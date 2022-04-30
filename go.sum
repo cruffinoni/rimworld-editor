@@ -1,0 +1,4 @@
+github.com/AllenDang/gform v0.0.0-20130830051017-6bb9f0d6b77e h1:ydyNRilv6v0XpkJ5bHCXdRpfLt/Tr/Rr3EkcX3kmzbY=
+github.com/AllenDang/gform v0.0.0-20130830051017-6bb9f0d6b77e/go.mod h1:Xw5E2XAXNKUG16G8mFPJ2UipVEnkiBcr2ak7H3Az238=
+github.com/AllenDang/w32 v0.0.0-20180428130237-ad0a36d80adc h1:w3fW4b1hPf6/cfdQQ/vu9V8eBeQmuLZIaUMj81nIzYQ=
+github.com/AllenDang/w32 v0.0.0-20180428130237-ad0a36d80adc/go.mod h1:1rHKulT5eD2DzdKxDXUZRKtBfkTzLmTL42ZmEmOfyrs=
