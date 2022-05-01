@@ -32,9 +32,9 @@ func localXMLUnmarshaler(decoder *xml.Decoder, os onStartElement, oe onEndElemen
 			}
 			return err
 		}
-		log.Printf("Token type: %T\n", token)
 		switch t := token.(type) {
 		case xml.StartElement:
+			log.Printf("StartElement: %s\n", t.Name.Local)
 			log.Printf("Attribute: %v\n", t.Attr)
 			startAcquired = true
 			os(&t, i)
@@ -42,6 +42,7 @@ func localXMLUnmarshaler(decoder *xml.Decoder, os onStartElement, oe onEndElemen
 			if !startAcquired {
 				continue
 			}
+			log.Printf("EndElement: %s\n", t.Name.Local)
 			oe(&t, i)
 			startAcquired = false
 			i++
@@ -88,5 +89,49 @@ func (m *GenericFormatByMap) UnmarshalXML(decoder *xml.Decoder, _ xml.StartEleme
 		},
 		func(c []byte, index int) {
 			m.Data[lastIdx].Data = string(c)
+		})
+}
+
+type XMLListReader struct {
+	xml.Unmarshaler
+	Data map[string]map[string][]*XMLTag
+}
+
+func findClassFromAttr(attr []xml.Attr) string {
+	for _, a := range attr {
+		if a.Name.Local == "Class" {
+			return a.Value
+		}
+	}
+	return ""
+}
+
+func (l *XMLListReader) UnmarshalXML(decoder *xml.Decoder, _ xml.StartElement) error {
+	l.Data = make(map[string][]*XMLTag)
+	lastClassName := ""
+	lastIdx := 0
+	toIgnore := false
+	return localXMLUnmarshaler(decoder,
+		func(e *xml.StartElement, index int) {
+			if tmpClassName := findClassFromAttr(e.Attr); tmpClassName == "" {
+				l.Data[lastClassName] = append(l.Data[lastClassName], &XMLTag{StartElement: *e})
+				lastIdx = len(l.Data[lastClassName]) - 1
+				toIgnore = false
+			} else {
+				lastClassName = tmpClassName
+				toIgnore = true
+			}
+		},
+		func(e *xml.EndElement, index int) {
+			if toIgnore {
+				return
+			}
+			l.Data[lastClassName][lastIdx].EndElement = *e
+		},
+		func(c []byte, index int) {
+			if toIgnore {
+				return
+			}
+			l.Data[lastClassName][lastIdx].Data = string(c)
 		})
 }
