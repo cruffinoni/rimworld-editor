@@ -1,7 +1,6 @@
 package editor
 
 import (
-	"github.com/cruffinoni/rimworld-editor/editor/game"
 	"github.com/cruffinoni/rimworld-editor/xml"
 )
 
@@ -10,5 +9,5 @@ type Savegame struct {
 	//Version  string `xml:"version,attr"`
 	//Encoding string `xml:"encoding,attr"`
 	Meta *xml.Discover `xml:"meta"`
-	Game *game.Game    `xml:"game"`
+	Game *xml.Discover `xml:"game"`
 }

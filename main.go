@@ -3,15 +3,21 @@ package main
 import (
 	"github.com/cruffinoni/rimworld-editor/editor"
 	"log"
+	"time"
 )
 
 func main() {
 	println("Hello, world.")
+	t := time.Now()
 	if f, err := editor.Open("TEST.rws"); err != nil {
 		panic(err)
 	} else {
+		log.Printf("Time elapsed: %v", time.Since(t))
 		_ = f
-		log.Println(f.GetXML().Meta.Pretty())
+		for i := 0; i < 100; i++ {
+			f.GetXML().Game.Raw()
+		}
+		//log.Println(f.GetXML().Meta.Pretty(4))
 		//log.Printf("Discover: '%v'", f.GetXML().Meta.Pretty(2))
 		//log.Printf("->>: '%+#v'", f.GetXML().Meta.Tag.String())
 		//log.Printf("->>: '%+#v'", *f.GetXML().Meta.Tag.Next)

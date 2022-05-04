@@ -33,20 +33,24 @@ func (t *Tag) Raw(spacing ...int) string {
 		}
 		sb.WriteString(fmt.Sprintf("%s<%v>%v</%v>\n", strings.Repeat(" ", spacing[0]), n.StartElement.Name.Local, d, t.EndElement.Name.Local))
 		if n.Child != nil {
-			sb.WriteString(n.Child.Raw(spacing[0] * 2))
+			sb.WriteString(n.Child.Raw(spacing[0] + 2))
 		}
 		n = n.Next
 	}
 	return sb.String()
-	//n := t
-	//for n != nil {
-	//	log.Printf("Node %p (%v) [parent: %p] ", n, n.StartElement.Name.Local, n.Parent)
-	//	if n.Child != nil {
-	//		n.Child.Raw()
-	//	}
-	//	n = n.Next
-	//}
-	//return ""
+}
+
+func (t *Tag) DisplayDebug() string {
+	n := t
+	k := ""
+	for n != nil {
+		k += fmt.Sprintf("Node %p (%v) [parent: %p] ", n, n.StartElement.Name.Local, n.Parent)
+		if n.Child != nil {
+			k += n.Child.DisplayDebug()
+		}
+		n = n.Next
+	}
+	return k
 }
 
 func (t *Tag) Pretty(spacing int) string {
@@ -55,7 +59,7 @@ func (t *Tag) Pretty(spacing int) string {
 	for n != nil {
 		sb.WriteString(fmt.Sprintf("%s> %s\n", strings.Repeat(" ", spacing), n.StartElement.Name.Local))
 		if n.Child != nil {
-			sb.WriteString(n.Child.Pretty(spacing * 2))
+			sb.WriteString(n.Child.Pretty(spacing + 2))
 		}
 		n = n.Next
 	}
