@@ -1,14 +1,15 @@
 package editor
 
 import (
-	"encoding/xml"
+	_xml "encoding/xml"
+	"github.com/cruffinoni/rimworld-editor/xml"
 	"os"
 )
 
 type FileOpening struct {
 	fileName string
 	content  string
-	xml      Savegame
+	xml      *xml.Discover
 }
 
 func Open(fileName string) (*FileOpening, error) {
@@ -17,12 +18,12 @@ func Open(fileName string) (*FileOpening, error) {
 	if err != nil {
 		return nil, err
 	}
-	if err = xml.Unmarshal(content, &fileOpening.xml); err != nil {
+	if err = _xml.Unmarshal(content, &fileOpening.xml); err != nil {
 		return nil, err
 	}
 	return fileOpening, nil
 }
 
-func (fileOpening *FileOpening) GetXML() Savegame {
+func (fileOpening *FileOpening) GetXML() *xml.Discover {
 	return fileOpening.xml
 }

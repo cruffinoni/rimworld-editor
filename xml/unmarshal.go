@@ -27,10 +27,6 @@ func localXMLUnmarshal(decoder *_xml.Decoder,
 		}
 		switch t := token.(type) {
 		case _xml.StartElement:
-			t.End()
-			//log.Printf("StartElement: %s\n", t.Name.Local)
-			////log.Printf("Attribute: %v\n", t.Attr)
-			//startAcquired = true
 			ctx.depth++
 			onStartElement(&t, ctx)
 		case _xml.EndElement:
@@ -48,7 +44,9 @@ func localXMLUnmarshal(decoder *_xml.Decoder,
 			if ctx.depth == 0 {
 				continue
 			}
-			onCharByte(t, ctx)
+			if onCharByte != nil {
+				onCharByte(t, ctx)
+			}
 		}
 	}
 }

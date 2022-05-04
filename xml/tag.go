@@ -41,16 +41,16 @@ func (t *Tag) Raw(spacing ...int) string {
 }
 
 func (t *Tag) DisplayDebug() string {
+	var sb strings.Builder
 	n := t
-	k := ""
 	for n != nil {
-		k += fmt.Sprintf("Node %p (%v) [parent: %p] ", n, n.StartElement.Name.Local, n.Parent)
+		sb.WriteString(fmt.Sprintf("Node %p (%v) [parent: %p] ", n, n.StartElement.Name.Local, n.Parent))
 		if n.Child != nil {
-			k += n.Child.DisplayDebug()
+			sb.WriteString(fmt.Sprintf("[child: %p] ", n.Child))
 		}
 		n = n.Next
 	}
-	return k
+	return sb.String()
 }
 
 func (t *Tag) Pretty(spacing int) string {
@@ -82,4 +82,21 @@ func (t *Tag) String() string {
 		s = s[:l-1]
 	}
 	return s
+}
+
+func (t *Tag) GetName() string {
+	return t.StartElement.Name.Local
+}
+
+func (t *Tag) GetXMLPath() string {
+	var sb strings.Builder
+	n := t
+	for n != nil {
+		sb.WriteString(fmt.Sprintf(">%s", n.StartElement.Name.Local))
+		if n.Child != nil {
+			sb.WriteString(n.Child.GetXMLPath())
+		}
+		n = n.Next
+	}
+	return sb.String()
 }

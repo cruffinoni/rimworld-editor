@@ -1,12 +1,17 @@
 package xml
 
 import (
+	"bytes"
 	_xml "encoding/xml"
 )
 
 type Discover struct {
 	_xml.Unmarshaler
 	Tag *Tag
+}
+
+func (d *Discover) Debug() {
+	d.Tag.DisplayDebug()
 }
 
 func (d *Discover) Pretty(space ...int) string {
@@ -75,7 +80,9 @@ func (d *Discover) UnmarshalXML(decoder *_xml.Decoder, _ _xml.StartElement) erro
 			}
 		},
 		func(e *_xml.EndElement, ctx *Context) {
+			lastNode.EndElement = *e
 		},
 		func(b []byte, ctx *Context) {
+			lastNode.Data = string(bytes.Trim(b, "\n\t"))
 		})
 }
