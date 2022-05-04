@@ -1,20 +1,18 @@
 package game
 
-import (
-	"github.com/cruffinoni/rimworld-editor/utils"
-)
+import "github.com/cruffinoni/rimworld-editor/xml"
 
 type Scenario struct {
-	Name        string `xml:"name"`
-	Summary     string `xml:"summary"`
-	Description string `xml:"description"`
-	//PlayerFaction utils.GenericSimpleFormat `xml:"playerFaction"`
-	Parts utils.XMLListReader `xml:"parts"` // TODO: parts>li / Implement XML list reader
+	Name          string     `xml:"name"`
+	Summary       string     `xml:"summary"`
+	Description   string     `xml:"description"`
+	PlayerFaction xml.Map    `xml:"playerFaction"`
+	Parts         xml.Nested `xml:"parts"`
 }
 
 type Game struct {
 	CurrentMapIndex int `xml:"currentMapIndex"`
-	//Info            utils.GenericSimpleFormat `xml:"info"`
-	//Rules           utils.GenericSimpleFormat `xml:"rules"`
-	Scenario Scenario `xml:"scenario"`
+	//Info            xml.Map  `xml:"info"`
+	//Rules           xml.Map  `xml:"rules"`
+	//Scenario        Scenario `xml:"scenario"`
 }
