@@ -2,13 +2,24 @@ package path
 
 import "github.com/cruffinoni/rimworld-editor/xml"
 
-type StringMatcher struct {
+type StringMatch struct {
 }
 
-func (s *StringMatcher) RawMatch(pattern string) bool {
+func (s *StringMatch) RawMatch(_ string) bool {
 	return true
 }
 
-func (s *StringMatcher) StrictMatch(node *xml.Tag, input string) bool {
-	return input == node.GetName()
+func (s *StringMatch) Build(_ string) ComputedMatcher {
+	return &StringMatch{}
+}
+
+func (s *StringMatch) StrictMatch(node *xml.Tag, input string) XMLTags {
+	if input == node.GetName() {
+		return XMLTags{node}
+	}
+	return nil
+}
+
+func (s *StringMatch) TrailingMatch() XMLTags {
+	return nil
 }

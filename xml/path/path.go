@@ -8,64 +8,90 @@ import (
 
 type pattern struct {
 	path    string
-	matcher Matcher
+	matcher ComputedMatcher
 }
 
+type XMLTags []*xml.Tag
+
+// ResultType is the type of the result of a match.
+//type ResultType interface {
+//	*xml.Tag | []*xml.Tag
+//}
+
+// Path is a path to a node in the XML tree.
 type Path struct {
-	patterns []pattern
+	patterns []*pattern
 	discover *xml.Discover
 }
 
 type Matcher interface {
+	Build(pattern string) ComputedMatcher
 	RawMatch(pattern string) bool
 }
 
-// Template ComputerMatcher with any type and add a function to build the matcher
-type ComputerMatcher interface {
-	StrictMatch(node *xml.Tag, input string) bool
+type ComputedMatcher interface {
+	StrictMatch(node *xml.Tag, input string) XMLTags
+	TrailingMatch() XMLTags
 }
 
-var (
-	DefaultMatcher = &StringMatcher{}
-)
+type DefaultMatcher = StringMatch
 
-// savegame>meta>gameVersion
-// savegame>meta>game*
+var matchers = []Matcher{
+	&WildcardMatch{},
+	&ArrayMatch{},
+	&ListMatch{},
+}
 
 func NewPathing(rawPattern string) *Path {
+	split := strings.Split(rawPattern, ">")
 	p := &Path{
-		patterns: make([]pattern, 0),
+		patterns: make([]*pattern, 0, len(split)),
 	}
-	for _, s := range strings.Split(rawPattern, ">") {
-		p.patterns = append(p.patterns, pattern{s, &strictMatcher{}})
-	}
-}
-
-/*
-TODO:
-- Implements wildcard for path
-- Impl array for path
-*/
-
-func (p *Path) Find(root *xml.Discover) *xml.Tag {
-	if len(p.pattern) == 0 {
-		log.Printf("null pattern")
-		return nil
-	}
-	cpyPattern := make([]string, len(p.pattern))
-	copy(cpyPattern, p.pattern)
-	n := root.Tag
-	for n != nil {
-		log.Printf("Comparing %s to %s", cpyPattern[0], n.GetName())
-		if n.GetName() == cpyPattern[0] {
-			cpyPattern = cpyPattern[1:]
-			if len(cpyPattern) == 0 {
-				return n
+	for _, s := range split {
+		pm := &pattern{
+			path:    s,
+			matcher: &DefaultMatcher{},
+		}
+		p.patterns = append(p.patterns, pm)
+		for _, m := range matchers {
+			if m.RawMatch(s) {
+				pm.matcher = m.Build(s)
+				log.Printf("Found matcher: %T", m)
+				break
 			}
-			n = n.Child
-		} else {
-			n = n.Next
 		}
 	}
-	return n
+	return p
+}
+
+func FindWithPath(rawPattern string, root *xml.Discover) XMLTags {
+	p := NewPathing(rawPattern)
+	return p.Find(root)
+}
+
+func (p *Path) Find(root *xml.Discover) XMLTags {
+	var (
+		r          XMLTags
+		n          = root.Tag
+		patternIdx = 0
+	)
+	cpyPatterns := make([]*pattern, len(p.patterns))
+	copy(cpyPatterns, p.patterns)
+	for n != nil {
+		if r = p.patterns[patternIdx].matcher.StrictMatch(n, cpyPatterns[0].path); r == nil {
+			n = n.Next
+			continue
+		}
+		patternIdx++
+		cpyPatterns = cpyPatterns[1:]
+		if len(cpyPatterns) == 0 {
+			return r
+		} else {
+			n = n.Child
+		}
+	}
+	if r = p.patterns[patternIdx].matcher.TrailingMatch(); r != nil {
+		return r
+	}
+	return nil
 }
