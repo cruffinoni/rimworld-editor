@@ -30,18 +30,24 @@ func (d *Discover) Raw() string {
 
 func (d *Discover) FindTagsFromData(data string) []*Tag {
 	var (
-		validTag *Tag
+		validTag []*Tag
 		tags     = make([]*Tag, 0)
 		n        = d.Tag
 	)
 	for n != nil {
 		if validTag = n.FindTagFromData(data); validTag != nil {
-			tags = append(tags, validTag)
+			tags = append(tags, validTag...)
 		}
 		n = n.Next
 	}
 	return tags
 }
+
+/*
+	TODO:
+	- Create a single variable for the new node
+	- add index to <li>
+*/
 
 func (d *Discover) UnmarshalXML(decoder *_xml.Decoder, _ _xml.StartElement) error {
 	var (
@@ -70,7 +76,10 @@ func (d *Discover) UnmarshalXML(decoder *_xml.Decoder, _ _xml.StartElement) erro
 				}
 			} else if ctx.depth < depth {
 				if lastNode.Parent != nil {
-					lastNode = lastNode.Parent
+					for depth > ctx.depth {
+						lastNode = lastNode.Parent
+						depth--
+					}
 					nn := &Tag{
 						Parent:       lastNode.Parent,
 						Prev:         lastNode.Prev,
@@ -81,7 +90,6 @@ func (d *Discover) UnmarshalXML(decoder *_xml.Decoder, _ _xml.StartElement) erro
 					//log.Println("(ctx.depth < depth) retrieving prev node")
 					lastNode.Next = nn
 					lastNode = nn
-					depth = ctx.depth
 				} else {
 					// This case should not happen because every child must have a parent
 					log.Println("no prev but depth decreased")

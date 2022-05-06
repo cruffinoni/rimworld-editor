@@ -3,7 +3,6 @@ package xml
 import (
 	_xml "encoding/xml"
 	"fmt"
-	"log"
 	"strings"
 )
 
@@ -128,26 +127,27 @@ func (t *Tag) XMLPath() string {
 	return s
 }
 
-func (t *Tag) FindTagFromData(data string) *Tag {
+func (t *Tag) FindTagFromData(data string) []*Tag {
 	var (
-		r  *Tag
-		d  string
-		ok bool
-		n  = t
+		result = make([]*Tag, 0)
+		d      string
+		ok     bool
+		n      = t
 	)
+	//log.Printf("going with %v", n)
 	for n != nil {
-		log.Printf("[%v] w/ '%v'", n.StartElement.Name.Local, n.Data)
+		//log.Printf("[%v] w/ '%v'", n.StartElement.Name.Local, n.Data)
 		if d, ok = n.Data.(string); ok {
 			if d == data {
-				return n
+				result = append(result, n)
 			}
 		}
 		if n.Child != nil {
-			if r = n.Child.FindTagFromData(data); r != nil {
-				return r
+			if r := n.Child.FindTagFromData(data); r != nil {
+				result = append(result, r...)
 			}
 		}
 		n = n.Next
 	}
-	return nil
+	return result
 }

@@ -2,6 +2,8 @@ package main
 
 import (
 	"github.com/cruffinoni/rimworld-editor/editor"
+	"github.com/cruffinoni/rimworld-editor/xml/path"
+	"log"
 	"os"
 )
 
@@ -10,15 +12,22 @@ func main() {
 		panic(err)
 	} else {
 		_ = f
-		//fmt.Printf(f.GetXML().Raw())
-		//pawns := f.GetXML().FindTagsFromData("Nikolai")
-		//log.Printf("%+v", pawns)
-		//if len(pawns) > 0 {
-		//	log.Printf("Pawn path: %s", pawns[0].XMLPath())
-		//
-		os.WriteFile("test.xml", []byte(f.GetXML().Pretty()), 0644)
+		// Nikolai
+		pawns := f.GetXML().FindTagsFromData("0")
+		if len(pawns) > 0 {
+			for _, p := range pawns {
+				log.Printf("Pawn xmlPath: %s", p.XMLPath())
+				xmlPath := path.FindWithPath(p.XMLPath(), f.GetXML())
+				log.Printf("Data of node: '%v' (%d)", xmlPath, len(xmlPath))
+			}
+		} else {
+			log.Println("NODE NOT FOUND")
+		}
+
+		os.WriteFile("test.txt", []byte(f.GetXML().Pretty()), 0644)
+
 		//fmt.Println(f.GetXML().Pretty())
-		//p := path.NewPathing("meta>game>scenario>parts>storyWatcher>researchManager>progress>storyteller>history>archive>autoRecorderGroups>li>recorders>li>recorders>li>recorders>li>recorders>historyEventsManager>colonistEvents>vals>taleManager>tales>li>pawnData")
+		//p := path.NewPathing("game>taleManager>tales>li>pawnData>name>first")
 		//
 		//if n := p.Find(f.GetXML()); n != nil {
 		//	log.Printf("Data of node: '%v' (%d)", n, len(n))

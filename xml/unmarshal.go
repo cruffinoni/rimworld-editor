@@ -28,6 +28,11 @@ func localXMLUnmarshal(decoder *_xml.Decoder,
 		switch t := token.(type) {
 		case _xml.StartElement:
 			ctx.depth++
+			if t.Name.Local == "li" {
+				ctx.index++
+			} else {
+				ctx.index = 0
+			}
 			onStartElement(&t, ctx)
 		case _xml.EndElement:
 			if ctx.depth == 0 {
@@ -36,7 +41,6 @@ func localXMLUnmarshal(decoder *_xml.Decoder,
 			//log.Printf("EndElement: %s\n", t.Name.Local)
 			ctx.depth--
 			//log.Printf("Depth: %v", ctx.depth)
-			ctx.index++
 			onEndElement(&t, ctx)
 		case _xml.CharData:
 			////log.Printf("CharData: '%s'\n", string(t))
