@@ -13,7 +13,7 @@ func (s *StringMatch) Build(_ string) ComputedMatcher {
 	return &StringMatch{}
 }
 
-func (s *StringMatch) StrictMatch(node *xml.Tag, input string) XMLTags {
+func (s *StringMatch) StrictMatch(node *xml.Element, input string) XMLTags {
 	if input == node.GetName() {
 		return XMLTags{node}
 	}

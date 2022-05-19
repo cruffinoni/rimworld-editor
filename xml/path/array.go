@@ -2,7 +2,6 @@ package path
 
 import (
 	"github.com/cruffinoni/rimworld-editor/xml"
-	"log"
 	"regexp"
 	"strconv"
 	"strings"
@@ -19,6 +18,7 @@ func (a *ArrayMatch) Build(pattern string) ComputedMatcher {
 	if res == nil {
 		return nil
 	}
+	res = res[1 : len(res)-1]
 	if nb, err := strconv.Atoi(string(res)); err != nil {
 		return nil
 	} else {
@@ -28,6 +28,7 @@ func (a *ArrayMatch) Build(pattern string) ComputedMatcher {
 			listIndex:     nb,
 			pattern:       pattern[:idx],
 			patternLength: len(pattern[:idx]),
+			matchedCount:  1, // Array starts at 1
 		}
 	}
 }
@@ -44,13 +45,13 @@ type ComputedArrayMatch struct {
 	ComputedMatcher
 }
 
-func (c *ComputedArrayMatch) StrictMatch(node *xml.Tag, _ string) XMLTags {
+func (c *ComputedArrayMatch) StrictMatch(node *xml.Element, _ string) XMLTags {
 	if node.GetName()[:c.patternLength] == c.pattern {
-		log.Printf("Total of matched count: %d", c.matchedCount)
-		c.matchedCount++
-		if c.matchedCount-1 == c.listIndex {
+		//log.Printf("Total of matched count: %d", c.matchedCount)
+		if c.matchedCount == c.listIndex {
 			return XMLTags{node}
 		}
+		c.matchedCount++
 	}
 	return nil
 }

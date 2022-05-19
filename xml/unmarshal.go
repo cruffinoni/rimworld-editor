@@ -7,16 +7,56 @@ import (
 
 type event[T any] func(e T, ctx *Context)
 
+type indexRemembering map[int]int
+
+type mapAttribute map[string]string
+
+func (m *mapAttribute) Join(sep string) string {
+	var (
+		b []byte
+		i = 0
+	)
+	for k, v := range *m {
+		if i > 0 {
+			b = append(b, sep...)
+		}
+		b = append(b, k...)
+		b = append(b, '=')
+		b = append(b, '"')
+		b = append(b, v...)
+		b = append(b, '"')
+		i++
+	}
+	return string(b)
+}
+
+func (m *mapAttribute) Empty() bool {
+	return len(*m) == 0
+}
+
 type Context struct {
-	index int
+	index indexRemembering
+	attr  mapAttribute
 	depth int
 }
+
+func transformAttrToMap(attr *[]_xml.Attr) mapAttribute {
+	attrMap := make(mapAttribute)
+	for _, a := range *attr {
+		attrMap[a.Name.Local] = a.Value
+	}
+	return attrMap
+}
+
+const InvalidIdx = -1
 
 func localXMLUnmarshal(decoder *_xml.Decoder,
 	onStartElement event[*_xml.StartElement],
 	onEndElement event[*_xml.EndElement],
 	onCharByte event[[]byte]) error {
-	ctx := &Context{}
+	ctx := &Context{
+		index: make(indexRemembering),
+	}
 	for {
 		token, err := decoder.Token()
 		if err != nil {
@@ -28,22 +68,33 @@ func localXMLUnmarshal(decoder *_xml.Decoder,
 		switch t := token.(type) {
 		case _xml.StartElement:
 			ctx.depth++
+			ctx.attr = transformAttrToMap(&t.Attr)
 			if t.Name.Local == "li" {
-				ctx.index++
-			} else {
-				ctx.index = 0
+				ctx.index[ctx.depth]++
 			}
-			onStartElement(&t, ctx)
+			if onStartElement != nil {
+				onStartElement(&t, ctx)
+			}
 		case _xml.EndElement:
 			if ctx.depth == 0 {
 				continue
 			}
-			//log.Printf("EndElement: %s\n", t.Name.Local)
+			ctx.attr = nil
+			//log.Printf("EndElement: %s at %v => %v\n", t.Name.Local, ctx.depth, ctx.index[ctx.depth])
 			ctx.depth--
-			//log.Printf("Depth: %v", ctx.depth)
-			onEndElement(&t, ctx)
+			//log.Printf("Depth: %v - %v - %v", ctx.depth, ctx.index[ctx.depth+1], ctx.index[ctx.depth])
+			if onEndElement != nil {
+				onEndElement(&t, ctx)
+			}
+
+			previousIdx := ctx.depth + 2
+			//log.Printf("Same idx: %v", ctx.index[previousIdx])
+			if t.Name.Local != "li" && ctx.index[previousIdx] > 0 {
+				//log.Printf("debug: %v - %v - %v", ctx.depth, ctx.index[previousIdx], ctx.index[ctx.depth])
+				delete(ctx.index, previousIdx)
+			}
+			//log.Printf("ctx.index[ctx.depth+1]: %v", ctx.index[ctx.depth+1])
 		case _xml.CharData:
-			////log.Printf("CharData: '%s'\n", string(t))
 			//log.Print("CharData called")
 			if ctx.depth == 0 {
 				continue

@@ -33,7 +33,7 @@ type ComputedListMatch struct {
 	ComputedMatcher
 }
 
-func (c *ComputedListMatch) StrictMatch(node *xml.Tag, _ string) XMLTags {
+func (c *ComputedListMatch) StrictMatch(node *xml.Element, _ string) XMLTags {
 	if node.GetName()[:c.patternLength] == c.pattern {
 		c.tagsCount++
 		c.tags = append(c.tags, node)

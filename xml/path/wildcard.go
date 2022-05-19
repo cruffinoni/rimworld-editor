@@ -32,7 +32,7 @@ type ComputedWildcardMatcher struct {
 	length          int
 }
 
-func (w *ComputedWildcardMatcher) StrictMatch(node *xml.Tag, input string) XMLTags {
+func (w *ComputedWildcardMatcher) StrictMatch(node *xml.Element, input string) XMLTags {
 	if node.GetName()[:w.length] == w.requiredPattern {
 		return XMLTags{node}
 	}

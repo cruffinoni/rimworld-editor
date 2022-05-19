@@ -8,6 +8,6 @@ type Savegame struct {
 	//Xml      string `xml:"savegame"`
 	//Version  string `xml:"version,attr"`
 	//Encoding string `xml:"encoding,attr"`
-	Meta *xml.Discover `xml:"meta"`
-	Game *xml.Discover `xml:"game"`
+	Meta *xml.Tree `xml:"meta"`
+	Game *xml.Tree `xml:"game"`
 }
