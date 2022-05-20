@@ -1,11 +1,6 @@
 package meta
 
-import (
-	"encoding/xml"
-)
-
 type Meta struct {
-	XMLName     xml.Name `xml:"meta"`
 	GameVersion string   `xml:"gameVersion"`
 	ModsIds     []string `xml:"modIds>li"`
 	ModsSteamId []int    `xml:"modSteamIds>li"`

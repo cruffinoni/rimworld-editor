@@ -9,7 +9,7 @@ import (
 type FileOpening struct {
 	fileName string
 	content  string
-	xml      *xml.Tree
+	XML      *xml.Tree
 }
 
 func Open(fileName string) (*FileOpening, error) {
@@ -18,12 +18,12 @@ func Open(fileName string) (*FileOpening, error) {
 	if err != nil {
 		return nil, err
 	}
-	if err = _xml.Unmarshal(content, &fileOpening.xml); err != nil {
+	if err = _xml.Unmarshal(content, &fileOpening.XML); err != nil {
 		return nil, err
 	}
 	return fileOpening, nil
 }
 
 func (fileOpening *FileOpening) GetXML() *xml.Tree {
-	return fileOpening.xml
+	return fileOpening.XML
 }

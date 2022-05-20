@@ -5,9 +5,9 @@ import (
 )
 
 type Savegame struct {
-	//Xml      string `xml:"savegame"`
-	//Version  string `xml:"version,attr"`
-	//Encoding string `xml:"encoding,attr"`
-	Meta *xml.Tree `xml:"meta"`
-	Game *xml.Tree `xml:"game"`
+	//Xml      string `XML:"savegame"`
+	//Version  string `XML:"version,attr"`
+	//Encoding string `XML:"encoding,attr"`
+	Meta *xml.Tree `XML:"meta"`
+	Game *xml.Tree `XML:"game"`
 }
