@@ -1,52 +1,57 @@
 package meta
 
+import (
+	"errors"
+	"github.com/cruffinoni/rimworld-editor/xml"
+	"github.com/cruffinoni/rimworld-editor/xml/path"
+)
+
+type Mod struct {
+	SteamId int
+	Id      string
+}
+
 type Meta struct {
-	GameVersion string   `xml:"gameVersion"`
-	ModsIds     []string `xml:"modIds>li"`
-	ModsSteamId []int    `xml:"modSteamIds>li"`
-	ModsName    []string `xml:"modNames>li"`
+	GameVersion string `xml:"gameVersion"`
+	Mods        map[string]*Mod
+}
+
+func (m *Meta) Assign(e *xml.Element) error {
+	elems := []path.Elements{
+		path.FindWithPath("modIds>li[...]", e),
+		path.FindWithPath("modSteamIds>li[...]", e),
+		path.FindWithPath("modNames>li[...]", e),
+	}
+	for _, elem := range elems {
+		if len(elem) == 0 {
+			return errors.New("meta: no mod found")
+		}
+	}
+	m.Mods = make(map[string]*Mod)
+	for i, elem := range elems[2] {
+		m.Mods[elem.Data.GetString()] = &Mod{
+			SteamId: elems[1][i].Data.GetInt(),
+			Id:      elems[0][i].Data.GetString(),
+		}
+	}
+	return nil
+}
+
+func (m *Meta) GetPath() string {
+	return "meta"
 }
 
 func (m *Meta) GetGameVersion() string {
 	return m.GameVersion
 }
 
-//
-//func (m *Meta) GetModByName(name string) *Mod {
-//	for i, mod := range m.ModsName.Names {
-//		if mod == name {
-//			return &Mod{
-//				Id:      m.ModsIds.Ids[i],
-//				Name:    name,
-//				SteamId: m.ModsSteamId.ToString(i),
-//			}
-//		}
-//	}
-//	return nil
-//}
-//
-//func (m *Meta) GetModById(id string) *Mod {
-//	for i, mod := range m.ModsIds.Ids {
-//		if mod == id {
-//			return &Mod{
-//				Id:      id,
-//				Name:    m.ModsName.Names[i],
-//				SteamId: m.ModsSteamId.ToString(i),
-//			}
-//		}
-//	}
-//	return nil
-//}
-//
-//func (m *Meta) GetModBySteamId(id int) *Mod {
-//	for i, mod := range m.ModsSteamId.SteamIds {
-//		if mod == id {
-//			return &Mod{
-//				Id:      m.ModsIds.Ids[i],
-//				Name:    m.ModsName.Names[i],
-//				SteamId: m.ModsSteamId.ToString(mod),
-//			}
-//		}
-//	}
-//	return nil
-//}
+func (m *Meta) GetMods() map[string]*Mod {
+	return m.Mods
+}
+
+func (m *Meta) GetMod(id string) *Mod {
+	if mod, ok := m.Mods[id]; ok {
+		return mod
+	}
+	return nil
+}

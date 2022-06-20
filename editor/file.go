@@ -23,7 +23,3 @@ func Open(fileName string) (*FileOpening, error) {
 	}
 	return fileOpening, nil
 }
-
-func (fileOpening *FileOpening) GetXML() *xml.Tree {
-	return fileOpening.XML
-}

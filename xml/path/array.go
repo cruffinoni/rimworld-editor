@@ -45,17 +45,17 @@ type ComputedArrayMatch struct {
 	ComputedMatcher
 }
 
-func (c *ComputedArrayMatch) StrictMatch(node *xml.Element, _ string) XMLTags {
+func (c *ComputedArrayMatch) StrictMatch(node *xml.Element, _ string) Elements {
 	if node.GetName()[:c.patternLength] == c.pattern {
 		//log.Printf("Total of matched count: %d", c.matchedCount)
 		if c.matchedCount == c.listIndex {
-			return XMLTags{node}
+			return Elements{node}
 		}
 		c.matchedCount++
 	}
 	return nil
 }
 
-func (c *ComputedArrayMatch) TrailingMatch() XMLTags {
+func (c *ComputedArrayMatch) TrailingMatch() Elements {
 	return nil
 }

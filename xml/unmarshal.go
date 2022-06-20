@@ -9,9 +9,9 @@ type event[T any] func(e T, ctx *Context)
 
 type indexRemembering map[int]int
 
-type mapAttribute map[string]string
+type Attributes map[string]string
 
-func (m *mapAttribute) Join(sep string) string {
+func (m *Attributes) Join(sep string) string {
 	var (
 		b []byte
 		i = 0
@@ -30,18 +30,18 @@ func (m *mapAttribute) Join(sep string) string {
 	return string(b)
 }
 
-func (m *mapAttribute) Empty() bool {
+func (m *Attributes) Empty() bool {
 	return len(*m) == 0
 }
 
 type Context struct {
 	index indexRemembering
-	attr  mapAttribute
+	attr  Attributes
 	depth int
 }
 
-func transformAttrToMap(attr *[]_xml.Attr) mapAttribute {
-	attrMap := make(mapAttribute)
+func transformAttrToMap(attr *[]_xml.Attr) Attributes {
+	attrMap := make(Attributes)
 	for _, a := range *attr {
 		attrMap[a.Name.Local] = a.Value
 	}
@@ -50,7 +50,7 @@ func transformAttrToMap(attr *[]_xml.Attr) mapAttribute {
 
 const InvalidIdx = -1
 
-func localXMLUnmarshal(decoder *_xml.Decoder,
+func unmarshalEmbed(decoder *_xml.Decoder,
 	onStartElement event[*_xml.StartElement],
 	onEndElement event[*_xml.EndElement],
 	onCharByte event[[]byte]) error {

@@ -15,7 +15,7 @@ type ListMatch struct {
 func (l *ListMatch) Build(pattern string) ComputedMatcher {
 	idx := strings.Index(pattern, "[")
 	return &ComputedListMatch{
-		tags:          make(XMLTags, 0),
+		tags:          make(Elements, 0),
 		pattern:       pattern[:idx],
 		patternLength: len(pattern[:idx]),
 	}
@@ -26,14 +26,14 @@ func (l *ListMatch) RawMatch(pattern string) bool {
 }
 
 type ComputedListMatch struct {
-	tags          XMLTags
+	tags          Elements
 	tagsCount     int
 	pattern       string
 	patternLength int
 	ComputedMatcher
 }
 
-func (c *ComputedListMatch) StrictMatch(node *xml.Element, _ string) XMLTags {
+func (c *ComputedListMatch) StrictMatch(node *xml.Element, _ string) Elements {
 	if node.GetName()[:c.patternLength] == c.pattern {
 		c.tagsCount++
 		c.tags = append(c.tags, node)
@@ -43,7 +43,7 @@ func (c *ComputedListMatch) StrictMatch(node *xml.Element, _ string) XMLTags {
 	return nil
 }
 
-func (c *ComputedListMatch) TrailingMatch() XMLTags {
+func (c *ComputedListMatch) TrailingMatch() Elements {
 	if c.tagsCount > 0 {
 		return c.tags
 	}

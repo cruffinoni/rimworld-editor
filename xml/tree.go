@@ -24,8 +24,8 @@ func (t *Tree) Pretty(space ...int) string {
 	return t.Root.Pretty(spacing)
 }
 
-func (t *Tree) Raw() string {
-	return t.Root.Raw()
+func (t *Tree) ToXML() string {
+	return t.Root.ToXML(0)
 }
 
 func (t *Tree) XMLPath() string {
@@ -49,7 +49,7 @@ func (t *Tree) UnmarshalXML(decoder *_xml.Decoder, _ _xml.StartElement) error {
 		depth    = 1
 	)
 
-	return localXMLUnmarshal(decoder,
+	return unmarshalEmbed(decoder,
 		func(e *_xml.StartElement, ctx *Context) {
 			if ctx.depth > depth {
 				if lastNode.Child != nil {
@@ -87,14 +87,14 @@ func (t *Tree) UnmarshalXML(decoder *_xml.Decoder, _ _xml.StartElement) error {
 					//log.Printf("(ctx.depth < depth) creating a new node w/ idx: %v", idx)
 					n := &Element{
 						Parent:       lastNode.Parent,
-						Left:         lastNode.Left,
+						Prev:         lastNode.Prev,
 						Index:        idx,
 						StartElement: *e,
 						EndElement:   _xml.EndElement{Name: e.Name},
 						Attr:         ctx.attr,
 					}
 					//log.Println("(ctx.depth < depth) retrieving prev node")
-					lastNode.Right = n
+					lastNode.Next = n
 					lastNode = n
 				} else {
 					// This case should not happen because every child must have a parent
@@ -111,7 +111,7 @@ func (t *Tree) UnmarshalXML(decoder *_xml.Decoder, _ _xml.StartElement) error {
 					idx = v
 				}
 				n := &Element{
-					Left:         lastNode,
+					Prev:         lastNode,
 					StartElement: *e,
 					Index:        idx,
 					EndElement:   _xml.EndElement{Name: e.Name},
@@ -125,7 +125,7 @@ func (t *Tree) UnmarshalXML(decoder *_xml.Decoder, _ _xml.StartElement) error {
 				} else {
 					// All children must have the same parent
 					n.Parent = lastNode.Parent
-					lastNode.Right = n
+					lastNode.Next = n
 					lastNode = n
 					//log.Printf("Basic node created w/ parent: %p", lastNode.Parent)
 				}
@@ -135,7 +135,7 @@ func (t *Tree) UnmarshalXML(decoder *_xml.Decoder, _ _xml.StartElement) error {
 		func(b []byte, ctx *Context) {
 			s := string(bytes.Trim(b, "\n\t"))
 			if s != "" {
-				lastNode.Data = s
+				lastNode.Data = DetermineDataType(s)
 				//log.Printf("Data: '%v'", s)
 			}
 		})

@@ -2,7 +2,6 @@ package path
 
 import (
 	"github.com/cruffinoni/rimworld-editor/xml"
-	"log"
 	"strings"
 )
 
@@ -15,7 +14,6 @@ func (w *WildcardMatch) Build(pattern string) ComputedMatcher {
 	if idx == -1 {
 		return &DefaultMatcher{}
 	}
-	log.Printf("Required pattern found: %s", pattern[:idx])
 	return &ComputedWildcardMatcher{
 		requiredPattern: pattern[:idx],
 		length:          len(pattern[:idx]),
@@ -28,17 +26,24 @@ func (w *WildcardMatch) RawMatch(pattern string) bool {
 
 type ComputedWildcardMatcher struct {
 	ComputedMatcher
+	nodes           Elements
 	requiredPattern string
 	length          int
 }
 
-func (w *ComputedWildcardMatcher) StrictMatch(node *xml.Element, input string) XMLTags {
-	if node.GetName()[:w.length] == w.requiredPattern {
-		return XMLTags{node}
+func (w *ComputedWildcardMatcher) StrictMatch(node *xml.Element, input string) Elements {
+	if w.length == 0 {
+		w.nodes = append(w.nodes, node)
+		return nil
+	} else if node.GetName()[:w.length] == w.requiredPattern {
+		return Elements{node}
 	}
 	return nil
 }
 
-func (w *ComputedWildcardMatcher) TrailingMatch() XMLTags {
+func (w *ComputedWildcardMatcher) TrailingMatch() Elements {
+	if w.length == 0 {
+		return w.nodes
+	}
 	return nil
 }

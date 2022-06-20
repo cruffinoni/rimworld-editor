@@ -43,24 +43,24 @@ type ComputedAttributeMatch struct {
 	query string
 }
 
-func (c *ComputedAttributeMatch) StrictMatch(node *xml.Element, _ string) XMLTags {
+func (c *ComputedAttributeMatch) StrictMatch(node *xml.Element, _ string) Elements {
 	if node.GetName() != c.query {
 		return nil
 	}
 	if c.key != "" {
 		if node.Attr[c.key] == c.value {
-			return XMLTags{node}
+			return Elements{node}
 		}
 	} else {
 		for _, attr := range node.Attr {
 			if attr == c.value {
-				return XMLTags{node}
+				return Elements{node}
 			}
 		}
 	}
 	return nil
 }
 
-func (c *ComputedAttributeMatch) TrailingMatch() XMLTags {
+func (c *ComputedAttributeMatch) TrailingMatch() Elements {
 	return nil
 }

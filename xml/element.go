@@ -10,34 +10,39 @@ import (
 type Element struct {
 	StartElement _xml.StartElement
 	EndElement   _xml.EndElement
-	Attr         mapAttribute
-	Data         any
+	Attr         Attributes
+	Data         *Data
 	Index        int
 
-	Right  *Element
-	Left   *Element
+	Next   *Element
+	Prev   *Element
 	Child  *Element
 	Parent *Element
 }
 
-const DefaultSpacing = 3
+const DefaultSpacing = 2
 
-func (e *Element) Raw(spacing ...int) string {
-	if len(spacing) == 0 {
-		spacing = []int{DefaultSpacing}
-	}
+func (e *Element) ToXML(spacing int) string {
 	var sb strings.Builder
 	n := e
+	spaces := strings.Repeat(" ", spacing)
 	for n != nil {
-		d := n.Data
-		if d == nil {
-			d = "null"
+		sb.WriteString("\n" + spaces)
+		sb.WriteString("<" + n.StartElement.Name.Local)
+		if !n.Attr.Empty() {
+			sb.WriteString(" " + n.Attr.Join(" "))
 		}
-		sb.WriteString(fmt.Sprintf("%s<%v>%v</%v>\n", strings.Repeat(" ", spacing[0]), n.StartElement.Name.Local, d, n.EndElement.Name.Local))
+		sb.WriteString(">")
 		if n.Child != nil {
-			sb.WriteString(n.Child.Raw(spacing[0] + 2))
+			sb.WriteString(n.Child.ToXML(spacing + DefaultSpacing))
 		}
-		n = n.Right
+		if n.Data != nil {
+			sb.WriteString(n.Data.GetString())
+			sb.WriteString("</" + n.StartElement.Name.Local + ">")
+		} else {
+			sb.WriteString("\n" + spaces + "</" + n.StartElement.Name.Local + ">")
+		}
+		n = n.Next
 	}
 	return sb.String()
 }
@@ -50,7 +55,7 @@ func (e *Element) DisplayDebug() string {
 		if n.Child != nil {
 			sb.WriteString(fmt.Sprintf("[child: %p] ", n.Child))
 		}
-		n = n.Right
+		n = n.Next
 	}
 	return sb.String()
 }
@@ -67,24 +72,24 @@ func (e *Element) Pretty(spacing int) string {
 		if n.Child != nil {
 			sb.WriteString(n.Child.Pretty(spacing + 2))
 		}
-		n = n.Right
+		n = n.Next
 	}
 	return sb.String()
 }
 
-func (e *Element) String() string {
-	var s string
-	s = fmt.Sprintf("%v[%v/%d] ", s, e.StartElement.Name.Local, e.Index)
-	if e.Child != nil {
-		s += "(" + e.Child.String() + ") "
-	}
-	s = fmt.Sprintf("%v'%v' ", s, e.Data)
-	l := len(s)
-	if l > 0 && s[l-1] == ' ' {
-		s = s[:l-1]
-	}
-	return s
-}
+//func (e *Element) String() string {
+//	var s string
+//	s = fmt.Sprintf("%v[%v/%d] ", s, e.StartElement.Name.Local, e.Index)
+//	if e.Child != nil {
+//		s += "(" + e.Child.String() + ") "
+//	}
+//	s = fmt.Sprintf("%v'%v' ", s, e.Data)
+//	l := len(s)
+//	if l > 0 && s[l-1] == ' ' {
+//		s = s[:l-1]
+//	}
+//	return s
+//}
 
 func (e *Element) GetName() string {
 	return e.StartElement.Name.Local
@@ -100,7 +105,7 @@ func (e *Element) DisplayAllXMLPaths() string {
 		if n.Child != nil {
 			sb.WriteString(n.Child.DisplayAllXMLPaths())
 		}
-		n = n.Right
+		n = n.Next
 	}
 	return sb.String()
 }
@@ -131,15 +136,11 @@ func (e *Element) XMLPath() string {
 func (e *Element) FindTagFromData(data string) []*Element {
 	var (
 		result = make([]*Element, 0)
-		d      string
-		ok     bool
 		n      = e
 	)
-	//log.Printf("going with %v", n)
 	for n != nil {
-		//log.Printf("[%v] w/ '%v'", n.StartElement.Name.Local, n.Data)
-		if d, ok = n.Data.(string); ok {
-			if d == data {
+		if n.Data != nil {
+			if n.Data.GetString() == data {
 				return []*Element{n}
 			}
 		}
@@ -148,7 +149,7 @@ func (e *Element) FindTagFromData(data string) []*Element {
 				result = append(result, r...)
 			}
 		}
-		n = n.Right
+		n = n.Next
 	}
 	return result
 }

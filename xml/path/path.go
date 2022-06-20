@@ -11,7 +11,7 @@ type pattern struct {
 	matcher ComputedMatcher
 }
 
-type XMLTags []*xml.Element
+type Elements []*xml.Element
 
 // ResultType is the type of the result of a match.
 //type ResultType interface {
@@ -21,7 +21,7 @@ type XMLTags []*xml.Element
 // Path is a path to a node in the XML tree.
 type Path struct {
 	patterns []*pattern
-	discover *xml.Tree
+	tree     *xml.Tree
 }
 
 type Matcher interface {
@@ -30,8 +30,8 @@ type Matcher interface {
 }
 
 type ComputedMatcher interface {
-	StrictMatch(node *xml.Element, input string) XMLTags
-	TrailingMatch() XMLTags
+	StrictMatch(node *xml.Element, input string) Elements
+	TrailingMatch() Elements
 }
 
 type DefaultMatcher = StringMatch
@@ -70,14 +70,14 @@ func NewPathing(rawPattern string) *Path {
 	return p
 }
 
-func FindWithPath(rawPattern string, root *xml.Element) XMLTags {
+func FindWithPath(rawPattern string, root *xml.Element) Elements {
 	p := NewPathing(rawPattern)
 	return p.Find(root)
 }
 
-func (p *Path) Find(root *xml.Element) XMLTags {
+func (p *Path) Find(root *xml.Element) Elements {
 	var (
-		r          XMLTags
+		r          Elements
 		n          = root
 		patternIdx = 0
 	)
@@ -85,7 +85,7 @@ func (p *Path) Find(root *xml.Element) XMLTags {
 	copy(cpyPatterns, p.patterns)
 	for n != nil {
 		if r = p.patterns[patternIdx].matcher.StrictMatch(n, cpyPatterns[0].path); r == nil {
-			n = n.Right
+			n = n.Next
 			continue
 		}
 		patternIdx++
@@ -96,9 +96,14 @@ func (p *Path) Find(root *xml.Element) XMLTags {
 			n = n.Child
 		}
 	}
-	log.Printf("Not found at %s (%T)", cpyPatterns[0].path, cpyPatterns[0].matcher)
 	if r = p.patterns[patternIdx].matcher.TrailingMatch(); r != nil {
+		if len(r) == 0 {
+			log.Printf("Not found at %s (%T)", cpyPatterns[0].path, cpyPatterns[0].matcher)
+		}
 		return r
+	}
+	if len(r) == 0 {
+		log.Printf("Not found at %s (%T)", cpyPatterns[0].path, cpyPatterns[0].matcher)
 	}
 	return nil
 }

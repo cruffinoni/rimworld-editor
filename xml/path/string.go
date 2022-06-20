@@ -13,13 +13,13 @@ func (s *StringMatch) Build(_ string) ComputedMatcher {
 	return &StringMatch{}
 }
 
-func (s *StringMatch) StrictMatch(node *xml.Element, input string) XMLTags {
+func (s *StringMatch) StrictMatch(node *xml.Element, input string) Elements {
 	if input == node.GetName() {
-		return XMLTags{node}
+		return Elements{node}
 	}
 	return nil
 }
 
-func (s *StringMatch) TrailingMatch() XMLTags {
+func (s *StringMatch) TrailingMatch() Elements {
 	return nil
 }
