@@ -12,8 +12,8 @@ type Tree struct {
 	Root *Element
 }
 
-func (t *Tree) Debug() {
-	t.Root.DisplayDebug()
+func (t *Tree) Debug() string {
+	return t.Root.DisplayDebug()
 }
 
 func (t *Tree) Pretty(space ...int) string {
@@ -135,7 +135,7 @@ func (t *Tree) UnmarshalXML(decoder *_xml.Decoder, _ _xml.StartElement) error {
 		func(b []byte, ctx *Context) {
 			s := string(bytes.Trim(b, "\n\t"))
 			if s != "" {
-				lastNode.Data = DetermineDataType(s)
+				lastNode.Data = CreateDataType(s)
 				//log.Printf("Data: '%v'", s)
 			}
 		})

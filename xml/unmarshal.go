@@ -9,31 +9,6 @@ type event[T any] func(e T, ctx *Context)
 
 type indexRemembering map[int]int
 
-type Attributes map[string]string
-
-func (m *Attributes) Join(sep string) string {
-	var (
-		b []byte
-		i = 0
-	)
-	for k, v := range *m {
-		if i > 0 {
-			b = append(b, sep...)
-		}
-		b = append(b, k...)
-		b = append(b, '=')
-		b = append(b, '"')
-		b = append(b, v...)
-		b = append(b, '"')
-		i++
-	}
-	return string(b)
-}
-
-func (m *Attributes) Empty() bool {
-	return len(*m) == 0
-}
-
 type Context struct {
 	index indexRemembering
 	attr  Attributes

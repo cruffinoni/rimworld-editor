@@ -12,8 +12,8 @@ type Mod struct {
 }
 
 type Meta struct {
-	GameVersion string `xml:"gameVersion"`
-	Mods        map[string]*Mod
+	GameVersion string          `xml:"gameVersion"`
+	Mods        map[string]*Mod `xml_key:"modIds"`
 }
 
 func (m *Meta) Assign(e *xml.Element) error {
@@ -38,7 +38,7 @@ func (m *Meta) Assign(e *xml.Element) error {
 }
 
 func (m *Meta) GetPath() string {
-	return "meta"
+	return ""
 }
 
 func (m *Meta) GetGameVersion() string {

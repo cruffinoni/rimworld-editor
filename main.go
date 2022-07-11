@@ -29,9 +29,17 @@ func main() {
 	var m editor.Savegame
 	err = unmarshal.Element(f.XML.Root, &m)
 	if err != nil {
-		return
+		log.Fatal(err)
 	}
-	//log.Printf("%+v & err: %v", m.Meta.GetMods(), err)
+
+	//os.WriteFile("test/output.log", []byte(f.XML.Pretty(2)), 0644)
+
+	//log.Printf("%+v & err: %v", m.Game.Scenario.PlayerFaction, err)
+	if err != nil {
+		log.Fatal(err)
+	}
+	log.Printf("Value: %v (t: %T)", m.Game.ResearchManager.Progress.Get("ComplexFurniture"), m.Game.ResearchManager.Progress.Get("StartingYear"))
+	m.Game.ResearchManager.SetAllProgress(10000)
 	//for _, p := range path.FindWithPath(`meta>beta>li[2]>faction{Faction}`, f.XML.Root) {
 	//	log.Printf("=> %v", p.XMLPath())
 	//	fmt.Println(p.ToXML(0))

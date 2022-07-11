@@ -3,10 +3,12 @@ package game
 import "github.com/cruffinoni/rimworld-editor/xml"
 
 type Game struct {
-	CurrentMapIndex int       `xml:"currentMapIndex"`
-	Info            string    `xml:"info"`
-	Rules           string    `xml:"rules"`
-	Scenario        *Scenario `xml:"scenario"`
+	CurrentMapIndex int              `xml:"currentMapIndex"`
+	Info            string           `xml:"info"`
+	Rules           string           `xml:"rules"`
+	Scenario        *Scenario        `xml:"scenario"`
+	TickManager     *TickManager     `xml:"tickManager"`
+	ResearchManager *ResearchManager `xml:"researchManager"`
 }
 
 func (g *Game) Assign(e *xml.Element) error {
