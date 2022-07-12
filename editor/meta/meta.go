@@ -7,13 +7,13 @@ import (
 )
 
 type Mod struct {
-	SteamId int
+	SteamId int64
 	Id      string
 }
 
 type Meta struct {
 	GameVersion string          `xml:"gameVersion"`
-	Mods        map[string]*Mod `xml_key:"modIds"`
+	Mods        map[string]*Mod
 }
 
 func (m *Meta) Assign(e *xml.Element) error {
@@ -30,7 +30,7 @@ func (m *Meta) Assign(e *xml.Element) error {
 	m.Mods = make(map[string]*Mod)
 	for i, elem := range elems[2] {
 		m.Mods[elem.Data.GetString()] = &Mod{
-			SteamId: elems[1][i].Data.GetInt(),
+			SteamId: elems[1][i].Data.GetInt64(),
 			Id:      elems[0][i].Data.GetString(),
 		}
 	}

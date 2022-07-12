@@ -3,11 +3,10 @@ package game
 import (
 	"github.com/cruffinoni/rimworld-editor/xml"
 	"github.com/cruffinoni/rimworld-editor/xml/type"
-	"log"
 )
 
 type ResearchManager struct {
-	Progress _type.Map[string, int32] `xml:"progress"`
+	Progress _type.Map[string, float64] `xml:"progress"`
 }
 
 func (r *ResearchManager) Assign(_ *xml.Element) error {
@@ -18,17 +17,18 @@ func (r *ResearchManager) GetPath() string {
 	return ""
 }
 
-func (r *ResearchManager) GetProgress(key string) int32 {
+func (r *ResearchManager) GetProgress(key string) float64 {
 	return r.Progress.Get(key)
 }
 
-func (r *ResearchManager) SetProgress(key string, value int32) {
+func (r *ResearchManager) SetProgress(key string, value float64) {
 	r.Progress.Set(key, value)
 }
 
-func (r *ResearchManager) SetAllProgress(value int32) {
+const ResearchMaxValue = 10000
+
+func (r *ResearchManager) SetAllProgress(value float64) {
 	for it := r.Progress.Iterator(); it != nil; it = it.Next() {
-		log.Printf("SetAllProgress: %s = %d", it.Key(), value)
 		r.Progress.Set(it.Key(), value)
 	}
 }

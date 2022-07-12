@@ -5,7 +5,7 @@ import (
 )
 
 type TickManager struct {
-	StartingYear int32 `xml:"startingYear"`
+	StartingYear int64 `xml:"startingYear"`
 }
 
 func (t *TickManager) Assign(_ *xml.Element) error {

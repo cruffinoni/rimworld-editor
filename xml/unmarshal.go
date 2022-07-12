@@ -55,22 +55,16 @@ func unmarshalEmbed(decoder *_xml.Decoder,
 				continue
 			}
 			ctx.attr = nil
-			//log.Printf("EndElement: %s at %v => %v\n", t.Name.Local, ctx.depth, ctx.index[ctx.depth])
 			ctx.depth--
-			//log.Printf("Depth: %v - %v - %v", ctx.depth, ctx.index[ctx.depth+1], ctx.index[ctx.depth])
 			if onEndElement != nil {
 				onEndElement(&t, ctx)
 			}
 
 			previousIdx := ctx.depth + 2
-			//log.Printf("Same idx: %v", ctx.index[previousIdx])
 			if t.Name.Local != "li" && ctx.index[previousIdx] > 0 {
-				//log.Printf("debug: %v - %v - %v", ctx.depth, ctx.index[previousIdx], ctx.index[ctx.depth])
 				delete(ctx.index, previousIdx)
 			}
-			//log.Printf("ctx.index[ctx.depth+1]: %v", ctx.index[ctx.depth+1])
 		case _xml.CharData:
-			//log.Print("CharData called")
 			if ctx.depth == 0 {
 				continue
 			}

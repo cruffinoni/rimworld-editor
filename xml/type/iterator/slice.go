@@ -1,7 +1,5 @@
 package iterator
 
-import "log"
-
 type SliceIndexer[V comparable] interface {
 	GetFromIndex(idx int) V
 	Capacity() int
@@ -20,7 +18,7 @@ func NewSliceIterator[V comparable](v SliceIndexer[V]) *SliceIterator[V] {
 func (si *SliceIterator[V]) Next() *SliceIterator[V] {
 	si.idx++
 	if si.idx > si.cap {
-		log.Panic("iterator overflow")
+		panic("iterator overflow")
 	}
 	return &SliceIterator[V]{m: si.m, idx: si.idx, cap: si.cap}
 }
@@ -28,7 +26,7 @@ func (si *SliceIterator[V]) Next() *SliceIterator[V] {
 func (si *SliceIterator[V]) Prev() *SliceIterator[V] {
 	si.idx--
 	if si.idx < 0 {
-		log.Panic("iterator underflow")
+		panic("iterator underflow")
 	}
 	return &SliceIterator[V]{m: si.m, idx: si.idx, cap: si.cap}
 }

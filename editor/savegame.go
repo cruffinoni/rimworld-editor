@@ -8,7 +8,7 @@ import (
 
 type Savegame struct {
 	Meta *meta.Meta `xml:"meta"`
-	Game *game.Game `xml:"game" `
+	Game *game.Game `xml:"game"`
 }
 
 func (s *Savegame) Assign(_ *xml.Element) error {
@@ -17,4 +17,13 @@ func (s *Savegame) Assign(_ *xml.Element) error {
 
 func (s *Savegame) GetPath() string {
 	return ""
+}
+
+func (s *Savegame) GetMeta() *meta.Meta {
+	return s.Meta
+}
+
+func (s *Savegame) SaveXML(path string) error {
+	
+	return nil
 }

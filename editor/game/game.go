@@ -1,14 +1,18 @@
 package game
 
-import "github.com/cruffinoni/rimworld-editor/xml"
+import (
+	"github.com/cruffinoni/rimworld-editor/editor/game/world"
+	"github.com/cruffinoni/rimworld-editor/xml"
+)
 
 type Game struct {
-	CurrentMapIndex int              `xml:"currentMapIndex"`
+	CurrentMapIndex int64            `xml:"currentMapIndex"`
 	Info            string           `xml:"info"`
 	Rules           string           `xml:"rules"`
 	Scenario        *Scenario        `xml:"scenario"`
 	TickManager     *TickManager     `xml:"tickManager"`
 	ResearchManager *ResearchManager `xml:"researchManager"`
+	World           *world.World     `xml:"world"`
 }
 
 func (g *Game) Assign(e *xml.Element) error {
@@ -19,10 +23,11 @@ func (g *Game) GetPath() string {
 	return ""
 }
 
-func (g *Game) GetCurrentMapIndex() int {
-	return g.CurrentMapIndex
-}
-
-func (g *Game) GetInfo() string {
-	return g.Info
-}
+//
+//func (g *Game) GetCurrentMapIndex() int64 {
+//	return g.CurrentMapIndex
+//}
+//
+//func (g *Game) GetInfo() string {
+//	return g.Info
+//}

@@ -36,7 +36,7 @@ func isXMLElement(v reflect.Value) bool {
 
 func makePointer(v reflect.Value) reflect.Value {
 	v.Set(reflect.New(v.Type().Elem()))
-	return v.Elem()
+	return v
 }
 
 func attributeDataToField(v reflect.Value, e *xml.Element) {
@@ -47,11 +47,11 @@ func attributeDataToField(v reflect.Value, e *xml.Element) {
 	case reflect.String:
 		v.SetString(e.Data.GetString())
 	case reflect.Int, reflect.Int8, reflect.Int16, reflect.Int32, reflect.Int64:
-		v.SetInt(int64(e.Data.GetInt()))
+		v.SetInt(e.Data.GetInt64())
 	case reflect.Bool:
 		v.SetBool(e.Data.GetBool())
 	case reflect.Float32, reflect.Float64:
-		v.SetFloat(e.Data.GetFloat())
+		v.SetFloat(e.Data.GetFloat64())
 	}
 }
 
@@ -66,27 +66,39 @@ func createValueFromPrimaryType(t reflect.Type, e *xml.Element) reflect.Value {
 	}
 	switch k {
 	case reflect.String:
-		log.Printf("=> '%v'", d.GetString())
 		return reflect.ValueOf(d.GetString())
-	case reflect.Int:
-		return reflect.ValueOf(d.GetInt())
-	case reflect.Int8:
-		return reflect.ValueOf(d.GetInt8())
-	case reflect.Int16:
-		return reflect.ValueOf(d.GetInt16())
-	case reflect.Int32:
-		return reflect.ValueOf(d.GetInt32())
 	case reflect.Int64:
 		return reflect.ValueOf(d.GetInt64())
 	case reflect.Bool:
 		return reflect.ValueOf(d.GetBool())
-	case reflect.Float32, reflect.Float64:
-		return reflect.ValueOf(d.GetFloat())
+	case reflect.Float64:
+		return reflect.ValueOf(d.GetFloat64())
 	default:
 		log.Panicf("createValueFromPrimaryType: unsupported type %s", t.String())
 	}
 	// Never reached
 	return reflect.Value{}
+}
+
+func isPrimaryType(t reflect.Kind) bool {
+	switch t {
+	case reflect.String, reflect.Int, reflect.Int8, reflect.Int16, reflect.Int32, reflect.Int64, reflect.Bool, reflect.Float32, reflect.Float64:
+		return true
+	}
+	return false
+}
+
+func skipPath(element *xml.Element, pathStr string) *xml.Element {
+	p := path.FindWithPath(pathStr, element)
+
+	if len(p) > 1 {
+		panic("unmarshal: multiple elements found")
+	}
+	if len(p) == 0 {
+		panic("unmarshal: no element found")
+	}
+	n := p[0].Child
+	return n
 }
 
 func Element(element *xml.Element, dest xml.Assigner) error {
@@ -95,20 +107,9 @@ func Element(element *xml.Element, dest xml.Assigner) error {
 	if n == nil {
 		return nil
 	}
-	// TODO: maybe delete this part
 	skippingPath := dest.GetPath()
 	if skippingPath != "" {
-		log.Printf("Skipping path: '%v'...", skippingPath)
-		p := path.FindWithPath(dest.GetPath(), element)
-
-		if len(p) > 1 {
-			return errors.New("unmarshal: multiple elements found")
-		}
-		if len(p) == 0 {
-			return errors.New("unmarshal: no element found")
-		}
-		n = p[0].Child
-		log.Printf("unmarshal: skipping path: %v", skippingPath)
+		n = skipPath(n, skippingPath)
 	}
 
 	t := reflect.TypeOf(dest)
@@ -126,11 +127,15 @@ func Element(element *xml.Element, dest xml.Assigner) error {
 		if f != -1 {
 			fieldValue := v.Field(f)
 			fieldKind := fieldValue.Kind()
+			var fieldPtr reflect.Value
+			//log.Printf("Field name: '%v', kind: %v", fieldValue.Type().Name(), fieldKind)
 			// If the field is a pointer, we need to allocate a new value
 			if fieldKind == reflect.Ptr {
-				fieldValue = makePointer(fieldValue)
+				fieldPtr = makePointer(fieldValue)
+				fieldValue = fieldPtr.Elem()
 				fieldKind = fieldValue.Kind()
 			}
+			//log.Printf(">Field name: '%v', kind: %v", fieldValue.Type().Name(), fieldKind)
 			switch fieldKind {
 			case reflect.Ptr:
 				// The function doesn't support multiple pointers (a.k.a. pointers to pointers)
@@ -153,20 +158,29 @@ func Element(element *xml.Element, dest xml.Assigner) error {
 					// Special case for xml.Element, set directly to the field
 					if ft == elementStruct {
 						fieldValue.Set(reflect.Append(fieldValue, reflect.ValueOf(nBefore)))
-					} else {
+					} else if isPrimaryType(ft.Kind()) {
 						fieldValue.Set(reflect.Append(fieldValue, createValueFromPrimaryType(ft, nBefore)))
+					} else {
+						if ft.Kind() != reflect.Ptr {
+							panic("unmarshal: slice element type must be a pointer")
+						}
+						newEntry := reflect.New(ft.Elem())
+						if err := Element(nBefore, newEntry.Interface().(xml.Assigner)); err != nil {
+							panic(err)
+						}
+						fieldValue.Set(reflect.Append(fieldValue, newEntry))
 					}
 					nBefore = nBefore.Next
 				}
 			case reflect.Struct:
 				// Special case for xml.Element, set directly to the field
 				if isXMLElement(fieldValue) {
-					fieldValue.Set(reflect.ValueOf(n))
+					fieldPtr.Set(reflect.ValueOf(n))
 					break
 				}
 				// Otherwise, we need to call the unmarshal function recursively
 				if err := Element(n.Child, fieldValue.Addr().Interface().(xml.Assigner)); err != nil {
-					return err
+					panic(err)
 				}
 			}
 		}

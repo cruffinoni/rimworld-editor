@@ -34,18 +34,12 @@ func castDataFromKind[T comparable](kind reflect.Kind, d *xml.Data) T {
 	switch kind {
 	case reflect.String:
 		return castTemplate[T](d.GetString())
-	case reflect.Int:
-		return castTemplate[T](d.GetInt())
-	case reflect.Int8:
-		return castTemplate[T](d.GetInt8())
-	case reflect.Int16:
-		return castTemplate[T](d.GetInt16())
-	case reflect.Int32:
-		return castTemplate[T](d.GetInt32())
-	case reflect.Int64:
+	case reflect.Int, reflect.Int8, reflect.Int16, reflect.Int32, reflect.Int64:
 		return castTemplate[T](d.GetInt64())
 	case reflect.Bool:
 		return castTemplate[T](d.GetBool())
+	case reflect.Float32, reflect.Float64:
+		return castTemplate[T](d.GetFloat64())
 	}
 	log.Panicf("Map/castDataFromKind: cannot cast %v to %v", d, zero[T]())
 	// Never reached
