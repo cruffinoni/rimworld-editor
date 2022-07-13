@@ -8,7 +8,7 @@ import (
 )
 
 func main() {
-	f, err := editor.Open("test/alone.rws")
+	f, err := editor.Open("test/part.rws")
 	if err != nil {
 		log.Fatal(err)
 	}
@@ -18,7 +18,9 @@ func main() {
 	if err != nil {
 		log.Fatal(err)
 	}
-	outputFileTree()
+	if err = m.SaveXML("test/part_save.xml"); err != nil {
+		log.Fatal(err)
+	}
 }
 
 func outputFileTree() {

@@ -8,6 +8,7 @@ import (
 )
 
 type Element struct {
+	AttributeAssigner
 	StartElement _xml.StartElement
 	EndElement   _xml.EndElement
 	Attr         Attributes
@@ -152,4 +153,12 @@ func (e *Element) FindTagFromData(data string) []*Element {
 		n = n.Next
 	}
 	return result
+}
+
+func (e *Element) SetAttributes(_ Attributes) {
+	// We ignore the attribution because the structure has already set the attributes
+}
+
+func (e *Element) GetAttributes() Attributes {
+	return e.Attr
 }

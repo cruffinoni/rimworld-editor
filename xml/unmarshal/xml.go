@@ -2,6 +2,7 @@ package unmarshal
 
 import (
 	"errors"
+	"github.com/cruffinoni/rimworld-editor/helper"
 	"github.com/cruffinoni/rimworld-editor/xml"
 	"github.com/cruffinoni/rimworld-editor/xml/path"
 	"log"
@@ -23,9 +24,36 @@ func findFieldFromName(t reflect.Type, value reflect.Value, name string) int {
 }
 
 var (
-	elementStruct     = reflect.TypeOf((*xml.Element)(nil))
-	elementStructName = elementStruct.Elem().Name()
+	elementStruct          = reflect.TypeOf((*xml.Element)(nil))
+	elementStructName      = elementStruct.Elem().Name()
+	elementEmptyStructName = reflect.TypeOf((*xml.Empty)(nil)).Elem().Name()
+	primaryTypeNames       []string
 )
+
+func init() {
+	primaryTypeNames = []string{
+		reflect.TypeOf((*xml.EmbeddedPrimaryType[int])(nil)).Elem().Name(),
+		reflect.TypeOf((*xml.EmbeddedPrimaryType[uint])(nil)).Elem().Name(),
+		reflect.TypeOf((*xml.EmbeddedPrimaryType[float64])(nil)).Elem().Name(),
+		reflect.TypeOf((*xml.EmbeddedPrimaryType[bool])(nil)).Elem().Name(),
+		reflect.TypeOf((*xml.EmbeddedPrimaryType[string])(nil)).Elem().Name(),
+		reflect.TypeOf((*xml.EmbeddedPrimaryType[int64])(nil)).Elem().Name(),
+		reflect.TypeOf((*xml.EmbeddedPrimaryType[uint64])(nil)).Elem().Name(),
+	}
+}
+
+func isXMLEmbeddedPrimaryType(name string) bool {
+	for _, n := range primaryTypeNames {
+		if name == n {
+			return true
+		}
+	}
+	return false
+}
+
+func isEmptyType(name string) bool {
+	return name == elementEmptyStructName
+}
 
 func isXMLElement(v reflect.Value) bool {
 	if v.Type().Kind() == reflect.Ptr {
@@ -78,14 +106,6 @@ func createValueFromPrimaryType(t reflect.Type, e *xml.Element) reflect.Value {
 	}
 	// Never reached
 	return reflect.Value{}
-}
-
-func isPrimaryType(t reflect.Kind) bool {
-	switch t {
-	case reflect.String, reflect.Int, reflect.Int8, reflect.Int16, reflect.Int32, reflect.Int64, reflect.Bool, reflect.Float32, reflect.Float64:
-		return true
-	}
-	return false
 }
 
 func skipPath(element *xml.Element, pathStr string) *xml.Element {
@@ -147,7 +167,7 @@ func Element(element *xml.Element, dest xml.Assigner) error {
 				fieldValue.Set(reflect.MakeSlice(fieldValue.Type(), 0, 0))
 				// If there is no child element, we are done and left the slice empty
 				if n.Child == nil {
-					log.Printf("unmarshal: slice empty")
+					log.Println("unmarshal: slice empty")
 					continue
 				}
 				// ft is the type of the slice
@@ -158,7 +178,7 @@ func Element(element *xml.Element, dest xml.Assigner) error {
 					// Special case for xml.Element, set directly to the field
 					if ft == elementStruct {
 						fieldValue.Set(reflect.Append(fieldValue, reflect.ValueOf(nBefore)))
-					} else if isPrimaryType(ft.Kind()) {
+					} else if helper.IsReflectPrimaryType(ft.Kind()) {
 						fieldValue.Set(reflect.Append(fieldValue, createValueFromPrimaryType(ft, nBefore)))
 					} else {
 						if ft.Kind() != reflect.Ptr {
@@ -173,18 +193,28 @@ func Element(element *xml.Element, dest xml.Assigner) error {
 					nBefore = nBefore.Next
 				}
 			case reflect.Struct:
+				typeName := fieldValue.Type().Name()
 				// Special case for xml.Element, set directly to the field
 				if isXMLElement(fieldValue) {
 					fieldPtr.Set(reflect.ValueOf(n))
 					break
-				}
-				// Otherwise, we need to call the unmarshal function recursively
-				if err := Element(n.Child, fieldValue.Addr().Interface().(xml.Assigner)); err != nil {
-					panic(err)
+				} else if isXMLEmbeddedPrimaryType(typeName) ||
+					isEmptyType(typeName) {
+					// it must be a safe cast because the structures are known
+					cast := fieldValue.Addr().Interface().(xml.Assigner)
+					// We know, for sure, that struct doesn't return any error
+					_ = cast.Assign(n)
+					cast.SetAttributes(n.Attr)
+				} else {
+					// Otherwise, we need to call the unmarshal function recursively
+					if err := Element(n.Child, fieldValue.Addr().Interface().(xml.Assigner)); err != nil {
+						panic(err)
+					}
 				}
 			}
 		}
 		n = n.Next
 	}
+	dest.SetAttributes(nCpy.Attr)
 	return dest.Assign(nCpy)
 }

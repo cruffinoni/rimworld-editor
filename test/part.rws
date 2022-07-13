@@ -11,90 +11,43 @@
 		<modNames>
 			<li>Core</li>
 		</modNames>
-		<beta>
-			<li>
-				<fac Class="Faction">
-					<li>abc</li>
-					<li>def</li>
-				</fac>
-			</li>
-			<li>
-				<faction Class="Faction">
-					<li>xdf</li>
-					<li>uio</li>
-				</faction>
-			</li>
-		</beta>
 	</meta>
 	<game>
-		<world>
-			<factionManager>
-				<allFactions>
-					<li>
-						<leader>Thing_Human440</leader>
-						<def>OutlanderCivil</def>
-						<name>Thado nord-ouest</name>
-						<randomKey>944421117</randomKey>
-						<colorFromSpectrum>0.930568</colorFromSpectrum>
-						<centralMelanin>0.7051842</centralMelanin>
-						<kidnapped>
-							<kidnappedPawns />
-						</kidnapped>
-						<ideos>
-							<primaryIdeo>Ideo_0</primaryIdeo>
-							<ideosMinor />
-						</ideos>
-						<predatorThreats />
-						<relations>
-							<li>
-								<other>Faction_1</other>
-								<kind>Hostile</kind>
-								<goodwill>-80</goodwill>
-							</li>
-							<li>
-								<other>Faction_2</other>
-							</li>
-							<li>
-								<other>Faction_3</other>
-								<kind>Hostile</kind>
-								<goodwill>-80</goodwill>
-							</li>
-							<li>
-								<other>Faction_4</other>
-								<kind>Hostile</kind>
-								<goodwill>-100</goodwill>
-							</li>
-							<li>
-								<other>Faction_5</other>
-								<kind>Hostile</kind>
-								<goodwill>-100</goodwill>
-							</li>
-							<li>
-								<other>Faction_6</other>
-							</li>
-							<li>
-								<other>Faction_7</other>
-								<kind>Hostile</kind>
-								<goodwill>-100</goodwill>
-							</li>
-							<li>
-								<other>Faction_8</other>
-								<kind>Hostile</kind>
-								<goodwill>-100</goodwill>
-							</li>
-							<li>
-								<other>Faction_9</other>
-								<kind>Hostile</kind>
-								<goodwill>-100</goodwill>
-							</li>
-							<li>
-								<other>Faction_10</other>
-							</li>
-						</relations>
-						<questTags IsNull="True" />
-					</li>
-				</allFactions>
-			</factionManager>
-		</world>
+		<scenario>
+			<name Class="Random">Brutalité nue</name>
+			<summary>Nu(e), seul(e) et complètement non préparé(e). Pourrez-vous survivre ? Extrêmement difficile et injuste.</summary>
+			<description>Vous avez été anesthésié(e) pour une opération mineure. Maintenant, vous réveillez dans une nacelle qui s'écrase sur une planète lointaine. Vous êtes pris(e) au dépourvu, nu(e), et seul(e). Pourrez-vous survivre ?
+
+Avertissement : ce scénario ne vous ménagera pas et ne sera pas loyal. Il est extrêmement difficile et la mort peut arriver à tout moment.</description>
+			<playerFaction>
+				<def>PlayerFaction</def>
+				<factionDef>PlayerColony</factionDef>
+			</playerFaction>
+			<parts>
+				<li Class="ScenPart_ConfigPage_ConfigureStartingPawns">
+					<def>ConfigPage_ConfigureStartingPawns</def>
+					<pawnCount>1</pawnCount>
+					<pawnChoiceCount>8</pawnChoiceCount>
+				</li>
+				<li Class="ScenPart_PlayerPawnsArriveMethod">
+					<def>PlayerPawnsArriveMethod</def>
+					<method>DropPods</method>
+				</li>
+				<li Class="ScenPart_Naked">
+					<def>Naked</def>
+					<chance>1</chance>
+					<context>PlayerStarter</context>
+				</li>
+				<li Class="ScenPart_GameStartDialog">
+					<def>GameStartDialog</def>
+					<text>C'était censé être une opération mineure. Juste une heure sous anesthésie. Vous vous sentiez totalement en sécurité.
+
+Vous vous réveillez à l'intérieur d'une nacelle dans l'atmosphère d'un monde lointain.
+
+À l'exception d'un mystérieux liquide visqueux sur votre corps, vous êtes totalement nu(e). Sans préparation, sans fournitures et sans outils, pourrez-vous survivre ?</text>
+					<closeSound>GameStartSting</closeSound>
+				</li>
+			</parts>
+		</scenario>
 	</game>
 </savegame>

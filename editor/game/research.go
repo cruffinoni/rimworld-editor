@@ -17,6 +17,14 @@ func (r *ResearchManager) GetPath() string {
 	return ""
 }
 
+func (r *ResearchManager) SetAttributes(_ xml.Attributes) {
+	// No attributes need to be set.
+}
+
+func (r *ResearchManager) GetAttributes() xml.Attributes {
+	return nil
+}
+
 func (r *ResearchManager) GetProgress(key string) float64 {
 	return r.Progress.Get(key)
 }

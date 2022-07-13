@@ -22,3 +22,11 @@ func (i *Info) Assign(_ *xml.Element) error {
 func (i *Info) GetPath() string {
 	return ""
 }
+
+func (i *Info) SetAttributes(_ xml.Attributes) {
+	// No attributes need to be set.
+}
+
+func (i *Info) GetAttributes() xml.Attributes {
+	return nil
+}

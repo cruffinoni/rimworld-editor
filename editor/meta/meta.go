@@ -12,8 +12,16 @@ type Mod struct {
 }
 
 type Meta struct {
-	GameVersion string          `xml:"gameVersion"`
+	GameVersion string `xml:"gameVersion"`
 	Mods        map[string]*Mod
+}
+
+func (m *Meta) SetAttributes(_ xml.Attributes) {
+	// No attributes need to be set.
+}
+
+func (m *Meta) GetAttributes() xml.Attributes {
+	return nil
 }
 
 func (m *Meta) Assign(e *xml.Element) error {

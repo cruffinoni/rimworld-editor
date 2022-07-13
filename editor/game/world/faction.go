@@ -16,6 +16,14 @@ func (f *FactionRelation) GetPath() string {
 	return "li"
 }
 
+func (f *FactionRelation) SetAttributes(_ xml.Attributes) {
+	// No attributes need to be set.
+}
+
+func (f *FactionRelation) GetAttributes() xml.Attributes {
+	return nil
+}
+
 type Faction struct {
 	Leader            string             `xml:"leader"`
 	Def               string             `xml:"def"`
@@ -37,6 +45,14 @@ func (f *Faction) GetPath() string {
 	return "li"
 }
 
+func (f *Faction) SetAttributes(_ xml.Attributes) {
+	// No attributes need to be set.
+}
+
+func (f *Faction) GetAttributes() xml.Attributes {
+	return nil
+}
+
 type FactionManager struct {
 	AllFactions []*Faction `xml:"allFactions"`
 }
@@ -47,4 +63,12 @@ func (f *FactionManager) Assign(e *xml.Element) error {
 
 func (f *FactionManager) GetPath() string {
 	return ""
+}
+
+func (f *FactionManager) SetAttributes(_ xml.Attributes) {
+	// No attributes need to be set.
+}
+
+func (f *FactionManager) GetAttributes() xml.Attributes {
+	return nil
 }

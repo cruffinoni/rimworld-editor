@@ -23,6 +23,14 @@ func (g *Game) GetPath() string {
 	return ""
 }
 
+func (g *Game) SetAttributes(_ xml.Attributes) {
+	// No attributes need to be set.
+}
+
+func (g *Game) GetAttributes() xml.Attributes {
+	return nil
+}
+
 //
 //func (g *Game) GetCurrentMapIndex() int64 {
 //	return g.CurrentMapIndex

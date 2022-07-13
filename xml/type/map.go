@@ -134,3 +134,11 @@ func (m *Map[K, V]) Capacity() int {
 func (m *Map[K, V]) Iterator() *iterator.MapIterator[K, V] {
 	return iterator.NewMapIterator[K, V](m)
 }
+
+func (m *Map[K, V]) SetAttributes(_ xml.Attributes) {
+	// No attributes need to be set.
+}
+
+func (m *Map[K, V]) GetAttributes() xml.Attributes {
+	return nil
+}
