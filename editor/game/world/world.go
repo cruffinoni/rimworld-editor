@@ -1,6 +1,9 @@
 package world
 
-import "github.com/cruffinoni/rimworld-editor/xml"
+import (
+	"github.com/cruffinoni/rimworld-editor/xml"
+	"github.com/cruffinoni/rimworld-editor/xml/attributes"
+)
 
 type World struct {
 	FactionManager *FactionManager `xml:"factionManager"`
@@ -15,10 +18,10 @@ func (w *World) GetPath() string {
 	return ""
 }
 
-func (w *World) SetAttributes(_ xml.Attributes) {
+func (w *World) SetAttributes(_ attributes.Attributes) {
 	// No attributes need to be set.
 }
 
-func (w *World) GetAttributes() xml.Attributes {
+func (w *World) GetAttributes() attributes.Attributes {
 	return nil
 }

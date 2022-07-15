@@ -1,4 +1,4 @@
-package xml
+package attributes
 
 type Attributes map[string]string
 

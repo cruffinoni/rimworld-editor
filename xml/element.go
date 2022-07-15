@@ -4,6 +4,7 @@ import (
 	"bytes"
 	_xml "encoding/xml"
 	"fmt"
+	"github.com/cruffinoni/rimworld-editor/xml/attributes"
 	"strings"
 )
 
@@ -11,7 +12,7 @@ type Element struct {
 	AttributeAssigner
 	StartElement _xml.StartElement
 	EndElement   _xml.EndElement
-	Attr         Attributes
+	Attr         attributes.Attributes
 	Data         *Data
 	Index        int
 
@@ -155,10 +156,10 @@ func (e *Element) FindTagFromData(data string) []*Element {
 	return result
 }
 
-func (e *Element) SetAttributes(_ Attributes) {
+func (e *Element) SetAttributes(_ attributes.Attributes) {
 	// We ignore the attribution because the structure has already set the attributes
 }
 
-func (e *Element) GetAttributes() Attributes {
+func (e *Element) GetAttributes() attributes.Attributes {
 	return e.Attr
 }

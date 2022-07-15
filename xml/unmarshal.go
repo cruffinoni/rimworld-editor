@@ -2,6 +2,7 @@ package xml
 
 import (
 	_xml "encoding/xml"
+	"github.com/cruffinoni/rimworld-editor/xml/attributes"
 	"io"
 )
 
@@ -11,12 +12,12 @@ type indexRemembering map[int]int
 
 type Context struct {
 	index indexRemembering
-	attr  Attributes
+	attr  attributes.Attributes
 	depth int
 }
 
-func transformAttrToMap(attr *[]_xml.Attr) Attributes {
-	attrMap := make(Attributes)
+func transformAttrToMap(attr *[]_xml.Attr) attributes.Attributes {
+	attrMap := make(attributes.Attributes)
 	for _, a := range *attr {
 		attrMap[a.Name.Local] = a.Value
 	}

@@ -1,10 +1,11 @@
-package _type
+package types
 
 import (
 	"errors"
 	"github.com/cruffinoni/rimworld-editor/xml"
+	"github.com/cruffinoni/rimworld-editor/xml/attributes"
 	"github.com/cruffinoni/rimworld-editor/xml/path"
-	"github.com/cruffinoni/rimworld-editor/xml/type/iterator"
+	"github.com/cruffinoni/rimworld-editor/xml/types/iterator"
 	"log"
 	"reflect"
 )
@@ -13,7 +14,7 @@ import (
 // element.
 type Map[K, V comparable] struct {
 	xml.Assigner
-	iterator.SliceIndexer[V]
+	iterator.MapIndexer[K, V]
 	m map[K]V
 }
 
@@ -135,10 +136,10 @@ func (m *Map[K, V]) Iterator() *iterator.MapIterator[K, V] {
 	return iterator.NewMapIterator[K, V](m)
 }
 
-func (m *Map[K, V]) SetAttributes(_ xml.Attributes) {
+func (m *Map[K, V]) SetAttributes(_ attributes.Attributes) {
 	// No attributes need to be set.
 }
 
-func (m *Map[K, V]) GetAttributes() xml.Attributes {
+func (m *Map[K, V]) GetAttributes() attributes.Attributes {
 	return nil
 }

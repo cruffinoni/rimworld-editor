@@ -2,17 +2,18 @@ package game
 
 import (
 	"github.com/cruffinoni/rimworld-editor/xml"
+	"github.com/cruffinoni/rimworld-editor/xml/attributes"
 )
 
 type TickManager struct {
 	StartingYear int64 `xml:"startingYear"`
 }
 
-func (t *TickManager) SetAttributes(_ xml.Attributes) {
+func (t *TickManager) SetAttributes(_ attributes.Attributes) {
 	// No attributes need to be set.
 }
 
-func (t *TickManager) GetAttributes() xml.Attributes {
+func (t *TickManager) GetAttributes() attributes.Attributes {
 	return nil
 }
 

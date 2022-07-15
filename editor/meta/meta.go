@@ -3,6 +3,7 @@ package meta
 import (
 	"errors"
 	"github.com/cruffinoni/rimworld-editor/xml"
+	"github.com/cruffinoni/rimworld-editor/xml/attributes"
 	"github.com/cruffinoni/rimworld-editor/xml/path"
 )
 
@@ -16,11 +17,11 @@ type Meta struct {
 	Mods        map[string]*Mod
 }
 
-func (m *Meta) SetAttributes(_ xml.Attributes) {
+func (m *Meta) SetAttributes(_ attributes.Attributes) {
 	// No attributes need to be set.
 }
 
-func (m *Meta) GetAttributes() xml.Attributes {
+func (m *Meta) GetAttributes() attributes.Attributes {
 	return nil
 }
 

@@ -2,7 +2,8 @@ package world
 
 import (
 	"github.com/cruffinoni/rimworld-editor/xml"
-	_type "github.com/cruffinoni/rimworld-editor/xml/type"
+	"github.com/cruffinoni/rimworld-editor/xml/attributes"
+	"github.com/cruffinoni/rimworld-editor/xml/types"
 )
 
 type Info struct {
@@ -12,7 +13,7 @@ type Info struct {
 	OverallRainfall       string                   `xml:"overallRainfall"`
 	OverallTemperature    string                   `xml:"overallTemperature"`
 	InitialMapSize        string                   `xml:"initialMapSize"`
-	FactionCounts         _type.Map[string, int64] `xml:"factionCounts"`
+	FactionCounts         types.Map[string, int64] `xml:"factionCounts"`
 }
 
 func (i *Info) Assign(_ *xml.Element) error {
@@ -23,10 +24,10 @@ func (i *Info) GetPath() string {
 	return ""
 }
 
-func (i *Info) SetAttributes(_ xml.Attributes) {
+func (i *Info) SetAttributes(_ attributes.Attributes) {
 	// No attributes need to be set.
 }
 
-func (i *Info) GetAttributes() xml.Attributes {
+func (i *Info) GetAttributes() attributes.Attributes {
 	return nil
 }

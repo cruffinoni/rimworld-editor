@@ -1,17 +1,17 @@
 package iterator
 
-type SliceIndexer[V comparable] interface {
+type SliceIndexer[V any] interface {
 	GetFromIndex(idx int) V
 	Capacity() int
 }
 
-type SliceIterator[V comparable] struct {
+type SliceIterator[V any] struct {
 	m   SliceIndexer[V]
 	idx int
 	cap int
 }
 
-func NewSliceIterator[V comparable](v SliceIndexer[V]) *SliceIterator[V] {
+func NewSliceIterator[V any](v SliceIndexer[V]) *SliceIterator[V] {
 	return &SliceIterator[V]{m: v, idx: 0, cap: v.Capacity()}
 }
 

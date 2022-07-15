@@ -1,15 +1,16 @@
 package xml
 
-import "log"
+import (
+	"github.com/cruffinoni/rimworld-editor/xml/attributes"
+)
 
 type Empty struct {
 	name string
-	attr Attributes
+	attr attributes.Attributes
 }
 
 func (e *Empty) Assign(element *Element) error {
 	e.name = element.GetName()
-	log.Printf("Assigning %s to %s", element.GetName(), e.name)
 	return nil
 }
 
@@ -17,11 +18,11 @@ func (e *Empty) GetPath() string {
 	return ""
 }
 
-func (e *Empty) SetAttributes(attributes Attributes) {
+func (e *Empty) SetAttributes(attributes attributes.Attributes) {
 	e.attr = attributes
 }
 
-func (e *Empty) GetAttributes() Attributes {
+func (e *Empty) GetAttributes() attributes.Attributes {
 	return e.attr
 }
 

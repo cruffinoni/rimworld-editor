@@ -3,6 +3,7 @@ package game
 import (
 	"github.com/cruffinoni/rimworld-editor/editor/game/world"
 	"github.com/cruffinoni/rimworld-editor/xml"
+	"github.com/cruffinoni/rimworld-editor/xml/attributes"
 )
 
 type Game struct {
@@ -23,11 +24,11 @@ func (g *Game) GetPath() string {
 	return ""
 }
 
-func (g *Game) SetAttributes(_ xml.Attributes) {
+func (g *Game) SetAttributes(_ attributes.Attributes) {
 	// No attributes need to be set.
 }
 
-func (g *Game) GetAttributes() xml.Attributes {
+func (g *Game) GetAttributes() attributes.Attributes {
 	return nil
 }
 

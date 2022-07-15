@@ -2,18 +2,18 @@ package iterator
 
 import "log"
 
-type MapIndexer[K, V comparable] interface {
+type MapIndexer[K, V any] interface {
 	SliceIndexer[V]
 	GetFromKey(idx int) K
 }
 
-type MapIterator[K, V comparable] struct {
+type MapIterator[K, V any] struct {
 	m   MapIndexer[K, V]
 	idx int
 	cap int
 }
 
-func NewMapIterator[K, V comparable](v MapIndexer[K, V]) *MapIterator[K, V] {
+func NewMapIterator[K, V any](v MapIndexer[K, V]) *MapIterator[K, V] {
 	return &MapIterator[K, V]{m: v, idx: 0, cap: v.Capacity()}
 }
 

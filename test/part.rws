@@ -26,8 +26,8 @@ Avertissement : ce scénario ne vous ménagera pas et ne sera pas loyal. Il est 
 			<parts>
 				<li Class="ScenPart_ConfigPage_ConfigureStartingPawns">
 					<def>ConfigPage_ConfigureStartingPawns</def>
-					<pawnCount>1</pawnCount>
-					<pawnChoiceCount>8</pawnChoiceCount>
+					<pawnCount>99</pawnCount>
+					<pawnChoiceCount>98</pawnChoiceCount>
 				</li>
 				<li Class="ScenPart_PlayerPawnsArriveMethod">
 					<def>PlayerPawnsArriveMethod</def>

@@ -2,9 +2,11 @@ package unmarshal
 
 import (
 	"errors"
+	"fmt"
 	"github.com/cruffinoni/rimworld-editor/helper"
 	"github.com/cruffinoni/rimworld-editor/xml"
 	"github.com/cruffinoni/rimworld-editor/xml/path"
+	"github.com/cruffinoni/rimworld-editor/xml/types/primary"
 	"log"
 	"reflect"
 )
@@ -27,29 +29,7 @@ var (
 	elementStruct          = reflect.TypeOf((*xml.Element)(nil))
 	elementStructName      = elementStruct.Elem().Name()
 	elementEmptyStructName = reflect.TypeOf((*xml.Empty)(nil)).Elem().Name()
-	primaryTypeNames       []string
 )
-
-func init() {
-	primaryTypeNames = []string{
-		reflect.TypeOf((*xml.EmbeddedPrimaryType[int])(nil)).Elem().Name(),
-		reflect.TypeOf((*xml.EmbeddedPrimaryType[uint])(nil)).Elem().Name(),
-		reflect.TypeOf((*xml.EmbeddedPrimaryType[float64])(nil)).Elem().Name(),
-		reflect.TypeOf((*xml.EmbeddedPrimaryType[bool])(nil)).Elem().Name(),
-		reflect.TypeOf((*xml.EmbeddedPrimaryType[string])(nil)).Elem().Name(),
-		reflect.TypeOf((*xml.EmbeddedPrimaryType[int64])(nil)).Elem().Name(),
-		reflect.TypeOf((*xml.EmbeddedPrimaryType[uint64])(nil)).Elem().Name(),
-	}
-}
-
-func isXMLEmbeddedPrimaryType(name string) bool {
-	for _, n := range primaryTypeNames {
-		if name == n {
-			return true
-		}
-	}
-	return false
-}
 
 func isEmptyType(name string) bool {
 	return name == elementEmptyStructName
@@ -121,15 +101,19 @@ func skipPath(element *xml.Element, pathStr string) *xml.Element {
 	return n
 }
 
-func Element(element *xml.Element, dest xml.Assigner) error {
+func Element(element *xml.Element, dest any) error {
 	// Do a copy of the element to avoid modifying the original
 	n := element
 	if n == nil {
 		return nil
 	}
-	skippingPath := dest.GetPath()
-	if skippingPath != "" {
-		n = skipPath(n, skippingPath)
+
+	destAssigner, destIsAssigner := dest.(xml.Assigner)
+	if destIsAssigner {
+		skippingPath := destAssigner.GetPath()
+		if skippingPath != "" {
+			n = skipPath(n, skippingPath)
+		}
 	}
 
 	t := reflect.TypeOf(dest)
@@ -138,14 +122,17 @@ func Element(element *xml.Element, dest xml.Assigner) error {
 	}
 	t = t.Elem()
 	if t.Kind() != reflect.Struct {
-		return errors.New("unmarshal: dest must be a struct")
+		return fmt.Errorf("dest must be a pointer to a struct, got %s", t.String())
 	}
+	log.Printf("unmarshal: %s", t.String())
 	v := reflect.ValueOf(dest).Elem()
 	nCpy := n
 	for n != nil {
+		log.Printf("looking for %s", n.GetName())
 		f := findFieldFromName(t, v, n.GetName())
 		if f != -1 {
 			fieldValue := v.Field(f)
+			log.Printf("=>unmarshal: %s", fieldValue.Type().String())
 			fieldKind := fieldValue.Kind()
 			var fieldPtr reflect.Value
 			//log.Printf("Field name: '%v', kind: %v", fieldValue.Type().Name(), fieldKind)
@@ -198,7 +185,7 @@ func Element(element *xml.Element, dest xml.Assigner) error {
 				if isXMLElement(fieldValue) {
 					fieldPtr.Set(reflect.ValueOf(n))
 					break
-				} else if isXMLEmbeddedPrimaryType(typeName) ||
+				} else if primary.IsEmbeddedPrimaryType(typeName) ||
 					isEmptyType(typeName) {
 					// it must be a safe cast because the structures are known
 					cast := fieldValue.Addr().Interface().(xml.Assigner)
@@ -215,6 +202,10 @@ func Element(element *xml.Element, dest xml.Assigner) error {
 		}
 		n = n.Next
 	}
-	dest.SetAttributes(nCpy.Attr)
-	return dest.Assign(nCpy)
+	if destIsAssigner {
+		destAssigner.SetAttributes(nCpy.Attr)
+		return destAssigner.Assign(nCpy)
+	} else {
+		return nil
+	}
 }

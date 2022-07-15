@@ -1,6 +1,9 @@
 package world
 
-import "github.com/cruffinoni/rimworld-editor/xml"
+import (
+	"github.com/cruffinoni/rimworld-editor/xml"
+	"github.com/cruffinoni/rimworld-editor/xml/attributes"
+)
 
 type FactionRelation struct {
 	Other    string `xml:"other"`
@@ -16,11 +19,11 @@ func (f *FactionRelation) GetPath() string {
 	return "li"
 }
 
-func (f *FactionRelation) SetAttributes(_ xml.Attributes) {
+func (f *FactionRelation) SetAttributes(_ attributes.Attributes) {
 	// No attributes need to be set.
 }
 
-func (f *FactionRelation) GetAttributes() xml.Attributes {
+func (f *FactionRelation) GetAttributes() attributes.Attributes {
 	return nil
 }
 
@@ -45,11 +48,11 @@ func (f *Faction) GetPath() string {
 	return "li"
 }
 
-func (f *Faction) SetAttributes(_ xml.Attributes) {
+func (f *Faction) SetAttributes(_ attributes.Attributes) {
 	// No attributes need to be set.
 }
 
-func (f *Faction) GetAttributes() xml.Attributes {
+func (f *Faction) GetAttributes() attributes.Attributes {
 	return nil
 }
 
@@ -65,10 +68,10 @@ func (f *FactionManager) GetPath() string {
 	return ""
 }
 
-func (f *FactionManager) SetAttributes(_ xml.Attributes) {
+func (f *FactionManager) SetAttributes(_ attributes.Attributes) {
 	// No attributes need to be set.
 }
 
-func (f *FactionManager) GetAttributes() xml.Attributes {
+func (f *FactionManager) GetAttributes() attributes.Attributes {
 	return nil
 }

@@ -2,11 +2,12 @@ package game
 
 import (
 	"github.com/cruffinoni/rimworld-editor/xml"
-	"github.com/cruffinoni/rimworld-editor/xml/type"
+	"github.com/cruffinoni/rimworld-editor/xml/attributes"
+	"github.com/cruffinoni/rimworld-editor/xml/types"
 )
 
 type ResearchManager struct {
-	Progress _type.Map[string, float64] `xml:"progress"`
+	Progress types.Map[string, float64] `xml:"progress"`
 }
 
 func (r *ResearchManager) Assign(_ *xml.Element) error {
@@ -17,11 +18,11 @@ func (r *ResearchManager) GetPath() string {
 	return ""
 }
 
-func (r *ResearchManager) SetAttributes(_ xml.Attributes) {
+func (r *ResearchManager) SetAttributes(_ attributes.Attributes) {
 	// No attributes need to be set.
 }
 
-func (r *ResearchManager) GetAttributes() xml.Attributes {
+func (r *ResearchManager) GetAttributes() attributes.Attributes {
 	return nil
 }
 
