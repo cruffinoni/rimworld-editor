@@ -1,19 +1,72 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<savegame>>
-	<meta>>
-		<gameVersion>1.3.3326 rev562</gameVersion>>>
-	</meta>>
-	<game>>
-		<scenario>>
-			<name>Brutalité nue>>
-			</name>>
-			<summary>Nu(e), seul(e) et complètement non préparé(e). Pourrez-vous survivre ? Extrêmement difficile et injuste.</summary>>
+<savegame>
+	<meta>
+		<gameVersion>1.3.3326 rev562</gameVersion>
+	</meta>
+	<game>
+		<scenario>
+			<name Class="Random">
+				Brutalité nue
+			</name>
+			<summary>Nu(e), seul(e) et complètement non préparé(e). Pourrez-vous survivre ? Extrêmement difficile et injuste.</summary>
 			<description>Vous avez été anesthésié(e) pour une opération mineure. Maintenant, vous réveillez dans une nacelle qui s'écrase sur une planète lointaine. Vous êtes pris(e) au dépourvu, nu(e), et seul(e). Pourrez-vous survivre ?
 
-Avertissement : ce scénario ne vous ménagera pas et ne sera pas loyal. Il est extrêmement difficile et la mort peut arriver à tout moment.</description>>
-			<playerFaction></playerFaction>>
-			<parts>[<ConfigPage_ConfigureStartingPawns>, <PlayerPawnsArriveMethod>, <Naked>, <GameStartDialog>]>>
-			</parts>>>
-		</scenario>>>
-	</game>>>
+Avertissement : ce scénario ne vous ménagera pas et ne sera pas loyal. Il est extrêmement difficile et la mort peut arriver à tout moment.</description>
+			<playerFaction>
+				<def>PlayerFaction</def>
+				<factionDef>PlayerColony</factionDef>
+			</playerFaction>
+			<parts abc="abcd">
+				<li Class="ScenPart_ConfigPage_ConfigureStartingPawns">
+					<def>ConfigPage_ConfigureStartingPawns</def>
+					<pawnCount>99</pawnCount>
+					<pawnChoiceCount>98</pawnChoiceCount>
+				</li>
+				<li Class="ScenPart_PlayerPawnsArriveMethod">
+					<def>PlayerPawnsArriveMethod</def>
+					<method>DropPods</method>
+				</li>
+				<li Class="ScenPart_Naked">
+					<def>Naked</def>
+					<chance>1</chance>
+					<context>PlayerStarter</context>
+				</li>
+				<li Class="ScenPart_GameStartDialog">
+					<def>GameStartDialog</def>
+					<text>C'était censé être une opération mineure. Juste une heure sous anesthésie. Vous vous sentiez totalement en sécurité.
+
+Vous vous réveillez à l'intérieur d'une nacelle dans l'atmosphère d'un monde lointain.
+
+À l'exception d'un mystérieux liquide visqueux sur votre corps, vous êtes totalement nu(e). Sans préparation, sans fournitures et sans outils, pourrez-vous survivre ?</text>
+					<closeSound>GameStartSting</closeSound>
+				</li>
+			</parts>
+		</scenario>
+		<researchManager>
+			<progress>
+				<keys>
+					<li>Brewing</li>
+					<li>ComplexFurniture</li>
+					<li>PassiveCooler</li>
+					<li>DrugProduction</li>
+					<li>Cocoa</li>
+					<li>PsychoidBrewing</li>
+					<li>TreeSowing</li>
+					<li>Stonecutting</li>
+					<li>ComplexClothing</li>
+				</keys>
+				<values>
+					<li>10100</li>
+					<li>40100</li>
+					<li>60100</li>
+					<li>50100</li>
+					<li>20100</li>
+					<li>70100</li>
+					<li>90100</li>
+					<li>80100</li>
+					<li>30100</li>
+				</values>
+			</progress>
+		</researchManager>
+	</game>
 </savegame>

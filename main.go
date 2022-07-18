@@ -4,7 +4,6 @@ import (
 	"github.com/cruffinoni/rimworld-editor/editor"
 	"github.com/cruffinoni/rimworld-editor/xml/unmarshal"
 	"log"
-	"os"
 )
 
 func main() {
@@ -25,12 +24,4 @@ func main() {
 		log.Fatal(err)
 	}
 	log.Println("Done!")
-}
-
-func outputFileTree() {
-	f, err := editor.Open("test/alone.rws")
-	if err != nil {
-		log.Fatal(err)
-	}
-	os.WriteFile("test/alone.xml", []byte(f.XML.ToXML()), 0644)
 }

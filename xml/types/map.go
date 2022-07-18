@@ -2,20 +2,69 @@ package types
 
 import (
 	"errors"
+	"fmt"
+	"github.com/cruffinoni/rimworld-editor/helper"
 	"github.com/cruffinoni/rimworld-editor/xml"
 	"github.com/cruffinoni/rimworld-editor/xml/attributes"
 	"github.com/cruffinoni/rimworld-editor/xml/path"
+	"github.com/cruffinoni/rimworld-editor/xml/saver"
 	"github.com/cruffinoni/rimworld-editor/xml/types/iterator"
 	"log"
 	"reflect"
+	"sort"
 )
 
 // Map is a map of K to V and require the XML file to have a "keys" and "values"
 // element.
+
+type MapComparable[T any] interface {
+	Less(key reflect.Value, other T) bool
+	Equal(key reflect.Value, other T) bool
+	Great(key reflect.Value, other T) bool
+}
+
+// Map is a map of K to V.
+// We don't restrict the type K to MapComparable[Map[K, V]] because K might be
+// type of string, int or any primary type.
 type Map[K, V comparable] struct {
+	MapComparable[Map[K, V]]
 	xml.Assigner
 	iterator.MapIndexer[K, V]
-	m map[K]V
+	m          map[K]V
+	sortedKeys []reflect.Value
+}
+
+func (m Map[K, V]) TransformToXML(buffer *saver.Buffer) error {
+	if m.m == nil {
+		buffer.WriteEmptyTag("keys", nil)
+		buffer.WriteEmptyTag("values", nil)
+		return nil
+	}
+	buffer.IncreaseDepth()
+	buffer.WriteStringWithIndent("<keys>\n")
+	buffer.IncreaseDepth()
+	for k := range m.m {
+		buffer.WriteStringWithIndent("<li>")
+		buffer.IncreaseDepth()
+		buffer.WriteString(fmt.Sprintf("%v", k))
+		buffer.DecreaseDepth()
+		buffer.WriteString("</li>\n")
+	}
+	buffer.DecreaseDepth()
+	buffer.WriteStringWithIndent("</keys>\n")
+	buffer.WriteStringWithIndent("<values>\n")
+	buffer.IncreaseDepth()
+	for _, v := range m.m {
+		buffer.WriteStringWithIndent("<li>")
+		buffer.IncreaseDepth()
+		buffer.WriteString(fmt.Sprintf("%v", v))
+		buffer.DecreaseDepth()
+		buffer.WriteString("</li>\n")
+	}
+	buffer.DecreaseDepth()
+	buffer.WriteStringWithIndent("</values>")
+	buffer.DecreaseDepth()
+	return nil
 }
 
 func zero[T any]() T {
@@ -69,6 +118,36 @@ func (m *Map[K, V]) Assign(e *xml.Element) error {
 		}
 		m.m[castDataFromKind[K](kKind, key.Data)] = castDataFromKind[V](vKind, values[i].Data)
 	}
+	v := reflect.ValueOf(m.m)
+	k := reflect.ValueOf(zero[K]()).Kind()
+	m.sortedKeys = v.MapKeys()
+	// Primary type implements natively operator<
+	if helper.IsReflectPrimaryType(k) {
+		switch k {
+		case reflect.Int, reflect.Int8, reflect.Int16, reflect.Int32, reflect.Int64:
+			sort.Slice(m.sortedKeys, func(i, j int) bool {
+				return m.sortedKeys[i].Int() < m.sortedKeys[j].Int()
+			})
+		case reflect.String:
+			sort.Slice(m.sortedKeys, func(i, j int) bool {
+				return m.sortedKeys[i].String() < m.sortedKeys[j].String()
+			})
+		case reflect.Bool:
+			panic("Map/Assign: cannot sort bool")
+		case reflect.Float32, reflect.Float64:
+			sort.Slice(m.sortedKeys, func(i, j int) bool {
+				return m.sortedKeys[i].Float() < m.sortedKeys[j].Float()
+			})
+		}
+	} else {
+		// Custom type must implement operator<
+		if !reflect.TypeOf(zero[K]()).Implements(reflect.TypeOf((*MapComparable[Map[K, V]])(nil)).Elem()) {
+			panic("Map/Assign: custom type must implement MapComparable interface")
+		}
+		sort.Slice(m.sortedKeys, func(i, j int) bool {
+			return m.sortedKeys[i].Interface().(MapComparable[K]).Less(m.sortedKeys[i], m.sortedKeys[j].Interface().(K))
+		})
+	}
 	return nil
 }
 
@@ -102,7 +181,7 @@ func (m Map[K, V]) GetFromIndex(idx int) V {
 	return zero[V]()
 }
 
-func (m *Map[K, V]) GetFromKey(idx int) K {
+func (m *Map[K, V]) GetKeyFromIndex(idx int) K {
 	if m.m == nil {
 		return zero[K]()
 	}
@@ -110,14 +189,14 @@ func (m *Map[K, V]) GetFromKey(idx int) K {
 		log.Panic("Map/GetFromIndex: index out of range")
 		return zero[K]()
 	}
-	i := 0
-	for k := range m.m {
+	for i, k := range m.sortedKeys {
 		if i == idx {
-			return k
+			return k.Interface().(K)
 		}
 		i++
 	}
-	log.Panicf("Map/GetFromKey: index %d not found", idx)
+	log.Panicf("Map/GetKeyFromIndex: index %d not found", idx)
+	// Never reached
 	return zero[K]()
 }
 

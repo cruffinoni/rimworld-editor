@@ -1,10 +1,8 @@
 package iterator
 
-import "log"
-
 type MapIndexer[K, V any] interface {
 	SliceIndexer[V]
-	GetFromKey(idx int) K
+	GetKeyFromIndex(idx int) K
 }
 
 type MapIterator[K, V any] struct {
@@ -20,7 +18,7 @@ func NewMapIterator[K, V any](v MapIndexer[K, V]) *MapIterator[K, V] {
 func (mi *MapIterator[K, V]) Next() *MapIterator[K, V] {
 	mi.idx++
 	if mi.idx > mi.cap {
-		log.Panic("iterator overflow")
+		panic("iterator overflow")
 	} else if mi.idx == mi.cap {
 		return nil
 	}
@@ -30,14 +28,14 @@ func (mi *MapIterator[K, V]) Next() *MapIterator[K, V] {
 func (mi *MapIterator[K, V]) Prev() *MapIterator[K, V] {
 	mi.idx--
 	if mi.idx < 0 {
-		log.Panic("iterator underflow")
+		panic("iterator underflow")
 	}
 	return &MapIterator[K, V]{m: mi.m, idx: mi.idx, cap: mi.cap}
 }
 
 func (mi *MapIterator[K, V]) Key() K {
 	if mi.HasNext() {
-		return mi.m.GetFromKey(mi.idx)
+		return mi.m.GetKeyFromIndex(mi.idx)
 	}
 	panic("iterator overflow")
 }

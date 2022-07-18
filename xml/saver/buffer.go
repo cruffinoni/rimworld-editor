@@ -55,6 +55,14 @@ func (b *Buffer) LastWriteWithNewLine() bool {
 	return b.hasMultipleLine
 }
 
+func (b *Buffer) WriteString(s string) {
+	b.Write([]byte(s))
+}
+
+func (b *Buffer) WriteStringWithIndent(s string) {
+	b.WriteWithIndent([]byte(s))
+}
+
 func (b *Buffer) WriteWithIndent(p []byte) {
 	b.Write([]byte(strings.Repeat("\t", b.indentation)))
 	b.Write(p)
@@ -70,7 +78,7 @@ func (b *Buffer) OpenTag(tag string, attr attributes.Attributes) {
 }
 
 func (b *Buffer) WriteEmptyTag(tag string, attr attributes.Attributes) {
-	if attr != nil {
+	if attr != nil && !attr.Empty() {
 		b.Write([]byte("<" + tag + ` ` + attr.Join(" ") + " />"))
 	} else {
 		b.Write([]byte("<" + tag + " />"))

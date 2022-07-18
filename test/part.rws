@@ -49,5 +49,35 @@ Vous vous réveillez à l'intérieur d'une nacelle dans l'atmosphère d'un monde
 				</li>
 			</parts>
 		</scenario>
+		<researchManager>
+			<progress>
+				<keys>
+					<li>PsychoidBrewing</li>
+					<li>TreeSowing</li>
+					<li>Brewing</li>
+					<li>ComplexFurniture</li>
+					<li>PassiveCooler</li>
+					<li>Stonecutting</li>
+					<li>ComplexClothing</li>
+					<li>DrugProduction</li>
+					<li>Cocoa</li>
+				</keys>
+				<values>
+					<li>0</li>
+					<li>0</li>
+					<li>0</li>
+					<li>300</li>
+					<li>400</li>
+					<li>300</li>
+					<li>600</li>
+					<li>0</li>
+					<li>0</li>
+				</values>
+			</progress>
+			<techprints>
+				<keys />
+				<values />
+			</techprints>
+		</researchManager>
 	</game>
 </savegame>

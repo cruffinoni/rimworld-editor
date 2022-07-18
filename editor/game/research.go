@@ -37,6 +37,7 @@ func (r *ResearchManager) SetProgress(key string, value float64) {
 const ResearchMaxValue = 10000
 
 func (r *ResearchManager) SetAllProgress(value float64) {
+	// Custom iterator for the map inspired from C++ STL.
 	for it := r.Progress.Iterator(); it != nil; it = it.Next() {
 		r.Progress.Set(it.Key(), value)
 	}
