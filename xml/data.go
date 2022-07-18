@@ -66,7 +66,7 @@ func (d *Data) lazyCheck(destKind reflect.Kind) {
 	}
 }
 
-func (d *Data) GetKind() reflect.Kind {
+func (d *Data) Kind() reflect.Kind {
 	return d.t
 }
 

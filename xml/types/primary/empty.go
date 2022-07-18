@@ -1,6 +1,7 @@
-package xml
+package primary
 
 import (
+	"github.com/cruffinoni/rimworld-editor/xml"
 	"github.com/cruffinoni/rimworld-editor/xml/attributes"
 )
 
@@ -9,7 +10,7 @@ type Empty struct {
 	attr attributes.Attributes
 }
 
-func (e *Empty) Assign(element *Element) error {
+func (e *Empty) Assign(element *xml.Element) error {
 	e.name = element.GetName()
 	return nil
 }

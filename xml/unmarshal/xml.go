@@ -26,9 +26,10 @@ func findFieldFromName(t reflect.Type, value reflect.Value, name string) int {
 }
 
 var (
-	elementStruct          = reflect.TypeOf((*xml.Element)(nil))
-	elementStructName      = elementStruct.Elem().Name()
-	elementEmptyStructName = reflect.TypeOf((*xml.Empty)(nil)).Elem().Name()
+	elementStruct            = reflect.TypeOf((*xml.Element)(nil))
+	elementStructName        = elementStruct.Elem().Name()
+	elementEmptyStructName   = reflect.TypeOf((*primary.Empty)(nil)).Elem().Name()
+	xmlAssignerInterfaceName = reflect.TypeOf((*xml.Assigner)(nil)).Elem().Name()
 )
 
 func isEmptyType(name string) bool {
@@ -69,8 +70,8 @@ func createValueFromPrimaryType(t reflect.Type, e *xml.Element) reflect.Value {
 		log.Panicf("createValueFromPrimaryType: no data for %s", t.Name())
 	}
 	d := e.Data
-	if d.GetKind() != k {
-		log.Panicf("createValueFromPrimaryType: type mismatch: %v != %v", k, d.GetKind())
+	if d.Kind() != k {
+		log.Panicf("createValueFromPrimaryType: type mismatch: %v != %v", k, d.Kind())
 	}
 	switch k {
 	case reflect.String:
@@ -121,28 +122,28 @@ func Element(element *xml.Element, dest any) error {
 		return errors.New("dest must be a pointer")
 	}
 	t = t.Elem()
+	if t.Kind() == reflect.Ptr {
+		return fmt.Errorf("multiple pointers found for type %s", reflect.TypeOf(dest).String())
+	}
 	if t.Kind() != reflect.Struct {
 		return fmt.Errorf("dest must be a pointer to a struct, got %s", t.String())
 	}
-	log.Printf("unmarshal: %s", t.String())
 	v := reflect.ValueOf(dest).Elem()
-	nCpy := n
+	if v.Kind() == reflect.Invalid {
+		return errors.New("value of dest is invalid")
+	}
 	for n != nil {
-		log.Printf("looking for %s", n.GetName())
 		f := findFieldFromName(t, v, n.GetName())
 		if f != -1 {
 			fieldValue := v.Field(f)
-			log.Printf("=>unmarshal: %s", fieldValue.Type().String())
 			fieldKind := fieldValue.Kind()
 			var fieldPtr reflect.Value
-			//log.Printf("Field name: '%v', kind: %v", fieldValue.Type().Name(), fieldKind)
 			// If the field is a pointer, we need to allocate a new value
 			if fieldKind == reflect.Ptr {
 				fieldPtr = makePointer(fieldValue)
 				fieldValue = fieldPtr.Elem()
 				fieldKind = fieldValue.Kind()
 			}
-			//log.Printf(">Field name: '%v', kind: %v", fieldValue.Type().Name(), fieldKind)
 			switch fieldKind {
 			case reflect.Ptr:
 				// The function doesn't support multiple pointers (a.k.a. pointers to pointers)
@@ -193,6 +194,10 @@ func Element(element *xml.Element, dest any) error {
 					_ = cast.Assign(n)
 					cast.SetAttributes(n.Attr)
 				} else {
+					if fieldValue.Kind() == reflect.Ptr {
+						fieldPtr = makePointer(fieldValue)
+						fieldValue = fieldPtr.Elem()
+					}
 					// Otherwise, we need to call the unmarshal function recursively
 					if err := Element(n.Child, fieldValue.Addr().Interface().(xml.Assigner)); err != nil {
 						panic(err)
@@ -203,9 +208,15 @@ func Element(element *xml.Element, dest any) error {
 		n = n.Next
 	}
 	if destIsAssigner {
-		destAssigner.SetAttributes(nCpy.Attr)
-		return destAssigner.Assign(nCpy)
-	} else {
-		return nil
+		// The variable element correspond to current element of the xml file
+		// but dest might be the parent because we go through all the fields
+		// of the struct.
+		if t.Kind() == reflect.Struct && element.Parent != nil {
+			destAssigner.SetAttributes(element.Parent.Attr)
+		} else {
+			destAssigner.SetAttributes(element.Attr)
+		}
+		return destAssigner.Assign(element)
 	}
+	return nil
 }

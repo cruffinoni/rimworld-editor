@@ -4,9 +4,10 @@ import (
 	"fmt"
 	"github.com/cruffinoni/rimworld-editor/xml"
 	"github.com/cruffinoni/rimworld-editor/xml/attributes"
+	"github.com/cruffinoni/rimworld-editor/xml/saver"
+	"github.com/cruffinoni/rimworld-editor/xml/saver/file"
 	"github.com/cruffinoni/rimworld-editor/xml/types/iterator"
 	"github.com/cruffinoni/rimworld-editor/xml/unmarshal"
-	"log"
 	"reflect"
 	"strings"
 )
@@ -21,7 +22,15 @@ type sliceData[T any] struct {
 }
 
 func (s *sliceData[T]) Assign(e *xml.Element) error {
-	err := unmarshal.Element(e, &s.data)
+	var (
+		err   error
+		tKind = reflect.TypeOf(s.data).Kind()
+	)
+	if tKind == reflect.Ptr {
+		err = unmarshal.Element(e, s.data)
+	} else {
+		err = unmarshal.Element(e, &s.data)
+	}
 	if err != nil {
 		return err
 	}
@@ -34,7 +43,6 @@ func (s *sliceData[T]) GetPath() string {
 }
 
 func (s *sliceData[T]) SetAttributes(attributes attributes.Attributes) {
-	log.Printf("sliceData[T].SetAttributes: %v", attributes)
 	s.attr = attributes
 }
 
@@ -55,7 +63,7 @@ func (s *sliceData[T]) UpdateStringRepresentation(v T) {
 		}
 	} else {
 		// Otherwise we use a basic string representation.
-		s.str = fmt.Sprintf("%+v", v)
+		s.str = fmt.Sprintf("%v", v)
 	}
 }
 
@@ -71,6 +79,24 @@ type Slice[T any] struct {
 	repeatingTag string
 	cap          int
 	iterator.SliceIndexer[T]
+	saver.Transformer
+	fmt.Stringer
+}
+
+func (s Slice[T]) TransformToXML(b *saver.Buffer) error {
+	if s.repeatingTag == "" {
+		return nil
+	}
+	lastElement := s.cap - 1
+	for i, v := range s.data {
+		if err := file.Save(v.data, b, s.repeatingTag); err != nil {
+			return err
+		}
+		if i != lastElement {
+			b.Write([]byte("\n"))
+		}
+	}
+	return nil
 }
 
 func (s *Slice[T]) Capacity() int {
@@ -95,10 +121,11 @@ func (s *Slice[T]) Assign(e *xml.Element) error {
 	if n == nil {
 		return nil
 	}
+	s.repeatingTag = n.GetName()
 	for n != nil {
 		d := sliceData[T]{
 			tag:  n.GetName(),
-			data: *new(T),
+			data: reflect.New(reflect.TypeOf(*new(T)).Elem()).Interface().(T),
 		}
 		// The child element inherits the attributes of the parent element
 		// because we don't unmarshal the element directly but the children

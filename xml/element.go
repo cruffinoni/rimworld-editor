@@ -5,11 +5,15 @@ import (
 	_xml "encoding/xml"
 	"fmt"
 	"github.com/cruffinoni/rimworld-editor/xml/attributes"
+	"github.com/cruffinoni/rimworld-editor/xml/saver"
+	"reflect"
 	"strings"
 )
 
 type Element struct {
 	AttributeAssigner
+	saver.Transformer
+
 	StartElement _xml.StartElement
 	EndElement   _xml.EndElement
 	Attr         attributes.Attributes
@@ -49,6 +53,24 @@ func (e *Element) ToXML(spacing int) string {
 	return sb.String()
 }
 
+func (e Element) TransformToXML(buffer *saver.Buffer) error {
+	n := &e
+	buffer.OpenTag(n.GetName(), n.Attr)
+	if n.Data != nil {
+		if n.Data.Kind() == reflect.Struct {
+			buffer.Write([]byte("\n"))
+		}
+		buffer.Write([]byte(n.Data.GetString()))
+	}
+	if n.Child != nil {
+		if err := n.Child.TransformToXML(buffer); err != nil {
+			return err
+		}
+	}
+	buffer.CloseTag(n.StartElement.Name.Local)
+	return nil
+}
+
 func (e *Element) DisplayDebug() string {
 	var sb strings.Builder
 	n := e
@@ -70,8 +92,8 @@ func (e *Element) Pretty(spacing int) string {
 		if !n.Attr.Empty() {
 			sb.WriteString(" [" + n.Attr.Join(", ") + "]")
 		}
-		sb.WriteString("\n")
 		if n.Child != nil {
+			//sb.WriteString("\n")
 			sb.WriteString(n.Child.Pretty(spacing + 2))
 		}
 		n = n.Next

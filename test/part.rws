@@ -23,7 +23,7 @@ Avertissement : ce scénario ne vous ménagera pas et ne sera pas loyal. Il est 
 				<def>PlayerFaction</def>
 				<factionDef>PlayerColony</factionDef>
 			</playerFaction>
-			<parts>
+			<parts abc="abcd">
 				<li Class="ScenPart_ConfigPage_ConfigureStartingPawns">
 					<def>ConfigPage_ConfigureStartingPawns</def>
 					<pawnCount>99</pawnCount>

@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"github.com/cruffinoni/rimworld-editor/xml"
 	"github.com/cruffinoni/rimworld-editor/xml/attributes"
+	"github.com/cruffinoni/rimworld-editor/xml/saver"
 	"reflect"
 )
 
@@ -35,14 +36,34 @@ func IsEmbeddedPrimaryType(name string) bool {
 
 type EmbeddedType[T comparable] struct {
 	fmt.Stringer
+	saver.Transformer
+
 	data T
+	tag  string
 	// str is the string representation of the data.
 	str  string
 	attr attributes.Attributes
 }
 
+func (pt EmbeddedType[T]) TransformToXML(buffer *saver.Buffer) error {
+	buffer.IncreaseDepth()
+	buffer.WriteWithIndent([]byte(pt.str))
+	buffer.DecreaseDepth()
+	return nil
+}
+
+func lazyCheck(data any) {
+	switch reflect.TypeOf(data).Kind() {
+	case reflect.Ptr, reflect.Interface, reflect.Map, reflect.Slice, reflect.Chan, reflect.Func, reflect.Struct:
+		panic("primary.EmbeddedType: data must be a primitive type")
+	}
+}
+
 func (pt *EmbeddedType[T]) Assign(e *xml.Element) error {
+	// The type T must be a primitive type.
+	lazyCheck(pt.data)
 	if v, ok := e.Data.GetData().(T); ok {
+		pt.tag = e.GetName()
 		pt.data = v
 		pt.str = fmt.Sprintf("%v", v)
 		return nil

@@ -62,8 +62,8 @@ func (b *Buffer) WriteWithIndent(p []byte) {
 
 func (b *Buffer) OpenTag(tag string, attr attributes.Attributes) {
 	b.IncreaseDepth()
-	if attr != nil {
-		b.WriteWithIndent([]byte("<" + tag + ` ` + attr.Join(" ") + ">"))
+	if attr != nil && !attr.Empty() {
+		b.WriteWithIndent([]byte("<" + tag + " " + attr.Join(" ") + ">"))
 	} else {
 		b.WriteWithIndent([]byte("<" + tag + ">"))
 	}

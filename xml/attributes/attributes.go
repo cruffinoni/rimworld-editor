@@ -3,6 +3,9 @@ package attributes
 type Attributes map[string]string
 
 func (m *Attributes) Join(sep string) string {
+	if m.Empty() {
+		return ""
+	}
 	var (
 		b []byte
 		i = 0
@@ -21,8 +24,8 @@ func (m *Attributes) Join(sep string) string {
 	return string(b)
 }
 
-func (m *Attributes) Empty() bool {
-	return len(*m) == 0
+func (m Attributes) Empty() bool {
+	return len(m) == 0
 }
 
 func (m *Attributes) Get(key string) string {

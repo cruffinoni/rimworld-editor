@@ -3,7 +3,7 @@ package saver
 import "reflect"
 
 type Transformer interface {
-	TransformToXML() ([]byte, error)
+	TransformToXML(buffer *Buffer) error
 }
 
 func TransformPrimaryType(value reflect.Value) ([]byte, error) {
