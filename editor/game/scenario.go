@@ -8,15 +8,23 @@ import (
 )
 
 type Parts struct {
-	attr            attributes.Attributes
-	Def             string `xml:"def"`
-	PawnCount       string `xml:"pawnCount"`
-	PawnChoiceCount string `xml:"pawnChoiceCount"`
-	Method          string `xml:"method"`
-	Chance          string `xml:"chance"`
-	Context         string `xml:"context"`
-	Text            string `xml:"text"`
-	CloseSound      string `xml:"closeSound"`
+	attr                         attributes.Attributes
+	Def                          string `xml:"def"`
+	PawnCount                    string `xml:"pawnCount"`
+	PawnChoiceCount              string `xml:"pawnChoiceCount"`
+	Method                       string `xml:"method"`
+	Chance                       string `xml:"chance"`
+	Context                      string `xml:"context"`
+	HideOffMap                   string `xml:"hideOffMap"`
+	Hediff                       string `xml:"hediff"`
+	SeverityRange                string `xml:"severityRange"`
+	ThingDef                     string `xml:"thingDef"`
+	Count                        string `xml:"count"`
+	Stuff                        string `xml:"stuff"`
+	BondToRandomPlayerPawnChance string `xml:"bondToRandomPlayerPawnChance"`
+	AllowRoofed                  string `xml:"allowRoofed"`
+	TextKey                      string `xml:"textKey"`
+	CloseSound                   string `xml:"closeSound"`
 }
 
 func (p *Parts) Assign(e *xml.Element) error {

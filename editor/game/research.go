@@ -7,7 +7,9 @@ import (
 )
 
 type ResearchManager struct {
-	Progress types.Map[string, float64] `xml:"progress"`
+	CurrentProject string                     `xml:"currentProj"`
+	Progress       types.Map[string, float64] `xml:"progress"`
+	TechPrints     types.Map[string, float64] `xml:"techPrints"`
 }
 
 func (r *ResearchManager) Assign(_ *xml.Element) error {
