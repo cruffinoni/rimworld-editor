@@ -47,7 +47,7 @@ func (b *Buffer) RemoveFlag(flag Flag) {
 
 func (b *Buffer) Write(p []byte) {
 	b.size += len(p)
-	//b.hasMultipleLine = strings.Index(string(p), "\n") != -1
+	//b.hasMultipleLine = strings.index(string(p), "\n") != -1
 	b.buffer = append(b.buffer, p...)
 }
 

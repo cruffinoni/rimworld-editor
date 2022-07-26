@@ -66,7 +66,7 @@ func (t *Tree) UnmarshalXML(decoder *_xml.Decoder, _ _xml.StartElement) error {
 						StartElement: *e,
 						EndElement:   _xml.EndElement{Name: e.Name},
 						Parent:       lastNode,
-						Index:        idx,
+						index:        idx,
 						Attr:         ctx.attr,
 					}
 					lastNode.Child = n
@@ -88,7 +88,7 @@ func (t *Tree) UnmarshalXML(decoder *_xml.Decoder, _ _xml.StartElement) error {
 					n := &Element{
 						Parent:       lastNode.Parent,
 						Prev:         lastNode.Prev,
-						Index:        idx,
+						index:        idx,
 						StartElement: *e,
 						EndElement:   _xml.EndElement{Name: e.Name},
 						Attr:         ctx.attr,
@@ -113,7 +113,7 @@ func (t *Tree) UnmarshalXML(decoder *_xml.Decoder, _ _xml.StartElement) error {
 				n := &Element{
 					Prev:         lastNode,
 					StartElement: *e,
-					Index:        idx,
+					index:        idx,
 					EndElement:   _xml.EndElement{Name: e.Name},
 					Attr:         ctx.attr,
 				}

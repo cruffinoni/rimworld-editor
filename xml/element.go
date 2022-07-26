@@ -18,7 +18,7 @@ type Element struct {
 	EndElement   _xml.EndElement
 	Attr         attributes.Attributes
 	Data         *Data
-	Index        int
+	index        int
 
 	Next   *Element
 	Prev   *Element
@@ -103,7 +103,7 @@ func (e *Element) Pretty(spacing int) string {
 
 //func (e *Element) String() string {
 //	var s string
-//	s = fmt.Sprintf("%v[%v/%d] ", s, e.StartElement.Name.Local, e.Index)
+//	s = fmt.Sprintf("%v[%v/%d] ", s, e.StartElement.Name.Local, e.index)
 //	if e.Child != nil {
 //		s += "(" + e.Child.String() + ") "
 //	}
@@ -137,8 +137,8 @@ func (e *Element) DisplayAllXMLPaths() string {
 func (e *Element) xmlPath() *bytes.Buffer {
 	b := &bytes.Buffer{}
 	b.WriteString(e.StartElement.Name.Local)
-	if e.Index > 0 {
-		b.WriteString(fmt.Sprintf("[%d]", e.Index))
+	if e.index > 0 {
+		b.WriteString(fmt.Sprintf("[%d]", e.index))
 	}
 	return b
 }

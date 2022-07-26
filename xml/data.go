@@ -13,6 +13,12 @@ type Data struct {
 	checkDone bool
 }
 
+const (
+	Matrix = reflect.UnsafePointer + iota
+	MatrixWithMapIndex
+	RGBA
+)
+
 type associatedRegex struct {
 	pattern *regexp.Regexp
 	kind    reflect.Kind
@@ -22,13 +28,13 @@ var (
 	HexRegex     = regexp.MustCompile(`^[0-9a-fA-F]{2,}$`)
 	IntegerRegex = regexp.MustCompile(`^-?[0-9]+$`)
 	FloatRegex   = regexp.MustCompile(`^-?[0-9]*\.?[0-9]+$`)
-	StringRegex  = regexp.MustCompile(`^[^<>&"]+$`)
+	BoolRegex    = regexp.MustCompile(`^(TRUE|FALSE|true|false)$`)
 
 	AllPatterns = []associatedRegex{
 		{pattern: IntegerRegex, kind: reflect.Int64},
-		{pattern: HexRegex, kind: reflect.Uint64},
 		{pattern: FloatRegex, kind: reflect.Float64},
-		{pattern: StringRegex, kind: reflect.String},
+		{pattern: BoolRegex, kind: reflect.Bool},
+		{pattern: HexRegex, kind: reflect.Uint64},
 	}
 )
 
@@ -41,8 +47,7 @@ func CreateDataType(data string) *Data {
 			return &Data{data: data, t: p.kind}
 		}
 	}
-	log.Panicf("can't create data type for '%s'", data)
-	return nil
+	return &Data{data: data, t: reflect.String}
 }
 
 func (d *Data) lazyCheck(destKind reflect.Kind) {
@@ -78,7 +83,7 @@ func (d *Data) GetInt64() int64 {
 	d.lazyCheck(reflect.Int64)
 	i, err := strconv.ParseInt(d.data, 10, 64)
 	if err != nil {
-		log.Printf("can't convert to int64: %v > %v", d.data, err)
+		log.Panicf("can't convert to int64: %v > %v", d.data, err)
 		return 0
 	}
 	return i
@@ -88,7 +93,7 @@ func (d *Data) GetUint64() uint64 {
 	d.lazyCheck(reflect.Uint64)
 	i, err := strconv.ParseUint(d.data, 10, 64)
 	if err != nil {
-		log.Printf("can't convert to uint64: %v > %v", d.data, err)
+		log.Panicf("can't convert to uint64: %v > %v", d.data, err)
 		return 0
 	}
 	return i
@@ -103,7 +108,7 @@ func (d *Data) GetFloat64() float64 {
 	d.lazyCheck(reflect.Float64)
 	f, err := strconv.ParseFloat(d.data, 64)
 	if err != nil {
-		log.Printf("can't convert to float: %v > %v", d.data, err)
+		log.Panicf("can't convert to float: %v > %v", d.data, err)
 		return 0.0
 	}
 	return f
@@ -113,7 +118,7 @@ func (d *Data) GetBool() bool {
 	d.lazyCheck(reflect.Bool)
 	b, err := strconv.ParseBool(d.data)
 	if err != nil {
-		log.Printf("can't convert to bool: %v > %v", d.data, err)
+		log.Panicf("can't convert to bool: %v > %v", d.data, err)
 		return false
 	}
 	return b
