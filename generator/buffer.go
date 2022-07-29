@@ -8,8 +8,9 @@ type buffer struct {
 }
 
 const (
-	headerXmlTypes = "xml/types"
-	headerXml      = "xml"
+	customTypesPath = "xml/types"
+	headerEmbedded  = "xml/types/primary"
+	headerXml       = "xml"
 )
 
 func (b *buffer) writeImport(s string) {

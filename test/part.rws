@@ -7,7 +7,7 @@
 			<policies>
 				<li>
 					<uniqueId>1</uniqueId>
-					<label>Drogues sociales</label>
+					<label tag="value">Drogues sociales</label>
 					<drugs>
 						<li>
 							<drug>Beer</drug>

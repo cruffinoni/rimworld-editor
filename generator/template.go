@@ -75,7 +75,7 @@ func (s *StructInfo) generateStructTo(path string) error {
 		buf.writeToBody("\t" + strcase.ToCamel(m.name) + " ")
 		switch va := m.t.(type) {
 		case *CustomType:
-			buf.writeImport(headerXmlTypes)
+			buf.writeImport(va.importPath)
 			buf.writeToBody(va.pkg + "." + va.name + "[" + getTypeName(va.type1))
 			if err = checkTypeAndApply(va.type1, buf, path); err != nil {
 				return err

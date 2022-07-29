@@ -55,6 +55,16 @@ func determineTypeFromData(e *xml.Element, flag uint) any {
 		}
 	} else if t == reflect.Invalid {
 		t = e
+	} else {
+		if !e.Attr.Empty() {
+			log.Println("primary.EmbeddedType: found attributes on path", e.XMLPath())
+			return &CustomType{
+				name:       "EmbeddedType",
+				pkg:        "primary",
+				type1:      t,
+				importPath: headerEmbedded,
+			}
+		}
 	}
 	return t
 }
@@ -95,6 +105,14 @@ func handleElement(e *xml.Element, st *StructInfo, flag uint) error {
 		} else {
 			if n.Data != nil {
 				t = n.Data.Kind()
+				if !n.Attr.Empty() {
+					t = &CustomType{
+						name:       "EmbeddedType",
+						pkg:        "primary",
+						type1:      t,
+						importPath: headerEmbedded,
+					}
+				}
 			} else {
 				t = e
 			}

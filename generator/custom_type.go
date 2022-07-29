@@ -11,8 +11,9 @@ type CustomType struct {
 	pkg  string
 	// type1 is the first type in the custom type
 	// It can be anything from reflect.Kind, *CustomType, *xml.Element, etc.
-	type1 any
-	type2 any
+	type1      any
+	type2      any
+	importPath string
 }
 
 func createCustomSlice(e *xml.Element, flag uint) any {
@@ -30,9 +31,10 @@ func createCustomSlice(e *xml.Element, flag uint) any {
 		t = e
 	}
 	return &CustomType{
-		name:  "Slice",
-		pkg:   "types",
-		type1: t,
+		name:       "Slice",
+		pkg:        "types",
+		type1:      t,
+		importPath: customTypesPath,
 	}
 }
 
@@ -51,16 +53,18 @@ func createCustomTypeForMap(e *xml.Element, flag uint) any {
 	// By default, maps are strings to strings
 	if k == reflect.Invalid || v == reflect.Invalid {
 		return &CustomType{
-			name:  "Map",
-			pkg:   "types",
-			type1: reflect.String,
-			type2: reflect.String,
+			name:       "Map",
+			pkg:        "types",
+			type1:      reflect.String,
+			type2:      reflect.String,
+			importPath: customTypesPath,
 		}
 	}
 	return &CustomType{
-		name:  "Map",
-		pkg:   "types",
-		type1: k,
-		type2: v,
+		name:       "Map",
+		pkg:        "types",
+		type1:      k,
+		type2:      v,
+		importPath: customTypesPath,
 	}
 }

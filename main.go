@@ -4,11 +4,13 @@ import (
 	"github.com/cruffinoni/rimworld-editor/editor"
 	"github.com/cruffinoni/rimworld-editor/generator"
 	"log"
+	"time"
 )
 
 func main() {
 	log.Println("Starting...")
-	f, err := editor.Open("test/alone.rws")
+	t := time.Now()
+	f, err := editor.Open("test/huge.rws")
 	if err != nil {
 		log.Fatal(err)
 	}
@@ -27,5 +29,5 @@ func main() {
 	if err = root.WriteGoFile("generated"); err != nil {
 		log.Fatal(err)
 	}
-	log.Println("Done!")
+	log.Printf("Done in %s", time.Since(t))
 }
