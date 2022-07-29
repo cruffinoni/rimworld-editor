@@ -33,11 +33,6 @@ Avertissement : ce scénario ne vous ménagera pas et ne sera pas loyal. Il est 
 				</li>
 				<li Class="ScenPart_GameStartDialog">
 					<def>GameStartDialog</def>
-					<text>C'était censé être une opération mineure. Juste une heure sous anesthésie. Vous vous sentiez totalement en sécurité.
-
-Vous vous réveillez à l'intérieur d'une nacelle dans l'atmosphère d'un monde lointain.
-
-À l'exception d'un mystérieux liquide visqueux sur votre corps, vous êtes totalement nu(e). Sans préparation, sans fournitures et sans outils, pourrez-vous survivre ?</text>
 					<closeSound>GameStartSting</closeSound>
 				</li>
 			</parts>
@@ -45,26 +40,26 @@ Vous vous réveillez à l'intérieur d'une nacelle dans l'atmosphère d'un monde
 		<researchManager>
 			<progress>
 				<keys>
+					<li>Stonecutting</li>
+					<li>Cocoa</li>
 					<li>Brewing</li>
 					<li>ComplexFurniture</li>
 					<li>PassiveCooler</li>
+					<li>ComplexClothing</li>
 					<li>DrugProduction</li>
-					<li>Cocoa</li>
 					<li>PsychoidBrewing</li>
 					<li>TreeSowing</li>
-					<li>Stonecutting</li>
-					<li>ComplexClothing</li>
 				</keys>
 				<values>
-					<li>10100</li>
-					<li>40100</li>
-					<li>60100</li>
-					<li>50100</li>
-					<li>20100</li>
-					<li>70100</li>
-					<li>90100</li>
-					<li>80100</li>
-					<li>30100</li>
+					<li>600</li>
+					<li>0</li>
+					<li>0</li>
+					<li>0</li>
+					<li>0</li>
+					<li>300</li>
+					<li>400</li>
+					<li>300</li>
+					<li>0</li>
 				</values>
 			</progress>
 		</researchManager>

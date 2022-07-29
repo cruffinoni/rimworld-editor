@@ -5,16 +5,12 @@ import (
 	"github.com/cruffinoni/rimworld-editor/xml"
 	"github.com/cruffinoni/rimworld-editor/xml/attributes"
 	"log"
+	"math/rand"
 	"os"
 	"reflect"
 )
 
 type flag uint
-
-const (
-	flagNone      flag = 0 << iota
-	hasAttributes flag = 1 << iota
-)
 
 type metadata struct {
 	dir   os.DirEntry
@@ -45,7 +41,7 @@ func GenerateGoFiles(root *xml.Element) *StructInfo {
 		name:    "save",
 		members: make([]*member, 0),
 	}
-	if err := handleElement(root, &s); err != nil {
+	if err := handleElement(root, &s, flagNone); err != nil {
 		panic(err)
 	}
 	return &s
@@ -64,6 +60,10 @@ func (s *StructInfo) WriteGoFile(path string) error {
 	return s.generateStructTo(path)
 }
 
+func isListTag(tag string) bool {
+	return tag == "li" || tag == "list"
+}
+
 func getTypeFromArray(e *xml.Element) reflect.Kind {
 	k := e.Child
 	if k != nil && k.Child != nil {
@@ -77,7 +77,7 @@ func getTypeFromArray(e *xml.Element) reflect.Kind {
 				// Float64 and Int64 are interchangeable
 				!(kdk == reflect.Float64 && kt == reflect.Int64) &&
 				!(kdk == reflect.Int64 && kt == reflect.Float64) {
-				log.Panicf("primary.EmbeddedType: found type %v, expected %v", kdk, kt)
+				log.Panicf("primary.EmbeddedType: found type %v, expected %v on path %v ('%v')", kdk, kt, k.XMLPath(), k.Data.GetData())
 			}
 			// Float64 and Int64 are interchangeable, but we prefer to keep Float64
 			if !(kdk == reflect.Int64 && kt == reflect.Float64) {
@@ -89,43 +89,75 @@ func getTypeFromArray(e *xml.Element) reflect.Kind {
 	return kt
 }
 
-func generateStructure(e *xml.Element) *StructInfo {
-	log.Printf("Generating structure for %v", e.GetName())
+const (
+	stringFixedSize = 5
+	letterBytes     = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ"
+)
+
+func generateRandomString() string {
+	b := make([]byte, stringFixedSize)
+	for i := range b {
+		b[i] = letterBytes[rand.Int63()%int64(len(letterBytes))]
+	}
+	return string(b)
+}
+
+func createStructure(e *xml.Element, flag uint) *StructInfo {
+	if flag&forceChild == forceChild {
+		flag &^= forceChild
+		if e.Child != nil && e.Child.Child != nil {
+			return createStructure(e.Child, flag)
+		} else {
+			panic("generate.createStructure|forceChild: missing child")
+		}
+	}
+	if e.Child == nil {
+		panic("generate.createStructure: missing child")
+	}
+	name := e.GetName()
+	if isListTag(name) {
+		name += generateRandomString()
+		log.Printf("debug: name '%v' & xmlPath: %v", name, e.XMLPath())
+	}
 	s := &StructInfo{
-		name:    e.GetName(),
+		name:    name,
 		members: make([]*member, 0),
 	}
-	if err := handleElement(e.Child, s); err != nil {
+	if err := handleElement(e.Child, s, flag); err != nil {
 		panic(err)
 	}
 	s.removeDuplicates()
 	return s
 }
 
-func createCustomTypeForMap(e *xml.Element) any {
-	if e.Child == nil {
-		log.Panic("primary.EmbeddedType: missing child")
+func getTypeFromAny(e *xml.Element, flag uint) any {
+	t := any(getTypeFromArray(e))
+	// We need to define this struct with of this all members
+	if t == reflect.Struct {
+		c := e.Child
+		if isListTag(c.Child.GetName()) {
+			t = createCustomSlice(c, flag|forceChild)
+		} else {
+			t = createStructure(e, flag)
+		}
+	} else if t == reflect.Invalid {
+		t = e
 	}
+	return t
+}
+
+func createCustomTypeForMap(e *xml.Element, flag uint) any {
+	if e.Child == nil {
+		log.Panic("generate.createCustomTypeForMap: missing child")
+	}
+
 	var (
-		c     = e.Child
-		k any = getTypeFromArray(c)
+		c = e.Child
+		k = getTypeFromAny(c, flag)
 		v any
 	)
-	// We need to define this struct with of this all members
-	if k == reflect.Struct {
-		// This is a slice of structs, we need to define this struct will all members
-		k = generateStructure(c)
-	} else if k == reflect.Invalid {
-		k = e
-	}
 	c = c.Next
-	v = getTypeFromArray(c)
-	// Repeat the operation for the value
-	if v == reflect.Struct {
-		v = generateStructure(c)
-	} else if v == reflect.Invalid {
-		v = e
-	}
+	v = getTypeFromAny(c, flag)
 	// By default, maps are strings to strings
 	if k == reflect.Invalid || v == reflect.Invalid {
 		return &customType{
@@ -158,12 +190,17 @@ func (s *StructInfo) removeDuplicates() {
 	}
 }
 
-func createCustomSlice(e *xml.Element) any {
+func createCustomSlice(e *xml.Element, flag uint) any {
 	c := e
 	var t any
 	t = getTypeFromArray(c)
 	if t == reflect.Struct {
-		t = generateStructure(c)
+		t = createStructure(c, flag|skipChild)
+		//if c.Child.GetName() == "li" {
+		//	t = createCustomSlice(c.Child, flag)
+		//} else {
+		//	t = createStructure(c, flag)
+		//}
 	} else if t == reflect.Invalid {
 		t = e
 	}
@@ -174,29 +211,42 @@ func createCustomSlice(e *xml.Element) any {
 	}
 }
 
-func handleElement(e *xml.Element, st *StructInfo) error {
+const (
+	flagNone = 0 << iota
+	// skipChild indicates that the child of the current element should be skipped
+	// and directly handled by the function handleElement.
+	skipChild = 1 << iota
+	// forceChild is a flag that forces the child of the current child to be used
+	// A.K.A., skip the current child and use the child of the current child
+	// Useful for the case of list with custom tag
+	forceChild = 2 << iota
+)
+
+func handleElement(e *xml.Element, st *StructInfo, flag uint) error {
 	n := e
 	for n != nil {
 		var t any
 		if n.Child != nil {
 			// Skip the "li" tag since it's a slice and should not be a member of the struct
-			if n.GetName() == "li" {
-				if err := handleElement(n.Child, st); err != nil {
+			if flag&skipChild != 0 || isListTag(n.GetName()) {
+				flag &^= skipChild
+				if err := handleElement(n.Child, st, flag); err != nil {
 					return err
 				}
 			} else {
 				switch n.Child.GetName() {
 				case "li":
-					t = createCustomSlice(n)
+					t = createCustomSlice(n, flag|skipChild)
 				case "keys":
-					t = createCustomTypeForMap(n)
+					t = createCustomTypeForMap(n, flag)
 				default:
-					t = &StructInfo{
-						name:    n.GetName(),
-						members: make([]*member, 0),
-					}
-					if err := handleElement(n.Child, t.(*StructInfo)); err != nil {
-						return err
+					// Sometimes, slice are not marked as "li" so we need to check
+					// if the next children has the same name.
+					// If so, we consider it as a slice
+					if n.Child.Next != nil && n.Child.Next.GetName() == n.Child.GetName() {
+						t = createCustomSlice(n, flag|forceChild)
+					} else {
+						t = createStructure(n, flag)
 					}
 				}
 				st.members = append(st.members, &member{

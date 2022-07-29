@@ -73,6 +73,7 @@ func (s sliceData[T]) String() string {
 
 // Slice is a slice of data that is represented by sliceData.
 // The main difference with a normal slice is that it can get and set attributes.
+// Like a normal slice, the slice is a slice of T and you can iterate over it.
 type Slice[T any] struct {
 	data         []sliceData[T]
 	attr         attributes.Attributes
