@@ -1,8 +1,8 @@
-package editor
+package editor_old
 
 import (
-	"github.com/cruffinoni/rimworld-editor/editor/game"
-	"github.com/cruffinoni/rimworld-editor/editor/meta"
+	"github.com/cruffinoni/rimworld-editor/editor_old/game"
+	"github.com/cruffinoni/rimworld-editor/editor_old/meta"
 	"github.com/cruffinoni/rimworld-editor/xml"
 	"github.com/cruffinoni/rimworld-editor/xml/attributes"
 	"github.com/cruffinoni/rimworld-editor/xml/saver"

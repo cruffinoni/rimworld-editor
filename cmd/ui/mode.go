@@ -10,6 +10,6 @@ type Options struct {
 }
 
 type Mode interface {
-	Execute() error
-	NewMode(options *Options) Mode
+	Execute(args []string) error
+	Init(options *Options)
 }

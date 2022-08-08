@@ -1,4 +1,4 @@
-package editor
+package editor_old
 
 import (
 	_xml "encoding/xml"

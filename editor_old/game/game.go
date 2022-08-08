@@ -1,7 +1,7 @@
 package game
 
 import (
-	"github.com/cruffinoni/rimworld-editor/editor/game/world"
+	"github.com/cruffinoni/rimworld-editor/editor_old/game/world"
 	"github.com/cruffinoni/rimworld-editor/xml"
 	"github.com/cruffinoni/rimworld-editor/xml/attributes"
 )
