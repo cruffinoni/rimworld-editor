@@ -2,14 +2,14 @@ package main
 
 import (
 	"flag"
-	"github.com/cruffinoni/rimworld-editor/editor_old"
+	"github.com/cruffinoni/rimworld-editor/file"
 	"github.com/cruffinoni/rimworld-editor/generator"
 	"log"
 )
 
 func main() {
 	var (
-		file *editor_old.FileOpening
+		fo   *file.Opening
 		err  error
 		path string
 	)
@@ -20,8 +20,8 @@ func main() {
 		flag.Usage()
 		return
 	}
-	file, err = editor_old.Open(path)
-	root := generator.GenerateGoFiles(file.XML.Root)
+	fo, err = file.Open(path)
+	root := generator.GenerateGoFiles(fo.XML.Root)
 	if err = root.WriteGoFile("./generated"); err != nil {
 		log.Fatal(err)
 	}

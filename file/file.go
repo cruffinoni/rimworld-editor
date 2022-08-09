@@ -1,4 +1,4 @@
-package editor_old
+package file
 
 import (
 	_xml "encoding/xml"
@@ -6,14 +6,14 @@ import (
 	"os"
 )
 
-type FileOpening struct {
+type Opening struct {
 	fileName string
 	content  string
 	XML      *xml.Tree
 }
 
-func Open(fileName string) (*FileOpening, error) {
-	fileOpening := &FileOpening{fileName: fileName}
+func Open(fileName string) (*Opening, error) {
+	fileOpening := &Opening{fileName: fileName}
 	content, err := os.ReadFile(fileName)
 	if err != nil {
 		return nil, err

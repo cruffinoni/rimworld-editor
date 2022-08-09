@@ -3,7 +3,7 @@ package main
 import (
 	"github.com/cruffinoni/rimworld-editor/cmd/app/ui"
 	"github.com/cruffinoni/rimworld-editor/cmd/app/ui/terminal"
-	"github.com/cruffinoni/rimworld-editor/editor_old"
+	"github.com/cruffinoni/rimworld-editor/file"
 	"github.com/cruffinoni/rimworld-editor/generated"
 	"github.com/cruffinoni/rimworld-editor/generator"
 	"github.com/cruffinoni/rimworld-editor/xml/unmarshal"
@@ -32,7 +32,7 @@ type Application struct {
 	ui.Options
 	*cli.Cli
 
-	fileOpening *editor_old.FileOpening
+	fileOpening *file.Opening
 	ui          ui.Mode
 }
 
@@ -104,6 +104,6 @@ func (app *Application) RunWithArgs(args []string) error {
 
 func (app *Application) ReadFile() error {
 	var err error
-	app.fileOpening, err = editor_old.Open(app.Input)
+	app.fileOpening, err = file.Open(app.Input)
 	return err
 }
