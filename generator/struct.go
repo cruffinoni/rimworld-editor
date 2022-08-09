@@ -29,6 +29,8 @@ const (
 	// A.K.A., skip the current child and use the child of the current child
 	// Useful for the case of list with custom tag
 	forceChild = 2 << iota
+	// notComparable is a flag that indicates that the member is not comparable
+	notComparable = 3 << iota
 )
 
 // GenerateGoFiles generates the Go files (with the corresponding structs)
@@ -77,7 +79,7 @@ func (s *StructInfo) removeDuplicates() {
 // createStructure creates a new structure from the given element.
 // Then the function will recursively call handleElement on the children of the element.
 // It removes the duplicates from the members of the struct.
-func createStructure(e *xml.Element, flag uint) *StructInfo {
+func createStructure(e *xml.Element, flag uint) any {
 	// forceChild is a flag that forces the child of the current child to be used
 	// It is useful for the case of lists
 	if flag&forceChild == forceChild {
@@ -97,10 +99,17 @@ func createStructure(e *xml.Element, flag uint) *StructInfo {
 	// If the name is "li", it's a list and a generic name, so we add
 	// a random string to the name.
 	// Good to notes, that this part let us know when the code generate
-	// a "li" as a struct which should never happen.
+	// a "li" as a struct. The structure can have other custom type but the
+	// problem with that is those types are not comparable.
 	if isListTag(name) {
-		name += generateRandomString()
-		log.Printf("debug: name '%v' & xmlPath: %v", name, e.XMLPath())
+		return e
+	}
+
+	// In this case, the child has the same name as his parent which
+	// is very confusing for structure names.
+	if e.Parent != nil && name == e.Parent.GetName() {
+		name += "_Inner"
+		log.Printf("force random name: name '%v' & xmlPath: %v", name, e.XMLPath())
 	}
 	s := &StructInfo{
 		name:    name,

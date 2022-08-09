@@ -81,16 +81,17 @@ func handleElement(e *xml.Element, st *StructInfo, flag uint) error {
 					return err
 				}
 			} else {
-				switch n.Child.GetName() {
+				childName := n.Child.GetName()
+				switch childName {
 				case "li":
 					t = createCustomSlice(n, flag|skipChild)
 				case "keys":
 					t = createCustomTypeForMap(n, flag)
 				default:
 					// Sometimes, slice are not marked as "li" so we need to check
-					// if the next children has the same name.
+					// if the next sibling has the same name.
 					// If so, we consider it as a slice
-					if n.Child.Next != nil && n.Child.Next.GetName() == n.Child.GetName() {
+					if n.Child.Next != nil && n.Child.Next.GetName() == childName {
 						t = createCustomSlice(n, flag|forceChild)
 					} else {
 						t = createStructure(n, flag)

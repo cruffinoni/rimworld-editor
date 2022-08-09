@@ -21,7 +21,10 @@ func createCustomSlice(e *xml.Element, flag uint) any {
 	var t any
 	t = getTypeFromArray(c)
 	if t == reflect.Struct {
-		t = createStructure(c, flag|skipChild)
+		if flag&notComparable != 0 {
+			return e
+		}
+		t = createStructure(c, flag|skipChild|notComparable)
 		//if c.Child.GetName() == "li" {
 		//	t = createCustomSlice(c.Child, flag)
 		//} else {
