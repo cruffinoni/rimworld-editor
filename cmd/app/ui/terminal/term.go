@@ -2,6 +2,8 @@ package terminal
 
 import (
 	"fmt"
+	"github.com/cruffinoni/rimworld-editor/xml/saver"
+	"github.com/cruffinoni/rimworld-editor/xml/saver/file"
 	"log"
 	"strings"
 
@@ -74,6 +76,18 @@ func (c *Console) faction(args []string) error {
 	return nil
 }
 
+func (c *Console) savegame(args []string) error {
+	path := "test/output_savegame.rws"
+	if len(args) > 0 {
+		path = args[0]
+	}
+	b := saver.NewBuffer()
+	if err := file.Save(c.save, b, "savegame"); err != nil {
+		return err
+	}
+	return b.ToFile(path)
+}
+
 func (c *Console) Init(options *ui.Options, save *generated.Save) {
 	c.opt = options
 	c.save = save
@@ -81,5 +95,6 @@ func (c *Console) Init(options *ui.Options, save *generated.Save) {
 		"exit":    c.exit,
 		"pawn":    c.pawn,
 		"faction": c.faction,
+		"save":    c.savegame,
 	}
 }

@@ -125,8 +125,13 @@ func (s *Slice[T]) Assign(e *xml.Element) error {
 	s.repeatingTag = n.GetName()
 	for n != nil {
 		d := sliceData[T]{
-			tag:  n.GetName(),
-			data: reflect.New(reflect.TypeOf(*new(T)).Elem()).Interface().(T),
+			tag: n.GetName(),
+		}
+		switch tType := reflect.TypeOf(d.data).Kind(); tType {
+		case reflect.Ptr, reflect.Interface, reflect.Struct, reflect.Map, reflect.Slice:
+			d.data = reflect.New(reflect.TypeOf(*new(T)).Elem()).Interface().(T)
+		case reflect.String, reflect.Bool, reflect.Int, reflect.Int8, reflect.Int16, reflect.Int32, reflect.Int64, reflect.Uint, reflect.Uint8, reflect.Uint16, reflect.Uint32, reflect.Uint64, reflect.Float32, reflect.Float64:
+			d.data = zero[T]()
 		}
 		// The child element inherits the attributes of the parent element
 		// because we don't unmarshal the element directly but the children

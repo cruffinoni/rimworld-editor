@@ -93,12 +93,10 @@ func (app *Application) beforeExecution() {
 }
 
 func (app *Application) Run() error {
-	log.Printf("Os args: %+#v", os.Args)
 	return app.Cli.Run(os.Args)
 }
 
 func (app *Application) RunWithArgs(args []string) error {
-	log.Printf("defined args: %+#v", args)
 	return app.Cli.Run(args)
 }
 
