@@ -106,11 +106,11 @@ func (s Slice[T]) TransformToXML(b *saver.Buffer) error {
 	return nil
 }
 
-func (s *Slice[T]) Capacity() int {
+func (s Slice[T]) Capacity() int {
 	return s.cap
 }
 
-func (s *Slice[T]) GetFromIndex(idx int) T {
+func (s Slice[T]) GetFromIndex(idx int) T {
 	for i, d := range s.data {
 		if i == idx {
 			return d.data

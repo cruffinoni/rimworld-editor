@@ -64,6 +64,13 @@ func createCustomTypeForMap(e *xml.Element, flag uint) any {
 		k = determineTypeFromData(c, flag|ignoreSlice)
 		v any
 	)
+	if ct, ok := k.(*CustomType); ok {
+		// primary.Empty does not implement comparable
+		// TODO: Might be deleted when the types.Map type implements any as Key and not comparable anymore
+		if ct.name == "Empty" {
+			k = reflect.String
+		}
+	}
 	//log.Printf("Key type: %T", k)
 	c = c.Next
 	//log.Printf("Determining value type from '%v'", c.XMLPath())

@@ -20,7 +20,8 @@ func (f *finder[A, T]) FindIf(ref A, pred func(T) bool) (T, bool) {
 			return ref.GetFromIndex(i), true
 		}
 	}
-	return nil, false
+	var t T
+	return t, false
 }
 
 func FindIf[A iterator.SliceIndexer[T], T any](arr A, f func(T) bool) (T, bool) {
