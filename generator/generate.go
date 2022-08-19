@@ -1,6 +1,7 @@
 package generator
 
 import (
+	"github.com/cruffinoni/rimworld-editor/helper"
 	"github.com/cruffinoni/rimworld-editor/xml"
 	"log"
 	"reflect"
@@ -11,6 +12,9 @@ import (
 func getTypeFromArray(e *xml.Element) reflect.Kind {
 	k := e.Child
 	if k != nil && k.Child != nil {
+		if helper.IsListTag(k.Child.GetName()) {
+			return reflect.Slice
+		}
 		return reflect.Struct
 	}
 	kt := reflect.Invalid
@@ -41,28 +45,40 @@ func getTypeFromArray(e *xml.Element) reflect.Kind {
 // Is it useful for empty tags.
 func determineTypeFromData(e *xml.Element, flag uint) any {
 	t := any(getTypeFromArray(e))
+	//log.Printf("Type of %v is %v", e.XMLPath(), t)
 	// We need to define this struct with of this all members
-	if t == reflect.Struct {
+	if t == reflect.Struct || t == reflect.Slice {
 		c := e.Child
+		if (flag & ignoreSlice) > 0 {
+			flag &^= ignoreSlice
+			//log.Println("Ignoring slice")
+			return determineTypeFromData(c, flag)
+		}
 		// If the child is a list, let's create a slice from it
-		if isListTag(c.Child.GetName()) {
+		if helper.IsListTag(c.Child.GetName()) {
 			// We set the forceChild flag to true to force the function createStructure
 			// to take the children of the list and not the list itself.
 			t = createCustomSlice(c, flag|forceChild)
 		} else {
 			// Otherwise, a basic struct is created
+			// We pass 'e' instead of 'c' because createStructure will take the children of 'e'
 			t = createStructure(e, flag)
 		}
 	} else if t == reflect.Invalid {
-		t = e
+		if e.Data == nil {
+			t = createEmptyType()
+		} else {
+			log.Printf("2: invalid type: %v => '%v' (data: '%v')", t, e.XMLPath(), e.Data)
+			t = e
+		}
 	} else {
 		if !e.Attr.Empty() {
-			log.Println("primary.EmbeddedType: found attributes on path", e.XMLPath())
+			//log.Println("primary.EmbeddedType: found attributes on path", e.XMLPath())
 			return &CustomType{
 				name:       "EmbeddedType",
 				pkg:        "primary",
 				type1:      t,
-				importPath: headerEmbedded,
+				importPath: primaryTypesPath,
 			}
 		}
 	}
@@ -75,19 +91,18 @@ func handleElement(e *xml.Element, st *StructInfo, flag uint) error {
 		var t any
 		if n.Child != nil {
 			// Skip the "li" tag since it's a slice and should not be a member of the struct
-			if flag&skipChild != 0 || isListTag(n.GetName()) {
+			if flag&skipChild != 0 || helper.IsListTag(n.GetName()) {
 				flag &^= skipChild
 				if err := handleElement(n.Child, st, flag); err != nil {
 					return err
 				}
 			} else {
 				childName := n.Child.GetName()
-				switch childName {
-				case "li":
+				if helper.IsListTag(childName) {
 					t = createCustomSlice(n, flag|skipChild)
-				case "keys":
+				} else if childName == "keys" {
 					t = createCustomTypeForMap(n, flag)
-				default:
+				} else {
 					// Sometimes, slice are not marked as "li" so we need to check
 					// if the next sibling has the same name.
 					// If so, we consider it as a slice
@@ -111,7 +126,7 @@ func handleElement(e *xml.Element, st *StructInfo, flag uint) error {
 						name:       "EmbeddedType",
 						pkg:        "primary",
 						type1:      t,
-						importPath: headerEmbedded,
+						importPath: primaryTypesPath,
 					}
 				}
 			} else {

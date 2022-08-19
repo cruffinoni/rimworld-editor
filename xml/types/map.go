@@ -26,7 +26,7 @@ type MapComparable[T any] interface {
 // Map is a map of K to V.
 // We don't restrict the type K to MapComparable[Map[K, V]] because K might be
 // type of string, int or any primary type.
-type Map[K, V comparable] struct {
+type Map[K comparable, V any] struct {
 	MapComparable[Map[K, V]]
 	xml.Assigner
 	iterator.MapIndexer[K, V]
@@ -80,7 +80,7 @@ func castTemplate[T any](value any) T {
 	return zero[T]()
 }
 
-func castDataFromKind[T comparable](kind reflect.Kind, d *xml.Data) T {
+func castDataFromKind[T any](kind reflect.Kind, d *xml.Data) T {
 	switch kind {
 	case reflect.String:
 		return castTemplate[T](d.GetString())

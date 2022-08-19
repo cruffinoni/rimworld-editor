@@ -14,7 +14,3 @@ func generateRandomString() string {
 	}
 	return string(b)
 }
-
-func isListTag(tag string) bool {
-	return tag == "li" || tag == "list"
-}

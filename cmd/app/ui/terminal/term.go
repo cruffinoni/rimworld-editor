@@ -2,8 +2,6 @@ package terminal
 
 import (
 	"fmt"
-	"github.com/cruffinoni/rimworld-editor/xml/saver"
-	"github.com/cruffinoni/rimworld-editor/xml/saver/file"
 	"log"
 	"strings"
 
@@ -13,13 +11,11 @@ import (
 	"github.com/c-bata/go-prompt"
 )
 
-type commandHandler func([]string) error
-
 type Console struct {
 	ui.Mode
 	opt        *ui.Options
 	shouldExit bool
-	commands   map[string]commandHandler
+	commands   *terminalCommand
 	save       *generated.Save
 }
 
@@ -36,15 +32,13 @@ func (c *Console) Execute([]string) error {
 		if len(f) == 0 {
 			continue
 		}
-		if h, ok := c.commands[f[0]]; ok {
-			lastError = h(f[1:])
-			if lastError != nil {
+		if err := c.commands.Parse(f); err != nil {
+			log.Println(err)
+			if err != errUnknownCommand {
 				c.shouldExit = true
-				log.Println(lastError)
 			}
-		} else {
-			log.Printf("Unknown command: %s", f[0])
 		}
+		log.Println("Execution ended.")
 		if c.shouldExit {
 			break
 		}
@@ -52,50 +46,42 @@ func (c *Console) Execute([]string) error {
 	return lastError
 }
 
-func (c *Console) exit(_ []string) error {
+func (c *Console) exit([]string) error {
 	c.shouldExit = true
 	return nil
-}
-
-func (c *Console) pawn(args []string) error {
-	switch args[0] {
-	case "list":
-		log.Println("Listing pawns...")
-	}
-	return nil
-}
-
-func (c *Console) faction(args []string) error {
-	switch args[0] {
-	case "list":
-		log.Println("Listing factions...")
-		//for i := c.save.Game.World.Info.FactionCounts.Iterator(); i != nil; i = i.Next() {
-		//	log.Printf("%s: %d", i.Key(), i.Value())
-		//}
-	}
-	return nil
-}
-
-// TODO: Command doesn't save properly (check out file.Save)
-func (c *Console) savegame(args []string) error {
-	path := "test/output_savegame.rws"
-	if len(args) > 0 {
-		path = args[0]
-	}
-	b := saver.NewBuffer()
-	if err := file.Save(c.save, b, "savegame"); err != nil {
-		return err
-	}
-	return b.ToFile(path)
 }
 
 func (c *Console) Init(options *ui.Options, save *generated.Save) {
 	c.opt = options
 	c.save = save
-	c.commands = map[string]commandHandler{
-		"exit":    c.exit,
-		"pawn":    c.pawn,
-		"faction": c.faction,
-		"save":    c.savegame,
-	}
+	c.commands = NewTerminalCommands()
+	c.commands.RegisterCommand(&details{
+		name:        "exit",
+		description: "Exit the console",
+		handler:     c.exit,
+	})
+	c.commands.RegisterCommand(&details{
+		name:        "pawn",
+		description: "Pawn commands",
+	})
+	c.commands.RegisterCommand(&details{
+		name:        "faction",
+		description: "Faction commands",
+	}).RegisterCommand(
+		&details{
+			name:        "list",
+			description: "List factions",
+			handler:     c.factionList,
+		},
+		&details{
+			name:        "create",
+			description: "Create a faction",
+			handler:     c.factionCreate,
+		},
+		&details{
+			name:        "delete",
+			description: "Delete a faction",
+			handler:     c.factionDelete,
+		},
+	)
 }

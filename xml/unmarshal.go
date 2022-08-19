@@ -2,14 +2,19 @@ package xml
 
 import (
 	_xml "encoding/xml"
+	"github.com/cruffinoni/rimworld-editor/helper"
 	"github.com/cruffinoni/rimworld-editor/xml/attributes"
 	"io"
 )
 
+// event is a type that represents a function to
+// handle a event. T is a user-defined type.
+// See Context for ctx
 type event[T any] func(e T, ctx *Context)
 
 type indexRemembering map[int]int
 
+// Context give a context to an event
 type Context struct {
 	index indexRemembering
 	attr  attributes.Attributes
@@ -28,7 +33,6 @@ const InvalidIdx = -1
 
 func unmarshalEmbed(decoder *_xml.Decoder,
 	onStartElement event[*_xml.StartElement],
-	onEndElement event[*_xml.EndElement],
 	onCharByte event[[]byte]) error {
 	ctx := &Context{
 		index: make(indexRemembering),
@@ -45,7 +49,7 @@ func unmarshalEmbed(decoder *_xml.Decoder,
 		case _xml.StartElement:
 			ctx.depth++
 			ctx.attr = transformAttrToMap(&t.Attr)
-			if t.Name.Local == "li" {
+			if helper.IsListTag(t.Name.Local) {
 				ctx.index[ctx.depth]++
 			}
 			if onStartElement != nil {
@@ -56,15 +60,12 @@ func unmarshalEmbed(decoder *_xml.Decoder,
 				continue
 			}
 			ctx.attr = nil
-			ctx.depth--
-			if onEndElement != nil {
-				onEndElement(&t, ctx)
-			}
 
-			previousIdx := ctx.depth + 2
-			if t.Name.Local != "li" && ctx.index[previousIdx] > 0 {
+			previousIdx := ctx.depth + 1
+			if !helper.IsListTag(t.Name.Local) && ctx.index[previousIdx] > 0 {
 				delete(ctx.index, previousIdx)
 			}
+			ctx.depth--
 		case _xml.CharData:
 			if ctx.depth == 0 {
 				continue

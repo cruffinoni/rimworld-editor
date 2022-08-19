@@ -5,6 +5,7 @@ import (
 	"reflect"
 	"regexp"
 	"strconv"
+	"strings"
 )
 
 type Data struct {
@@ -17,6 +18,7 @@ const (
 	Matrix = reflect.UnsafePointer + iota
 	MatrixWithMapIndex
 	RGBA
+	Empty
 )
 
 type associatedRegex struct {
@@ -39,8 +41,8 @@ var (
 )
 
 func CreateDataType(data string) *Data {
-	if data == "" {
-		return &Data{data: data, t: reflect.Invalid}
+	if strings.TrimSpace(data) == "" {
+		return &Data{data: data, t: Empty}
 	}
 	for _, p := range AllPatterns {
 		if p.pattern.MatchString(data) {

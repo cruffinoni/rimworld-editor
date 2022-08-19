@@ -16,22 +16,34 @@ type CustomType struct {
 	importPath string
 }
 
+func createEmptyType() any {
+	return &CustomType{
+		name:       "Empty",
+		pkg:        "primary",
+		type1:      reflect.Invalid,
+		importPath: primaryTypesPath,
+	}
+}
+
 func createCustomSlice(e *xml.Element, flag uint) any {
-	c := e
 	var t any
-	t = getTypeFromArray(c)
-	if t == reflect.Struct {
-		if flag&notComparable != 0 {
-			return e
+	t = getTypeFromArray(e)
+	//log.Printf("Type of array: %v (%v) & %p", t, e.XMLPath(), e)
+	switch t {
+	case reflect.Invalid:
+		// With an invalid type and no data, we can assume that the slice is empty
+		if e.Data == nil {
+			t = createEmptyType()
+		} else {
+			log.Printf("invalid type: %v => '%v' (data: '%v')", t, e.XMLPath(), e.Data)
+			t = e
 		}
-		t = createStructure(c, flag|skipChild|notComparable)
-		//if c.Child.GetName() == "li" {
-		//	t = createCustomSlice(c.Child, flag)
-		//} else {
-		//	t = createStructure(c, flag)
-		//}
-	} else if t == reflect.Invalid {
-		t = e
+	case reflect.Slice:
+		//log.Printf("Creating custom slice from %s", e.Child.XMLPath())
+		t = createCustomSlice(e.Child, flag)
+	case reflect.Struct:
+		//log.Printf("[Struct] creating a structure from %s", e.XMLPath())
+		t = createStructure(e, flag|skipChild)
 	}
 	return &CustomType{
 		name:       "Slice",
@@ -46,13 +58,17 @@ func createCustomTypeForMap(e *xml.Element, flag uint) any {
 		log.Panic("generate.createCustomTypeForMap: missing child")
 	}
 
+	//log.Printf("Determining key type from %s", e.Child.XMLPath())
 	var (
 		c = e.Child
-		k = determineTypeFromData(c, flag)
+		k = determineTypeFromData(c, flag|ignoreSlice)
 		v any
 	)
+	//log.Printf("Key type: %T", k)
 	c = c.Next
-	v = determineTypeFromData(c, flag)
+	//log.Printf("Determining value type from '%v'", c.XMLPath())
+	v = determineTypeFromData(c, flag|ignoreSlice)
+	//log.Printf("Value type: %T", v)
 	// By default, maps are strings to strings
 	if k == reflect.Invalid || v == reflect.Invalid {
 		return &CustomType{

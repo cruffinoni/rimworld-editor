@@ -14,11 +14,11 @@ type buffer struct {
 }
 
 const (
-	customTypesPath = "xml/types"
-	headerEmbedded  = "xml/types/primary"
+	customTypesPath  = "xml/types"
+	primaryTypesPath = "xml/types/primary"
+	headerXml        = "xml"
 	saverPath       = "xml/saver"
 	xmlAttributes   = "xml/attributes"
-	headerXml       = "xml"
 )
 
 func (b *buffer) writeImport(imp ...string) {

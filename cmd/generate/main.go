@@ -21,6 +21,10 @@ func main() {
 		return
 	}
 	fo, err = file.Open(path)
+	if err != nil {
+		log.Println(err)
+		return
+	}
 	root := generator.GenerateGoFiles(fo.XML.Root)
 	if err = root.WriteGoFile("./generated"); err != nil {
 		log.Fatal(err)

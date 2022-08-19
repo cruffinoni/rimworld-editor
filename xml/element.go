@@ -26,7 +26,7 @@ type Element struct {
 	Parent *Element
 }
 
-const DefaultSpacing = 2
+const DefaultSpacing = 4
 
 func (e *Element) ToXML(spacing int) string {
 	var sb strings.Builder
@@ -100,20 +100,6 @@ func (e *Element) Pretty(spacing int) string {
 	}
 	return sb.String()
 }
-
-//func (e *Element) String() string {
-//	var s string
-//	s = fmt.Sprintf("%v[%v/%d] ", s, e.StartElement.Name.Local, e.index)
-//	if e.Child != nil {
-//		s += "(" + e.Child.String() + ") "
-//	}
-//	s = fmt.Sprintf("%v'%v' ", s, e.Data)
-//	l := len(s)
-//	if l > 0 && s[l-1] == ' ' {
-//		s = s[:l-1]
-//	}
-//	return s
-//}
 
 func (e *Element) GetName() string {
 	return e.StartElement.Name.Local

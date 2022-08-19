@@ -4,7 +4,6 @@ import (
 	"bytes"
 	_xml "encoding/xml"
 	"log"
-	"os"
 )
 
 type Tree struct {
@@ -51,15 +50,18 @@ func (t *Tree) UnmarshalXML(decoder *_xml.Decoder, _ _xml.StartElement) error {
 
 	return unmarshalEmbed(decoder,
 		func(e *_xml.StartElement, ctx *Context) {
+			//log.Printf("Depth increased: %v", depth)
 			if ctx.depth > depth {
 				if lastNode.Child != nil {
-					//log.Printf("(ctx.depth > depth) retrieving next node: %v", ctx.depth)
+					// The last node has already a child, so we retrieve it
 					lastNode = lastNode.Child
 				} else {
-					//log.Printf("(ctx.depth > depth - %v) creating a new node: %v", e.Name.Local, ctx.depth)
+					// No child and this is a new element, so we create a new node
+
 					idx := InvalidIdx
+					// If the index has a registered depth, we use it.
+					// It adds additional information to the node
 					if v, ok := ctx.index[ctx.depth]; ok {
-						//log.Printf("(ctx.depth > depth) index: %v", v)
 						idx = v
 					}
 					n := &Element{
@@ -71,20 +73,27 @@ func (t *Tree) UnmarshalXML(decoder *_xml.Decoder, _ _xml.StartElement) error {
 					}
 					lastNode.Child = n
 					lastNode = n
-					////log.Printf("(ctx.depth > depth) created a new node / Parent: %p", lastNode)
 					depth = ctx.depth
 				}
 			} else if ctx.depth < depth {
+				//log.Printf("Depth decreased: %v", depth)
+				// The depth is smaller than the last one, so we go back to the parent
 				if lastNode.Parent != nil {
+					// We don't detect the end of a XML element, so we have to
+					// go back where the new element is.
+					// Because if we are at the end of multiple element, the depth
+					// will decrease multiple times.
 					for depth > ctx.depth {
 						lastNode = lastNode.Parent
 						depth--
 					}
 					idx := InvalidIdx
+
+					// We do the same thing as previously explained
 					if v, ok := ctx.index[ctx.depth]; ok {
 						idx = v
 					}
-					//log.Printf("(ctx.depth < depth) creating a new node w/ idx: %v", idx)
+					// TODO: Code factorization ?
 					n := &Element{
 						Parent:       lastNode.Parent,
 						Prev:         lastNode.Prev,
@@ -93,21 +102,18 @@ func (t *Tree) UnmarshalXML(decoder *_xml.Decoder, _ _xml.StartElement) error {
 						EndElement:   _xml.EndElement{Name: e.Name},
 						Attr:         ctx.attr,
 					}
-					//log.Println("(ctx.depth < depth) retrieving prev node")
 					lastNode.Next = n
 					lastNode = n
 				} else {
 					// This case should not happen because every child must have a parent
-					log.Println("no prev but depth decreased")
-					//log.Printf("Last node: %v", lastNode.XMLPath())
-					//fmt.Printf(t.Pretty())
-					os.Exit(1)
+					log.Fatal("no prev but depth decreased")
 				}
 			} else {
-				//log.Printf("(ctx.depth == depth - %s) creating a new node", e.Name.Local)
+				// The depth is the same as the last one, so we create a new node
+				// which is basically a sibling of the current node
+				//log.Printf("Depth is the same: %v", depth)
 				idx := InvalidIdx
 				if v, ok := ctx.index[ctx.depth]; ok {
-					//log.Printf("(ctx.depth == depth) index: %v", v)
 					idx = v
 				}
 				n := &Element{
@@ -118,25 +124,27 @@ func (t *Tree) UnmarshalXML(decoder *_xml.Decoder, _ _xml.StartElement) error {
 					Attr:         ctx.attr,
 				}
 				// First node is null because it is the root node
+				// This is a special case. The first time we go through
+				// the different conditions, the code will always go here
 				if lastNode == nil {
-					//log.Println("Root node created")
 					lastNode = n
 					t.Root = lastNode
 				} else {
-					// All children must have the same parent
+					// All children must have the same parent because
+					// they are siblings
 					n.Parent = lastNode.Parent
 					lastNode.Next = n
 					lastNode = n
-					//log.Printf("Basic node created w/ parent: %p", lastNode.Parent)
 				}
 			}
 		},
-		nil,
 		func(b []byte, ctx *Context) {
-			s := string(bytes.Trim(b, "\n\t"))
+			// This is a small trick to ignore data with only spaces
+			// It occurs when an XML element close
+			s := string(bytes.TrimSpace(b))
 			if s != "" {
 				lastNode.Data = CreateDataType(s)
-				//log.Printf("Data: '%v'", s)
+				//log.Printf("Data: '%v' from %s", s, lastNode.XMLPath())
 			}
 		})
 }

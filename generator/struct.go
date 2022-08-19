@@ -2,10 +2,11 @@ package generator
 
 import (
 	"bytes"
+	"github.com/cruffinoni/rimworld-editor/helper"
 	"github.com/cruffinoni/rimworld-editor/xml"
 	"github.com/cruffinoni/rimworld-editor/xml/attributes"
-	"log"
 	"os"
+	"strconv"
 )
 
 type StructInfo struct {
@@ -29,8 +30,13 @@ const (
 	// A.K.A., skip the current child and use the child of the current child
 	// Useful for the case of list with custom tag
 	forceChild = 2 << iota
-	// notComparable is a flag that indicates that the member is not comparable
-	notComparable = 3 << iota
+
+	ignoreSlice = 3 << iota
+
+	forceRandomName = 4 << iota
+
+	// InnerKeyword is the keyword for cases when the name of the element is the same as the name of the parent.
+	InnerKeyword = "_Inner"
 )
 
 // GenerateGoFiles generates the Go files (with the corresponding structs)
@@ -76,6 +82,8 @@ func (s *StructInfo) removeDuplicates() {
 	}
 }
 
+var uniqueNumber = 0
+
 // createStructure creates a new structure from the given element.
 // Then the function will recursively call handleElement on the children of the element.
 // It removes the duplicates from the members of the struct.
@@ -84,8 +92,8 @@ func createStructure(e *xml.Element, flag uint) any {
 	// It is useful for the case of lists
 	if flag&forceChild == forceChild {
 		flag &^= forceChild
-		// Quick way to determine if the child is a structure, check
-		// if the child is not nil.
+		//log.Println("Forcing child flag")
+		// Quick way to determine if the child is a structure
 		if e.Child != nil && e.Child.Child != nil {
 			return createStructure(e.Child, flag)
 		} else {
@@ -96,20 +104,21 @@ func createStructure(e *xml.Element, flag uint) any {
 		panic("generate.createStructure: missing child")
 	}
 	name := e.GetName()
-	// If the name is "li", it's a list and a generic name, so we add
-	// a random string to the name.
-	// Good to notes, that this part let us know when the code generate
-	// a "li" as a struct. The structure can have other custom type but the
-	// problem with that is those types are not comparable.
-	if isListTag(name) {
-		return e
+
+	// TODO: Update doc for this line of code
+	if helper.IsListTag(name) {
+		//log.Printf("generate.createStructure: '%s' & child name: %v", name, e.Child.GetName())
+		return createStructure(e.Parent, flag|forceRandomName)
 	}
 
 	// In this case, the child has the same name as his parent which
 	// is very confusing for structure names.
 	if e.Parent != nil && name == e.Parent.GetName() {
-		name += "_Inner"
-		log.Printf("force random name: name '%v' & xmlPath: %v", name, e.XMLPath())
+		name += InnerKeyword
+	}
+	if (flag & forceRandomName) > 0 {
+		name += strconv.Itoa(uniqueNumber)
+		uniqueNumber++
 	}
 	s := &StructInfo{
 		name:    name,
