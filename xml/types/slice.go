@@ -134,6 +134,8 @@ func (s *Slice[T]) Assign(e *xml.Element) error {
 		d := sliceData[T]{
 			tag: n.GetName(),
 		}
+		// Set d.data to zero depending on the type of T. Either a pointer or a
+		// value.
 		switch tType := reflect.TypeOf(d.data).Kind(); tType {
 		case reflect.Ptr, reflect.Interface, reflect.Struct, reflect.Map, reflect.Slice:
 			d.data = reflect.New(reflect.TypeOf(*new(T)).Elem()).Interface().(T)
@@ -143,13 +145,13 @@ func (s *Slice[T]) Assign(e *xml.Element) error {
 		// The child element inherits the attributes of the parent element
 		// because we don't unmarshal the element directly but the children
 		// since it's a slice.
-		// WARN: Might be reworked to something more elegant.
 		if n.Child != nil {
 			n.Child.Attr = n.Attr
 			if err := unmarshal.Element(n.Child, &d); err != nil {
 				return err
 			}
 		} else {
+			// TODO: Might be reworked to something more elegant.
 			if err := unmarshal.Element(n, &d); err != nil {
 				return err
 			}
