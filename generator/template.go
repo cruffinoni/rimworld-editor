@@ -2,7 +2,6 @@ package generator
 
 import (
 	"github.com/cruffinoni/rimworld-editor/xml"
-	"github.com/cruffinoni/rimworld-editor/xml/saver"
 	"github.com/iancoleman/strcase"
 	"go/format"
 	"log"
@@ -123,7 +122,6 @@ func (s *StructInfo) generateStructTo(path string) error {
 }
 
 type require interface {
-	saver.Transformer
 	xml.Assigner
 }
 
@@ -133,7 +131,7 @@ var (
 )
 
 func writeRequiredInterfaces(b *buffer, structName string) {
-	b.writeImport(saverPath, xmlAttributes, headerXml)
+	b.writeImport(xmlAttributes, headerXml)
 	for i := 0; i < nbMethod; i++ {
 		m := tRequired.Method(i)
 		b.writeToFooter("" +

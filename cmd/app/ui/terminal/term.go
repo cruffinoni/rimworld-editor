@@ -69,13 +69,14 @@ func (c *Console) faction(args []string) error {
 	switch args[0] {
 	case "list":
 		log.Println("Listing factions...")
-		for i := c.save.Game.World.Info.FactionCounts.Iterator(); i != nil; i = i.Next() {
-			log.Printf("%s: %d", i.Key(), i.Value())
-		}
+		//for i := c.save.Game.World.Info.FactionCounts.Iterator(); i != nil; i = i.Next() {
+		//	log.Printf("%s: %d", i.Key(), i.Value())
+		//}
 	}
 	return nil
 }
 
+// TODO: Command doesn't save properly (check out file.Save)
 func (c *Console) savegame(args []string) error {
 	path := "test/output_savegame.rws"
 	if len(args) > 0 {

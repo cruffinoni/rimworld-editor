@@ -37,7 +37,6 @@ func Save(val any, b *saver.Buffer, tag string) error {
 		v = v.Elem()
 	}
 	vInterface := v.Interface()
-	//log.Printf("Interface: %T", vInterface)
 
 	var attr attributes.Attributes
 	if attributeAssigner, ok := castToInterface[xml.AttributeAssigner](t, val); ok {

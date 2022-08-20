@@ -89,6 +89,9 @@ func (app *Application) beforeExecution() {
 		if err = root.WriteGoFile(app.Output); err != nil {
 			log.Fatal(err)
 		}
+		if err = app.ReadFile(); err != nil {
+			log.Fatal(err)
+		}
 	}
 }
 

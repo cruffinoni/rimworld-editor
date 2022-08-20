@@ -35,7 +35,7 @@ type Map[K, V comparable] struct {
 }
 
 func (m Map[K, V]) TransformToXML(buffer *saver.Buffer) error {
-	if m.m == nil {
+	if m.m == nil || m.Capacity() == 0 {
 		buffer.WriteEmptyTag("keys", nil)
 		buffer.WriteEmptyTag("values", nil)
 		return nil
@@ -91,7 +91,7 @@ func castDataFromKind[T comparable](kind reflect.Kind, d *xml.Data) T {
 	case reflect.Float32, reflect.Float64:
 		return castTemplate[T](d.GetFloat64())
 	}
-	log.Panicf("Map/castDataFromKind: cannot cast %v to %v", d, zero[T]())
+	log.Panicf("Map/castDataFromKind: cannot cast %T to %T", d.GetData(), zero[T]())
 	// Never reached
 	return zero[T]()
 }
@@ -113,10 +113,19 @@ func (m *Map[K, V]) Assign(e *xml.Element) error {
 	kKind := reflect.TypeOf(zero[K]()).Kind()
 	vKind := reflect.TypeOf(zero[V]()).Kind()
 	for i, key := range keys {
-		if key.Data == nil || values[i].Data == nil {
-			log.Panicf("Map/Assign: no data for %s or %s", key.StartElement.Name.Local, values[i].StartElement.Name.Local)
+		if key.Data == nil {
+			log.Panicf("Map/Assign: no data for key %s", key.StartElement.Name.Local)
 		}
-		m.m[castDataFromKind[K](kKind, key.Data)] = castDataFromKind[V](vKind, values[i].Data)
+		// There is a key with no data
+		if values[i].Data == nil {
+			m.m[castDataFromKind[K](kKind, key.Data)] = zero[V]()
+		} else if _, isElement := interface{}(zero[V]()).(*xml.Element); isElement {
+			// Special if V is a xml.Element because we pass a pointer to the data for castDataFromKind
+			// so, we don't use this function but assign directly to the map
+			m.m[castDataFromKind[K](kKind, key.Data)] = castTemplate[V](values[i])
+		} else {
+			m.m[castDataFromKind[K](kKind, key.Data)] = castDataFromKind[V](vKind, values[i].Data)
+		}
 	}
 	v := reflect.ValueOf(m.m)
 	k := reflect.ValueOf(zero[K]()).Kind()

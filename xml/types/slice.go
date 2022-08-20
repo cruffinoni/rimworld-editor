@@ -8,6 +8,7 @@ import (
 	"github.com/cruffinoni/rimworld-editor/xml/saver/file"
 	"github.com/cruffinoni/rimworld-editor/xml/types/iterator"
 	"github.com/cruffinoni/rimworld-editor/xml/unmarshal"
+	"log"
 	"reflect"
 	"strings"
 )
@@ -22,6 +23,7 @@ type sliceData[T any] struct {
 }
 
 func (s *sliceData[T]) Assign(e *xml.Element) error {
+	log.Println("Assign sliceData")
 	var (
 		err   error
 		tKind = reflect.TypeOf(s.data).Kind()
@@ -31,6 +33,7 @@ func (s *sliceData[T]) Assign(e *xml.Element) error {
 	} else {
 		err = unmarshal.Element(e, &s.data)
 	}
+	log.Printf("Data '%v' / %T", s.data, s.data)
 	if err != nil {
 		return err
 	}
@@ -63,11 +66,12 @@ func (s *sliceData[T]) UpdateStringRepresentation(v T) {
 		}
 	} else {
 		// Otherwise we use a basic string representation.
-		s.str = fmt.Sprintf("%v", v)
+		s.str = fmt.Sprintf("'%v'", v)
 	}
 }
 
-func (s sliceData[T]) String() string {
+func (s *sliceData[T]) String() string {
+	log.Println("String called")
 	return s.str
 }
 
@@ -86,10 +90,12 @@ type Slice[T any] struct {
 
 func (s Slice[T]) TransformToXML(b *saver.Buffer) error {
 	if s.repeatingTag == "" {
+		log.Print("Slice.TransformToXML: No repeating tag specified.")
 		return nil
 	}
 	lastElement := s.cap - 1
 	for i, v := range s.data {
+		log.Printf("Slice.TransformToXML: %v at %v // %v", v.data, i, s.repeatingTag)
 		if err := file.Save(v.data, b, s.repeatingTag); err != nil {
 			return err
 		}
@@ -123,6 +129,7 @@ func (s *Slice[T]) Assign(e *xml.Element) error {
 		return nil
 	}
 	s.repeatingTag = n.GetName()
+	log.Printf("Slice.Assign: Repeating tag: %v", s.repeatingTag)
 	for n != nil {
 		d := sliceData[T]{
 			tag: n.GetName(),
@@ -136,15 +143,23 @@ func (s *Slice[T]) Assign(e *xml.Element) error {
 		// The child element inherits the attributes of the parent element
 		// because we don't unmarshal the element directly but the children
 		// since it's a slice.
+		// WARN: Might be reworked to something more elegant.
 		if n.Child != nil {
 			n.Child.Attr = n.Attr
+			if err := unmarshal.Element(n.Child, &d); err != nil {
+				return err
+			}
+		} else {
+			if err := unmarshal.Element(n, &d); err != nil {
+				return err
+			}
 		}
-		if err := unmarshal.Element(n.Child, &d); err != nil {
-			return err
-		}
+		log.Printf("Slice.Assign: Data: %v", n.Data.GetData())
+		log.Printf("Data of d: '%v' (%T)", d.data, d.data)
 		s.data = append(s.data, d)
 		n = n.Next
 	}
+	log.Println("Slice.Assign: end")
 	return nil
 }
 
