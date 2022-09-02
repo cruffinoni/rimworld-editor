@@ -1,8 +1,8 @@
 package terminal
 
 import (
+	"github.com/cruffinoni/rimworld-editor/algorithm"
 	"github.com/cruffinoni/rimworld-editor/generated"
-	"github.com/cruffinoni/rimworld-editor/xml/types/algorithm"
 	"log"
 )
 
@@ -13,9 +13,10 @@ func (c *Console) factionList(args []string) error {
 			log.Printf("%s: %d", i.Key(), i.Value())
 		}
 	} else {
-		f, ok := algorithm.FindIf(c.save.Game.World.FactionManager.AllFactions, func(a *generated.AllFactions) bool {
-			return a.Name == args[0]
-		})
+		f, ok := algorithm.FindInSlice[*generated.AllFactions](c.save.Game.World.FactionManager.AllFactions, &generated.AllFactions{Name: args[0]})
+		//f, ok := algorithm.FindInSliceIf(c.save.Game.World.FactionManager.AllFactions, func(a *generated.AllFactions) bool {
+		//	return a.Name == args[0]
+		//})
 		if !ok {
 			log.Printf("faction '%v' not found", args[0])
 			return nil

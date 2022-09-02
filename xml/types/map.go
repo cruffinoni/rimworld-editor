@@ -17,6 +17,16 @@ import (
 // Map is a map of K to V and require the XML file to have a "keys" and "values"
 // element.
 
+type Pair[K, V any] struct {
+	Key   K
+	Value V
+}
+
+func (p *Pair[K, V]) Equal(rhs *Pair[K, V]) bool {
+	//return p.Key == rhs.Key && p.Value == rhs.Value
+	return true
+}
+
 type MapComparable[T any] interface {
 	Less(key reflect.Value, other T) bool
 	Equal(key reflect.Value, other T) bool
@@ -190,7 +200,7 @@ func (m Map[K, V]) GetFromIndex(idx int) V {
 	return zero[V]()
 }
 
-func (m *Map[K, V]) GetKeyFromIndex(idx int) K {
+func (m Map[K, V]) GetKeyFromIndex(idx int) K {
 	if m.m == nil {
 		return zero[K]()
 	}
@@ -216,7 +226,7 @@ func (m *Map[K, V]) Set(key K, value V) {
 	m.m[key] = value
 }
 
-func (m *Map[K, V]) Capacity() int {
+func (m Map[K, V]) Capacity() int {
 	return len(m.m)
 }
 
