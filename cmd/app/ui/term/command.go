@@ -1,8 +1,9 @@
-package terminal
+package term
 
 import (
 	"errors"
 	"fmt"
+	"log"
 )
 
 type commandHandler func([]string) error
@@ -52,7 +53,8 @@ func (t *terminalCommand) showHelp() {
 }
 
 func (t *terminalCommand) Parse(input []string) error {
-	if len(t.commands) == 0 {
+	log.Printf("cmd: %+#v", t)
+	if len(t.commands) == 0 || len(input) == 0 {
 		if t.details.handler == nil {
 			t.showHelp()
 			return nil
@@ -61,6 +63,7 @@ func (t *terminalCommand) Parse(input []string) error {
 	}
 	for n, c := range t.commands {
 		if n == input[0] {
+			log.Printf("Found command %s", n)
 			return c.Parse(input[1:])
 		}
 	}

@@ -2,10 +2,11 @@ package main
 
 import (
 	"github.com/cruffinoni/rimworld-editor/cmd/app/ui"
-	"github.com/cruffinoni/rimworld-editor/cmd/app/ui/terminal"
+	"github.com/cruffinoni/rimworld-editor/cmd/app/ui/term"
 	"github.com/cruffinoni/rimworld-editor/file"
 	"github.com/cruffinoni/rimworld-editor/generated"
 	"github.com/cruffinoni/rimworld-editor/generator"
+	"github.com/cruffinoni/rimworld-editor/xml/unmarshal"
 	"github.com/jawher/mow.cli"
 	"log"
 	"os"
@@ -53,16 +54,16 @@ func CreateApplication() *Application {
 	app.Before = app.beforeExecution
 	app.Action = func() {
 		if app.Mode == modeConsole {
-			app.ui = &terminal.Console{}
+			app.ui = &term.Console{}
 		} else if app.Mode == modeGUI {
 			panic("not implemented")
 			//app.ui = app.guiMode
 		}
 		save := &generated.Save{}
 		log.Println("Unmarshalling XML...")
-		//if err := unmarshal.Element(app.fileOpening.XML.Root, save); err != nil {
-		//	log.Fatal(err)
-		//}
+		if err := unmarshal.Element(app.fileOpening.XML.Root, save); err != nil {
+			log.Fatal(err)
+		}
 		log.Println("Initializing UI...")
 		app.ui.Init(&app.Options, save)
 		log.Println("Running UI...")

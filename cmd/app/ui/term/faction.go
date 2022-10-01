@@ -1,4 +1,4 @@
-package terminal
+package term
 
 import (
 	"github.com/cruffinoni/rimworld-editor/algorithm"
@@ -7,7 +7,7 @@ import (
 )
 
 func (c *Console) factionList(args []string) error {
-	if args[0] == "all" || len(args) == 0 {
+	if len(args) == 0 || args[0] == "all" {
 		log.Println("Summary of all factions...")
 		for i := c.save.Game.World.Info.FactionCounts.Iterator(); i != nil; i = i.Next() {
 			log.Printf("%s: %d", i.Key(), i.Value())

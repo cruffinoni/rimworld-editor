@@ -1,4 +1,4 @@
-package terminal
+package term
 
 import (
 	"fmt"
@@ -38,8 +38,8 @@ func (c *Console) Execute([]string) error {
 				c.shouldExit = true
 			}
 		}
-		log.Println("Execution ended.")
 		if c.shouldExit {
+			log.Println("Execution ended.")
 			break
 		}
 	}
