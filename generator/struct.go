@@ -2,11 +2,12 @@ package generator
 
 import (
 	"bytes"
+	"os"
+	"strconv"
+
 	"github.com/cruffinoni/rimworld-editor/helper"
 	"github.com/cruffinoni/rimworld-editor/xml"
 	"github.com/cruffinoni/rimworld-editor/xml/attributes"
-	"os"
-	"strconv"
 )
 
 type StructInfo struct {
@@ -44,7 +45,7 @@ const (
 // To do that, call WriteGoFile.
 func GenerateGoFiles(root *xml.Element) *StructInfo {
 	s := StructInfo{
-		name:    "save",
+		name:    root.GetName(),
 		members: make([]*member, 0),
 	}
 	if err := handleElement(root, &s, flagNone); err != nil {

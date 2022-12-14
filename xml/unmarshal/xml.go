@@ -3,12 +3,13 @@ package unmarshal
 import (
 	"errors"
 	"fmt"
+	"log"
+	"reflect"
+
 	"github.com/cruffinoni/rimworld-editor/helper"
 	"github.com/cruffinoni/rimworld-editor/xml"
 	"github.com/cruffinoni/rimworld-editor/xml/path"
 	"github.com/cruffinoni/rimworld-editor/xml/types/primary"
-	"log"
-	"reflect"
 )
 
 func findFieldFromName(t reflect.Type, value reflect.Value, name string) int {
@@ -126,7 +127,7 @@ func Element(element *xml.Element, dest any) error {
 		return fmt.Errorf("multiple pointers found for type %s", reflect.TypeOf(dest).String())
 	}
 	if t.Kind() != reflect.Struct {
-		return fmt.Errorf("dest must be a pointer to a struct, got %s", t.String())
+		return fmt.Errorf("unmarshal: path %s: type %s is not a struct", n.XMLPath(), t.String())
 	}
 	v := reflect.ValueOf(dest).Elem()
 	if v.Kind() == reflect.Invalid {

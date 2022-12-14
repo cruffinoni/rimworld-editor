@@ -1,10 +1,11 @@
 package generator
 
 import (
-	"github.com/cruffinoni/rimworld-editor/helper"
-	"github.com/cruffinoni/rimworld-editor/xml"
 	"log"
 	"reflect"
+
+	"github.com/cruffinoni/rimworld-editor/helper"
+	"github.com/cruffinoni/rimworld-editor/xml"
 )
 
 // getTypeFromArray returns the type of the element as a reflect.Kind
@@ -129,8 +130,14 @@ func handleElement(e *xml.Element, st *StructInfo, flag uint) error {
 						importPath: primaryTypesPath,
 					}
 				}
+			} else if n.Next != nil && n.Next.GetName() == n.GetName() {
+				t = createCustomSlice(n, flag)
+				// Skip the next element since it's already handled
+				for n.Next != nil && n.Next.GetName() == n.GetName() {
+					n = n.Next
+				}
 			} else {
-				t = e
+				t = createEmptyType()
 			}
 			st.members = append(st.members, &member{
 				name: n.GetName(),

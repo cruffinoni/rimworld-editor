@@ -1,9 +1,13 @@
 package file
 
 import (
+	"bytes"
 	_xml "encoding/xml"
-	"github.com/cruffinoni/rimworld-editor/xml"
 	"os"
+
+	"golang.org/x/net/html/charset"
+
+	"github.com/cruffinoni/rimworld-editor/xml"
 )
 
 type Opening struct {
@@ -18,7 +22,10 @@ func Open(fileName string) (*Opening, error) {
 	if err != nil {
 		return nil, err
 	}
-	if err = _xml.Unmarshal(content, &fileOpening.XML); err != nil {
+	reader := bytes.NewReader(content)
+	decoder := _xml.NewDecoder(reader)
+	decoder.CharsetReader = charset.NewReaderLabel
+	if err = decoder.Decode(&fileOpening.XML); err != nil {
 		return nil, err
 	}
 	return fileOpening, nil

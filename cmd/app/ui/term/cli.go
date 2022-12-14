@@ -15,8 +15,8 @@ type Console struct {
 	ui.Mode
 	opt        *ui.Options
 	shouldExit bool
-	commands   *terminalCommand
-	save       *generated.Save
+	commands   *TerminalCommand
+	save       *generated.Savegame
 }
 
 func (c *Console) completer(d prompt.Document) []prompt.Suggest {

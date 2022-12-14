@@ -17,8 +17,7 @@ const (
 	customTypesPath  = "xml/types"
 	primaryTypesPath = "xml/types/primary"
 	headerXml        = "xml"
-	saverPath       = "xml/saver"
-	xmlAttributes   = "xml/attributes"
+	xmlAttributes    = "xml/attributes"
 )
 
 func (b *buffer) writeImport(imp ...string) {
@@ -53,7 +52,7 @@ func (b *buffer) bytes() []byte {
 			builder.WriteString(v)
 		}
 		builder.WriteString("\n)\n")
-	} else {
+	} else if len(b.imp) == 1 {
 		builder.WriteString("\nimport " + b.imp[0] + "\n")
 	}
 	builder.WriteString(b.body)

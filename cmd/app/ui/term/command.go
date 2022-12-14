@@ -13,26 +13,26 @@ type details struct {
 	description string
 	handler     commandHandler
 }
-type terminalCommand struct {
+type TerminalCommand struct {
 	*details
-	commands map[string]*terminalCommand
+	commands map[string]*TerminalCommand
 }
 
-func NewTerminalCommands() *terminalCommand {
-	return &terminalCommand{
-		commands: make(map[string]*terminalCommand),
+func NewTerminalCommands() *TerminalCommand {
+	return &TerminalCommand{
+		commands: make(map[string]*TerminalCommand),
 	}
 }
 
-func (t *terminalCommand) RegisterCommand(cmd ...*details) *terminalCommand {
+func (t *TerminalCommand) RegisterCommand(cmd ...*details) *TerminalCommand {
 	lastCreatedCmd := t
 	for _, c := range cmd {
 		if _, ok := t.commands[c.name]; ok {
 			panic(fmt.Sprintf("Command %s already registered", c.name))
 		}
-		newT := &terminalCommand{
+		newT := &TerminalCommand{
 			details:  c,
-			commands: make(map[string]*terminalCommand),
+			commands: make(map[string]*TerminalCommand),
 		}
 		t.commands[c.name] = newT
 		lastCreatedCmd = newT
@@ -45,14 +45,14 @@ func (t *terminalCommand) RegisterCommand(cmd ...*details) *terminalCommand {
 
 var errUnknownCommand = errors.New("unknown command")
 
-func (t *terminalCommand) showHelp() {
+func (t *TerminalCommand) showHelp() {
 	fmt.Printf("%s: %s\n", t.details.name, t.details.description)
 	for n, c := range t.commands {
 		fmt.Printf("%s: %s\n", n, c.details.description)
 	}
 }
 
-func (t *terminalCommand) Parse(input []string) error {
+func (t *TerminalCommand) Parse(input []string) error {
 	log.Printf("cmd: %+#v", t)
 	if len(t.commands) == 0 || len(input) == 0 {
 		if t.details.handler == nil {

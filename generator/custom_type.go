@@ -1,9 +1,10 @@
 package generator
 
 import (
-	"github.com/cruffinoni/rimworld-editor/xml"
 	"log"
 	"reflect"
+
+	"github.com/cruffinoni/rimworld-editor/xml"
 )
 
 type CustomType struct {
@@ -20,7 +21,7 @@ func createEmptyType() any {
 	return &CustomType{
 		name:       "Empty",
 		pkg:        "primary",
-		type1:      reflect.Invalid,
+		type1:      nil,
 		importPath: primaryTypesPath,
 	}
 }

@@ -1,13 +1,16 @@
 package generator
 
 import (
-	"github.com/cruffinoni/rimworld-editor/xml"
-	"github.com/iancoleman/strcase"
 	"go/format"
 	"log"
 	"os"
 	"reflect"
 	"strings"
+
+	"github.com/iancoleman/strcase"
+
+	"github.com/cruffinoni/rimworld-editor/algorithm"
+	"github.com/cruffinoni/rimworld-editor/xml"
 )
 
 func getTypeName(t any) string {
@@ -71,7 +74,13 @@ func removeInnerKeyword(s string) string {
 func writeCustomType(c *CustomType, b *buffer, path string) error {
 	var err error
 	b.writeImport(c.importPath)
-	b.writeToBody(c.pkg + "." + c.name + "[" + getTypeName(c.type1))
+	log.Printf("Custom type %+v", *c)
+	b.writeToBody(c.pkg + "." + c.name)
+	if c.type1 == nil {
+		log.Printf("Types: %v & %v", c.type1, c.type2)
+		return nil
+	}
+	b.writeToBody("[" + getTypeName(c.type1))
 	if err = checkTypeAndApply(c.type1, b, path); err != nil {
 		return err
 	}
@@ -137,20 +146,25 @@ func (s *StructInfo) generateStructTo(path string) error {
 	return nil
 }
 
+type generic struct{}
+
 type require interface {
 	xml.Assigner
+	algorithm.Comparable[generic]
 }
 
 var (
-	tRequired = reflect.TypeOf((*require)(nil)).Elem()
-	nbMethod  = tRequired.NumMethod()
+	tRequired        = reflect.TypeOf((*require)(nil)).Elem()
+	nbRequiredMethod = tRequired.NumMethod()
+
+	localGenericName = reflect.TypeOf(generic{}).Name()
 )
 
 func writeRequiredInterfaces(b *buffer, structName string) {
 	b.writeImport(xmlAttributes, headerXml)
-	for i := 0; i < nbMethod; i++ {
+	for i := 0; i < nbRequiredMethod; i++ {
 		m := tRequired.Method(i)
-		b.writeToFooter("" +
+		b.writeToFooter("\n" +
 			"func (" + strings.ToLower(structName[:1]) + " *" + structName + ") ")
 		b.writeToFooter(m.Name + "(")
 		if m.Type.NumIn() > 0 {
@@ -159,7 +173,11 @@ func writeRequiredInterfaces(b *buffer, structName string) {
 				if j > 0 {
 					b.writeToFooter(", ")
 				}
-				b.writeToFooter(m.Type.In(j).String())
+				if localGenericName == m.Type.In(j).Name() {
+					b.writeToFooter("*" + structName)
+				} else {
+					b.writeToFooter(m.Type.In(j).String())
+				}
 			}
 		}
 		b.writeToFooter(")")
@@ -174,8 +192,13 @@ func writeRequiredInterfaces(b *buffer, structName string) {
 					b.writeToFooter(", ")
 				}
 				o := m.Type.Out(j)
-				returnedValue = append(returnedValue, o)
-				b.writeToFooter(o.String())
+				if o.Name() == localGenericName {
+					returnedValue = append(returnedValue, reflect.TypeOf((*require)(nil)))
+					b.writeToFooter("*" + structName)
+				} else {
+					returnedValue = append(returnedValue, o)
+					b.writeToFooter(o.String())
+				}
 			}
 			if numReturnedValue > 1 {
 				b.writeToFooter(")")

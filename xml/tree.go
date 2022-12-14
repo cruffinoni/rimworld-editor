@@ -42,15 +42,15 @@ func (t *Tree) FindElementFromData(data string) []*Element {
 	return tags
 }
 
-func (t *Tree) UnmarshalXML(decoder *_xml.Decoder, _ _xml.StartElement) error {
+func (t *Tree) UnmarshalXML(decoder *_xml.Decoder, s _xml.StartElement) error {
 	var (
-		lastNode *Element
-		depth    = 1
+		lastNode = &Element{StartElement: s}
+		depth    = 0
 	)
+	t.Root = lastNode
 
 	return unmarshalEmbed(decoder,
 		func(e *_xml.StartElement, ctx *Context) {
-			//log.Printf("Depth increased: %v", depth)
 			if ctx.depth > depth {
 				if lastNode.Child != nil {
 					// The last node has already a child, so we retrieve it
@@ -123,19 +123,11 @@ func (t *Tree) UnmarshalXML(decoder *_xml.Decoder, _ _xml.StartElement) error {
 					EndElement:   _xml.EndElement{Name: e.Name},
 					Attr:         ctx.attr,
 				}
-				// First node is null because it is the root node
-				// This is a special case. The first time we go through
-				// the different conditions, the code will always go here
-				if lastNode == nil {
-					lastNode = n
-					t.Root = lastNode
-				} else {
-					// All children must have the same parent because
-					// they are siblings
-					n.Parent = lastNode.Parent
-					lastNode.Next = n
-					lastNode = n
-				}
+				// All children must have the same parent because
+				// they are siblings
+				n.Parent = lastNode.Parent
+				lastNode.Next = n
+				lastNode = n
 			}
 		},
 		func(b []byte, ctx *Context) {
