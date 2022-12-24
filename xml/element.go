@@ -4,10 +4,11 @@ import (
 	"bytes"
 	_xml "encoding/xml"
 	"fmt"
-	"github.com/cruffinoni/rimworld-editor/xml/attributes"
-	"github.com/cruffinoni/rimworld-editor/xml/saver"
 	"reflect"
 	"strings"
+
+	"github.com/cruffinoni/rimworld-editor/xml/attributes"
+	"github.com/cruffinoni/rimworld-editor/xml/saver"
 )
 
 type Element struct {

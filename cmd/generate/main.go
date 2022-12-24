@@ -2,9 +2,10 @@ package main
 
 import (
 	"flag"
+	"log"
+
 	"github.com/cruffinoni/rimworld-editor/file"
 	"github.com/cruffinoni/rimworld-editor/generator"
-	"log"
 )
 
 func main() {
@@ -13,7 +14,7 @@ func main() {
 		err  error
 		path string
 	)
-	flag.StringVar(&path, "path", "", "Path to the save game file")
+	flag.StringVar(&path, "path", "./generated", "Path to the save game file")
 	flag.Parse()
 	if path == "" {
 		log.Println("no path specified")
@@ -25,6 +26,8 @@ func main() {
 		log.Println(err)
 		return
 	}
+	log.Println(fo.XML.Root.XMLPath(), fo.XML.Root.Child.GetName())
+	//log.Printf("Root: %v & Children: %v", fo.XML.Root.GetName(), fo.XML.Root.Child.GetName())
 	root := generator.GenerateGoFiles(fo.XML.Root)
 	if err = root.WriteGoFile("./generated"); err != nil {
 		log.Fatal(err)

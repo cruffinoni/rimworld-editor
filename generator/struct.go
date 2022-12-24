@@ -44,14 +44,11 @@ const (
 // for the given XML file, but it doesn't write anything.
 // To do that, call WriteGoFile.
 func GenerateGoFiles(root *xml.Element) *StructInfo {
-	s := StructInfo{
-		name:    root.GetName(),
-		members: make([]*member, 0),
-	}
-	if err := handleElement(root, &s, flagNone); err != nil {
+	var s *StructInfo
+	if err := handleElement(root, s, flagNone); err != nil {
 		panic(err)
 	}
-	return &s
+	return s
 }
 
 // WriteGoFile writes the struct Go code to the given path.
@@ -67,7 +64,7 @@ func (s *StructInfo) WriteGoFile(path string) error {
 	if err := os.Mkdir(path, os.ModePerm); err != nil {
 		return err
 	}
-	return s.generateStructTo(path)
+	return s.generateStructToPath(path)
 }
 
 // removeDuplicates removes the duplicates from the members of the struct.

@@ -1,10 +1,11 @@
 package path
 
 import (
-	"github.com/cruffinoni/rimworld-editor/xml"
 	"regexp"
 	"strconv"
 	"strings"
+
+	"github.com/cruffinoni/rimworld-editor/xml"
 )
 
 var regexArrayDetection = regexp.MustCompile(`\[\d+\]`)

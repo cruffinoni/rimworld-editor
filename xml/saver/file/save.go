@@ -1,12 +1,13 @@
 package file
 
 import (
+	"reflect"
+	"strconv"
+
 	"github.com/cruffinoni/rimworld-editor/xml"
 	"github.com/cruffinoni/rimworld-editor/xml/attributes"
 	"github.com/cruffinoni/rimworld-editor/xml/saver"
 	"github.com/cruffinoni/rimworld-editor/xml/types/primary"
-	"reflect"
-	"strconv"
 )
 
 func SaveWithBuffer(val any, tag string) error {
@@ -14,7 +15,7 @@ func SaveWithBuffer(val any, tag string) error {
 	return Save(val, b, tag)
 }
 
-func castToInterface[T any](ref reflect.Type, val any) (T, bool) {
+func castToInterface[T any](val any) (T, bool) {
 	if v, ok := val.(T); ok {
 		return v, true
 	}
@@ -39,7 +40,7 @@ func Save(val any, b *saver.Buffer, tag string) error {
 	vInterface := v.Interface()
 
 	var attr attributes.Attributes
-	if attributeAssigner, ok := castToInterface[xml.AttributeAssigner](t, val); ok {
+	if attributeAssigner, ok := castToInterface[xml.AttributeAssigner](val); ok {
 		attr = attributeAssigner.GetAttributes()
 	}
 
@@ -54,7 +55,7 @@ func Save(val any, b *saver.Buffer, tag string) error {
 		j := v.Len()
 		// This is a special case in case the type has a custom
 		// implementation of the TransformToXML() method.
-		if transformer, ok := castToInterface[saver.Transformer](t, vInterface); ok {
+		if transformer, ok := castToInterface[saver.Transformer](vInterface); ok {
 			if err := transformer.TransformToXML(b); err != nil {
 				return err
 			}
@@ -82,7 +83,7 @@ func Save(val any, b *saver.Buffer, tag string) error {
 		b.Write([]byte("\n"))
 		// If `vInterface` implements Transformer interface, retrieve it
 		// as a Transformer and call TransformToXML() method.
-		if transformer, ok := castToInterface[saver.Transformer](t, vInterface); ok {
+		if transformer, ok := castToInterface[saver.Transformer](vInterface); ok {
 			if err := transformer.TransformToXML(b); err != nil {
 				return err
 			}

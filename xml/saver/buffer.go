@@ -1,9 +1,10 @@
 package saver
 
 import (
-	"github.com/cruffinoni/rimworld-editor/xml/attributes"
 	"os"
 	"strings"
+
+	"github.com/cruffinoni/rimworld-editor/xml/attributes"
 )
 
 type Flag uint

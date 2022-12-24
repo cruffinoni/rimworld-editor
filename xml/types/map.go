@@ -3,15 +3,16 @@ package types
 import (
 	"errors"
 	"fmt"
+	"log"
+	"reflect"
+	"sort"
+
 	"github.com/cruffinoni/rimworld-editor/helper"
 	"github.com/cruffinoni/rimworld-editor/xml"
 	"github.com/cruffinoni/rimworld-editor/xml/attributes"
 	"github.com/cruffinoni/rimworld-editor/xml/path"
 	"github.com/cruffinoni/rimworld-editor/xml/saver"
 	"github.com/cruffinoni/rimworld-editor/xml/types/iterator"
-	"log"
-	"reflect"
-	"sort"
 )
 
 // Map is a map of K to V and require the XML file to have a "keys" and "values"

@@ -51,7 +51,7 @@ func (c *Console) exit([]string) error {
 	return nil
 }
 
-func (c *Console) Init(options *ui.Options, save *generated.Save) {
+func (c *Console) Init(options *ui.Options, save *generated.Savegame) {
 	c.opt = options
 	c.save = save
 	c.commands = NewTerminalCommands()

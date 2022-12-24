@@ -1,9 +1,10 @@
 package path
 
 import (
-	"github.com/cruffinoni/rimworld-editor/xml"
 	"regexp"
 	"strings"
+
+	"github.com/cruffinoni/rimworld-editor/xml"
 )
 
 var regexListDetection = regexp.MustCompile(`\[[.]{3}\]`)

@@ -2,10 +2,11 @@ package primary
 
 import (
 	"fmt"
+	"reflect"
+
 	"github.com/cruffinoni/rimworld-editor/xml"
 	"github.com/cruffinoni/rimworld-editor/xml/attributes"
 	"github.com/cruffinoni/rimworld-editor/xml/saver"
-	"reflect"
 )
 
 var (

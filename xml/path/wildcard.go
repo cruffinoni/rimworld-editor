@@ -1,8 +1,9 @@
 package path
 
 import (
-	"github.com/cruffinoni/rimworld-editor/xml"
 	"strings"
+
+	"github.com/cruffinoni/rimworld-editor/xml"
 )
 
 type WildcardMatch struct {

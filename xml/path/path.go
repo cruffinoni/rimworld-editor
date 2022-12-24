@@ -1,9 +1,10 @@
 package path
 
 import (
-	"github.com/cruffinoni/rimworld-editor/xml"
 	"log"
 	"strings"
+
+	"github.com/cruffinoni/rimworld-editor/xml"
 )
 
 type pattern struct {

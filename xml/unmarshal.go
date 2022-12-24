@@ -2,9 +2,10 @@ package xml
 
 import (
 	_xml "encoding/xml"
+	"io"
+
 	"github.com/cruffinoni/rimworld-editor/helper"
 	"github.com/cruffinoni/rimworld-editor/xml/attributes"
-	"io"
 )
 
 // event is a type that represents a function to

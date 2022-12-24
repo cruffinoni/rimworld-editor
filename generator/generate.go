@@ -88,6 +88,7 @@ func determineTypeFromData(e *xml.Element, flag uint) any {
 
 func handleElement(e *xml.Element, st *StructInfo, flag uint) error {
 	n := e
+	log.Printf("St (%s) => %s & %v", st.name, e.GetName(), n.Child)
 	for n != nil {
 		var t any
 		if n.Child != nil {
@@ -113,11 +114,15 @@ func handleElement(e *xml.Element, st *StructInfo, flag uint) error {
 						t = createStructure(n, flag)
 					}
 				}
-				st.members = append(st.members, &member{
-					name: n.GetName(),
-					t:    t,
-					attr: n.Attr,
-				})
+				if st == nil {
+					st = t.(*StructInfo)
+				} else {
+					st.members = append(st.members, &member{
+						name: n.GetName(),
+						t:    t,
+						attr: n.Attr,
+					})
+				}
 			}
 		} else {
 			if n.Data != nil {

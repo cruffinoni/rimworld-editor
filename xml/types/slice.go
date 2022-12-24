@@ -2,15 +2,16 @@ package types
 
 import (
 	"fmt"
+	"log"
+	"reflect"
+	"strings"
+
 	"github.com/cruffinoni/rimworld-editor/xml"
 	"github.com/cruffinoni/rimworld-editor/xml/attributes"
 	"github.com/cruffinoni/rimworld-editor/xml/saver"
 	"github.com/cruffinoni/rimworld-editor/xml/saver/file"
 	"github.com/cruffinoni/rimworld-editor/xml/types/iterator"
 	"github.com/cruffinoni/rimworld-editor/xml/unmarshal"
-	"log"
-	"reflect"
-	"strings"
 )
 
 type sliceData[T any] struct {
@@ -33,7 +34,7 @@ func (s *sliceData[T]) Assign(e *xml.Element) error {
 	} else {
 		err = unmarshal.Element(e, &s.data)
 	}
-	log.Printf("Data '%v' / %T", s.data, s.data)
+	// log.Printf("Data '%v' / %T", s.data, s.data)
 	if err != nil {
 		return err
 	}

@@ -1,6 +1,7 @@
 package generator
 
 import (
+	"fmt"
 	"go/format"
 	"log"
 	"os"
@@ -44,7 +45,7 @@ func getTypeName(t any) string {
 func checkTypeAndApply(t any, buffer *buffer, path string) error {
 	switch va := t.(type) {
 	case *StructInfo:
-		return va.generateStructTo(path)
+		return va.generateStructToPath(path)
 	case *xml.Element:
 		buffer.writeImport(headerXml)
 	case *CustomType:
@@ -74,10 +75,10 @@ func removeInnerKeyword(s string) string {
 func writeCustomType(c *CustomType, b *buffer, path string) error {
 	var err error
 	b.writeImport(c.importPath)
-	log.Printf("Custom type %+v", *c)
+	//log.Printf("Custom type %+v", *c)
 	b.writeToBody(c.pkg + "." + c.name)
 	if c.type1 == nil {
-		log.Printf("Types: %v & %v", c.type1, c.type2)
+		//log.Printf("Types: %v & %v", c.type1, c.type2)
 		return nil
 	}
 	b.writeToBody("[" + getTypeName(c.type1))
@@ -94,7 +95,7 @@ func writeCustomType(c *CustomType, b *buffer, path string) error {
 	return err
 }
 
-func (s *StructInfo) generateStructTo(path string) error {
+func (s *StructInfo) generateStructToPath(path string) error {
 	f, err := os.Create(path + "/" + strcase.ToSnake(s.name) + ".go")
 	if err != nil {
 		return err
@@ -106,7 +107,7 @@ func (s *StructInfo) generateStructTo(path string) error {
 	defer func(f *os.File) {
 		err = f.Close()
 		if err != nil {
-			log.Fatalf("generator.StructInfo.generateStructTo: can't close the file %v", err)
+			log.Fatalf("generator.StructInfo.generateStructToPath: can't close the file %v", err)
 		}
 	}(f)
 	structName := strcase.ToCamel(s.name)
@@ -122,7 +123,10 @@ func (s *StructInfo) generateStructTo(path string) error {
 			buf.writeToBody(va.String())
 		case *StructInfo:
 			buf.writeToBody("*" + strcase.ToCamel(va.name))
-			if err = va.generateStructTo(path); err != nil {
+			if s.name == va.name {
+				return fmt.Errorf("duplicate name for %s", s.name)
+			}
+			if err = va.generateStructToPath(path); err != nil {
 				return err
 			}
 		case *xml.Element:
