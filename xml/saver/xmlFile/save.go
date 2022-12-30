@@ -1,18 +1,24 @@
-package file
+package xmlFile
 
 import (
-	"reflect"
-	"strconv"
-
 	"github.com/cruffinoni/rimworld-editor/xml"
 	"github.com/cruffinoni/rimworld-editor/xml/attributes"
 	"github.com/cruffinoni/rimworld-editor/xml/saver"
 	"github.com/cruffinoni/rimworld-editor/xml/types/primary"
+	"log"
+	"reflect"
+	"strconv"
+	"strings"
 )
 
-func SaveWithBuffer(val any, tag string) error {
+func SaveWithBuffer(val any) (*saver.Buffer, error) {
 	b := saver.NewBuffer()
-	return Save(val, b, tag)
+	valType := reflect.TypeOf(val)
+	if valType.Kind() == reflect.Ptr {
+		valType = valType.Elem()
+	}
+	err := Save(val, b, strings.ToLower(valType.Name()))
+	return b, err
 }
 
 func castToInterface[T any](val any) (T, bool) {
@@ -81,6 +87,8 @@ func Save(val any, b *saver.Buffer, tag string) error {
 			return nil
 		}
 		b.Write([]byte("\n"))
+		a, k := vInterface.(saver.Transformer)
+		log.Printf("->: %v & %v // %+v", a, k, val)
 		// If `vInterface` implements Transformer interface, retrieve it
 		// as a Transformer and call TransformToXML() method.
 		if transformer, ok := castToInterface[saver.Transformer](vInterface); ok {
@@ -91,6 +99,7 @@ func Save(val any, b *saver.Buffer, tag string) error {
 			b.CloseTagWithIndent(tag)
 			return nil
 		}
+		// TODO: Go through fields and check individually if casting saver.transfrom is ok
 		for i := 0; i < v.NumField(); i++ {
 			f := t.Field(i)
 			vTag, ok := f.Tag.Lookup("xml")

@@ -2,6 +2,7 @@ package types
 
 import (
 	"fmt"
+	"github.com/cruffinoni/rimworld-editor/xml/saver/xmlFile"
 	"log"
 	"reflect"
 	"strings"
@@ -9,7 +10,6 @@ import (
 	"github.com/cruffinoni/rimworld-editor/xml"
 	"github.com/cruffinoni/rimworld-editor/xml/attributes"
 	"github.com/cruffinoni/rimworld-editor/xml/saver"
-	"github.com/cruffinoni/rimworld-editor/xml/saver/file"
 	"github.com/cruffinoni/rimworld-editor/xml/types/iterator"
 	"github.com/cruffinoni/rimworld-editor/xml/unmarshal"
 )
@@ -97,7 +97,7 @@ func (s Slice[T]) TransformToXML(b *saver.Buffer) error {
 	lastElement := s.cap - 1
 	for i, v := range s.data {
 		log.Printf("Slice.TransformToXML: %v at %v // %v", v.data, i, s.repeatingTag)
-		if err := file.Save(v.data, b, s.repeatingTag); err != nil {
+		if err := xmlFile.Save(v.data, b, s.repeatingTag); err != nil {
 			return err
 		}
 		if i != lastElement {

@@ -12,7 +12,6 @@ import (
 
 type Opening struct {
 	fileName string
-	content  string
 	XML      *xml.Tree
 }
 

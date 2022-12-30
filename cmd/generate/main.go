@@ -14,7 +14,7 @@ func main() {
 		err  error
 		path string
 	)
-	flag.StringVar(&path, "path", "./generated", "Path to the save game file")
+	flag.StringVar(&path, "path", "", "Path to the save game file")
 	flag.Parse()
 	if path == "" {
 		log.Println("no path specified")
