@@ -59,7 +59,7 @@ func CreateApplication() *Application {
 			panic("not implemented")
 			//app.ui = app.guiMode
 		}
-		save := &generated.Save{}
+		save := &generated.Savegame{}
 		log.Println("Unmarshalling XML...")
 		if err := unmarshal.Element(app.fileOpening.XML.Root, save); err != nil {
 			log.Fatal(err)
@@ -76,7 +76,7 @@ func CreateApplication() *Application {
 
 func (app *Application) beforeExecution() {
 	if !isValidMode(app.Mode) {
-		log.Printf("->invalid usage: %v", app.Mode)
+		log.Printf("->invalid mode: %v", app.Mode)
 		app.PrintHelp()
 		cli.Exit(1)
 	}

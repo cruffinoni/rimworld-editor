@@ -21,13 +21,13 @@ func main() {
 		flag.Usage()
 		return
 	}
+	log.Printf("Opening and decoding XML file from %s", path)
 	fo, err = file.Open(path)
 	if err != nil {
-		log.Println(err)
+		log.Fatal(err)
 		return
 	}
-	log.Println(fo.XML.Root.XMLPath(), fo.XML.Root.Child.GetName())
-	//log.Printf("Root: %v & Children: %v", fo.XML.Root.GetName(), fo.XML.Root.Child.GetName())
+	log.Print("Generating go files to './generated")
 	root := generator.GenerateGoFiles(fo.XML.Root)
 	if err = root.WriteGoFile("./generated"); err != nil {
 		log.Fatal(err)

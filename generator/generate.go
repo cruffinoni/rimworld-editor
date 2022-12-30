@@ -88,7 +88,6 @@ func determineTypeFromData(e *xml.Element, flag uint) any {
 
 func handleElement(e *xml.Element, st *StructInfo, flag uint) error {
 	n := e
-	log.Printf("St (%s) => %s & %v", st.name, e.GetName(), n.Child)
 	for n != nil {
 		var t any
 		if n.Child != nil {
@@ -114,8 +113,10 @@ func handleElement(e *xml.Element, st *StructInfo, flag uint) error {
 						t = createStructure(n, flag)
 					}
 				}
-				if st == nil {
-					st = t.(*StructInfo)
+				// This is a special case where the root node has been created outside the process.
+				// To recognize this special node, we don't set any name to it, but it refers as the root node.
+				if st.name == "" {
+					*st = *t.(*StructInfo)
 				} else {
 					st.members = append(st.members, &member{
 						name: n.GetName(),

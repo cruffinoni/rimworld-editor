@@ -111,6 +111,9 @@ func (s *StructInfo) generateStructToPath(path string) error {
 		}
 	}(f)
 	structName := strcase.ToCamel(s.name)
+	if structName == "" {
+		panic("empty struct name")
+	}
 	buf.writeToBody("type " + structName + " struct {\n")
 	for _, m := range s.members {
 		buf.writeToBody("\t" + strcase.ToCamel(m.name) + " ")

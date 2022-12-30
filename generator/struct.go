@@ -44,7 +44,7 @@ const (
 // for the given XML file, but it doesn't write anything.
 // To do that, call WriteGoFile.
 func GenerateGoFiles(root *xml.Element) *StructInfo {
-	var s *StructInfo
+	s := &StructInfo{}
 	if err := handleElement(root, s, flagNone); err != nil {
 		panic(err)
 	}

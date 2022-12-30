@@ -13,5 +13,5 @@ type Options struct {
 
 type Mode interface {
 	Execute(args []string) error
-	Init(options *Options, save *generated.Save)
+	Init(options *Options, save *generated.Savegame)
 }
