@@ -1,14 +1,16 @@
 package xmlFile
 
 import (
-	"github.com/cruffinoni/rimworld-editor/xml"
-	"github.com/cruffinoni/rimworld-editor/xml/attributes"
-	"github.com/cruffinoni/rimworld-editor/xml/saver"
-	"github.com/cruffinoni/rimworld-editor/xml/types/primary"
 	"log"
 	"reflect"
 	"strconv"
 	"strings"
+
+	"github.com/cruffinoni/rimworld-editor/helper"
+	"github.com/cruffinoni/rimworld-editor/xml"
+	"github.com/cruffinoni/rimworld-editor/xml/attributes"
+	"github.com/cruffinoni/rimworld-editor/xml/saver"
+	"github.com/cruffinoni/rimworld-editor/xml/types/primary"
 )
 
 func SaveWithBuffer(val any) (*saver.Buffer, error) {
@@ -43,25 +45,28 @@ func Save(val any, b *saver.Buffer, tag string) error {
 	if v.Kind() == reflect.Ptr {
 		v = v.Elem()
 	}
-	vInterface := v.Interface()
+	vi := v.Interface()
 
 	var attr attributes.Attributes
 	if attributeAssigner, ok := castToInterface[xml.AttributeAssigner](val); ok {
 		attr = attributeAssigner.GetAttributes()
 	}
-
 	if _, ok := val.(primary.Empty); ok {
 		b.WriteEmptyTag(tag, attr)
 		return nil
 	}
-	b.OpenTag(tag, attr)
 	kind := v.Kind()
+	if helper.IsReflectPrimaryType(kind) && v.IsZero() {
+		return nil
+	}
+	b.OpenTag(tag, attr)
 	switch kind {
+	// The `reflect.Slice` case may not be supported in later versions to give way to custom types: `primary.Empty`, `types.Slice`, etc.
 	case reflect.Slice:
 		j := v.Len()
 		// This is a special case in case the type has a custom
 		// implementation of the TransformToXML() method.
-		if transformer, ok := castToInterface[saver.Transformer](vInterface); ok {
+		if transformer, ok := castToInterface[saver.Transformer](vi); ok {
 			if err := transformer.TransformToXML(b); err != nil {
 				return err
 			}
@@ -78,20 +83,16 @@ func Save(val any, b *saver.Buffer, tag string) error {
 		return nil
 	case reflect.String:
 		b.Write([]byte(v.String()))
-	case reflect.Int:
+	case reflect.Int64:
 		b.Write([]byte(strconv.FormatInt(v.Int(), 10)))
 	case reflect.Float64:
 		b.Write([]byte(strconv.FormatFloat(v.Float(), 'f', -1, 64)))
 	case reflect.Struct:
-		if vInterface == nil {
+		if vi == nil {
 			return nil
 		}
 		b.Write([]byte("\n"))
-		a, k := vInterface.(saver.Transformer)
-		log.Printf("->: %v & %v // %+v", a, k, val)
-		// If `vInterface` implements Transformer interface, retrieve it
-		// as a Transformer and call TransformToXML() method.
-		if transformer, ok := castToInterface[saver.Transformer](vInterface); ok {
+		if transformer, ok := castToInterface[saver.Transformer](vi); ok {
 			if err := transformer.TransformToXML(b); err != nil {
 				return err
 			}
@@ -99,19 +100,30 @@ func Save(val any, b *saver.Buffer, tag string) error {
 			b.CloseTagWithIndent(tag)
 			return nil
 		}
-		// TODO: Go through fields and check individually if casting saver.transfrom is ok
 		for i := 0; i < v.NumField(); i++ {
 			f := t.Field(i)
-			vTag, ok := f.Tag.Lookup("xml")
+			vf := v.Field(i)
+			// The field might be a custom type that implements saver.Transformer.
+			// If so, we let the type handle the transformation from Type -> XML
+			if transformer, ok := castToInterface[saver.Transformer](vf.Interface()); ok {
+				if err := transformer.TransformToXML(b); err != nil {
+					return err
+				}
+				b.Write([]byte("\n"))
+				// We don't close the tag since it's only a MEMBER of the struct, so it can't decide
+				// whenever the struct is completely parsed.
+				continue
+			}
+			xmlTag, ok := f.Tag.Lookup("xml")
 			if !ok {
+				log.Print("No XML tag present")
 				continue
 			}
-			vField := v.Field(i)
-			// Ignore zero value fields.
-			if vField.IsZero() {
+			// Structure that have empty value into their fields are ignored.
+			if helper.IsReflectPrimaryType(vf.Kind()) && vf.IsZero() {
 				continue
 			}
-			if err := Save(vField.Interface(), b, vTag); err != nil {
+			if err := Save(vf.Interface(), b, xmlTag); err != nil {
 				return err
 			}
 			b.Write([]byte("\n"))

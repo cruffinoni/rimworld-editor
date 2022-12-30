@@ -27,10 +27,9 @@ func findFieldFromName(t reflect.Type, value reflect.Value, name string) int {
 }
 
 var (
-	elementStruct            = reflect.TypeOf((*xml.Element)(nil))
-	elementStructName        = elementStruct.Elem().Name()
-	elementEmptyStructName   = reflect.TypeOf((*primary.Empty)(nil)).Elem().Name()
-	xmlAssignerInterfaceName = reflect.TypeOf((*xml.Assigner)(nil)).Elem().Name()
+	elementStruct          = reflect.TypeOf((*xml.Element)(nil))
+	elementStructName      = elementStruct.Elem().Name()
+	elementEmptyStructName = reflect.TypeOf((*primary.Empty)(nil)).Elem().Name()
 )
 
 func isEmptyType(name string) bool {

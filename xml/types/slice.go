@@ -2,10 +2,11 @@ package types
 
 import (
 	"fmt"
-	"github.com/cruffinoni/rimworld-editor/xml/saver/xmlFile"
 	"log"
 	"reflect"
 	"strings"
+
+	"github.com/cruffinoni/rimworld-editor/xml/saver/xmlFile"
 
 	"github.com/cruffinoni/rimworld-editor/xml"
 	"github.com/cruffinoni/rimworld-editor/xml/attributes"
@@ -24,7 +25,7 @@ type sliceData[T any] struct {
 }
 
 func (s *sliceData[T]) Assign(e *xml.Element) error {
-	log.Println("Assign sliceData")
+	//log.Println("Assign sliceData")
 	var (
 		err   error
 		tKind = reflect.TypeOf(s.data).Kind()
@@ -94,16 +95,22 @@ func (s Slice[T]) TransformToXML(b *saver.Buffer) error {
 		log.Print("Slice.TransformToXML: No repeating tag specified.")
 		return nil
 	}
+	log.Printf("Transform to xml called w/ len of data %d", len(s.data))
 	lastElement := s.cap - 1
+	b.OpenTag(s.repeatingTag, s.attr)
+	b.WriteString("\n")
 	for i, v := range s.data {
-		log.Printf("Slice.TransformToXML: %v at %v // %v", v.data, i, s.repeatingTag)
+		log.Printf("Slice.TransformToXML: %+v at %v // %v", v.data, i, s.repeatingTag)
+		lastLen := b.Len()
 		if err := xmlFile.Save(v.data, b, s.repeatingTag); err != nil {
 			return err
 		}
-		if i != lastElement {
+		if i != lastElement && lastLen != b.Len() {
 			b.Write([]byte("\n"))
 		}
 	}
+	b.WriteString("\n")
+	b.CloseTagWithIndent(s.repeatingTag)
 	return nil
 }
 
@@ -126,43 +133,46 @@ func (s *Slice[T]) Assign(e *xml.Element) error {
 		s.cap = len(s.data)
 	}()
 	n := e
+	log.Printf("e called: %v", e.XMLPath())
 	if n == nil {
 		return nil
 	}
 	s.repeatingTag = n.GetName()
-	log.Printf("Slice.Assign: Repeating tag: %v", s.repeatingTag)
+	//log.Printf("Slice.Assign: Repeating tag: %v", s.repeatingTag)
 	for n != nil {
-		d := sliceData[T]{
+		sd := sliceData[T]{
 			tag: n.GetName(),
 		}
-		// Set d.data to zero depending on the type of T. Either a pointer or a
+		// Set sd.data to zero depending on the type of T. Either a pointer or a
 		// value.
-		switch tType := reflect.TypeOf(d.data).Kind(); tType {
+		switch tType := reflect.TypeOf(sd.data).Kind(); tType {
 		case reflect.Ptr, reflect.Interface, reflect.Struct, reflect.Map, reflect.Slice:
-			d.data = reflect.New(reflect.TypeOf(*new(T)).Elem()).Interface().(T)
+			sd.data = reflect.New(reflect.TypeOf(*new(T)).Elem()).Interface().(T)
 		case reflect.String, reflect.Bool, reflect.Int, reflect.Int8, reflect.Int16, reflect.Int32, reflect.Int64, reflect.Uint, reflect.Uint8, reflect.Uint16, reflect.Uint32, reflect.Uint64, reflect.Float32, reflect.Float64:
-			d.data = zero[T]()
+			sd.data = zero[T]()
 		}
 		// The child element inherits the attributes of the parent element
 		// because we don't unmarshal the element directly but the children
 		// since it's a slice.
 		if n.Child != nil {
 			n.Child.Attr = n.Attr
-			if err := unmarshal.Element(n.Child, &d); err != nil {
+			if err := unmarshal.Element(n.Child, &sd); err != nil {
 				return err
 			}
 		} else {
 			// TODO: Might be reworked to something more elegant.
-			if err := unmarshal.Element(n, &d); err != nil {
+			if err := unmarshal.Element(n, &sd); err != nil {
 				return err
 			}
 		}
-		log.Printf("Slice.Assign: Data: %v", n.Data.GetData())
-		log.Printf("Data of d: '%v' (%T)", d.data, d.data)
-		s.data = append(s.data, d)
+		if n.Data != nil {
+			//log.Printf("Slice.Assign: Data: %v", n.Data.GetData())
+			//log.Printf("Data of sd: '%v' (%T)", sd.data, sd.data)
+		}
+		s.data = append(s.data, sd)
 		n = n.Next
 	}
-	log.Println("Slice.Assign: end")
+	//log.Println("Slice.Assign: end")
 	return nil
 }
 

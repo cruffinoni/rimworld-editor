@@ -13,7 +13,7 @@ type Buffer struct {
 	buffer          []byte
 	indentation     int
 	depth           int
-	size            int
+	bufferLen       int
 	flag            Flag
 	hasMultipleLine bool
 }
@@ -47,9 +47,12 @@ func (b *Buffer) RemoveFlag(flag Flag) {
 }
 
 func (b *Buffer) Write(p []byte) {
-	b.size += len(p)
-	//b.hasMultipleLine = strings.index(string(p), "\n") != -1
+	b.bufferLen += len(p)
 	b.buffer = append(b.buffer, p...)
+}
+
+func (b *Buffer) Len() int {
+	return b.bufferLen
 }
 
 func (b *Buffer) LastWriteWithNewLine() bool {
@@ -87,7 +90,7 @@ func (b *Buffer) WriteEmptyTag(tag string, attr attributes.Attributes) {
 }
 
 func (b *Buffer) CloseTag(tag string) {
-	//if b.buffer[b.size-1] != '\n' {
+	//if b.buffer[b.bufferLen-1] != '\n' {
 	//	b.Write([]byte("\n"))
 	//}
 	//b.Write([]byte(strings.Repeat("\t", b.indentation)))

@@ -2,6 +2,7 @@ package primary
 
 import (
 	"fmt"
+	"log"
 	"reflect"
 
 	"github.com/cruffinoni/rimworld-editor/xml"
@@ -47,9 +48,19 @@ type EmbeddedType[T comparable] struct {
 }
 
 func (pt EmbeddedType[T]) TransformToXML(buffer *saver.Buffer) error {
-	buffer.IncreaseDepth()
-	buffer.WriteWithIndent([]byte(pt.str))
-	buffer.DecreaseDepth()
+	l := len(pt.str)
+	if l == 0 {
+		log.Printf("str is empty: %#+v", pt)
+		buffer.WriteEmptyTag(pt.tag, pt.attr)
+		return nil
+	}
+	buffer.OpenTag(pt.tag, pt.attr)
+	buffer.WriteString(pt.str)
+	if pt.str[len(pt.str)-1] != '\n' {
+		buffer.CloseTag(pt.tag)
+	} else {
+		buffer.CloseTagWithIndent(pt.tag)
+	}
 	return nil
 }
 

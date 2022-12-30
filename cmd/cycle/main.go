@@ -2,11 +2,12 @@ package main
 
 import (
 	"flag"
+	"log"
+
 	"github.com/cruffinoni/rimworld-editor/file"
 	"github.com/cruffinoni/rimworld-editor/generated"
 	"github.com/cruffinoni/rimworld-editor/xml/saver/xmlFile"
 	"github.com/cruffinoni/rimworld-editor/xml/unmarshal"
-	"log"
 )
 
 func main() {
@@ -22,18 +23,18 @@ func main() {
 		flag.Usage()
 		return
 	}
-	log.Printf("Opening and decoding XML file from %s", path)
+	//log.Printf("Opening and decoding XML file from %s", path)
 	fo, err = file.Open(path)
 	if err != nil {
 		log.Fatal(err)
 		return
 	}
 	save := &generated.Savegame{}
-	log.Println("Unmarshalling XML...")
-	if err := unmarshal.Element(fo.XML.Root, save); err != nil {
+	//log.Println("Unmarshalling XML...")
+	if err := unmarshal.Element(fo.XML.Root.Child, save); err != nil {
 		log.Fatal(err)
 	}
-	log.Print("Generating XML file to folder")
+	//log.Print("Generating XML file to folder")
 	buffer, err := xmlFile.SaveWithBuffer(save)
 	if err != nil {
 		log.Panic(err)
