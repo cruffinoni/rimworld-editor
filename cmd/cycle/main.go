@@ -12,11 +12,13 @@ import (
 
 func main() {
 	var (
-		fo   *file.Opening
-		err  error
-		path string
+		fo       *file.Opening
+		err      error
+		path     string
+		fileName string
 	)
 	flag.StringVar(&path, "path", "", "Path to the save game file")
+	flag.StringVar(&fileName, "fileName", "CUSTOM_FILE", "File name for the generated XML")
 	flag.Parse()
 	if path == "" {
 		log.Println("no path specified")
@@ -39,7 +41,7 @@ func main() {
 	if err != nil {
 		log.Panic(err)
 	}
-	if err := buffer.ToFile("CUSTOM_FILE.rws"); err != nil {
+	if err := buffer.ToFile("generated/" + fileName + ".rws"); err != nil {
 		log.Panic(err)
 	}
 }

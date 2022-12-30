@@ -13,6 +13,7 @@ import (
 	"github.com/cruffinoni/rimworld-editor/xml/types/primary"
 )
 
+// SaveWithBuffer takes in a value of any type, and returns a saver.Buffer and any error that occurs during the saving process.
 func SaveWithBuffer(val any) (*saver.Buffer, error) {
 	b := saver.NewBuffer()
 	valType := reflect.TypeOf(val)
@@ -23,6 +24,7 @@ func SaveWithBuffer(val any) (*saver.Buffer, error) {
 	return b, err
 }
 
+// castToInterface attempts to cast the given value to the specified type and returns the result and a boolean indicating whether the cast was successful.
 func castToInterface[T any](val any) (T, bool) {
 	if v, ok := val.(T); ok {
 		return v, true
@@ -30,6 +32,7 @@ func castToInterface[T any](val any) (T, bool) {
 	return *new(T), false
 }
 
+// Save recursively saves the given value to the provided buffer with the given tag.
 func Save(val any, b *saver.Buffer, tag string) error {
 	if val == nil {
 		return nil
@@ -51,6 +54,7 @@ func Save(val any, b *saver.Buffer, tag string) error {
 	if attributeAssigner, ok := castToInterface[xml.AttributeAssigner](val); ok {
 		attr = attributeAssigner.GetAttributes()
 	}
+	// If the value is of type primary.Empty, write an empty tag with the given attributes and return.
 	if _, ok := val.(primary.Empty); ok {
 		b.WriteEmptyTag(tag, attr)
 		return nil
