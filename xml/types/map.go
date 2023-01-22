@@ -6,6 +6,7 @@ import (
 	"log"
 	"reflect"
 	"sort"
+	"unicode"
 
 	"github.com/cruffinoni/rimworld-editor/helper"
 	"github.com/cruffinoni/rimworld-editor/xml"
@@ -43,38 +44,70 @@ type Map[K comparable, V any] struct {
 	iterator.MapIndexer[K, V]
 	m          map[K]V
 	sortedKeys []reflect.Value
+
+	tag  string
+	attr attributes.Attributes
 }
 
-func (m Map[K, V]) TransformToXML(buffer *saver.Buffer) error {
+func castToInterface[T any](val any) (T, bool) {
+	if v, ok := val.(T); ok {
+		return v, true
+	}
+	return *new(T), false
+}
+
+func (m *Map[K, V]) TransformToXML(b *saver.Buffer) error {
+	b.OpenTag(m.tag, m.attr)
+	b.Write([]byte("\n"))
+	defer func() {
+		b.Write([]byte("\n"))
+		b.CloseTagWithIndent(m.tag)
+	}()
 	if m.m == nil || m.Capacity() == 0 {
-		buffer.WriteEmptyTag("keys", nil)
-		buffer.WriteEmptyTag("values", nil)
+		b.WriteEmptyTag("keys", nil)
+		b.WriteEmptyTag("values", nil)
 		return nil
 	}
-	buffer.IncreaseDepth()
-	buffer.WriteStringWithIndent("<keys>\n")
-	buffer.IncreaseDepth()
+	b.IncreaseDepth()
+	b.WriteStringWithIndent("<keys>\n")
+	b.IncreaseDepth()
 	for k := range m.m {
-		buffer.WriteStringWithIndent("<li>")
-		buffer.IncreaseDepth()
-		buffer.WriteString(fmt.Sprintf("%v", k))
-		buffer.DecreaseDepth()
-		buffer.WriteString("</li>\n")
+		b.WriteStringWithIndent("<li>")
+		b.IncreaseDepth()
+		if transformer, ok := castToInterface[saver.Transformer](&k); ok {
+			if err := transformer.TransformToXML(b); err != nil {
+				return err
+			}
+		} else {
+			b.WriteString(fmt.Sprintf("%v", k))
+			b.DecreaseDepth()
+		}
+		if unicode.IsSpace(rune(b.Buffer()[b.Len()-1])) {
+			b.WriteStringWithIndent("</li>\n")
+		} else {
+			b.WriteString("</li>\n")
+		}
 	}
-	buffer.DecreaseDepth()
-	buffer.WriteStringWithIndent("</keys>\n")
-	buffer.WriteStringWithIndent("<values>\n")
-	buffer.IncreaseDepth()
+	b.DecreaseDepth()
+	b.WriteStringWithIndent("</keys>\n")
+	b.WriteStringWithIndent("<values>\n")
+	b.IncreaseDepth()
 	for _, v := range m.m {
-		buffer.WriteStringWithIndent("<li>")
-		buffer.IncreaseDepth()
-		buffer.WriteString(fmt.Sprintf("%v", v))
-		buffer.DecreaseDepth()
-		buffer.WriteString("</li>\n")
+		b.WriteStringWithIndent("<li>")
+		if transformer, ok := castToInterface[saver.Transformer](v); ok {
+			if err := transformer.TransformToXML(b); err != nil {
+				return err
+			}
+		} else {
+			b.IncreaseDepth()
+			b.WriteString(fmt.Sprintf("%v", v))
+			b.DecreaseDepth()
+		}
+		b.WriteStringWithIndent("</li>\n")
 	}
-	buffer.DecreaseDepth()
-	buffer.WriteStringWithIndent("</values>")
-	buffer.DecreaseDepth()
+	b.DecreaseDepth()
+	b.WriteStringWithIndent("</values>")
+	b.DecreaseDepth()
 	return nil
 }
 
@@ -109,6 +142,12 @@ func castDataFromKind[T any](kind reflect.Kind, d *xml.Data) T {
 
 func (m *Map[K, V]) Assign(e *xml.Element) error {
 	m.m = make(map[K]V)
+	if e.Parent != nil {
+		m.tag = e.Parent.GetName()
+		m.attr = e.Parent.GetAttributes()
+	} else {
+		return fmt.Errorf("map.Assign: map's parent is nil")
+	}
 	n := e.Child
 	if n == nil {
 		return nil
@@ -127,8 +166,27 @@ func (m *Map[K, V]) Assign(e *xml.Element) error {
 		if key.Data == nil {
 			log.Panicf("Map/Assign: no data for key %s", key.StartElement.Name.Local)
 		}
-		// There is a key with no data
-		if values[i].Data == nil {
+		//log.Printf("There is data? %+v\n> %+v\n>> %+v\n>>>%+v", values[i], values[i].Child, values[i].Child.Child, values[i].Child.Child.Child)
+		//log.Printf("Type ok? '%T'", zero[V]())
+		// This might be a custom type that implements xml.Assigner interface
+		if _, ok := any(zero[V]()).(xml.Assigner); ok {
+			var (
+				subValue    = new(V)
+				subValueVal = reflect.ValueOf(subValue)
+			)
+			//log.Printf("! > %v & %T + '%v' & POSSIBLE? %v", subValue, subValue, subValueVal.Kind(), subValueVal.Elem().CanAddr())
+			subValueVal = subValueVal.Elem()
+			if subValueVal.Kind() == reflect.Ptr {
+				subValueVal.Set(reflect.New(subValueVal.Type().Elem()))
+			}
+			if err := subValueVal.Interface().(xml.Assigner).Assign(values[i].Child); err != nil { // Use the child because we don't to assign the <li> tag element
+				return err
+			}
+			//log.Printf("Res: %v (%T)", subValueVal.Interface().(V), subValueVal.Interface().(V))
+			m.m[castDataFromKind[K](kKind, key.Data)] = subValueVal.Interface().(V)
+			//log.Printf("!!=> %v > %v", castDataFromKind[K](kKind, key.Data), m.m[castDataFromKind[K](kKind, key.Data)])
+		} else if values[i].Data == nil {
+			// There is a key with no data
 			m.m[castDataFromKind[K](kKind, key.Data)] = zero[V]()
 		} else if _, isElement := interface{}(zero[V]()).(*xml.Element); isElement {
 			// Special if V is a xml.Element because we pass a pointer to the data for castDataFromKind
@@ -137,6 +195,7 @@ func (m *Map[K, V]) Assign(e *xml.Element) error {
 		} else {
 			m.m[castDataFromKind[K](kKind, key.Data)] = castDataFromKind[V](vKind, values[i].Data)
 		}
+		//log.Printf("=> %v > %v", castDataFromKind[K](kKind, key.Data), m.m[castDataFromKind[K](kKind, key.Data)])
 	}
 	v := reflect.ValueOf(m.m)
 	k := reflect.ValueOf(zero[K]()).Kind()
@@ -182,7 +241,7 @@ func (m *Map[K, V]) Get(key K) V {
 	return m.m[key]
 }
 
-func (m Map[K, V]) GetFromIndex(idx int) V {
+func (m *Map[K, V]) GetFromIndex(idx int) V {
 	if m.m == nil {
 		return zero[V]()
 	}
@@ -201,7 +260,7 @@ func (m Map[K, V]) GetFromIndex(idx int) V {
 	return zero[V]()
 }
 
-func (m Map[K, V]) GetKeyFromIndex(idx int) K {
+func (m *Map[K, V]) GetKeyFromIndex(idx int) K {
 	if m.m == nil {
 		return zero[K]()
 	}
@@ -227,7 +286,7 @@ func (m *Map[K, V]) Set(key K, value V) {
 	m.m[key] = value
 }
 
-func (m Map[K, V]) Capacity() int {
+func (m *Map[K, V]) Capacity() int {
 	return len(m.m)
 }
 

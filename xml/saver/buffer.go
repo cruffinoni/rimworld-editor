@@ -2,6 +2,7 @@ package saver
 
 import (
 	"os"
+	"regexp"
 	"strings"
 
 	"github.com/cruffinoni/rimworld-editor/xml/attributes"
@@ -10,40 +11,19 @@ import (
 type Flag uint
 
 type Buffer struct {
-	buffer          []byte
-	indentation     int
-	depth           int
-	bufferLen       int
-	flag            Flag
-	hasMultipleLine bool
+	buffer    []byte
+	depth     int
+	bufferLen int
 }
-
-const (
-	FlagNone         Flag = 0
-	FlagWriteOpenTag      = 1 << iota
-	FlagWriteCloseTag
-	FlagWriteIndent
-	FlagWriteEmptyTag
-	FlagWriteNewLine
-)
 
 func NewBuffer() *Buffer {
 	b := &Buffer{
 		buffer: make([]byte, 0),
-		// indentation starts at -1 because the first tag is not indented.
-		indentation: -1,
-		depth:       0,
+		// depth starts at -1 because the first tag is not indented.
+		depth: -1,
 	}
 	b.Write([]byte("<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n"))
 	return b
-}
-
-func (b *Buffer) AddFlag(flag Flag) {
-	b.flag |= flag
-}
-
-func (b *Buffer) RemoveFlag(flag Flag) {
-	b.flag &^= flag
 }
 
 func (b *Buffer) Write(p []byte) {
@@ -55,10 +35,6 @@ func (b *Buffer) Len() int {
 	return b.bufferLen
 }
 
-func (b *Buffer) LastWriteWithNewLine() bool {
-	return b.hasMultipleLine
-}
-
 func (b *Buffer) WriteString(s string) {
 	b.Write([]byte(s))
 }
@@ -68,49 +44,70 @@ func (b *Buffer) WriteStringWithIndent(s string) {
 }
 
 func (b *Buffer) WriteWithIndent(p []byte) {
-	b.Write([]byte(strings.Repeat("\t", b.indentation)))
+	b.Write([]byte(strings.Repeat("\t", b.depth)))
 	b.Write(p)
 }
 
 func (b *Buffer) OpenTag(tag string, attr attributes.Attributes) {
-	b.IncreaseDepth()
-	if attr != nil && !attr.Empty() {
-		b.WriteWithIndent([]byte("<" + tag + " " + attr.Join(" ") + ">"))
-	} else {
-		b.WriteWithIndent([]byte("<" + tag + ">"))
-	}
+	b.writeTag(tag, attr, true)
 }
 
 func (b *Buffer) WriteEmptyTag(tag string, attr attributes.Attributes) {
+	b.writeTag(tag, attr, false)
+}
+
+func (b *Buffer) writeTag(tag string, attr attributes.Attributes, open bool) {
+	if tag == "" {
+		return
+	}
+	if b.buffer[b.bufferLen-1] != '\n' {
+		b.Write([]byte("\n"))
+	}
+	b.IncreaseDepth()
 	if attr != nil && !attr.Empty() {
-		b.Write([]byte("<" + tag + ` ` + attr.Join(" ") + " />"))
+		if open {
+			b.WriteWithIndent([]byte("<" + tag + " " + attr.Join(" ") + ">"))
+		} else {
+			b.WriteWithIndent([]byte("<" + tag + ` ` + attr.Join(" ") + " />"))
+		}
 	} else {
-		b.Write([]byte("<" + tag + " />"))
+		if open {
+			b.WriteWithIndent([]byte("<" + tag + ">"))
+		} else {
+			b.WriteWithIndent([]byte("<" + tag + " />"))
+		}
+	}
+	if !open {
+		b.DecreaseDepth()
 	}
 }
 
 func (b *Buffer) CloseTag(tag string) {
-	//if b.buffer[b.bufferLen-1] != '\n' {
-	//	b.Write([]byte("\n"))
-	//}
-	//b.Write([]byte(strings.Repeat("\t", b.indentation)))
+	if tag == "" {
+		return
+	}
 	b.Write([]byte(`</` + tag + ">"))
 	b.DecreaseDepth()
 }
 
 func (b *Buffer) CloseTagWithIndent(tag string) {
-	b.Write([]byte(strings.Repeat("\t", b.indentation)))
+	if tag == "" {
+		return
+	}
+	b.Write([]byte(strings.Repeat("\t", b.depth)))
 	b.CloseTag(tag)
 }
 
 func (b *Buffer) IncreaseDepth() {
 	b.depth++
-	b.indentation++
 }
 
 func (b *Buffer) DecreaseDepth() {
 	b.depth--
-	b.indentation--
+}
+
+func (b *Buffer) GetDepth() int {
+	return b.depth
 }
 
 func (b *Buffer) ToFile(path string) error {
@@ -119,4 +116,10 @@ func (b *Buffer) ToFile(path string) error {
 
 func (b *Buffer) Buffer() []byte {
 	return b.buffer
+}
+
+var reMultipleLineBreak = regexp.MustCompile(`(?m)^\s*\r?\n`)
+
+func (b *Buffer) RemoveEmptyLine() {
+	b.buffer = reMultipleLineBreak.ReplaceAll(b.buffer, []byte{})
 }

@@ -32,7 +32,7 @@ type ComputedWildcardMatcher struct {
 	length          int
 }
 
-func (w *ComputedWildcardMatcher) StrictMatch(node *xml.Element, input string) Elements {
+func (w *ComputedWildcardMatcher) StrictMatch(node *xml.Element, _ string) Elements {
 	if w.length == 0 {
 		w.nodes = append(w.nodes, node)
 		return nil

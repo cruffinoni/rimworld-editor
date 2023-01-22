@@ -6,12 +6,12 @@ import (
 	"reflect"
 	"strings"
 
+	"github.com/cruffinoni/rimworld-editor/helper"
 	"github.com/cruffinoni/rimworld-editor/xml/saver/xmlFile"
 
 	"github.com/cruffinoni/rimworld-editor/xml"
 	"github.com/cruffinoni/rimworld-editor/xml/attributes"
 	"github.com/cruffinoni/rimworld-editor/xml/saver"
-	"github.com/cruffinoni/rimworld-editor/xml/types/iterator"
 	"github.com/cruffinoni/rimworld-editor/xml/unmarshal"
 )
 
@@ -21,21 +21,38 @@ type sliceData[T any] struct {
 	str  string
 	attr attributes.Attributes
 	fmt.Stringer
-	tag string
+	tag  string
+	kind reflect.Kind
 }
 
 func (s *sliceData[T]) Assign(e *xml.Element) error {
-	//log.Println("Assign sliceData")
-	var (
-		err   error
-		tKind = reflect.TypeOf(s.data).Kind()
-	)
-	if tKind == reflect.Ptr {
+	var err error
+	s.kind = reflect.TypeOf(s.data).Kind()
+	if s.kind == reflect.Ptr {
 		err = unmarshal.Element(e, s.data)
+
+		//if reflect.TypeOf(s.data).Elem().Kind() == reflect.Struct {
+		//	err = unmarshal.Element(e.Child, s.data)
+		//} else {
+		//	err = unmarshal.Element(e, s.data)
+		//}
+	} else if helper.IsReflectPrimaryType(s.kind) {
+		switch s.kind {
+		case reflect.String:
+			s.data = castTemplate[T](e.Data.GetString())
+		case reflect.Int, reflect.Int8, reflect.Int16, reflect.Int32, reflect.Int64:
+			s.data = castTemplate[T](e.Data.GetInt64())
+		case reflect.Bool:
+			s.data = castTemplate[T](e.Data.GetBool())
+		case reflect.Float32, reflect.Float64:
+			s.data = castTemplate[T](e.Data.GetFloat64())
+		default:
+			return fmt.Errorf("sliceData.Assign: can't assign primary type %T to %T", e.Data.GetData(), s.data)
+		}
 	} else {
 		err = unmarshal.Element(e, &s.data)
 	}
-	// log.Printf("Data '%v' / %T", s.data, s.data)
+	log.Printf("Data '%v' / %T", s.data, s.data)
 	if err != nil {
 		return err
 	}
@@ -68,13 +85,27 @@ func (s *sliceData[T]) UpdateStringRepresentation(v T) {
 		}
 	} else {
 		// Otherwise we use a basic string representation.
-		s.str = fmt.Sprintf("'%v'", v)
+		s.str = fmt.Sprintf("'%+v'", v)
 	}
 }
 
 func (s *sliceData[T]) String() string {
-	log.Println("String called")
 	return s.str
+}
+
+func (s *sliceData[T]) TransformToXML(b *saver.Buffer) error {
+	//log.Printf("sliceData.TransformToXML => %v", b.GetDepth())
+	b.OpenTag(s.tag, s.attr)
+	if err := xmlFile.Save(s.data, b, ""); err != nil {
+		return err
+	}
+	b.CloseTagWithIndent(s.tag)
+	//if helper.IsReflectPrimaryType(s.kind) {
+	//	b.CloseTag(s.tag)
+	//} else {
+	//	b.CloseTagWithIndent(s.tag)
+	//}
+	return nil
 }
 
 // Slice is a slice of data that is represented by sliceData.
@@ -84,41 +115,34 @@ type Slice[T any] struct {
 	data         []sliceData[T]
 	attr         attributes.Attributes
 	repeatingTag string
+	name         string
 	cap          int
-	iterator.SliceIndexer[T]
-	saver.Transformer
-	fmt.Stringer
 }
 
-func (s Slice[T]) TransformToXML(b *saver.Buffer) error {
+func (s *Slice[T]) TransformToXML(b *saver.Buffer) error {
 	if s.repeatingTag == "" {
 		log.Print("Slice.TransformToXML: No repeating tag specified.")
 		return nil
 	}
-	log.Printf("Transform to xml called w/ len of data %d", len(s.data))
-	lastElement := s.cap - 1
+	log.Printf("Repeating tag: %v", s.repeatingTag)
 	b.OpenTag(s.repeatingTag, s.attr)
-	b.WriteString("\n")
-	for i, v := range s.data {
-		log.Printf("Slice.TransformToXML: %+v at %v // %v", v.data, i, s.repeatingTag)
-		lastLen := b.Len()
-		if err := xmlFile.Save(v.data, b, s.repeatingTag); err != nil {
+	for _, v := range s.data {
+		b.Write([]byte("\n"))
+		if err := v.TransformToXML(b); err != nil {
 			return err
-		}
-		if i != lastElement && lastLen != b.Len() {
-			b.Write([]byte("\n"))
 		}
 	}
 	b.WriteString("\n")
 	b.CloseTagWithIndent(s.repeatingTag)
+	b.WriteString("\n")
 	return nil
 }
 
-func (s Slice[T]) Capacity() int {
+func (s *Slice[T]) Capacity() int {
 	return s.cap
 }
 
-func (s Slice[T]) GetFromIndex(idx int) T {
+func (s *Slice[T]) GetFromIndex(idx int) T {
 	for i, d := range s.data {
 		if i == idx {
 			return d.data
@@ -133,12 +157,23 @@ func (s *Slice[T]) Assign(e *xml.Element) error {
 		s.cap = len(s.data)
 	}()
 	n := e
-	log.Printf("e called: %v", e.XMLPath())
 	if n == nil {
+		log.Printf("n is nil")
 		return nil
 	}
+	if n.Parent != nil {
+		s.name = n.Parent.GetName()
+		//log.Printf("Slice.Assign: Parent is %s", n.Parent.GetName())
+	} else {
+		//log.Printf("Slice.Assign: Assigning to slice without parent")
+		s.name = "unknown"
+	}
 	s.repeatingTag = n.GetName()
-	//log.Printf("Slice.Assign: Repeating tag: %v", s.repeatingTag)
+	if !strings.Contains(reflect.TypeOf(zero[T]()).Name(), "types.Slice") {
+		for n.Child != nil && n.Child.Child != nil {
+			n = n.Child
+		}
+	}
 	for n != nil {
 		sd := sliceData[T]{
 			tag: n.GetName(),
@@ -151,32 +186,29 @@ func (s *Slice[T]) Assign(e *xml.Element) error {
 		case reflect.String, reflect.Bool, reflect.Int, reflect.Int8, reflect.Int16, reflect.Int32, reflect.Int64, reflect.Uint, reflect.Uint8, reflect.Uint16, reflect.Uint32, reflect.Uint64, reflect.Float32, reflect.Float64:
 			sd.data = zero[T]()
 		}
-		// The child element inherits the attributes of the parent element
-		// because we don't unmarshal the element directly but the children
-		// since it's a slice.
+		var attr attributes.Attributes
 		if n.Child != nil {
-			n.Child.Attr = n.Attr
+			//log.Printf("Slice.Assign: child => %v", n.Child.GetName())
+			attr = n.Child.Attr
 			if err := unmarshal.Element(n.Child, &sd); err != nil {
 				return err
 			}
 		} else {
-			// TODO: Might be reworked to something more elegant.
+			//log.Printf("Slice.Assign: no child=> %v", n.GetName())
+			attr = n.Attr
 			if err := unmarshal.Element(n, &sd); err != nil {
 				return err
 			}
 		}
-		if n.Data != nil {
-			//log.Printf("Slice.Assign: Data: %v", n.Data.GetData())
-			//log.Printf("Data of sd: '%v' (%T)", sd.data, sd.data)
-		}
 		s.data = append(s.data, sd)
+		sd.SetAttributes(attr)
 		n = n.Next
 	}
-	//log.Println("Slice.Assign: end")
+	//log.Printf("Slice.Assign: end => %s", s)
 	return nil
 }
 
-func (s Slice[T]) String() string {
+func (s *Slice[T]) String() string {
 	b := strings.Builder{}
 	b.WriteString("[")
 	for i, d := range s.data {

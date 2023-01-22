@@ -6,7 +6,6 @@ import (
 	"log"
 	"reflect"
 
-	"github.com/cruffinoni/rimworld-editor/helper"
 	"github.com/cruffinoni/rimworld-editor/xml"
 	"github.com/cruffinoni/rimworld-editor/xml/path"
 	"github.com/cruffinoni/rimworld-editor/xml/types/primary"
@@ -110,6 +109,7 @@ func Element(element *xml.Element, dest any) error {
 	}
 
 	destAssigner, destIsAssigner := dest.(xml.Assigner)
+	log.Printf("Is assigner: %v => %T", destIsAssigner, dest)
 	if destIsAssigner {
 		skippingPath := destAssigner.GetPath()
 		if skippingPath != "" {
@@ -166,7 +166,7 @@ func Element(element *xml.Element, dest any) error {
 					// Special case for xml.Element, set directly to the field
 					if ft == elementStruct {
 						fieldValue.Set(reflect.Append(fieldValue, reflect.ValueOf(nBefore)))
-					} else if helper.IsReflectPrimaryType(ft.Kind()) {
+					} else if primary.IsEmbeddedPrimaryType(ft.Name()) {
 						fieldValue.Set(reflect.Append(fieldValue, createValueFromPrimaryType(ft, nBefore)))
 					} else {
 						if ft.Kind() != reflect.Ptr {
@@ -182,6 +182,7 @@ func Element(element *xml.Element, dest any) error {
 				}
 			case reflect.Struct:
 				typeName := fieldValue.Type().Name()
+				log.Printf("Type is struct of %v", typeName)
 				// Special case for xml.Element, set directly to the field
 				if isXMLElement(fieldValue) {
 					fieldPtr.Set(reflect.ValueOf(n))
@@ -194,7 +195,9 @@ func Element(element *xml.Element, dest any) error {
 					_ = cast.Assign(n)
 					cast.SetAttributes(n.Attr)
 				} else {
+					log.Printf("Custom types: %v", typeName)
 					if fieldValue.Kind() == reflect.Ptr {
+						log.Printf("and it's a ptr")
 						fieldPtr = makePointer(fieldValue)
 						fieldValue = fieldPtr.Elem()
 					}

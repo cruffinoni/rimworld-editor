@@ -50,7 +50,7 @@ type EmbeddedType[T comparable] struct {
 func (pt EmbeddedType[T]) TransformToXML(buffer *saver.Buffer) error {
 	l := len(pt.str)
 	if l == 0 {
-		log.Printf("str is empty: %#+v", pt)
+		log.Printf("EmbeddedType.TransformToXML => str is empty: %#+v", pt)
 		buffer.WriteEmptyTag(pt.tag, pt.attr)
 		return nil
 	}
@@ -80,7 +80,7 @@ func (pt *EmbeddedType[T]) Assign(e *xml.Element) error {
 		pt.str = fmt.Sprintf("%v", v)
 		return nil
 	} else {
-		return fmt.Errorf("xml: cannot assign %T to %T", e.Data.GetData(), pt)
+		return fmt.Errorf("EmbeddedType.Assign: cannot assign %T to %T", e.Data.GetData(), pt)
 	}
 }
 

@@ -21,6 +21,9 @@ func SaveWithBuffer(val any) (*saver.Buffer, error) {
 		valType = valType.Elem()
 	}
 	err := Save(val, b, strings.ToLower(valType.Name()))
+	if err == nil {
+		b.RemoveEmptyLine()
+	}
 	return b, err
 }
 
@@ -42,25 +45,26 @@ func Save(val any, b *saver.Buffer, tag string) error {
 		t = t.Elem()
 	}
 	v := reflect.ValueOf(val)
-	if v.IsZero() {
+	if v.IsZero() && v.Kind() == reflect.Ptr {
 		return nil
 	}
+	transformer, implTransformer := castToInterface[saver.Transformer](&val)
 	if v.Kind() == reflect.Ptr {
 		v = v.Elem()
 	}
 	vi := v.Interface()
 
 	var attr attributes.Attributes
-	if attributeAssigner, ok := castToInterface[xml.AttributeAssigner](val); ok {
+	if attributeAssigner, ok := castToInterface[xml.AttributeAssigner](&val); ok {
 		attr = attributeAssigner.GetAttributes()
 	}
 	// If the value is of type primary.Empty, write an empty tag with the given attributes and return.
-	if _, ok := val.(primary.Empty); ok {
+	if _, ok := val.(*primary.Empty); ok {
 		b.WriteEmptyTag(tag, attr)
 		return nil
 	}
 	kind := v.Kind()
-	if helper.IsReflectPrimaryType(kind) && v.IsZero() {
+	if helper.IsReflectPrimaryType(kind) && v.IsZero() && (kind != reflect.Int64 && kind != reflect.Float64) {
 		return nil
 	}
 	b.OpenTag(tag, attr)
@@ -70,23 +74,33 @@ func Save(val any, b *saver.Buffer, tag string) error {
 		j := v.Len()
 		// This is a special case in case the type has a custom
 		// implementation of the TransformToXML() method.
-		if transformer, ok := castToInterface[saver.Transformer](vi); ok {
+		if implTransformer {
 			if err := transformer.TransformToXML(b); err != nil {
 				return err
 			}
-		} else {
-			for i := 0; i < j; i++ {
-				b.Write([]byte("\n"))
-				if err := Save(v.Index(i).Interface(), b, "li"); err != nil {
-					return err
-				}
+		}
+		for i := 0; i < j; i++ {
+			b.Write([]byte("\n"))
+			if err := Save(v.Index(i).Interface(), b, "li"); err != nil {
+				return err
 			}
 		}
-		b.Write([]byte("\n"))
+		if tag != "" {
+			b.Write([]byte("\n"))
+		}
 		b.CloseTagWithIndent(tag)
 		return nil
 	case reflect.String:
+		multipleLineTxt := strings.Contains(v.String(), "\n")
+		if multipleLineTxt {
+			b.Write([]byte{'\n'})
+			b.IncreaseDepth()
+		}
 		b.Write([]byte(v.String()))
+		if multipleLineTxt {
+			b.Write([]byte{'\n'})
+			b.DecreaseDepth()
+		}
 	case reflect.Int64:
 		b.Write([]byte(strconv.FormatInt(v.Int(), 10)))
 	case reflect.Float64:
@@ -96,7 +110,7 @@ func Save(val any, b *saver.Buffer, tag string) error {
 			return nil
 		}
 		b.Write([]byte("\n"))
-		if transformer, ok := castToInterface[saver.Transformer](vi); ok {
+		if implTransformer {
 			if err := transformer.TransformToXML(b); err != nil {
 				return err
 			}
@@ -107,20 +121,25 @@ func Save(val any, b *saver.Buffer, tag string) error {
 		for i := 0; i < v.NumField(); i++ {
 			f := t.Field(i)
 			vf := v.Field(i)
+			if !vf.CanInterface() {
+				continue
+			}
 			// The field might be a custom type that implements saver.Transformer.
 			// If so, we let the type handle the transformation from Type -> XML
-			if transformer, ok := castToInterface[saver.Transformer](vf.Interface()); ok {
+			if transformer, ok := castToInterface[saver.Transformer](vf.Addr().Interface()); ok {
 				if err := transformer.TransformToXML(b); err != nil {
 					return err
 				}
-				b.Write([]byte("\n"))
+				if tag != "" {
+					b.Write([]byte("\n"))
+				}
 				// We don't close the tag since it's only a MEMBER of the struct, so it can't decide
 				// whenever the struct is completely parsed.
 				continue
 			}
 			xmlTag, ok := f.Tag.Lookup("xml")
 			if !ok {
-				log.Print("No XML tag present")
+				log.Printf("No XML tag present for %v", f.Name)
 				continue
 			}
 			// Structure that have empty value into their fields are ignored.

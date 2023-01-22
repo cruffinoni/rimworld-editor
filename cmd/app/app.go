@@ -1,15 +1,17 @@
 package main
 
 import (
+	"log"
+	"os"
+
+	"github.com/jawher/mow.cli"
+
 	"github.com/cruffinoni/rimworld-editor/cmd/app/ui"
 	"github.com/cruffinoni/rimworld-editor/cmd/app/ui/term"
 	"github.com/cruffinoni/rimworld-editor/file"
 	"github.com/cruffinoni/rimworld-editor/generated"
 	"github.com/cruffinoni/rimworld-editor/generator"
 	"github.com/cruffinoni/rimworld-editor/xml/unmarshal"
-	"github.com/jawher/mow.cli"
-	"log"
-	"os"
 )
 
 const (

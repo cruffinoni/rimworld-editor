@@ -20,7 +20,7 @@ type CustomType struct {
 func createEmptyType() any {
 	return &CustomType{
 		name:       "Empty",
-		pkg:        "primary",
+		pkg:        "*primary",
 		type1:      nil,
 		importPath: primaryTypesPath,
 	}
@@ -48,7 +48,7 @@ func createCustomSlice(e *xml.Element, flag uint) any {
 	}
 	return &CustomType{
 		name:       "Slice",
-		pkg:        "types",
+		pkg:        "*types",
 		type1:      t,
 		importPath: customTypesPath,
 	}

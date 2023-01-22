@@ -50,7 +50,6 @@ func NewPathing(rawPattern string) *Path {
 		patterns: make([]*pattern, 0, len(split)),
 	}
 	for _, s := range split {
-		//log.Printf("s: %s", s)
 		pm := &pattern{
 			path:    s,
 			matcher: &DefaultMatcher{},
@@ -61,18 +60,16 @@ func NewPathing(rawPattern string) *Path {
 				if pm.matcher == nil {
 					log.Fatalf("failed to build matcher for %s", s)
 				}
-				//log.Printf("Found matcher: %T", m)
 				break
 			}
 		}
-		//log.Printf("%v: Matcher: %T", pm.path, pm.matcher)
 		p.patterns = append(p.patterns, pm)
 	}
 	return p
 }
 
-func FindWithPath(rawPattern string, root *xml.Element) Elements {
-	p := NewPathing(rawPattern)
+func FindWithPath(pattern string, root *xml.Element) Elements {
+	p := NewPathing(pattern)
 	return p.Find(root)
 }
 
