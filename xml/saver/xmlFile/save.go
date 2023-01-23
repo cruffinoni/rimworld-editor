@@ -48,7 +48,7 @@ func Save(val any, b *saver.Buffer, tag string) error {
 	if v.IsZero() && v.Kind() == reflect.Ptr {
 		return nil
 	}
-	transformer, implTransformer := castToInterface[saver.Transformer](&val)
+	transformer, implTransformer := castToInterface[saver.Transformer](v.Interface())
 	if v.Kind() == reflect.Ptr {
 		v = v.Elem()
 	}

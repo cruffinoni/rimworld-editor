@@ -30,12 +30,6 @@ func (s *sliceData[T]) Assign(e *xml.Element) error {
 	s.kind = reflect.TypeOf(s.data).Kind()
 	if s.kind == reflect.Ptr {
 		err = unmarshal.Element(e, s.data)
-
-		//if reflect.TypeOf(s.data).Elem().Kind() == reflect.Struct {
-		//	err = unmarshal.Element(e.Child, s.data)
-		//} else {
-		//	err = unmarshal.Element(e, s.data)
-		//}
 	} else if helper.IsReflectPrimaryType(s.kind) {
 		switch s.kind {
 		case reflect.String:
@@ -52,7 +46,6 @@ func (s *sliceData[T]) Assign(e *xml.Element) error {
 	} else {
 		err = unmarshal.Element(e, &s.data)
 	}
-	log.Printf("Data '%v' / %T", s.data, s.data)
 	if err != nil {
 		return err
 	}
@@ -99,12 +92,14 @@ func (s *sliceData[T]) TransformToXML(b *saver.Buffer) error {
 	if err := xmlFile.Save(s.data, b, ""); err != nil {
 		return err
 	}
+	if helper.IsReflectPrimaryType(s.kind) {
+		if s.kind == reflect.String && strings.Contains(reflect.ValueOf(s.data).String(), "\n") {
+			b.CloseTagWithIndent(s.tag)
+		}
+		b.CloseTag(s.tag)
+		return nil
+	}
 	b.CloseTagWithIndent(s.tag)
-	//if helper.IsReflectPrimaryType(s.kind) {
-	//	b.CloseTag(s.tag)
-	//} else {
-	//	b.CloseTagWithIndent(s.tag)
-	//}
 	return nil
 }
 
@@ -124,7 +119,6 @@ func (s *Slice[T]) TransformToXML(b *saver.Buffer) error {
 		log.Print("Slice.TransformToXML: No repeating tag specified.")
 		return nil
 	}
-	log.Printf("Repeating tag: %v", s.repeatingTag)
 	b.OpenTag(s.repeatingTag, s.attr)
 	for _, v := range s.data {
 		b.Write([]byte("\n"))
