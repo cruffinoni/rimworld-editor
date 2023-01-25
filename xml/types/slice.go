@@ -86,6 +86,10 @@ func (s *sliceData[T]) String() string {
 	return s.str
 }
 
+func (s *sliceData[T]) GetXMLTag() []byte {
+	return nil
+}
+
 func (s *sliceData[T]) TransformToXML(b *saver.Buffer) error {
 	//log.Printf("sliceData.TransformToXML => %v", b.GetDepth())
 	b.OpenTag(s.tag, s.attr)
@@ -115,21 +119,25 @@ type Slice[T any] struct {
 }
 
 func (s *Slice[T]) TransformToXML(b *saver.Buffer) error {
-	if s.repeatingTag == "" {
-		log.Print("Slice.TransformToXML: No repeating tag specified.")
-		return nil
-	}
-	b.OpenTag(s.repeatingTag, s.attr)
+	//if s.repeatingTag == "" {
+	//	log.Print("Slice.TransformToXML: No repeating tag specified.")
+	//	return nil
+	//}
+	//b.OpenTag(s.repeatingTag, s.attr)
 	for _, v := range s.data {
-		b.Write([]byte("\n"))
 		if err := v.TransformToXML(b); err != nil {
 			return err
 		}
+		b.Write([]byte("\n"))
 	}
-	b.WriteString("\n")
-	b.CloseTagWithIndent(s.repeatingTag)
-	b.WriteString("\n")
+	//b.WriteString("\n")
+	//b.CloseTagWithIndent(s.repeatingTag)
+	//b.WriteString("\n")
 	return nil
+}
+
+func (s *Slice[T]) GetXMLTag() []byte {
+	return []byte(s.repeatingTag)
 }
 
 func (s *Slice[T]) Capacity() int {
@@ -147,9 +155,6 @@ func (s *Slice[T]) GetFromIndex(idx int) T {
 
 func (s *Slice[T]) Assign(e *xml.Element) error {
 	s.data = make([]sliceData[T], 0)
-	defer func() {
-		s.cap = len(s.data)
-	}()
 	n := e
 	if n == nil {
 		log.Printf("n is nil")
@@ -198,6 +203,7 @@ func (s *Slice[T]) Assign(e *xml.Element) error {
 		sd.SetAttributes(attr)
 		n = n.Next
 	}
+	s.cap = len(s.data)
 	//log.Printf("Slice.Assign: end => %s", s)
 	return nil
 }

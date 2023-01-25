@@ -114,7 +114,7 @@ func (s *StructInfo) generateStructToPath(path string) error {
 	if structName == "" {
 		panic("empty struct name")
 	}
-	buf.writeToBody("type " + structName + " struct {\n")
+	buf.writeToBody("type " + structName + " struct {\nAttr attributes.Attributes\n")
 	for _, m := range s.members {
 		buf.writeToBody("\t" + strcase.ToCamel(m.name) + " ")
 		switch va := m.t.(type) {
@@ -127,7 +127,7 @@ func (s *StructInfo) generateStructToPath(path string) error {
 		case *StructInfo:
 			buf.writeToBody("*" + strcase.ToCamel(va.name))
 			if s.name == va.name {
-				return fmt.Errorf("duplicate name for %s", s.name)
+				return fmt.Errorf("duplicate name for %s & %s", s.name, va.name)
 			}
 			if err = va.generateStructToPath(path); err != nil {
 				return err
@@ -171,8 +171,9 @@ func writeRequiredInterfaces(b *buffer, structName string) {
 	b.writeImport(xmlAttributes, headerXml)
 	for i := 0; i < nbRequiredMethod; i++ {
 		m := tRequired.Method(i)
+		structIdentifier := strings.ToLower(structName[:1])
 		b.writeToFooter("\n" +
-			"func (" + strings.ToLower(structName[:1]) + " *" + structName + ") ")
+			"func (" + structIdentifier + " *" + structName + ") ")
 		b.writeToFooter(m.Name + "(")
 		if m.Type.NumIn() > 0 {
 			totalIn := m.Type.NumIn()
@@ -183,6 +184,9 @@ func writeRequiredInterfaces(b *buffer, structName string) {
 				if localGenericName == m.Type.In(j).Name() {
 					b.writeToFooter("*" + structName)
 				} else {
+					if m.Name == "SetAttributes" {
+						b.writeToFooter("attr ")
+					}
 					b.writeToFooter(m.Type.In(j).String())
 				}
 			}
@@ -212,6 +216,9 @@ func writeRequiredInterfaces(b *buffer, structName string) {
 			}
 		}
 		b.writeToFooter(" {\n")
+		if m.Name == "SetAttributes" {
+			b.writeToFooter("\t" + structIdentifier + ".Attr = attr\n")
+		}
 		b.writeToFooter("\treturn ")
 		if numReturnedValue > 0 {
 			for c, rt := range returnedValue {
@@ -228,7 +235,11 @@ func writeRequiredInterfaces(b *buffer, structName string) {
 				case reflect.String:
 					b.writeToFooter(`""`)
 				case reflect.Pointer, reflect.Interface, reflect.Slice, reflect.Array, reflect.Map:
-					b.writeToFooter("nil")
+					if m.Name == "GetAttributes" {
+						b.writeToFooter(structIdentifier + ".Attr")
+					} else {
+						b.writeToFooter("nil")
+					}
 				default:
 					log.Panicf("generator.StructInfo.writeRequiredInterfaces: unknown type %v", rt.Kind())
 				}

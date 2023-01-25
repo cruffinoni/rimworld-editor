@@ -1,6 +1,7 @@
 package saver
 
 import (
+	"bytes"
 	"os"
 	"regexp"
 	"strings"
@@ -116,6 +117,10 @@ func (b *Buffer) ToFile(path string) error {
 
 func (b *Buffer) Buffer() []byte {
 	return b.buffer
+}
+
+func (b *Buffer) GetLastLine() []byte {
+	return bytes.SplitAfterN(b.buffer, []byte{'\n'}, 1)[0]
 }
 
 var reMultipleLineBreak = regexp.MustCompile(`(?m)^\s*\r?\n`)

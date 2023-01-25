@@ -49,22 +49,27 @@ func Save(val any, b *saver.Buffer, tag string) error {
 		return nil
 	}
 	transformer, implTransformer := castToInterface[saver.Transformer](v.Interface())
+	var attr attributes.Attributes
+	//y, z := castToInterface[saver.Transformer](v.Interface())
+	//log.Printf("Val: %T & %v/%v", val, y, z)
+	if attributeAssigner, ok := castToInterface[xml.AttributeAssigner](v.Interface()); ok {
+		attr = attributeAssigner.GetAttributes()
+	}
 	if v.Kind() == reflect.Ptr {
 		v = v.Elem()
 	}
 	vi := v.Interface()
-
-	var attr attributes.Attributes
-	if attributeAssigner, ok := castToInterface[xml.AttributeAssigner](&val); ok {
-		attr = attributeAssigner.GetAttributes()
-	}
 	// If the value is of type primary.Empty, write an empty tag with the given attributes and return.
 	if _, ok := val.(*primary.Empty); ok {
 		b.WriteEmptyTag(tag, attr)
 		return nil
 	}
 	kind := v.Kind()
-	if helper.IsReflectPrimaryType(kind) && v.IsZero() && (kind != reflect.Int64 && kind != reflect.Float64) {
+	//if kind == reflect.Int64 {
+	//	log.Printf("Debug: => %v & %T", val, val)
+	//}
+	if helper.IsReflectPrimaryType(kind) && v.IsZero() && !(kind == reflect.Int64 || kind == reflect.Float64) {
+		log.Printf("Skipping: %v & %T", val, val)
 		return nil
 	}
 	b.OpenTag(tag, attr)
@@ -139,11 +144,11 @@ func Save(val any, b *saver.Buffer, tag string) error {
 			}
 			xmlTag, ok := f.Tag.Lookup("xml")
 			if !ok {
-				log.Printf("No XML tag present for %v", f.Name)
+				//log.Printf("No XML tag present for %v", f.Name)
 				continue
 			}
 			// Structure that have empty value into their fields are ignored.
-			if helper.IsReflectPrimaryType(vf.Kind()) && vf.IsZero() {
+			if helper.IsReflectPrimaryType(vf.Kind()) && vf.IsZero() && !(vf.Kind() == reflect.Int64 || vf.Kind() == reflect.Float64) {
 				continue
 			}
 			if err := Save(vf.Interface(), b, xmlTag); err != nil {

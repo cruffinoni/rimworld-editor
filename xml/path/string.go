@@ -1,6 +1,8 @@
 package path
 
-import "github.com/cruffinoni/rimworld-editor/xml"
+import (
+	"github.com/cruffinoni/rimworld-editor/xml"
+)
 
 type StringMatch struct {
 }

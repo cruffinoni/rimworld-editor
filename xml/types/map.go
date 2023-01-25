@@ -14,6 +14,7 @@ import (
 	"github.com/cruffinoni/rimworld-editor/xml/path"
 	"github.com/cruffinoni/rimworld-editor/xml/saver"
 	"github.com/cruffinoni/rimworld-editor/xml/types/iterator"
+	"github.com/cruffinoni/rimworld-editor/xml/types/primary"
 )
 
 // Map is a map of K to V and require the XML file to have a "keys" and "values"
@@ -73,14 +74,20 @@ func (m *Map[K, V]) TransformToXML(b *saver.Buffer) error {
 	b.IncreaseDepth()
 	for k := range m.m {
 		b.WriteStringWithIndent("<li>")
-		b.IncreaseDepth()
 		if transformer, ok := castToInterface[saver.Transformer](&k); ok {
+			tag := transformer.GetXMLTag()
+			if tag != nil {
+				b.OpenTag(string(tag), nil)
+			}
 			if err := transformer.TransformToXML(b); err != nil {
 				return err
 			}
+			if tag != nil {
+				b.CloseTagWithIndent(string(tag))
+				b.Write([]byte{'\n'})
+			}
 		} else {
 			b.WriteString(fmt.Sprintf("%v", k))
-			b.DecreaseDepth()
 		}
 		if unicode.IsSpace(rune(b.Buffer()[b.Len()-1])) {
 			b.WriteStringWithIndent("</li>\n")
@@ -95,15 +102,25 @@ func (m *Map[K, V]) TransformToXML(b *saver.Buffer) error {
 	for _, v := range m.m {
 		b.WriteStringWithIndent("<li>")
 		if transformer, ok := castToInterface[saver.Transformer](v); ok {
+			tag := transformer.GetXMLTag()
+			if tag != nil {
+				b.OpenTag(string(tag), nil)
+			}
 			if err := transformer.TransformToXML(b); err != nil {
 				return err
 			}
+			if tag != nil {
+				b.CloseTagWithIndent(string(tag))
+				b.Write([]byte{'\n'})
+			}
 		} else {
-			b.IncreaseDepth()
 			b.WriteString(fmt.Sprintf("%v", v))
-			b.DecreaseDepth()
 		}
-		b.WriteStringWithIndent("</li>\n")
+		if unicode.IsSpace(rune(b.Buffer()[b.Len()-1])) {
+			b.WriteStringWithIndent("</li>\n")
+		} else {
+			b.WriteString("</li>\n")
+		}
 	}
 	b.DecreaseDepth()
 	b.WriteStringWithIndent("</values>")
@@ -122,6 +139,10 @@ func castTemplate[T any](value any) T {
 	log.Panicf("Map/castTemplate: cannot cast %T to %T", value, zero[T]())
 	// Never reached
 	return zero[T]()
+}
+
+func (m *Map[K, V]) GetXMLTag() []byte {
+	return nil
 }
 
 func castDataFromKind[T any](kind reflect.Kind, d *xml.Data) T {
@@ -148,28 +169,39 @@ func (m *Map[K, V]) Assign(e *xml.Element) error {
 	} else {
 		return fmt.Errorf("map.Assign: map's parent is nil")
 	}
-	n := e.Child
-	if n == nil {
+	if e.Child == nil {
 		return nil
 	}
+	log.Printf("Tag: %v", m.tag)
 	keys := path.FindWithPath("keys>[...]", e)
 	if len(keys) == 0 {
 		return errors.New("Map/Assign: no key")
 	}
+	log.Printf("e=%v", e.GetName())
 	values := path.FindWithPath("values>[...]", e)
 	if len(values) == 0 {
 		return errors.New("Map/Assign: no value")
 	}
+	if len(keys) != len(values) {
+		return errors.New("Map/Assign: keys length differs from values length")
+	}
+	log.Printf("Keys: %v, Value: %v", keys[0].XMLPath(), values[0].XMLPath())
+	log.Printf("Keys: %+v, Value: %+v", keys[0].Data, values[0].Data)
 	kKind := reflect.TypeOf(zero[K]()).Kind()
 	vKind := reflect.TypeOf(zero[V]()).Kind()
+	_, isEmpty := any(zero[V]()).(*primary.Empty)
+	log.Printf("%T is empty ? %v", zero[V](), isEmpty)
 	for i, key := range keys {
 		if key.Data == nil {
 			log.Panicf("Map/Assign: no data for key %s", key.StartElement.Name.Local)
 		}
 		//log.Printf("There is data? %+v\n> %+v\n>> %+v\n>>>%+v", values[i], values[i].Child, values[i].Child.Child, values[i].Child.Child.Child)
-		//log.Printf("Type ok? '%T'", zero[V]())
+		log.Printf("Type ok? '%T'", zero[V]())
 		// This might be a custom type that implements xml.Assigner interface
-		if _, ok := any(zero[V]()).(xml.Assigner); ok {
+		if _, ok := any(zero[V]()).(xml.Assigner); ok && !isEmpty {
+			if values[i].Child == nil {
+				log.Printf("Map/Assign: no child at %s | Index: %d", e.XMLPath(), i)
+			}
 			var (
 				subValue    = new(V)
 				subValueVal = reflect.ValueOf(subValue)
@@ -185,10 +217,10 @@ func (m *Map[K, V]) Assign(e *xml.Element) error {
 			//log.Printf("Res: %v (%T)", subValueVal.Interface().(V), subValueVal.Interface().(V))
 			m.m[castDataFromKind[K](kKind, key.Data)] = subValueVal.Interface().(V)
 			//log.Printf("!!=> %v > %v", castDataFromKind[K](kKind, key.Data), m.m[castDataFromKind[K](kKind, key.Data)])
-		} else if values[i].Data == nil {
+		} else if values[i].Data == nil || isEmpty {
 			// There is a key with no data
 			m.m[castDataFromKind[K](kKind, key.Data)] = zero[V]()
-		} else if _, isElement := interface{}(zero[V]()).(*xml.Element); isElement {
+		} else if _, isElement := any(zero[V]()).(*xml.Element); isElement {
 			// Special if V is a xml.Element because we pass a pointer to the data for castDataFromKind
 			// so, we don't use this function but assign directly to the map
 			m.m[castDataFromKind[K](kKind, key.Data)] = castTemplate[V](values[i])

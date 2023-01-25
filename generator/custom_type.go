@@ -44,7 +44,7 @@ func createCustomSlice(e *xml.Element, flag uint) any {
 		t = createCustomSlice(e.Child, flag)
 	case reflect.Struct:
 		//log.Printf("[Struct] creating a structure from %s", e.XMLPath())
-		t = createStructure(e, flag|skipChild)
+		t = createStructure(e, flag|forceFullCheck)
 	}
 	return &CustomType{
 		name:       "Slice",
@@ -62,12 +62,12 @@ func createCustomTypeForMap(e *xml.Element, flag uint) any {
 	//log.Printf("Determining key type from %s", e.Child.XMLPath())
 	var (
 		c = e.Child
-		k = determineTypeFromData(c, flag|ignoreSlice)
+		k = determineTypeFromData(c, flag|ignoreSlice|forceFullCheck)
 		v any
 	)
 	if ct, ok := k.(*CustomType); ok {
 		// primary.Empty does not implement comparable
-		// TODO: Might be deleted when the types.Map type implements any as Key and not comparable anymore
+		// Might be deleted when the types.Map type implements any as Key and not comparable anymore
 		if ct.name == "Empty" {
 			k = reflect.String
 		}
@@ -75,7 +75,7 @@ func createCustomTypeForMap(e *xml.Element, flag uint) any {
 	//log.Printf("Key type: %T", k)
 	c = c.Next
 	//log.Printf("Determining value type from '%v'", c.XMLPath())
-	v = determineTypeFromData(c, flag|ignoreSlice)
+	v = determineTypeFromData(c, flag|ignoreSlice|forceFullCheck)
 	//log.Printf("Value type: %T", v)
 	// By default, maps are strings to strings
 	if k == reflect.Invalid || v == reflect.Invalid {

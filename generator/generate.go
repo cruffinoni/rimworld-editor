@@ -29,7 +29,7 @@ func getTypeFromArray(e *xml.Element) reflect.Kind {
 				log.Panicf("primary.EmbeddedType: found type %v, expected %v on path %v ('%v')", kdk, kt, k.XMLPath(), k.Data.GetData())
 			}
 			// Float64 and Int64 are interchangeable, but we prefer to keep Float64
-			if !(kdk == reflect.Int64 && kt == reflect.Float64) {
+			if !(kt == reflect.Float64 && kdk == reflect.Int64) {
 				kt = kdk
 			}
 		}
@@ -91,7 +91,7 @@ func handleElement(e *xml.Element, st *StructInfo, flag uint) error {
 	for n != nil {
 		var t any
 		if n.Child != nil {
-			// Skip the "li" tag since it's a slice and should not be a member of the struct
+			// Skip the "li" tag (or any custom type) since it's a slice and should not be a member of the struct
 			if flag&skipChild != 0 || helper.IsListTag(n.GetName()) {
 				flag &^= skipChild
 				if err := handleElement(n.Child, st, flag); err != nil {
@@ -102,6 +102,7 @@ func handleElement(e *xml.Element, st *StructInfo, flag uint) error {
 				if helper.IsListTag(childName) {
 					t = createCustomSlice(n, flag|skipChild)
 				} else if childName == "keys" {
+					// Maps are constant in terms of naming, and it's with that we recognize them
 					t = createCustomTypeForMap(n, flag)
 				} else {
 					// Sometimes, slice are not marked as "li" so we need to check

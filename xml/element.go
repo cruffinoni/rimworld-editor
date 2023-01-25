@@ -54,8 +54,8 @@ func (e *Element) ToXML(spacing int) string {
 	return sb.String()
 }
 
-func (e Element) TransformToXML(buffer *saver.Buffer) error {
-	n := &e
+func (e *Element) TransformToXML(buffer *saver.Buffer) error {
+	n := e
 	buffer.OpenTag(n.GetName(), n.Attr)
 	if n.Data != nil {
 		if n.Data.Kind() == reflect.Struct {

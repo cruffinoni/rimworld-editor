@@ -3,6 +3,7 @@ package generator
 import (
 	"bytes"
 	"os"
+	"reflect"
 	"strconv"
 
 	"github.com/cruffinoni/rimworld-editor/helper"
@@ -30,13 +31,22 @@ const (
 	// forceChild is a flag that forces the child of the current child to be used
 	// A.K.A., skip the current child and use the child of the current child
 	// Useful for the case of list with custom tag
-	forceChild = 2 << iota
+	forceChild
 
-	ignoreSlice = 3 << iota
+	// Ignore the slice tag (li) because we don't need it there. Used for maps where
+	// only values inside the li tag is interesting
+	ignoreSlice
 
-	forceRandomName = 4 << iota
+	// Sometimes, there is no name attributed to a multiple grouped data and most
+	// likely happens in lists. It's not possible for us to do the same thing.
+	forceRandomName
 
-	// InnerKeyword is the keyword for cases when the name of the element is the same as the name of the parent.
+	// Force to make a full check of all values in a list. This is persistent for lists
+	// because a structure may vary from a one to other.
+	forceFullCheck
+
+	// InnerKeyword is the keyword for cases when the name of the element is
+	// the same as the name of the parent.
 	InnerKeyword = "_Inner"
 )
 
@@ -72,6 +82,12 @@ func (s *StructInfo) removeDuplicates() {
 	for i := 0; i < len(s.members); i++ {
 		for j := i + 1; j < len(s.members); j++ {
 			if s.members[i].name == s.members[j].name {
+				it, iIsPrimary := s.members[i].t.(reflect.Kind)
+				jt, jIsPrimary := s.members[j].t.(reflect.Kind)
+				// Sometimes float are integer, so keep the float64 type instead of changing to integer64
+				if iIsPrimary && it == reflect.Float64 && jIsPrimary && jt == reflect.Int64 {
+					s.members[j].t = s.members[i].t
+				}
 				s.members = append(s.members[:i], s.members[i+1:]...)
 				i--
 				break
@@ -124,6 +140,18 @@ func createStructure(e *xml.Element, flag uint) any {
 	}
 	if err := handleElement(e.Child, s, flag); err != nil {
 		panic(err)
+	}
+	// If "forceFullCheck" is asked, it means we are in a slice/map, and we want
+	// to check all nodes to have all members possible
+	if (flag & forceFullCheck) > 0 {
+		flag &^= forceFullCheck
+		n := e.Next
+		for n != nil {
+			if err := handleElement(n.Child, s, flag); err != nil {
+				panic(err)
+			}
+			n = n.Next
+		}
 	}
 	s.removeDuplicates()
 	return s

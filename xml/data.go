@@ -69,7 +69,7 @@ func (d *Data) lazyCheck(destKind reflect.Kind) {
 		return
 	}
 	if destKind != d.t {
-		log.Panicf("lazyCheck: type mismatch: %v != %v", d.t, destKind)
+		log.Panicf("lazyCheck: type mismatch: %v != %v (data: %v)", d.t, destKind, d.data)
 	}
 }
 

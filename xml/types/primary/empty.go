@@ -19,8 +19,8 @@ func (e *Empty) GetPath() string {
 	return ""
 }
 
-func (e *Empty) SetAttributes(attributes attributes.Attributes) {
-	e.attr = attributes
+func (e *Empty) SetAttributes(attr attributes.Attributes) {
+	e.attr = attr
 }
 
 func (e *Empty) GetAttributes() attributes.Attributes {
