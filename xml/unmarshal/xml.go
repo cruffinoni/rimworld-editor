@@ -194,7 +194,6 @@ func Element(element *xml.Element, dest any) error {
 					cast.SetAttributes(n.Attr)
 				} else {
 					if fieldValue.Kind() == reflect.Ptr {
-						log.Printf("and it's a ptr")
 						fieldPtr = makePointer(fieldValue)
 						fieldValue = fieldPtr.Elem()
 					}

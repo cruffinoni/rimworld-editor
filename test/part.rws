@@ -1,657 +1,107 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <savegame>
-	<meta>
-		<gameVersion>1.3.3287 rev1159</gameVersion>
-		<modIds>
-			<li>brrainz.harmony</li>
-			<li>ludeon.rimworld</li>
-			<li>ludeon.rimworld.royalty</li>
-			<li>ludeon.rimworld.ideology</li>
-			<li>unlimitedhugs.hugslib</li>
-			<li>com.github.alandariva.moreplanning</li>
-			<li>void.charactereditor</li>
-		</modIds>
-		<modSteamIds>
-			<li>0</li>
-			<li>0</li>
-			<li>1149640</li>
-			<li>1392840</li>
-			<li>0</li>
-			<li>0</li>
-			<li>0</li>
-		</modSteamIds>
-		<modNames>
-			<li>Harmony</li>
-			<li>Core</li>
-			<li>Royalty</li>
-			<li>Ideology</li>
-			<li>HugsLib</li>
-			<li>More Planning 1.3</li>
-			<li>Character Editor</li>
-		</modNames>
-	</meta>
-	<game>
-		<drugPolicyDatabase>
-			<policies>
-				<li>
-					<uniqueId>1</uniqueId>
-					<label tag="value">Drogues sociales</label>
-					<drugs>
-						<li>
-							<drug>Beer</drug>
-							<allowedForJoy>True</allowedForJoy>
-						</li>
-						<li>
-							<drug>SmokeleafJoint</drug>
-							<allowedForJoy>True</allowedForJoy>
-						</li>
-					</drugs>
-					<sourceDef>SocialDrugs</sourceDef>
-				</li>
-			</policies>
-		</drugPolicyDatabase>
-		<scenario>
-            <pawnDestinationReservationManager>
-                <reservedDestinations>
-                    <keys>
-                        <li>Faction_10</li>
-                    </keys>
-                    <values>
-                        <li>
-                            <list>
-                                <li>
-                                    <target>(134, 0, 116)</target>
-                                    <claimant>Thing_Human492</claimant>
-                                    <job>Job_224</job>
-                                </li>
-                            </list>
-                        </li>
-                    </values>
-                </reservedDestinations>
-            </pawnDestinationReservationManager>
-		</scenario>
-		<researchManager>
-			<progress>
-				<keys>
-					<li>PsychoidBrewing</li>
-					<li>TreeSowing</li>
-					<li>Brewing</li>
-					<li>ComplexFurniture</li>
-					<li>PassiveCooler</li>
-					<li>Stonecutting</li>
-					<li>ComplexClothing</li>
-					<li>DrugProduction</li>
-					<li>Cocoa</li>
-				</keys>
-				<values>
-					<li>0</li>
-					<li>0</li>
-					<li>0</li>
-					<li>300</li>
-					<li>400</li>
-					<li>300</li>
-					<li>600</li>
-					<li>0</li>
-					<li>0</li>
-				</values>
-			</progress>
-			<techprints>
-				<keys />
-				<values />
-			</techprints>
-		</researchManager>
-		<things>
-            <thing Class="Filth">
-                <def>Filth_RubbleRock</def>
-                <id>Filth_RubbleRock3236</id>
-                <map>0</map>
-                <pos>(184, 0, 3)</pos>
-                <questTags IsNull="True" />
-                <disappearAfterTicks>2931683</disappearAfterTicks>
-            </thing>
-            <thing Class="Filth">
-                <def>Filth_RubbleRock</def>
-                <id>Filth_RubbleRock3237</id>
-                <map>0</map>
-                <pos>(185, 0, 3)</pos>
-                <questTags IsNull="True" />
-                <disappearAfterTicks>2944394</disappearAfterTicks>
-            </thing>
-            <thing Class="Filth">
-                <def>Filth_RubbleRock</def>
-                <id>Filth_RubbleRock3238</id>
-                <map>0</map>
-                <pos>(183, 0, 3)</pos>
-                <questTags IsNull="True" />
-                <disappearAfterTicks>2735123</disappearAfterTicks>
-            </thing>
-            <thing Class="Filth">
-                <def>Filth_RubbleRock</def>
-                <id>Filth_RubbleRock3239</id>
-                <map>0</map>
-                <pos>(184, 0, 2)</pos>
-                <questTags IsNull="True" />
-                <disappearAfterTicks>2941165</disappearAfterTicks>
-            </thing>
-            <thing Class="Filth">
-                <def>Filth_RubbleRock</def>
-                <id>Filth_RubbleRock3241</id>
-                <map>0</map>
-                <pos>(185, 0, 1)</pos>
-                <questTags IsNull="True" />
-                <disappearAfterTicks>2971360</disappearAfterTicks>
-            </thing>
-            <thing Class="Filth">
-                <def>Filth_RubbleRock</def>
-                <id>Filth_RubbleRock3243</id>
-                <map>0</map>
-                <pos>(185, 0, 0)</pos>
-                <questTags IsNull="True" />
-                <disappearAfterTicks>2949358</disappearAfterTicks>
-            </thing>
-            <thing Class="Filth">
-                <def>Filth_RubbleRock</def>
-                <id>Filth_RubbleRock3244</id>
-                <map>0</map>
-                <pos>(183, 0, 2)</pos>
-                <questTags IsNull="True" />
-                <disappearAfterTicks>2913202</disappearAfterTicks>
-            </thing>
-            <thing Class="Filth">
-                <def>Filth_RubbleRock</def>
-                <id>Filth_RubbleRock3245</id>
-                <map>0</map>
-                <pos>(183, 0, 0)</pos>
-                <questTags IsNull="True" />
-                <disappearAfterTicks>2922649</disappearAfterTicks>
-            </thing>
-            <thing Class="Filth">
-                <def>Filth_RubbleRock</def>
-                <id>Filth_RubbleRock3247</id>
-                <map>0</map>
-                <pos>(184, 0, 1)</pos>
-                <questTags IsNull="True" />
-                <disappearAfterTicks>2918632</disappearAfterTicks>
-            </thing>
-            <thing Class="Filth">
-                <def>Filth_RubbleRock</def>
-                <id>Filth_RubbleRock3248</id>
-                <map>0</map>
-                <pos>(184, 0, 0)</pos>
-                <questTags IsNull="True" />
-                <disappearAfterTicks>2837610</disappearAfterTicks>
-            </thing>
-            <thing Class="Filth">
-                <def>Filth_RubbleRock</def>
-                <id>Filth_RubbleRock3250</id>
-                <map>0</map>
-                <pos>(160, 0, 5)</pos>
-                <questTags IsNull="True" />
-                <disappearAfterTicks>2946218</disappearAfterTicks>
-            </thing>
-            <thing Class="Filth">
-                <def>Filth_RubbleRock</def>
-                <id>Filth_RubbleRock3251</id>
-                <map>0</map>
-                <pos>(161, 0, 4)</pos>
-                <questTags IsNull="True" />
-                <disappearAfterTicks>2811529</disappearAfterTicks>
-            </thing>
-            <thing Class="Filth">
-                <def>Filth_RubbleRock</def>
-                <id>Filth_RubbleRock3252</id>
-                <map>0</map>
-                <pos>(160, 0, 3)</pos>
-                <questTags IsNull="True" />
-                <disappearAfterTicks>2728947</disappearAfterTicks>
-            </thing>
-            <thing Class="Filth">
-                <def>Filth_RubbleRock</def>
-                <id>Filth_RubbleRock3253</id>
-                <map>0</map>
-                <pos>(159, 0, 3)</pos>
-                <questTags IsNull="True" />
-                <disappearAfterTicks>2723394</disappearAfterTicks>
-            </thing>
-            <thing Class="Filth">
-                <def>Filth_RubbleRock</def>
-                <id>Filth_RubbleRock3255</id>
-                <map>0</map>
-                <pos>(159, 0, 5)</pos>
-                <questTags IsNull="True" />
-                <disappearAfterTicks>2843291</disappearAfterTicks>
-            </thing>
-            <thing Class="Filth">
-                <def>Filth_RubbleRock</def>
-                <id>Filth_RubbleRock3256</id>
-                <map>0</map>
-                <pos>(160, 0, 4)</pos>
-                <questTags IsNull="True" />
-                <disappearAfterTicks>2875877</disappearAfterTicks>
-            </thing>
-            <thing Class="Filth">
-                <def>Filth_RubbleRock</def>
-                <id>Filth_RubbleRock3257</id>
-                <map>0</map>
-                <pos>(158, 0, 5)</pos>
-                <questTags IsNull="True" />
-                <disappearAfterTicks>2789211</disappearAfterTicks>
-            </thing>
-            <thing Class="Filth">
-                <def>Filth_RubbleRock</def>
-                <id>Filth_RubbleRock3258</id>
-                <map>0</map>
-                <pos>(158, 0, 3)</pos>
-                <questTags IsNull="True" />
-                <disappearAfterTicks>2962979</disappearAfterTicks>
-            </thing>
-            <thing Class="Filth">
-                <def>Filth_RubbleRock</def>
-                <id>Filth_RubbleRock3259</id>
-                <map>0</map>
-                <pos>(159, 0, 4)</pos>
-                <questTags IsNull="True" />
-                <disappearAfterTicks>2915964</disappearAfterTicks>
-            </thing>
-            <thing Class="Filth">
-                <def>Filth_RubbleRock</def>
-                <id>Filth_RubbleRock3262</id>
-                <map>0</map>
-                <pos>(187, 0, 6)</pos>
-                <questTags IsNull="True" />
-                <disappearAfterTicks>2861768</disappearAfterTicks>
-            </thing>
-            <thing Class="Filth">
-                <def>Filth_RubbleRock</def>
-                <id>Filth_RubbleRock3265</id>
-                <map>0</map>
-                <pos>(186, 0, 8)</pos>
-                <questTags IsNull="True" />
-                <disappearAfterTicks>2964903</disappearAfterTicks>
-            </thing>
-            <thing Class="Filth">
-                <def>Filth_RubbleRock</def>
-                <id>Filth_RubbleRock3266</id>
-                <map>0</map>
-                <pos>(184, 0, 6)</pos>
-                <questTags IsNull="True" />
-                <disappearAfterTicks>2775196</disappearAfterTicks>
-            </thing>
-            <thing Class="Filth">
-                <def>Filth_RubbleRock</def>
-                <id>Filth_RubbleRock3268</id>
-                <map>0</map>
-                <pos>(184, 0, 8)</pos>
-                <questTags IsNull="True" />
-                <disappearAfterTicks>2794392</disappearAfterTicks>
-            </thing>
-            <thing Class="Filth">
-                <def>Filth_RubbleRock</def>
-                <id>Filth_RubbleRock3269</id>
-                <map>0</map>
-                <pos>(186, 0, 7)</pos>
-                <questTags IsNull="True" />
-                <disappearAfterTicks>2903280</disappearAfterTicks>
-            </thing>
-            <thing Class="Filth">
-                <def>Filth_RubbleRock</def>
-                <id>Filth_RubbleRock3270</id>
-                <map>0</map>
-                <pos>(186, 0, 9)</pos>
-                <questTags IsNull="True" />
-                <disappearAfterTicks>2819101</disappearAfterTicks>
-            </thing>
-            <thing Class="Filth">
-                <def>Filth_RubbleRock</def>
-                <id>Filth_RubbleRock3271</id>
-                <map>0</map>
-                <pos>(185, 0, 8)</pos>
-                <questTags IsNull="True" />
-                <disappearAfterTicks>2972303</disappearAfterTicks>
-            </thing>
-            <thing Class="Filth">
-                <def>Filth_RubbleRock</def>
-                <id>Filth_RubbleRock3273</id>
-                <map>0</map>
-                <pos>(73, 0, 8)</pos>
-                <questTags IsNull="True" />
-                <disappearAfterTicks>2918949</disappearAfterTicks>
-            </thing>
-            <thing Class="Filth">
-                <def>Filth_RubbleRock</def>
-                <id>Filth_RubbleRock3274</id>
-                <map>0</map>
-                <pos>(72, 0, 7)</pos>
-                <questTags IsNull="True" />
-                <disappearAfterTicks>2871838</disappearAfterTicks>
-            </thing>
-            <thing Class="Filth">
-                <def>Filth_RubbleRock</def>
-                <id>Filth_RubbleRock3275</id>
-                <map>0</map>
-                <pos>(74, 0, 6)</pos>
-                <questTags IsNull="True" />
-                <disappearAfterTicks>2709383</disappearAfterTicks>
-            </thing>
-            <thing Class="Filth">
-                <def>Filth_RubbleRock</def>
-                <id>Filth_RubbleRock3277</id>
-                <map>0</map>
-                <pos>(72, 0, 8)</pos>
-                <questTags IsNull="True" />
-                <disappearAfterTicks>2901482</disappearAfterTicks>
-            </thing>
-            <thing Class="Filth">
-                <def>Filth_RubbleRock</def>
-                <id>Filth_RubbleRock3278</id>
-                <map>0</map>
-                <pos>(73, 0, 7)</pos>
-                <questTags IsNull="True" />
-                <disappearAfterTicks>2809606</disappearAfterTicks>
-            </thing>
-            <thing Class="Filth">
-                <def>Filth_RubbleRock</def>
-                <id>Filth_RubbleRock3280</id>
-                <map>0</map>
-                <pos>(73, 0, 6)</pos>
-                <questTags IsNull="True" />
-                <disappearAfterTicks>2986862</disappearAfterTicks>
-            </thing>
-            <thing Class="Filth">
-                <def>Filth_RubbleRock</def>
-                <id>Filth_RubbleRock3283</id>
-                <map>0</map>
-                <pos>(75, 0, 8)</pos>
-                <questTags IsNull="True" />
-                <disappearAfterTicks>2796968</disappearAfterTicks>
-            </thing>
-            <thing Class="Filth">
-                <def>Filth_RubbleRock</def>
-                <id>Filth_RubbleRock3284</id>
-                <map>0</map>
-                <pos>(75, 0, 7)</pos>
-                <questTags IsNull="True" />
-                <disappearAfterTicks>2749261</disappearAfterTicks>
-            </thing>
-            <thing Class="Filth">
-                <def>Filth_RubbleRock</def>
-                <id>Filth_RubbleRock3286</id>
-                <map>0</map>
-                <pos>(73, 0, 9)</pos>
-                <questTags IsNull="True" />
-                <disappearAfterTicks>2701830</disappearAfterTicks>
-            </thing>
-            <thing Class="Filth">
-                <def>Filth_RubbleRock</def>
-                <id>Filth_RubbleRock3287</id>
-                <map>0</map>
-                <pos>(74, 0, 8)</pos>
-                <questTags IsNull="True" />
-                <disappearAfterTicks>2965069</disappearAfterTicks>
-            </thing>
-            <thing Class="Filth">
-                <def>Filth_RubbleRock</def>
-                <id>Filth_RubbleRock3289</id>
-                <map>0</map>
-                <pos>(74, 0, 10)</pos>
-                <questTags IsNull="True" />
-                <disappearAfterTicks>2988942</disappearAfterTicks>
-            </thing>
-            <thing Class="Filth">
-                <def>Filth_RubbleRock</def>
-                <id>Filth_RubbleRock3290</id>
-                <map>0</map>
-                <pos>(75, 0, 10)</pos>
-                <questTags IsNull="True" />
-                <disappearAfterTicks>2742145</disappearAfterTicks>
-            </thing>
-            <thing Class="Filth">
-                <def>Filth_RubbleRock</def>
-                <id>Filth_RubbleRock3291</id>
-                <map>0</map>
-                <pos>(74, 0, 9)</pos>
-                <questTags IsNull="True" />
-                <disappearAfterTicks>2735505</disappearAfterTicks>
-            </thing>
-            <thing Class="Filth">
-                <def>Filth_RubbleRock</def>
-                <id>Filth_RubbleRock3294</id>
-                <map>0</map>
-                <pos>(76, 0, 10)</pos>
-                <questTags IsNull="True" />
-                <disappearAfterTicks>2984402</disappearAfterTicks>
-            </thing>
-            <thing Class="Filth">
-                <def>Filth_RubbleRock</def>
-                <id>Filth_RubbleRock3295</id>
-                <map>0</map>
-                <pos>(75, 0, 9)</pos>
-                <questTags IsNull="True" />
-                <disappearAfterTicks>2891374</disappearAfterTicks>
-            </thing>
-            <thing Class="Filth">
-                <def>Filth_RubbleRock</def>
-                <id>Filth_RubbleRock3297</id>
-                <map>0</map>
-                <pos>(77, 0, 9)</pos>
-                <questTags IsNull="True" />
-                <disappearAfterTicks>2796970</disappearAfterTicks>
-            </thing>
-            <thing Class="Filth">
-                <def>Filth_RubbleRock</def>
-                <id>Filth_RubbleRock3299</id>
-                <map>0</map>
-                <pos>(190, 0, 8)</pos>
-                <questTags IsNull="True" />
-                <disappearAfterTicks>2960642</disappearAfterTicks>
-            </thing>
-            <thing Class="Filth">
-                <def>Filth_RubbleRock</def>
-                <id>Filth_RubbleRock3301</id>
-                <map>0</map>
-                <pos>(188, 0, 8)</pos>
-                <questTags IsNull="True" />
-                <disappearAfterTicks>2899512</disappearAfterTicks>
-            </thing>
-            <thing Class="Filth">
-                <def>Filth_RubbleRock</def>
-                <id>Filth_RubbleRock3303</id>
-                <map>0</map>
-                <pos>(190, 0, 9)</pos>
-                <questTags IsNull="True" />
-                <disappearAfterTicks>2713016</disappearAfterTicks>
-            </thing>
-            <thing Class="Filth">
-                <def>Filth_RubbleRock</def>
-                <id>Filth_RubbleRock3304</id>
-                <map>0</map>
-                <pos>(188, 0, 9)</pos>
-                <questTags IsNull="True" />
-                <disappearAfterTicks>2744314</disappearAfterTicks>
-            </thing>
-            <thing Class="Filth">
-                <def>Filth_RubbleRock</def>
-                <id>Filth_RubbleRock3306</id>
-                <map>0</map>
-                <pos>(189, 0, 7)</pos>
-                <questTags IsNull="True" />
-                <disappearAfterTicks>2919258</disappearAfterTicks>
-            </thing>
-            <thing Class="Filth">
-                <def>Filth_RubbleRock</def>
-                <id>Filth_RubbleRock3309</id>
-                <map>0</map>
-                <pos>(191, 0, 6)</pos>
-                <questTags IsNull="True" />
-                <disappearAfterTicks>2755857</disappearAfterTicks>
-            </thing>
-            <thing Class="Filth">
-                <def>Filth_RubbleRock</def>
-                <id>Filth_RubbleRock3310</id>
-                <map>0</map>
-                <pos>(189, 0, 8)</pos>
-                <questTags IsNull="True" />
-                <disappearAfterTicks>2830964</disappearAfterTicks>
-            </thing>
-            <thing Class="Filth">
-                <def>Filth_RubbleRock</def>
-                <id>Filth_RubbleRock3311</id>
-                <map>0</map>
-                <pos>(189, 0, 6)</pos>
-                <questTags IsNull="True" />
-                <disappearAfterTicks>2899902</disappearAfterTicks>
-            </thing>
-            <thing Class="Filth">
-                <def>Filth_RubbleRock</def>
-                <id>Filth_RubbleRock3314</id>
-                <map>0</map>
-                <pos>(189, 0, 5)</pos>
-                <questTags IsNull="True" />
-                <disappearAfterTicks>2887978</disappearAfterTicks>
-            </thing>
-            <thing Class="Filth">
-                <def>Filth_RubbleRock</def>
-                <id>Filth_RubbleRock3315</id>
-                <map>0</map>
-                <pos>(190, 0, 6)</pos>
-                <questTags IsNull="True" />
-                <disappearAfterTicks>2920336</disappearAfterTicks>
-            </thing>
-            <thing Class="Filth">
-                <def>Filth_RubbleRock</def>
-                <id>Filth_RubbleRock3317</id>
-                <map>0</map>
-                <pos>(191, 0, 5)</pos>
-                <questTags IsNull="True" />
-                <disappearAfterTicks>2841598</disappearAfterTicks>
-            </thing>
-            <thing Class="Filth">
-                <def>Filth_RubbleRock</def>
-                <id>Filth_RubbleRock3320</id>
-                <map>0</map>
-                <pos>(189, 0, 4)</pos>
-                <questTags IsNull="True" />
-                <disappearAfterTicks>2786542</disappearAfterTicks>
-            </thing>
-            <thing Class="Filth">
-                <def>Filth_RubbleRock</def>
-                <id>Filth_RubbleRock3323</id>
-                <map>0</map>
-                <pos>(189, 0, 3)</pos>
-                <questTags IsNull="True" />
-                <disappearAfterTicks>2861756</disappearAfterTicks>
-            </thing>
-            <thing Class="Filth">
-                <def>Filth_RubbleRock</def>
-                <id>Filth_RubbleRock3324</id>
-                <map>0</map>
-                <pos>(190, 0, 4)</pos>
-                <questTags IsNull="True" />
-                <disappearAfterTicks>2862245</disappearAfterTicks>
-            </thing>
-            <thing Class="Filth">
-                <def>Filth_RubbleRock</def>
-                <id>Filth_RubbleRock3326</id>
-                <map>0</map>
-                <pos>(190, 0, 5)</pos>
-                <questTags IsNull="True" />
-                <disappearAfterTicks>2792755</disappearAfterTicks>
-            </thing>
-            <thing Class="Filth">
-                <def>Filth_RubbleRock</def>
-                <id>Filth_RubbleRock3327</id>
-                <map>0</map>
-                <pos>(190, 0, 3)</pos>
-                <questTags IsNull="True" />
-                <disappearAfterTicks>2996516</disappearAfterTicks>
-            </thing>
-            <thing Class="Filth">
-                <def>Filth_RubbleRock</def>
-                <id>Filth_RubbleRock3328</id>
-                <map>0</map>
-                <pos>(191, 0, 4)</pos>
-                <questTags IsNull="True" />
-                <disappearAfterTicks>2953019</disappearAfterTicks>
-            </thing>
-            <thing Class="Filth">
-                <def>Filth_RubbleRock</def>
-                <id>Filth_RubbleRock3330</id>
-                <map>0</map>
-                <pos>(191, 0, 2)</pos>
-                <questTags IsNull="True" />
-                <disappearAfterTicks>2823224</disappearAfterTicks>
-            </thing>
-        </things>
-        <records>
-            <vals>
-                <li>0</li>
-                <li>0</li>
-                <li>0</li>
-                <li>0</li>
-                <li>0</li>
-                <li>0</li>
-                <li>0</li>
-                <li>0</li>
-                <li>0</li>
-                <li>0</li>
-                <li>0</li>
-                <li>0</li>
-                <li>0</li>
-                <li>0</li>
-                <li>0</li>
-                <li>0</li>
-                <li>0</li>
-                <li>0</li>
-                <li>0</li>
-                <li>0</li>
-                <li>0</li>
-                <li>0</li>
-                <li>0</li>
-                <li>0</li>
-                <li>0</li>
-                <li>0</li>
-                <li>0</li>
-                <li>0</li>
-                <li>0</li>
-                <li>0</li>
-                <li>0</li>
-                <li>0</li>
-                <li>0</li>
-                <li>0</li>
-                <li>0</li>
-                <li>0</li>
-                <li>0</li>
-                <li>0</li>
-                <li>0</li>
-                <li>0</li>
-                <li>0</li>
-                <li>0</li>
-                <li>0</li>
-                <li>0</li>
-                <li>0</li>
-                <li>0</li>
-                <li>0</li>
-                <li>0</li>
-                <li>0</li>
-                <li>0</li>
-                <li>0</li>
-                <li>0</li>
-                <li>0</li>
-                <li>0</li>
-                <li>0</li>
-                <li>0</li>
-                <li>0</li>
-                <li>0</li>
-                <li>0</li>
-                <li>0</li>
-                <li>0</li>
-                <li>0</li>
-                <li>0</li>
-                <li>0</li>
-                <li>0</li>
-                <li>0</li>
-                <li>0</li>
-            </vals>
-        </records>
-	</game>
+	<hairFrequencies>
+		<vals>
+			<li>
+				<frequency>Normal</frequency>
+			</li>
+			<li>
+				<frequency>Normal</frequency>
+				<gender>Female</gender>
+			</li>
+			<li>
+				<gender>Female</gender>
+			</li>
+			<li>
+				<gender>Any</gender>
+			</li>
+			<li>
+				<gender>Female</gender>
+			</li>
+			<li>
+				<gender>Female</gender>
+			</li>
+			<li>
+				<gender>Female</gender>
+			</li>
+			<li>
+				<gender>Female</gender>
+			</li>
+			<li>
+				<gender>Female</gender>
+			</li>
+			<li>
+				<frequency>Normal</frequency>
+				<gender>Female</gender>
+			</li>
+			<li>
+				<frequency>Normal</frequency>
+				<gender>Female</gender>
+			</li>
+			<li>
+				<frequency>Normal</frequency>
+				<gender>Female</gender>
+			</li>
+			<li>
+				<frequency>Normal</frequency>
+				<gender>MaleUsually</gender>
+			</li>
+			<li>
+				<frequency>Normal</frequency>
+				<gender>Any</gender>
+			</li>
+			<li>
+				<frequency>Normal</frequency>
+			</li>
+			<li>
+				<frequency>Normal</frequency>
+				<gender>Female</gender>
+			</li>
+			<li>
+				<frequency>Normal</frequency>
+				<gender>Female</gender>
+			</li>
+			<li>
+				<gender>Female</gender>
+			</li>
+			<li>
+				<frequency>Normal</frequency>
+				<gender>Female</gender>
+			</li>
+			<li>
+				<frequency>Normal</frequency>
+			</li>
+			<li>
+				<frequency>Normal1</frequency>
+			</li>
+			<li/>
+			<li>
+				<frequency>Normal2</frequency>
+			</li>
+			<li>
+				<frequency>Normal</frequency>
+			</li>
+			<li>
+				<gender>MaleUsually</gender>
+			</li>
+			<li>
+				<gender>FemaleUsually</gender>
+			</li>
+			<li>
+				<gender>FemaleUsually</gender>
+			</li>
+			<li>
+				<gender>MaleUsually</gender>
+			</li>
+			<li>
+				<gender>MaleUsually</gender>
+			</li>
+			<li>
+				<gender>MaleUsually</gender>
+			</li>
+			<li>
+				<gender>Any</gender>
+			</li>
+		</vals>
+	</hairFrequencies>
 </savegame>

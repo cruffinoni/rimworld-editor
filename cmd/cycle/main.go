@@ -36,7 +36,7 @@ func main() {
 	if err := unmarshal.Element(fo.XML.Root.Child, save); err != nil {
 		log.Fatal(err)
 	}
-	//log.Print("Generating XML file to folder")
+	log.Print("Generating XML file to folder")
 	buffer, err := xmlFile.SaveWithBuffer(save)
 	if err != nil {
 		log.Panic(err)

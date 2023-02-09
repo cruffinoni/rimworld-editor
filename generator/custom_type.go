@@ -43,7 +43,7 @@ func createCustomSlice(e *xml.Element, flag uint) any {
 		//log.Printf("Creating custom slice from %s", e.Child.XMLPath())
 		t = createCustomSlice(e.Child, flag)
 	case reflect.Struct:
-		//log.Printf("[Struct] creating a structure from %s", e.XMLPath())
+		// log.Printf("[Struct] creating a structure from %s", e.XMLPath())
 		t = createStructure(e, flag|forceFullCheck)
 	}
 	return &CustomType{

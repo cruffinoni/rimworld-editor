@@ -1,6 +1,7 @@
 package generator
 
 import (
+	"errors"
 	"fmt"
 	"go/format"
 	"log"
@@ -96,6 +97,11 @@ func writeCustomType(c *CustomType, b *buffer, path string) error {
 }
 
 func (s *StructInfo) generateStructToPath(path string) error {
+	if _, err := os.Stat(path + "/" + strcase.ToSnake(s.name) + ".go"); !errors.Is(err, os.ErrNotExist) {
+		log.Printf("generateStructToPath: file already exists at: %v", path+"/"+strcase.ToSnake(s.name)+".go")
+		log.Printf("Size: %d from %p", len(s.members), s)
+		return nil
+	}
 	f, err := os.Create(path + "/" + strcase.ToSnake(s.name) + ".go")
 	if err != nil {
 		return err
@@ -115,8 +121,8 @@ func (s *StructInfo) generateStructToPath(path string) error {
 		panic("empty struct name")
 	}
 	buf.writeToBody("type " + structName + " struct {\nAttr attributes.Attributes\n")
-	for _, m := range s.members {
-		buf.writeToBody("\t" + strcase.ToCamel(m.name) + " ")
+	for name, m := range registeredMembers[s.name].members { // Use the best matched version of s.name
+		buf.writeToBody("\t" + strcase.ToCamel(name) + " ")
 		switch va := m.t.(type) {
 		case *CustomType:
 			if err = writeCustomType(va, buf, path); err != nil {
@@ -137,7 +143,7 @@ func (s *StructInfo) generateStructToPath(path string) error {
 			// required import statement.
 			buf.writeToBody("*xml.Element")
 		}
-		buf.writeToBody(" `xml:\"" + removeInnerKeyword(m.name) + "\"`\n")
+		buf.writeToBody(" `xml:\"" + removeInnerKeyword(name) + "\"`\n")
 	}
 	buf.writeToFooter("}\n")
 	writeRequiredInterfaces(buf, structName)

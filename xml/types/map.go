@@ -58,6 +58,9 @@ func castToInterface[T any](val any) (T, bool) {
 }
 
 func (m *Map[K, V]) TransformToXML(b *saver.Buffer) error {
+	if m.Capacity() == 0 {
+		return nil
+	}
 	b.OpenTag(m.tag, m.attr)
 	b.Write([]byte("\n"))
 	defer func() {

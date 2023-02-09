@@ -3,7 +3,6 @@ package generator
 import (
 	"bytes"
 	"os"
-	"reflect"
 	"strconv"
 
 	"github.com/cruffinoni/rimworld-editor/helper"
@@ -11,16 +10,15 @@ import (
 	"github.com/cruffinoni/rimworld-editor/xml/attributes"
 )
 
-type StructInfo struct {
-	name    string
-	members []*member
-	buf     bytes.Buffer
-}
-
 type member struct {
-	name string
 	t    any
 	attr attributes.Attributes
+}
+
+type StructInfo struct {
+	name    string
+	members map[string]*member
+	buf     bytes.Buffer
 }
 
 const (
@@ -42,7 +40,7 @@ const (
 	forceRandomName
 
 	// Force to make a full check of all values in a list. This is persistent for lists
-	// because a structure may vary from a one to other.
+	// because a structure may vary from a one to another.
 	forceFullCheck
 
 	// InnerKeyword is the keyword for cases when the name of the element is
@@ -50,11 +48,16 @@ const (
 	InnerKeyword = "_Inner"
 )
 
+var registeredMembers map[string]*StructInfo
+
 // GenerateGoFiles generates the Go files (with the corresponding structs)
 // for the given XML file, but it doesn't write anything.
 // To do that, call WriteGoFile.
 func GenerateGoFiles(root *xml.Element) *StructInfo {
-	s := &StructInfo{}
+	s := &StructInfo{
+		members: make(map[string]*member),
+	}
+	registeredMembers = make(map[string]*StructInfo)
 	if err := handleElement(root, s, flagNone); err != nil {
 		panic(err)
 	}
@@ -75,25 +78,6 @@ func (s *StructInfo) WriteGoFile(path string) error {
 		return err
 	}
 	return s.generateStructToPath(path)
-}
-
-// removeDuplicates removes the duplicates from the members of the struct.
-func (s *StructInfo) removeDuplicates() {
-	for i := 0; i < len(s.members); i++ {
-		for j := i + 1; j < len(s.members); j++ {
-			if s.members[i].name == s.members[j].name {
-				it, iIsPrimary := s.members[i].t.(reflect.Kind)
-				jt, jIsPrimary := s.members[j].t.(reflect.Kind)
-				// Sometimes float are integer, so keep the float64 type instead of changing to integer64
-				if iIsPrimary && it == reflect.Float64 && jIsPrimary && jt == reflect.Int64 {
-					s.members[j].t = s.members[i].t
-				}
-				s.members = append(s.members[:i], s.members[i+1:]...)
-				i--
-				break
-			}
-		}
-	}
 }
 
 var uniqueNumber = 0
@@ -119,7 +103,8 @@ func createStructure(e *xml.Element, flag uint) any {
 	}
 	name := e.GetName()
 
-	// TODO: Update doc for this line of code
+	// This case comes when the tag is an innerList of a list which can happen multiple times
+	// in the file, so we need to set it a random name
 	if helper.IsListTag(name) {
 		//log.Printf("generate.createStructure: '%s' & child name: %v", name, e.Child.GetName())
 		return createStructure(e.Parent, flag|forceRandomName)
@@ -131,14 +116,17 @@ func createStructure(e *xml.Element, flag uint) any {
 		name += InnerKeyword
 	}
 	if (flag & forceRandomName) > 0 {
+		flag &^= forceRandomName
 		name += strconv.Itoa(uniqueNumber)
 		uniqueNumber++
 	}
 	s := &StructInfo{
 		name:    name,
-		members: make([]*member, 0),
+		members: make(map[string]*member),
 	}
-	if err := handleElement(e.Child, s, flag); err != nil {
+	//log.Printf("Thing >2> %p", s)
+	// The forceFullCheck check apply only to this structure, not to the children
+	if err := handleElement(e.Child, s, flag&^forceFullCheck); err != nil {
 		panic(err)
 	}
 	// If "forceFullCheck" is asked, it means we are in a slice/map, and we want
@@ -147,12 +135,12 @@ func createStructure(e *xml.Element, flag uint) any {
 		flag &^= forceFullCheck
 		n := e.Next
 		for n != nil {
+			//log.Printf("(b) Forcing full check")
 			if err := handleElement(n.Child, s, flag); err != nil {
 				panic(err)
 			}
 			n = n.Next
 		}
 	}
-	s.removeDuplicates()
 	return s
 }

@@ -91,7 +91,7 @@ func (s *sliceData[T]) GetXMLTag() []byte {
 }
 
 func (s *sliceData[T]) TransformToXML(b *saver.Buffer) error {
-	//log.Printf("sliceData.TransformToXML => %v", b.GetDepth())
+	//log.Printf("sliceData.TransformToXML => %v (? %T)", s.tag, s.data)
 	b.OpenTag(s.tag, s.attr)
 	if err := xmlFile.Save(s.data, b, ""); err != nil {
 		return err
@@ -123,6 +123,7 @@ func (s *Slice[T]) TransformToXML(b *saver.Buffer) error {
 	//	log.Print("Slice.TransformToXML: No repeating tag specified.")
 	//	return nil
 	//}
+	//log.Printf("Repeating tag: %v", s.repeatingTag)
 	//b.OpenTag(s.repeatingTag, s.attr)
 	for _, v := range s.data {
 		if err := v.TransformToXML(b); err != nil {
@@ -168,11 +169,11 @@ func (s *Slice[T]) Assign(e *xml.Element) error {
 		s.name = "unknown"
 	}
 	s.repeatingTag = n.GetName()
-	if !strings.Contains(reflect.TypeOf(zero[T]()).Name(), "types.Slice") {
-		for n.Child != nil && n.Child.Child != nil {
-			n = n.Child
-		}
-	}
+	//if !strings.Contains(reflect.TypeOf(zero[T]()).Name(), "types.Slice") {
+	//	for n.Child != nil && n.Child.Child != nil {
+	//		n = n.Child
+	//	}
+	//}
 	for n != nil {
 		sd := sliceData[T]{
 			tag: n.GetName(),
@@ -187,13 +188,11 @@ func (s *Slice[T]) Assign(e *xml.Element) error {
 		}
 		var attr attributes.Attributes
 		if n.Child != nil {
-			//log.Printf("Slice.Assign: child => %v", n.Child.GetName())
 			attr = n.Child.Attr
 			if err := unmarshal.Element(n.Child, &sd); err != nil {
 				return err
 			}
 		} else {
-			//log.Printf("Slice.Assign: no child=> %v", n.GetName())
 			attr = n.Attr
 			if err := unmarshal.Element(n, &sd); err != nil {
 				return err

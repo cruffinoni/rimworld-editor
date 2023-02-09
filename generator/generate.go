@@ -6,29 +6,49 @@ import (
 
 	"github.com/cruffinoni/rimworld-editor/helper"
 	"github.com/cruffinoni/rimworld-editor/xml"
+	"github.com/cruffinoni/rimworld-editor/xml/attributes"
 )
 
-// getTypeFromArray returns the type of the element as a reflect.Kind
-// It returns reflect.Invalid if the element is not a valid type
+// getTypeFromArray returns the type of the element as a reflect.Kind.
+// If the element is not a valid type, it returns reflect.Invalid.
 func getTypeFromArray(e *xml.Element) reflect.Kind {
+	// Return Invalid if the element has no child
+	if e.Child == nil {
+		return reflect.Invalid
+	}
+
 	k := e.Child
-	if k != nil && k.Child != nil {
+	kt := reflect.Invalid
+
+	// Determine if the element is a structure or slice
+	// In some cases, the first structure may have no data, so we check its siblings for a child
+	// We only need to do this once
+	if k.Next != nil && k.Next.GetName() == k.GetName() {
+		// This part of code is aimed to list with multiple elements
+		if k.Next.Child != nil {
+			if helper.IsListTag(k.Next.Child.GetName()) {
+				return reflect.Slice
+			}
+			return reflect.Struct
+		}
+	} else if k.Child != nil {
+		// On the other hand, this part only check the first element
 		if helper.IsListTag(k.Child.GetName()) {
 			return reflect.Slice
 		}
 		return reflect.Struct
 	}
-	kt := reflect.Invalid
+
 	for k != nil {
 		if k.Data != nil {
 			kdk := k.Data.Kind()
 			if kt != reflect.Invalid && kdk != kt &&
-				// Float64 and Int64 are interchangeable
+				// Float64 and Int64 can be interchangeable
 				!(kdk == reflect.Float64 && kt == reflect.Int64) &&
 				!(kdk == reflect.Int64 && kt == reflect.Float64) {
 				log.Panicf("primary.EmbeddedType: found type %v, expected %v on path %v ('%v')", kdk, kt, k.XMLPath(), k.Data.GetData())
 			}
-			// Float64 and Int64 are interchangeable, but we prefer to keep Float64
+			// Float64 and Int64 can be interchangeable, but we prefer to keep Float64
 			if !(kt == reflect.Float64 && kdk == reflect.Int64) {
 				kt = kdk
 			}
@@ -69,7 +89,6 @@ func determineTypeFromData(e *xml.Element, flag uint) any {
 		if e.Data == nil {
 			t = createEmptyType()
 		} else {
-			log.Printf("2: invalid type: %v => '%v' (data: '%v')", t, e.XMLPath(), e.Data)
 			t = e
 		}
 	} else {
@@ -84,6 +103,26 @@ func determineTypeFromData(e *xml.Element, flag uint) any {
 		}
 	}
 	return t
+}
+
+func hasSameMembers(a, b *StructInfo) bool {
+	if len(a.members) != len(b.members) {
+		return false
+	}
+	for i := range a.members {
+		if b.members[i] == nil {
+			return false
+		}
+		if reflect.TypeOf(a.members[i]) != reflect.TypeOf(b.members[i]) {
+			return false
+		}
+		if ct, ok := a.members[i].t.(*CustomType); ok {
+			if ctB, okB := b.members[i].t.(*CustomType); !okB || ct.type1 != ctB.type1 || ct.type2 != ctB.type2 {
+				return false
+			}
+		}
+	}
+	return true
 }
 
 func handleElement(e *xml.Element, st *StructInfo, flag uint) error {
@@ -102,7 +141,7 @@ func handleElement(e *xml.Element, st *StructInfo, flag uint) error {
 				if helper.IsListTag(childName) {
 					t = createCustomSlice(n, flag|skipChild)
 				} else if childName == "keys" {
-					// Maps are constant in terms of naming, and it's with that we recognize them
+					// Maps are constant in terms of naming, and that's how we recognize them
 					t = createCustomTypeForMap(n, flag)
 				} else {
 					// Sometimes, slice are not marked as "li" so we need to check
@@ -119,11 +158,7 @@ func handleElement(e *xml.Element, st *StructInfo, flag uint) error {
 				if st.name == "" {
 					*st = *t.(*StructInfo)
 				} else {
-					st.members = append(st.members, &member{
-						name: n.GetName(),
-						t:    t,
-						attr: n.Attr,
-					})
+					st.addMember(n.GetName(), n.Attr, t)
 				}
 			}
 		} else {
@@ -146,13 +181,43 @@ func handleElement(e *xml.Element, st *StructInfo, flag uint) error {
 			} else {
 				t = createEmptyType()
 			}
-			st.members = append(st.members, &member{
-				name: n.GetName(),
-				t:    t,
-				attr: n.Attr,
-			})
+			st.addMember(n.GetName(), n.Attr, t)
 		}
 		n = n.Next
 	}
+	if m, ok := registeredMembers[st.name]; ok && !hasSameMembers(m, st) {
+		//if m.name == "thing" {
+		//	log.Printf("WARNING: struct %s (length %d - %p) is different from %s (length %d - %p)", m.name, len(m.members), m, st.name, len(st.members), st)
+		//}
+		fixMembers(m, st)
+		//if m.name == "thing" {
+		//	log.Printf("WARNING: struct %s (length %d - %p) is different from %s (length %d - %p)", m.name, len(m.members), m, st.name, len(st.members), st)
+		//}
+	} else {
+		registeredMembers[st.name] = st
+	}
 	return nil
+}
+
+// addMember adds a new member to the StructInfo map.
+// If the member already exists, the function checks if the type of the existing member and the new member are the same.
+// If they are not, the function fixes the type mismatch.
+func (s *StructInfo) addMember(name string, attr attributes.Attributes, t any) {
+	// If there is no existing member with the same name, add the new member to the map
+	if _, ok := s.members[name]; !ok {
+		s.members[name] = &member{
+			t:    t,
+			attr: attr,
+		}
+	} else {
+		// Check if the existing member and the new member are of the same type
+		if kind, okKind := s.members[name].t.(reflect.Kind); !isSameType(s.members[name].t, t) || (okKind && kind != t.(reflect.Kind)) {
+			//log.Printf("Type mismatch: %v > %v", name, s.members[name])
+			// If the types are different, fix the type mismatch
+			fixTypeMismatch(s.members[name], &member{
+				t:    t,
+				attr: attr,
+			})
+		}
+	}
 }

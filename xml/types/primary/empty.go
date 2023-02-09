@@ -5,6 +5,8 @@ import (
 	"github.com/cruffinoni/rimworld-editor/xml/attributes"
 )
 
+// Empty is a type that represent an XML tag which is empty but can contain
+// attributes.Attributes.
 type Empty struct {
 	name string
 	attr attributes.Attributes
