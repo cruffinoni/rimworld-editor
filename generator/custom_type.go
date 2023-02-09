@@ -27,29 +27,10 @@ func createEmptyType() any {
 }
 
 func createCustomSlice(e *xml.Element, flag uint) any {
-	var t any
-	t = getTypeFromArray(e)
-	//log.Printf("Type of array: %v (%v) & %p", t, e.XMLPath(), e)
-	switch t {
-	case reflect.Invalid:
-		// With an invalid type and no data, we can assume that the slice is empty
-		if e.Data == nil {
-			t = createEmptyType()
-		} else {
-			log.Printf("invalid type: %v => '%v' (data: '%v')", t, e.XMLPath(), e.Data)
-			t = e
-		}
-	case reflect.Slice:
-		//log.Printf("Creating custom slice from %s", e.Child.XMLPath())
-		t = createCustomSlice(e.Child, flag)
-	case reflect.Struct:
-		// log.Printf("[Struct] creating a structure from %s", e.XMLPath())
-		t = createStructure(e, flag|forceFullCheck)
-	}
 	return &CustomType{
 		name:       "Slice",
 		pkg:        "*types",
-		type1:      t,
+		type1:      createSubtype(e, flag, getTypeFromArray(e)),
 		importPath: customTypesPath,
 	}
 }

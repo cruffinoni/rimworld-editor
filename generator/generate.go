@@ -9,6 +9,18 @@ import (
 	"github.com/cruffinoni/rimworld-editor/xml/attributes"
 )
 
+func determineArrayOrSliceKind(e *xml.Element) reflect.Kind {
+	k := e
+	for k != nil {
+		if k.Data == nil && k.Child == nil {
+			log.Printf("Fixed array detected")
+			return reflect.Array
+		}
+		k = k.Next
+	}
+	return reflect.Slice
+}
+
 // getTypeFromArray returns the type of the element as a reflect.Kind.
 // If the element is not a valid type, it returns reflect.Invalid.
 func getTypeFromArray(e *xml.Element) reflect.Kind {
@@ -27,14 +39,14 @@ func getTypeFromArray(e *xml.Element) reflect.Kind {
 		// This part of code is aimed to list with multiple elements
 		if k.Next.Child != nil {
 			if helper.IsListTag(k.Next.Child.GetName()) {
-				return reflect.Slice
+				return determineArrayOrSliceKind(k)
 			}
-			return reflect.Struct
 		}
+		return reflect.Struct
 	} else if k.Child != nil {
 		// On the other hand, this part only check the first element
 		if helper.IsListTag(k.Child.GetName()) {
-			return reflect.Slice
+			return determineArrayOrSliceKind(k)
 		}
 		return reflect.Struct
 	}
@@ -58,6 +70,25 @@ func getTypeFromArray(e *xml.Element) reflect.Kind {
 	return kt
 }
 
+func createArrayOrSlice(e *xml.Element, flag uint) any {
+	k := e.Child
+	count := 0
+	for k != nil {
+		if k.Data == nil && k.Child == nil && count > 0 {
+			// Count must be > 0 because empty slice/array must be considered as
+			// slice
+			log.Printf("creating fixed array for %s", e.GetName())
+			return createFixedArray(e, flag, &offset{
+				el:   k,
+				size: count,
+			})
+		}
+		count++
+		k = k.Next
+	}
+	return createCustomSlice(e, flag)
+}
+
 // determineTypeFromData returns the type of data from the element.
 // If the element is not a primitive type, it returns either a
 // StructInfo or a CustomType. Otherwise, it returns the type of the
@@ -71,6 +102,7 @@ func determineTypeFromData(e *xml.Element, flag uint) any {
 	if t == reflect.Struct || t == reflect.Slice {
 		c := e.Child
 		if (flag & ignoreSlice) > 0 {
+			// Ignore this element since we are in a map.
 			flag &^= ignoreSlice
 			//log.Println("Ignoring slice")
 			return determineTypeFromData(c, flag)
@@ -79,7 +111,7 @@ func determineTypeFromData(e *xml.Element, flag uint) any {
 		if helper.IsListTag(c.Child.GetName()) {
 			// We set the forceChild flag to true to force the function createStructure
 			// to take the children of the list and not the list itself.
-			t = createCustomSlice(c, flag|forceChild)
+			t = createArrayOrSlice(c, flag|forceChild)
 		} else {
 			// Otherwise, a basic struct is created
 			// We pass 'e' instead of 'c' because createStructure will take the children of 'e'
@@ -131,7 +163,7 @@ func handleElement(e *xml.Element, st *StructInfo, flag uint) error {
 		var t any
 		if n.Child != nil {
 			// Skip the "li" tag (or any custom type) since it's a slice and should not be a member of the struct
-			if flag&skipChild != 0 || helper.IsListTag(n.GetName()) {
+			if flag&skipChild > 0 || helper.IsListTag(n.GetName()) {
 				flag &^= skipChild
 				if err := handleElement(n.Child, st, flag); err != nil {
 					return err
@@ -139,7 +171,7 @@ func handleElement(e *xml.Element, st *StructInfo, flag uint) error {
 			} else {
 				childName := n.Child.GetName()
 				if helper.IsListTag(childName) {
-					t = createCustomSlice(n, flag|skipChild)
+					t = createArrayOrSlice(n, flag|skipChild)
 				} else if childName == "keys" {
 					// Maps are constant in terms of naming, and that's how we recognize them
 					t = createCustomTypeForMap(n, flag)
@@ -148,7 +180,7 @@ func handleElement(e *xml.Element, st *StructInfo, flag uint) error {
 					// if the next sibling has the same name.
 					// If so, we consider it as a slice
 					if n.Child.Next != nil && n.Child.Next.GetName() == childName {
-						t = createCustomSlice(n, flag|forceChild)
+						t = createArrayOrSlice(n, flag|forceChild)
 					} else {
 						t = createStructure(n, flag)
 					}
@@ -161,7 +193,7 @@ func handleElement(e *xml.Element, st *StructInfo, flag uint) error {
 					st.addMember(n.GetName(), n.Attr, t)
 				}
 			}
-		} else {
+		} else if !helper.IsListTag(n.GetName()) {
 			if n.Data != nil {
 				t = n.Data.Kind()
 				if !n.Attr.Empty() {
@@ -173,7 +205,8 @@ func handleElement(e *xml.Element, st *StructInfo, flag uint) error {
 					}
 				}
 			} else if n.Next != nil && n.Next.GetName() == n.GetName() {
-				t = createCustomSlice(n, flag)
+				// This condition must not apply to list tags because empty elements in a list are valid
+				t = createArrayOrSlice(n, flag)
 				// Skip the next element since it's already handled
 				for n.Next != nil && n.Next.GetName() == n.GetName() {
 					n = n.Next
@@ -186,9 +219,7 @@ func handleElement(e *xml.Element, st *StructInfo, flag uint) error {
 		n = n.Next
 	}
 	if m, ok := registeredMembers[st.name]; ok && !hasSameMembers(m, st) {
-		//if m.name == "thing" {
-		//	log.Printf("WARNING: struct %s (length %d - %p) is different from %s (length %d - %p)", m.name, len(m.members), m, st.name, len(st.members), st)
-		//}
+		//log.Printf("WARNING: struct %s (length %d - %p) is different from %s (length %d - %p)", m.name, len(m.members), m, st.name, len(st.members), st)
 		fixMembers(m, st)
 		//if m.name == "thing" {
 		//	log.Printf("WARNING: struct %s (length %d - %p) is different from %s (length %d - %p)", m.name, len(m.members), m, st.name, len(st.members), st)

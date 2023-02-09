@@ -124,7 +124,6 @@ func createStructure(e *xml.Element, flag uint) any {
 		name:    name,
 		members: make(map[string]*member),
 	}
-	//log.Printf("Thing >2> %p", s)
 	// The forceFullCheck check apply only to this structure, not to the children
 	if err := handleElement(e.Child, s, flag&^forceFullCheck); err != nil {
 		panic(err)
@@ -135,7 +134,6 @@ func createStructure(e *xml.Element, flag uint) any {
 		flag &^= forceFullCheck
 		n := e.Next
 		for n != nil {
-			//log.Printf("(b) Forcing full check")
 			if err := handleElement(n.Child, s, flag); err != nil {
 				panic(err)
 			}

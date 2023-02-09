@@ -68,7 +68,8 @@ func Save(val any, b *saver.Buffer, tag string) error {
 	//if kind == reflect.Int64 {
 	//	log.Printf("Debug: => %v & %T", val, val)
 	//}
-	if helper.IsReflectPrimaryType(kind) && v.IsZero() && !(kind == reflect.Int64 || kind == reflect.Float64) {
+	log.Printf("Content: '%v' (%T)", val, val)
+	if helper.IsReflectPrimaryType(kind) && (v.IsZero() || v.Kind() == reflect.String && val == "") && !(kind == reflect.Int64 || kind == reflect.Float64) {
 		log.Printf("Skipping: %v & %T", val, val)
 		return nil
 	}

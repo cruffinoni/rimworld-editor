@@ -36,6 +36,8 @@ func getTypeName(t any) string {
 		return s.String()
 	case *StructInfo:
 		return "*" + strcase.ToCamel(va.name)
+	case *FixedArray:
+		return fmt.Sprintf("[%d] %s", va.size, getTypeName(va.primaryType))
 	case *xml.Element:
 		return "*xml.Element"
 	default:
@@ -59,6 +61,11 @@ func checkTypeAndApply(t any, buffer *buffer, path string) error {
 			if err = checkTypeAndApply(va.type2, buffer, path); err != nil {
 				return err
 			}
+		}
+	case *FixedArray:
+		buffer.writeToBody(fmt.Sprintf("[%d]", va.size))
+		if err := checkTypeAndApply(va.primaryType, buffer, path); err != nil {
+			return err
 		}
 	}
 	return nil
@@ -142,6 +149,11 @@ func (s *StructInfo) generateStructToPath(path string) error {
 			// headerXml will be imported in the buffer when we write the
 			// required import statement.
 			buf.writeToBody("*xml.Element")
+		case *FixedArray:
+			buf.writeToBody(fmt.Sprintf("[%d] %s", va.size, getTypeName(va.primaryType)))
+			if err := checkTypeAndApply(va.primaryType, buf, path); err != nil {
+				return err
+			}
 		}
 		buf.writeToBody(" `xml:\"" + removeInnerKeyword(name) + "\"`\n")
 	}
