@@ -132,7 +132,11 @@ func createStructure(e *xml.Element, flag uint) any {
 	// to check all nodes to have all members possible
 	if (flag & forceFullCheck) > 0 {
 		flag &^= forceFullCheck
-		n := e.Next
+		n := e
+		// log.Printf("Forcefullcheck on %s & %p", e.XMLPath(), n.Child)
+		if n.Child != nil {
+			n = n.Child
+		}
 		for n != nil {
 			if err := handleElement(n.Child, s, flag); err != nil {
 				panic(err)

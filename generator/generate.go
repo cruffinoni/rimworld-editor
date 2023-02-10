@@ -13,7 +13,6 @@ func determineArrayOrSliceKind(e *xml.Element) reflect.Kind {
 	k := e
 	for k != nil {
 		if k.Data == nil && k.Child == nil {
-			log.Printf("Fixed array detected")
 			return reflect.Array
 		}
 		k = k.Next
@@ -26,7 +25,11 @@ func determineArrayOrSliceKind(e *xml.Element) reflect.Kind {
 func getTypeFromArray(e *xml.Element) reflect.Kind {
 	// Return Invalid if the element has no child
 	if e.Child == nil {
-		return reflect.Invalid
+		if e.Data == nil {
+			return reflect.Invalid
+		} else {
+			return e.Data.Kind()
+		}
 	}
 
 	k := e.Child
@@ -52,6 +55,7 @@ func getTypeFromArray(e *xml.Element) reflect.Kind {
 	}
 
 	for k != nil {
+		log.Printf("K: %s => %v", k.XMLPath(), k.Data)
 		if k.Data != nil {
 			kdk := k.Data.Kind()
 			if kt != reflect.Invalid && kdk != kt &&
@@ -74,10 +78,9 @@ func createArrayOrSlice(e *xml.Element, flag uint) any {
 	k := e.Child
 	count := 0
 	for k != nil {
-		if k.Data == nil && k.Child == nil && count > 0 {
+		if k.Data == nil && k.Child == nil && (count > 0 || k.Next != nil && k.Next.Next == nil) {
 			// Count must be > 0 because empty slice/array must be considered as
 			// slice
-			log.Printf("creating fixed array for %s", e.GetName())
 			return createFixedArray(e, flag, &offset{
 				el:   k,
 				size: count,
@@ -219,12 +222,21 @@ func handleElement(e *xml.Element, st *StructInfo, flag uint) error {
 		n = n.Next
 	}
 	if m, ok := registeredMembers[st.name]; ok && !hasSameMembers(m, st) {
+		if st.name == "components" {
+			log.Printf("Type mismatch: %v > %v", len(st.members), len(registeredMembers[st.name].members))
+			if len(st.members) > 10 {
+				log.Printf("Huge components > %s | %s", e.XMLPath(), st.name)
+			}
+		}
 		//log.Printf("WARNING: struct %s (length %d - %p) is different from %s (length %d - %p)", m.name, len(m.members), m, st.name, len(st.members), st)
 		fixMembers(m, st)
 		//if m.name == "thing" {
 		//	log.Printf("WARNING: struct %s (length %d - %p) is different from %s (length %d - %p)", m.name, len(m.members), m, st.name, len(st.members), st)
 		//}
 	} else {
+		if st.name == "components" {
+			log.Printf("Adding components: %p", registeredMembers[st.name])
+		}
 		registeredMembers[st.name] = st
 	}
 	return nil
@@ -240,9 +252,13 @@ func (s *StructInfo) addMember(name string, attr attributes.Attributes, t any) {
 			t:    t,
 			attr: attr,
 		}
+		if name == "components" {
+			log.Printf("Adding components: %p", s.members[name])
+		}
 	} else {
 		// Check if the existing member and the new member are of the same type
 		if kind, okKind := s.members[name].t.(reflect.Kind); !isSameType(s.members[name].t, t) || (okKind && kind != t.(reflect.Kind)) {
+
 			//log.Printf("Type mismatch: %v > %v", name, s.members[name])
 			// If the types are different, fix the type mismatch
 			fixTypeMismatch(s.members[name], &member{

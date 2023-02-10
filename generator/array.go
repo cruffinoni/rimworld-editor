@@ -1,7 +1,6 @@
 package generator
 
 import (
-	"log"
 	"reflect"
 
 	"github.com/cruffinoni/rimworld-editor/xml"
@@ -49,6 +48,5 @@ func createFixedArray(e *xml.Element, flag uint, o *offset) any {
 		f.size++
 		k = k.Next
 	}
-	log.Printf("Fixed array of size %d w/ pt %T at %s", f.size, f.primaryType, e.XMLPath())
 	return f
 }
