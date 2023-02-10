@@ -12,7 +12,7 @@ func isRelevantType(t1 any) bool {
 		return false
 	}
 	if ct, ok := t1.(*CustomType); ok {
-		if ct.name == "Empty" && ct.pkg == "*primary" {
+		if ct.Name == "Empty" && ct.Pkg == "*primary" {
 			return false
 		}
 	}
@@ -35,73 +35,73 @@ func fixCustomType(a, b *CustomType) {
 	if b == nil {
 		b = a
 	}
-	if a.type1 != b.type1 {
-		if isRelevantType(a.type1) && !isRelevantType(b.type1) {
-			b.type1 = a.type1
+	if a.Type1 != b.Type1 {
+		if isRelevantType(a.Type1) && !isRelevantType(b.Type1) {
+			b.Type1 = a.Type1
 			// If the main type is changed, update the package name, type name, and import path
-			b.name = a.name
-			b.pkg = a.pkg
-			b.importPath = a.importPath
-		} else if !isRelevantType(a.type1) && isRelevantType(b.type1) {
-			a.type1 = b.type1
+			b.Name = a.Name
+			b.Pkg = a.Pkg
+			b.ImportPath = a.ImportPath
+		} else if !isRelevantType(a.Type1) && isRelevantType(b.Type1) {
+			a.Type1 = b.Type1
 			// Perform the same update here
-			a.name = b.name
-			a.pkg = b.pkg
-			a.importPath = b.importPath
+			a.Name = b.Name
+			a.Pkg = b.Pkg
+			a.ImportPath = b.ImportPath
 		}
 	}
 	// Keep the relevant type between both `type2` fields.
-	if a.type2 != nil && a.type2 != b.type2 {
-		if isRelevantType(a.type2) && !isRelevantType(b.type2) {
-			b.type2 = a.type2
-		} else if !isRelevantType(a.type2) && isRelevantType(b.type2) {
-			a.type2 = b.type2
+	if a.Type2 != nil && a.Type2 != b.Type2 {
+		if isRelevantType(a.Type2) && !isRelevantType(b.Type2) {
+			b.Type2 = a.Type2
+		} else if !isRelevantType(a.Type2) && isRelevantType(b.Type2) {
+			a.Type2 = b.Type2
 		}
 	}
 }
 
-// printOrderedMembers print members of s in an alphabetic order
+// printOrderedMembers print Members of s in an alphabetic order
 func (s *StructInfo) printOrderedMembers() {
-	if len(s.members) == 0 {
+	if len(s.Members) == 0 {
 		return
 	}
-	m := make([]string, 0, len(s.members))
-	for k := range s.members {
+	m := make([]string, 0, len(s.Members))
+	for k := range s.Members {
 		m = append(m, k)
 	}
 	sort.Strings(m)
-	log.Printf("Struct %v", s.name)
+	log.Printf("Struct %v", s.Name)
 	for _, k := range m {
-		log.Printf("'%s' > %T", k, s.members[k])
+		log.Printf("'%s' > %T", k, s.Members[k])
 	}
 	fmt.Printf("\n")
 }
 
 func fixTypeMismatch(a, b *member) {
-	switch va := a.t.(type) {
+	switch va := a.T.(type) {
 	case *CustomType:
-		if ctB, okB := b.t.(*CustomType); okB {
+		if ctB, okB := b.T.(*CustomType); okB {
 			fixCustomType(va, ctB)
-		} else if structType, okStruct := b.t.(*StructInfo); okStruct {
+		} else if structType, okStruct := b.T.(*StructInfo); okStruct {
 			if isRelevantType(va) {
 				log.Panicf("fixTypeMismatch: double relevant type => %T & %T", va, structType)
 			}
-			a.t = b.t
+			a.T = b.T
 		} else {
-			b.t = a.t
+			b.T = a.T
 		}
 	case *StructInfo:
-		if bStruct, okStruct := b.t.(*StructInfo); okStruct {
+		if bStruct, okStruct := b.T.(*StructInfo); okStruct {
 			fixMembers(va, bStruct)
 		} else {
-			b.t = a.t
+			b.T = a.T
 		}
 	case reflect.Kind:
-		bt := b.t.(reflect.Kind)
+		bt := b.T.(reflect.Kind)
 		if va == reflect.Int64 && bt == reflect.Float64 {
-			a.t = reflect.Float64
+			a.T = reflect.Float64
 		} else if va == reflect.Float64 && bt == reflect.Int64 {
-			b.t = reflect.Float64
+			b.T = reflect.Float64
 		}
 	}
 }
@@ -113,14 +113,14 @@ func isSameType(a, b any) bool {
 	switch va := a.(type) {
 	case *CustomType:
 		if bType, ok := b.(*CustomType); ok {
-			return va.name == bType.name && va.pkg == bType.pkg &&
-				isSameType(va.type1, bType.type1) && isSameType(va.type2, bType.type2)
+			return va.Name == bType.Name && va.Pkg == bType.Pkg &&
+				isSameType(va.Type1, bType.Type1) && isSameType(va.Type2, bType.Type2)
 		} else {
 			return false
 		}
 	case *StructInfo:
 		if bType, ok := b.(*StructInfo); ok {
-			return va.name == bType.name && hasSameMembers(va, bType)
+			return va.Name == bType.Name && hasSameMembers(va, bType)
 		} else {
 			return false
 		}
@@ -130,24 +130,24 @@ func isSameType(a, b any) bool {
 }
 
 func fixMembers(a, b *StructInfo) {
-	for name, m := range a.members {
-		if _, ok := b.members[name]; !ok {
-			b.members[name] = m
+	for name, m := range a.Members {
+		if _, ok := b.Members[name]; !ok {
+			b.Members[name] = m
 		}
 	}
-	for name, m := range b.members {
-		if _, ok := a.members[name]; !ok {
-			a.members[name] = m
+	for name, m := range b.Members {
+		if _, ok := a.Members[name]; !ok {
+			a.Members[name] = m
 		}
 	}
-	for i := range a.members {
-		if _, ok := b.members[i]; !ok {
+	for i := range a.Members {
+		if _, ok := b.Members[i]; !ok {
 			a.printOrderedMembers()
 			b.printOrderedMembers()
 			log.Panicf("fixMembers: '%v' doesn't exist in b", i)
 		}
-		if !isSameType(a.members[i].t, b.members[i].t) {
-			fixTypeMismatch(a.members[i], b.members[i])
+		if !isSameType(a.Members[i].T, b.Members[i].T) {
+			fixTypeMismatch(a.Members[i], b.Members[i])
 		}
 	}
 }

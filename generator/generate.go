@@ -4,6 +4,7 @@ import (
 	"log"
 	"reflect"
 
+	"github.com/cruffinoni/rimworld-editor/generator/paths"
 	"github.com/cruffinoni/rimworld-editor/helper"
 	"github.com/cruffinoni/rimworld-editor/xml"
 	"github.com/cruffinoni/rimworld-editor/xml/attributes"
@@ -130,10 +131,10 @@ func determineTypeFromData(e *xml.Element, flag uint) any {
 		if !e.Attr.Empty() {
 			//log.Println("primary.EmbeddedType: found attributes on path", e.XMLPath())
 			return &CustomType{
-				name:       "EmbeddedType",
-				pkg:        "primary",
-				type1:      t,
-				importPath: primaryTypesPath,
+				Name:       "EmbeddedType",
+				Pkg:        "primary",
+				Type1:      t,
+				ImportPath: paths.PrimaryTypesPath,
 			}
 		}
 	}
@@ -141,18 +142,18 @@ func determineTypeFromData(e *xml.Element, flag uint) any {
 }
 
 func hasSameMembers(a, b *StructInfo) bool {
-	if len(a.members) != len(b.members) {
+	if len(a.Members) != len(b.Members) {
 		return false
 	}
-	for i := range a.members {
-		if b.members[i] == nil {
+	for i := range a.Members {
+		if b.Members[i] == nil {
 			return false
 		}
-		if reflect.TypeOf(a.members[i]) != reflect.TypeOf(b.members[i]) {
+		if reflect.TypeOf(a.Members[i]) != reflect.TypeOf(b.Members[i]) {
 			return false
 		}
-		if ct, ok := a.members[i].t.(*CustomType); ok {
-			if ctB, okB := b.members[i].t.(*CustomType); !okB || ct.type1 != ctB.type1 || ct.type2 != ctB.type2 {
+		if ct, ok := a.Members[i].T.(*CustomType); ok {
+			if ctB, okB := b.Members[i].T.(*CustomType); !okB || ct.Type1 != ctB.Type1 || ct.Type2 != ctB.Type2 {
 				return false
 			}
 		}
@@ -190,7 +191,7 @@ func handleElement(e *xml.Element, st *StructInfo, flag uint) error {
 				}
 				// This is a special case where the root node has been created outside the process.
 				// To recognize this special node, we don't set any name to it, but it refers as the root node.
-				if st.name == "" {
+				if st.Name == "" {
 					*st = *t.(*StructInfo)
 				} else {
 					st.addMember(n.GetName(), n.Attr, t)
@@ -201,10 +202,10 @@ func handleElement(e *xml.Element, st *StructInfo, flag uint) error {
 				t = n.Data.Kind()
 				if !n.Attr.Empty() {
 					t = &CustomType{
-						name:       "EmbeddedType",
-						pkg:        "primary",
-						type1:      t,
-						importPath: primaryTypesPath,
+						Name:       "EmbeddedType",
+						Pkg:        "primary",
+						Type1:      t,
+						ImportPath: paths.PrimaryTypesPath,
 					}
 				}
 			} else if n.Next != nil && n.Next.GetName() == n.GetName() {
@@ -221,11 +222,11 @@ func handleElement(e *xml.Element, st *StructInfo, flag uint) error {
 		}
 		n = n.Next
 	}
-	if m, ok := registeredMembers[st.name]; ok && !hasSameMembers(m, st) {
-		if st.name == "components" {
-			log.Printf("Type mismatch: %v > %v", len(st.members), len(registeredMembers[st.name].members))
-			if len(st.members) > 10 {
-				log.Printf("Huge components > %s | %s", e.XMLPath(), st.name)
+	if m, ok := RegisteredMembers[st.Name]; ok && !hasSameMembers(m, st) {
+		if st.Name == "components" {
+			log.Printf("Type mismatch: %v > %v", len(st.Members), len(RegisteredMembers[st.Name].Members))
+			if len(st.Members) > 10 {
+				log.Printf("Huge components > %s | %s", e.XMLPath(), st.Name)
 			}
 		}
 		//log.Printf("WARNING: struct %s (length %d - %p) is different from %s (length %d - %p)", m.name, len(m.members), m, st.name, len(st.members), st)
@@ -234,10 +235,10 @@ func handleElement(e *xml.Element, st *StructInfo, flag uint) error {
 		//	log.Printf("WARNING: struct %s (length %d - %p) is different from %s (length %d - %p)", m.name, len(m.members), m, st.name, len(st.members), st)
 		//}
 	} else {
-		if st.name == "components" {
-			log.Printf("Adding components: %p", registeredMembers[st.name])
+		if st.Name == "components" {
+			log.Printf("Adding components: %p", RegisteredMembers[st.Name])
 		}
-		registeredMembers[st.name] = st
+		RegisteredMembers[st.Name] = st
 	}
 	return nil
 }
@@ -247,22 +248,22 @@ func handleElement(e *xml.Element, st *StructInfo, flag uint) error {
 // If they are not, the function fixes the type mismatch.
 func (s *StructInfo) addMember(name string, attr attributes.Attributes, t any) {
 	// If there is no existing member with the same name, add the new member to the map
-	if _, ok := s.members[name]; !ok {
-		s.members[name] = &member{
-			t:    t,
+	if _, ok := s.Members[name]; !ok {
+		s.Members[name] = &member{
+			T:    t,
 			attr: attr,
 		}
 		if name == "components" {
-			log.Printf("Adding components: %p", s.members[name])
+			log.Printf("Adding components: %p", s.Members[name])
 		}
 	} else {
 		// Check if the existing member and the new member are of the same type
-		if kind, okKind := s.members[name].t.(reflect.Kind); !isSameType(s.members[name].t, t) || (okKind && kind != t.(reflect.Kind)) {
+		if kind, okKind := s.Members[name].T.(reflect.Kind); !isSameType(s.Members[name].T, t) || (okKind && kind != t.(reflect.Kind)) {
 
 			//log.Printf("Type mismatch: %v > %v", name, s.members[name])
 			// If the types are different, fix the type mismatch
-			fixTypeMismatch(s.members[name], &member{
-				t:    t,
+			fixTypeMismatch(s.Members[name], &member{
+				T:    t,
 				attr: attr,
 			})
 		}

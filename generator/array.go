@@ -7,8 +7,8 @@ import (
 )
 
 type FixedArray struct {
-	size        int
-	primaryType any
+	Size        int
+	PrimaryType any
 }
 
 func createSubtype(e *xml.Element, flag uint, t any) any {
@@ -37,15 +37,15 @@ type offset struct {
 
 func createFixedArray(e *xml.Element, flag uint, o *offset) any {
 	f := &FixedArray{
-		primaryType: createSubtype(e, flag, getTypeFromArray(e)),
-		size:        o.size,
+		PrimaryType: createSubtype(e, flag, getTypeFromArray(e)),
+		Size:        o.size,
 	}
 	if o == nil {
 		o = &offset{el: e}
 	}
 	k := o.el
 	for k != nil {
-		f.size++
+		f.Size++
 		k = k.Next
 	}
 	return f

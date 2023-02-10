@@ -1,8 +1,10 @@
-package generator
+package files
 
 import (
 	"sort"
 	"strings"
+
+	"github.com/cruffinoni/rimworld-editor/generator/paths"
 )
 
 type buffer struct {
@@ -13,20 +15,13 @@ type buffer struct {
 	footer         string
 }
 
-const (
-	customTypesPath  = "xml/types"
-	primaryTypesPath = "xml/types/primary"
-	headerXml        = "xml"
-	xmlAttributes    = "xml/attributes"
-)
-
 func (b *buffer) writeImport(imp ...string) {
 	for _, v := range imp {
 		if h, ok := b.writtenHeaders[v]; ok && h {
 			return
 		}
 		b.writtenHeaders[v] = true
-		b.imp = append(b.imp, `"github.com/cruffinoni/rimworld-editor/`+v+`"`+"\n")
+		b.imp = append(b.imp, paths.CodePackage+v+`"`+"\n")
 	}
 }
 

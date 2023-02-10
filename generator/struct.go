@@ -1,8 +1,6 @@
 package generator
 
 import (
-	"bytes"
-	"os"
 	"strconv"
 
 	"github.com/cruffinoni/rimworld-editor/helper"
@@ -11,14 +9,13 @@ import (
 )
 
 type member struct {
-	t    any
+	T    any
 	attr attributes.Attributes
 }
 
 type StructInfo struct {
-	name    string
-	members map[string]*member
-	buf     bytes.Buffer
+	Name    string
+	Members map[string]*member
 }
 
 const (
@@ -48,36 +45,20 @@ const (
 	InnerKeyword = "_Inner"
 )
 
-var registeredMembers map[string]*StructInfo
+var RegisteredMembers map[string]*StructInfo
 
 // GenerateGoFiles generates the Go files (with the corresponding structs)
 // for the given XML file, but it doesn't write anything.
 // To do that, call WriteGoFile.
 func GenerateGoFiles(root *xml.Element) *StructInfo {
 	s := &StructInfo{
-		members: make(map[string]*member),
+		Members: make(map[string]*member),
 	}
-	registeredMembers = make(map[string]*StructInfo)
+	RegisteredMembers = make(map[string]*StructInfo)
 	if err := handleElement(root, s, flagNone); err != nil {
 		panic(err)
 	}
 	return s
-}
-
-// WriteGoFile writes the struct Go code to the given path.
-// It writes recursively the members of the struct. If a member is a struct,
-// it will call WriteGoFile on it.
-func (s *StructInfo) WriteGoFile(path string) error {
-	path = "./" + path
-	if _, err := os.Stat(path); err == nil {
-		if err = os.RemoveAll(path); err != nil {
-			return err
-		}
-	}
-	if err := os.Mkdir(path, os.ModePerm); err != nil {
-		return err
-	}
-	return s.generateStructToPath(path)
 }
 
 var uniqueNumber = 0
@@ -121,8 +102,8 @@ func createStructure(e *xml.Element, flag uint) any {
 		uniqueNumber++
 	}
 	s := &StructInfo{
-		name:    name,
-		members: make(map[string]*member),
+		Name:    name,
+		Members: make(map[string]*member),
 	}
 	// The forceFullCheck check apply only to this structure, not to the children
 	if err := handleElement(e.Child, s, flag&^forceFullCheck); err != nil {
