@@ -27,7 +27,7 @@ func createSubtype(e *xml.Element, flag uint, t any) any {
 	case reflect.Struct:
 		return createStructure(e, flag|forceFullCheck)
 	}
-	return nil
+	return t
 }
 
 type offset struct {
@@ -38,10 +38,12 @@ type offset struct {
 func createFixedArray(e *xml.Element, flag uint, o *offset) any {
 	f := &FixedArray{
 		PrimaryType: createSubtype(e, flag, getTypeFromArray(e)),
-		Size:        o.size,
+		Size:        0,
 	}
 	if o == nil {
-		o = &offset{el: e}
+		o = &offset{el: e.Child}
+	} else {
+		f.Size = o.size
 	}
 	k := o.el
 	for k != nil {

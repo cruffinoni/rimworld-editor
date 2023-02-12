@@ -45,7 +45,7 @@ const (
 	InnerKeyword = "_Inner"
 )
 
-var RegisteredMembers map[string]*StructInfo
+var RegisteredMembers = make(map[string]*StructInfo)
 
 // GenerateGoFiles generates the Go files (with the corresponding structs)
 // for the given XML file, but it doesn't write anything.
@@ -61,7 +61,7 @@ func GenerateGoFiles(root *xml.Element) *StructInfo {
 	return s
 }
 
-var uniqueNumber = 0
+var UniqueNumber = 0
 
 // createStructure creates a new structure from the given element.
 // Then the function will recursively call handleElement on the children of the element.
@@ -98,8 +98,8 @@ func createStructure(e *xml.Element, flag uint) any {
 	}
 	if (flag & forceRandomName) > 0 {
 		flag &^= forceRandomName
-		name += strconv.Itoa(uniqueNumber)
-		uniqueNumber++
+		name += strconv.Itoa(UniqueNumber)
+		UniqueNumber++
 	}
 	s := &StructInfo{
 		Name:    name,

@@ -21,7 +21,7 @@ func (b *buffer) writeImport(imp ...string) {
 			return
 		}
 		b.writtenHeaders[v] = true
-		b.imp = append(b.imp, paths.CodePackage+v+`"`+"\n")
+		b.imp = append(b.imp, `"`+paths.CodePackage+v+`"`+"\n")
 	}
 }
 

@@ -6,6 +6,7 @@ import (
 
 	"github.com/cruffinoni/rimworld-editor/file"
 	"github.com/cruffinoni/rimworld-editor/generator"
+	"github.com/cruffinoni/rimworld-editor/generator/files"
 )
 
 func main() {
@@ -29,7 +30,7 @@ func main() {
 	}
 	log.Print("Generating go files to './generated")
 	root := generator.GenerateGoFiles(fo.XML.Root)
-	if err = root.WriteGoFile("./generated"); err != nil {
+	if err = files.WriteGoFile("./generated", root); err != nil {
 		log.Fatal(err)
 	}
 }

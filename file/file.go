@@ -24,7 +24,18 @@ func Open(fileName string) (*Opening, error) {
 	reader := bytes.NewReader(content)
 	decoder := _xml.NewDecoder(reader)
 	decoder.CharsetReader = charset.NewReaderLabel
-	if err = decoder.Decode(&fileOpening.XML); err != nil {
+	if err := decoder.Decode(&fileOpening.XML); err != nil {
+		return nil, err
+	}
+	return fileOpening, nil
+}
+
+func ReadFromBuffer(buffer string) (*Opening, error) {
+	fileOpening := &Opening{fileName: "localbuffer"}
+	reader := bytes.NewReader([]byte(buffer))
+	decoder := _xml.NewDecoder(reader)
+	decoder.CharsetReader = charset.NewReaderLabel
+	if err := decoder.Decode(&fileOpening.XML); err != nil {
 		return nil, err
 	}
 	return fileOpening, nil

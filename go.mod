@@ -4,6 +4,7 @@ go 1.19
 
 require (
 	github.com/c-bata/go-prompt v0.2.6
+	github.com/google/go-cmp v0.5.9
 	github.com/iancoleman/strcase v0.2.0
 	github.com/jawher/mow.cli v1.2.0
 	github.com/stretchr/testify v1.7.0
@@ -19,7 +20,6 @@ require (
 	github.com/pkg/term v1.2.0-beta.2 // indirect
 	github.com/pmezard/go-difflib v1.0.0 // indirect
 	github.com/rivo/uniseg v0.3.4 // indirect
-	github.com/stretchr/objx v0.2.0 // indirect
 	golang.org/x/sys v0.0.0-20220811171246-fbc7d0a398ab // indirect
 	golang.org/x/text v0.3.7 // indirect
 	gopkg.in/yaml.v3 v3.0.0-20200313102051-9f266ea9e77c // indirect
