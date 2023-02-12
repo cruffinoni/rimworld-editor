@@ -10,7 +10,7 @@ import (
 
 type member struct {
 	T    any
-	attr attributes.Attributes
+	Attr attributes.Attributes
 }
 
 type StructInfo struct {
@@ -22,6 +22,7 @@ const (
 	flagNone = 0 << iota
 	// skipChild indicates that the child of the current element should be skipped
 	// and directly handled by the function handleElement.
+	// DEPRECATED: skipped child are now automatically detected
 	skipChild = 1 << iota
 	// forceChild is a flag that forces the child of the current child to be used
 	// A.K.A., skip the current child and use the child of the current child

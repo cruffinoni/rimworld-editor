@@ -1,9 +1,151 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
+package generator
+
+import (
+	"reflect"
+	"strings"
+	"testing"
+
+	"github.com/go-test/deep"
+	"github.com/stretchr/testify/assert"
+	"github.com/stretchr/testify/require"
+)
+
+func Test_createStructure(t *testing.T) {
+	tests := map[string]tests{
+		"simple": {
+			args: args{
+				xmlContent: `
+<?xml version="1.0" encoding="utf-8"?>
+<savegame>
+	<quests>
+		<completed>False</completed>
+	</quests>
+</savegame>
+`,
+			},
+			want: createStructForTest("quests", map[string]*member{
+				"completed": {
+					T: reflect.String,
+				},
+			}),
+		},
+
+		"empty": {
+			args: args{
+				xmlContent: `
+<?xml version="1.0" encoding="utf-8"?>
+<savegame>
+	<quests>
+		<completed />
+	</quests>
+</savegame>
+`,
+			},
+			want: createStructForTest("quests", map[string]*member{
+				"completed": {
+					T: createEmptyType(),
+				},
+			}),
+		},
+
+		"disguised structure": {
+			args: args{
+				xmlContent: `
+		<?xml version="1.0" encoding="utf-8"?>
+		<savegame>
+			<skills>
+				<skills>
+					<li>
+						<def>Shooting</def>
+						<level>9</level>
+						<passion>Major</passion>
+					</li>
+					<li>
+						<def>Melee</def>
+						<level>4</level>
+						<passion>Minor</passion>
+					</li>
+					<li>
+						<def>Construction</def>
+					</li>
+					<li>
+						<def>Mining</def>
+					</li>
+					<li>
+						<def>Cooking</def>
+						<level>1</level>
+					</li>
+				</skills>
+				<lastXpSinceMidnightResetTimestamp>6127575
+				</lastXpSinceMidnightResetTimestamp>
+			</skills>
+		</savegame>
+		`,
+			},
+			want: createStructForTest("skills", map[string]*member{
+				"skills": {
+					T: createCustomSliceForTest(createStructForTest("skills_Inner", map[string]*member{
+						"def": {
+							T: reflect.String,
+						},
+						"level": {
+							T: reflect.Int64,
+						},
+						"passion": {
+							T: reflect.String,
+						},
+					})),
+				},
+				"lastXpSinceMidnightResetTimestamp": {
+					T: reflect.Int64,
+				},
+			}),
+		},
+
+		"with attr": {
+			args: args{
+				xmlContent: `
+<?xml version="1.0" encoding="utf-8"?>
+<savegame>
+	<quests>
+		<completed Class="Need_Mood" />
+	</quests>
+</savegame>
+`,
+			},
+			want: createStructForTest("quests", map[string]*member{
+				"completed": {
+					T: createEmptyType(),
+					Attr: map[string]string{
+						"Class": "Need_Mood",
+					},
+				},
+			}),
+		},
+	}
+	for name, tt := range tests {
+		t.Run(name, func(t *testing.T) {
+			root := resetVarsAndReadBuffer(t, tt.args)
+			res := createStructure(root.Child, tt.args.flag)
+			require.IsType(t, res, tt.want)
+			got := res.(*StructInfo)
+			wanted := tt.want.(*StructInfo)
+			assert.Equal(t, wanted, got)
+		})
+	}
+}
+
+func TestGenerateGoFiles(t *testing.T) {
+	tests := map[string]tests{
+		"large cover (slice, array, empty)": {
+			args: args{
+				xmlContent: `
+<?xml version="1.0" encoding="utf-8"?>
 <savegame>
 	<type>
 		<li>
 			<createdFromNoExpansionGame>True</createdFromNoExpansionGame>
-			<foundation IsNull="True"/>
+			<foundation />
 			<name>Rustican 2</name>
 			<culture>Rustican</culture>
 			<memes/>
@@ -236,80 +378,18 @@
 						</li>
 					</vals>
 				</hairFrequencies>
-				<beardFrequencies>
-					<vals>
-						<li>
-							<frequency>Frequent</frequency>
-							<gender>Any</gender>
-						</li>
-						<li/>
-						<li/>
-						<li/>
-						<li>
-							<frequency>Uncommon</frequency>
-						</li>
-						<li>
-							<frequency>Uncommon</frequency>
-						</li>
-						<li/>
-						<li>
-							<frequency>Uncommon</frequency>
-						</li>
-						<li>
-							<frequency>Uncommon</frequency>
-						</li>
-						<li>
-							<frequency>Uncommon</frequency>
-						</li>
-						<li/>
-						<li/>
-						<li/>
-						<li/>
-						<li/>
-						<li/>
-						<li/>
-						<li>
-							<frequency>Uncommon</frequency>
-						</li>
-						<li>
-							<frequency>Uncommon</frequency>
-						</li>
-						<li/>
-						<li/>
-						<li>
-							<frequency>Uncommon</frequency>
-						</li>
-						<li/>
-						<li>
-							<frequency>Uncommon</frequency>
-						</li>
-						<li/>
-						<li>
-							<frequency>Uncommon</frequency>
-						</li>
-						<li/>
-						<li>
-							<frequency>Uncommon</frequency>
-						</li>
-						<li/>
-						<li/>
-						<li>
-							<frequency>Uncommon</frequency>
-						</li>
-					</vals>
-				</beardFrequencies>
 				<styleForThingDef>
 					<keys/>
 					<values/>
 				</styleForThingDef>
 			</style>
 			<id>1</id>
-			<development IsNull="True"/>
+			<development />
 		</li>
 
 		<li>
 			<createdFromNoExpansionGame>True</createdFromNoExpansionGame>
-			<foundation/>
+			<foundation />
 			<name>Corunan</name>
 			<culture>Corunan</culture>
 			<memes/>
@@ -539,7 +619,60 @@
 				</styleForThingDef>
 			</style>
 			<id>2</id>
-			<development/>
+			<development />
 		</li>
 	</type>
 </savegame>
+`,
+			},
+			want: createStructForTest("savegame", map[string]*member{
+				"type": {
+					T: createCustomSliceForTest(createStructForTest("type", map[string]*member{
+						"foundation":                 {T: createEmptyType()},
+						"id":                         {T: reflect.Int64},
+						"culture":                    {T: reflect.String},
+						"usedSymbols":                {T: createEmptyType()},
+						"usedSymbolPacks":            {T: createEmptyType()},
+						"development":                {T: createEmptyType()},
+						"createdFromNoExpansionGame": {T: reflect.String},
+						"name":                       {T: reflect.String},
+						"memes":                      {T: createEmptyType()},
+						"precepts": {
+							T: createCustomSliceForTest(createStructForTest("precepts", map[string]*member{
+								"name":                {T: reflect.String},
+								"def":                 {T: reflect.String},
+								"ID":                  {T: reflect.Int64},
+								"randomSeed":          {T: reflect.Int64},
+								"usesDefiniteArticle": {T: reflect.String},
+							})),
+						},
+						"thingStyleCategories": {T: createEmptyType()},
+						"style": {
+							T: createStructForTest("style", map[string]*member{
+								"hairFrequencies": {
+									T: createStructForTest("hairFrequencies", map[string]*member{
+										"vals": {
+											T: createFixedArrayForTest(50, createStructForTest("vals", map[string]*member{
+												"frequency": {T: reflect.String},
+												"gender":    {T: reflect.String},
+											})),
+										},
+									}),
+								},
+								"styleForThingDef": {T: createCustomMapForTest(reflect.String, createEmptyType())},
+							}),
+						},
+					})),
+				},
+			}),
+		},
+	}
+	for name, tt := range tests {
+		t.Run(name, func(t *testing.T) {
+			root := resetVarsAndReadBuffer(t, tt.args)
+			if diff := deep.Equal(tt.want, GenerateGoFiles(root)); diff != nil {
+				assert.FailNow(t, strings.Join(diff, "\n"))
+			}
+		})
+	}
+}

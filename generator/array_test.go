@@ -1,58 +1,17 @@
 package generator
 
 import (
-	"fmt"
-	"reflect"
 	"testing"
 
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/require"
 
-	"github.com/cruffinoni/rimworld-editor/file"
-	"github.com/cruffinoni/rimworld-editor/generator/paths"
-	"github.com/cruffinoni/rimworld-editor/xml"
 	"github.com/cruffinoni/rimworld-editor/xml/attributes"
 )
 
-type args struct {
-	e          *xml.Element
-	flag       uint
-	o          *offset
-	xmlContent string
-}
-
-type tests struct {
-	args args
-	want *FixedArray
-}
-
-func sameMembers(a, b map[string]*member) bool {
-	if len(a) != len(b) {
-		return false
-	}
-	for k, v := range a {
-		if m, ok := b[k]; !ok {
-			return false
-		} else {
-			t1 := reflect.TypeOf(m)
-			if t1.Kind() == reflect.Ptr {
-				t1 = t1.Elem()
-			}
-			t2 := reflect.TypeOf(v)
-			if t2.Kind() == reflect.Ptr {
-				t2 = t2.Elem()
-			}
-			if t1.Name() != t2.Name() {
-				return false
-			}
-		}
-	}
-	return true
-}
-
 func Test_createFixedArray(t *testing.T) {
 	tests := map[string]tests{
-		"struct of struct": {
+		"struct": {
 			args: args{
 				xmlContent: `
 <?xml version="1.0" encoding="utf-8"?>
@@ -129,16 +88,7 @@ func Test_createFixedArray(t *testing.T) {
 					Name: "vals",
 					Members: map[string]*member{
 						"technology": {
-							T: &CustomType{
-								Name: "types",
-								Pkg:  "Slice",
-								Type1: &struct {
-									Attr attributes.Attributes
-								}{
-									Attr: nil,
-								},
-								ImportPath: paths.CustomTypesPath,
-							},
+							T: createCustomSliceForTest(&emptyStructWithAttr{}),
 						},
 					},
 				},
@@ -187,19 +137,21 @@ func Test_createFixedArray(t *testing.T) {
 	}
 	for name, tt := range tests {
 		t.Run(name, func(t *testing.T) {
-			UniqueNumber = 0
-			RegisteredMembers = make(map[string]*StructInfo)
-			root, err := file.ReadFromBuffer(tt.args.xmlContent)
-			require.Nil(t, err)
-			require.NotNil(t, root)
-			got := createFixedArray(root.XML.Root.Child, tt.args.flag, tt.args.o)
+			root := resetVarsAndReadBuffer(t, tt.args)
+			got := createFixedArray(root.Child, tt.args.flag, tt.args.o)
 			require.IsType(t, got, tt.want)
 			gotCasted := got.(*FixedArray)
-			assert.Equal(t, tt.want.Size, gotCasted.Size)
-			require.IsTypef(t, tt.want.PrimaryType, gotCasted.PrimaryType, "expected %+v (%T), got %+v (%T)", tt.want.PrimaryType, tt.want.PrimaryType, gotCasted.PrimaryType, gotCasted.PrimaryType)
-			if si, ok := tt.want.PrimaryType.(*StructInfo); ok && !sameMembers(si.Members, gotCasted.PrimaryType.(*StructInfo).Members) {
-				assert.Fail(t, fmt.Sprintf("expected members to be %+v (%T), got %+v (%T)", si.Members, si.Members, gotCasted.PrimaryType.(*StructInfo).Members, gotCasted.PrimaryType.(*StructInfo).Members))
-			}
+			wanted := got.(*FixedArray)
+			assert.Equal(t, wanted.Size, gotCasted.Size)
+			require.IsTypef(t, wanted.PrimaryType, gotCasted.PrimaryType, "expected %+v (%T), got %+v (%T)", wanted.PrimaryType, wanted.PrimaryType, gotCasted.PrimaryType, gotCasted.PrimaryType)
+			assert.Equal(t, wanted, got)
 		})
+	}
+}
+
+func createFixedArrayForTest(size int, pt any) *FixedArray {
+	return &FixedArray{
+		Size:        size,
+		PrimaryType: pt,
 	}
 }

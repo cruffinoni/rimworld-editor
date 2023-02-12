@@ -4,7 +4,7 @@ go 1.19
 
 require (
 	github.com/c-bata/go-prompt v0.2.6
-	github.com/google/go-cmp v0.5.9
+	github.com/go-test/deep v1.1.0
 	github.com/iancoleman/strcase v0.2.0
 	github.com/jawher/mow.cli v1.2.0
 	github.com/stretchr/testify v1.7.0

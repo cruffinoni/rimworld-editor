@@ -45,8 +45,8 @@ func getTypeFromArray(e *xml.Element) reflect.Kind {
 			if helper.IsListTag(k.Next.Child.GetName()) {
 				return determineArrayOrSliceKind(k)
 			}
+			return reflect.Struct
 		}
-		return reflect.Struct
 	} else if k.Child != nil {
 		// On the other hand, this part only check the first element
 		if helper.IsListTag(k.Child.GetName()) {
@@ -56,7 +56,6 @@ func getTypeFromArray(e *xml.Element) reflect.Kind {
 	}
 
 	for k != nil {
-		log.Printf("K: %s => %v", k.XMLPath(), k.Data)
 		if k.Data != nil {
 			kdk := k.Data.Kind()
 			if kt != reflect.Invalid && kdk != kt &&
@@ -167,15 +166,14 @@ func handleElement(e *xml.Element, st *StructInfo, flag uint) error {
 		var t any
 		if n.Child != nil {
 			// Skip the "li" tag (or any custom type) since it's a slice and should not be a member of the struct
-			if flag&skipChild > 0 || helper.IsListTag(n.GetName()) {
-				flag &^= skipChild
+			if helper.IsListTag(n.GetName()) {
 				if err := handleElement(n.Child, st, flag); err != nil {
 					return err
 				}
 			} else {
 				childName := n.Child.GetName()
 				if helper.IsListTag(childName) {
-					t = createArrayOrSlice(n, flag|skipChild)
+					t = createArrayOrSlice(n, flag)
 				} else if childName == "keys" {
 					// Maps are constant in terms of naming, and that's how we recognize them
 					t = createCustomTypeForMap(n, flag)
@@ -218,26 +216,15 @@ func handleElement(e *xml.Element, st *StructInfo, flag uint) error {
 			} else {
 				t = createEmptyType()
 			}
+			//log.Printf("Add member %T w/ %v (%s) to %v", t, n.XMLPath(), n.GetName(), st.Name)
 			st.addMember(n.GetName(), n.Attr, t)
 		}
 		n = n.Next
 	}
 	if m, ok := RegisteredMembers[st.Name]; ok && !hasSameMembers(m, st) {
-		if st.Name == "components" {
-			log.Printf("Type mismatch: %v > %v", len(st.Members), len(RegisteredMembers[st.Name].Members))
-			if len(st.Members) > 10 {
-				log.Printf("Huge components > %s | %s", e.XMLPath(), st.Name)
-			}
-		}
-		//log.Printf("WARNING: struct %s (length %d - %p) is different from %s (length %d - %p)", m.name, len(m.members), m, st.name, len(st.members), st)
+		//log.Printf("WARNING: struct %s (length %d - %p) is different from %s (length %d - %p)", m.Name, len(m.Members), m, st.Name, len(st.Members), st)
 		fixMembers(m, st)
-		//if m.name == "thing" {
-		//	log.Printf("WARNING: struct %s (length %d - %p) is different from %s (length %d - %p)", m.name, len(m.members), m, st.name, len(st.members), st)
-		//}
 	} else {
-		if st.Name == "components" {
-			log.Printf("Adding components: %p", RegisteredMembers[st.Name])
-		}
 		RegisteredMembers[st.Name] = st
 	}
 	return nil
@@ -251,20 +238,16 @@ func (s *StructInfo) addMember(name string, attr attributes.Attributes, t any) {
 	if _, ok := s.Members[name]; !ok {
 		s.Members[name] = &member{
 			T:    t,
-			attr: attr,
-		}
-		if name == "components" {
-			log.Printf("Adding components: %p", s.Members[name])
+			Attr: attr,
 		}
 	} else {
 		// Check if the existing member and the new member are of the same type
 		if kind, okKind := s.Members[name].T.(reflect.Kind); !isSameType(s.Members[name].T, t) || (okKind && kind != t.(reflect.Kind)) {
-
-			//log.Printf("Type mismatch: %v > %v", name, s.members[name])
+			//log.Printf("Type mismatch: %v > %v", name, s.Members[name])
 			// If the types are different, fix the type mismatch
 			fixTypeMismatch(s.Members[name], &member{
 				T:    t,
-				attr: attr,
+				Attr: attr,
 			})
 		}
 	}
