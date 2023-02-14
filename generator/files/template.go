@@ -106,8 +106,8 @@ func writeCustomType(c *generator.CustomType, b *buffer, path string) error {
 
 func generateStructToPath(path string, s *generator.StructInfo) error {
 	if _, err := os.Stat(path + "/" + strcase.ToSnake(s.Name) + ".go"); !errors.Is(err, os.ErrNotExist) {
-		//log.Printf("generateStructToPath: file already exists at: %v", path+"/"+strcase.ToSnake(s.name)+".go")
-		//log.Printf("Size: %d from %p", len(s.members), s)
+		log.Printf("generateStructToPath: file already exists at: %v", path+"/"+strcase.ToSnake(s.Name)+".go")
+		log.Printf("Size: %d from %p", len(s.Members), s)
 		return nil
 	}
 	f, err := os.Create(path + "/" + strcase.ToSnake(s.Name) + ".go")
@@ -129,8 +129,9 @@ func generateStructToPath(path string, s *generator.StructInfo) error {
 		panic("empty struct name")
 	}
 	buf.writeToBody("type " + structName + " struct {\nAttr attributes.Attributes\n")
-	for name, m := range generator.RegisteredMembers[s.Name].Members { // Use the best matched version of s.name
-		buf.writeToBody("\t" + strcase.ToCamel(name) + " ")
+	log.Printf("S: %s", s.Name)
+	for _, m := range generator.RegisteredMembers[s.Name].Order { // Use the best matched version of s.name
+		buf.writeToBody("\t" + strcase.ToCamel(m.Name) + " ")
 		switch va := m.T.(type) {
 		case *generator.CustomType:
 			if err = writeCustomType(va, buf, path); err != nil {
@@ -156,7 +157,7 @@ func generateStructToPath(path string, s *generator.StructInfo) error {
 				return err
 			}
 		}
-		buf.writeToBody(" `xml:\"" + removeInnerKeyword(name) + "\"`\n")
+		buf.writeToBody(" `xml:\"" + removeInnerKeyword(m.Name) + "\"`\n")
 	}
 	buf.writeToFooter("}\n")
 	writeRequiredInterfaces(buf, structName)

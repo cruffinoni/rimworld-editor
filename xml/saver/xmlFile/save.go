@@ -1,7 +1,6 @@
 package xmlFile
 
 import (
-	"log"
 	"reflect"
 	"strconv"
 	"strings"
@@ -68,9 +67,9 @@ func Save(val any, b *saver.Buffer, tag string) error {
 	//if kind == reflect.Int64 {
 	//	log.Printf("Debug: => %v & %T", val, val)
 	//}
-	log.Printf("Content: '%v' (%T)", val, val)
+	//log.Printf("Content: '%v' (%T)", val, val)
 	if helper.IsReflectPrimaryType(kind) && (v.IsZero() || v.Kind() == reflect.String && val == "") && !(kind == reflect.Int64 || kind == reflect.Float64) {
-		log.Printf("Skipping: %v & %T", val, val)
+		//log.Printf("Skipping: %v & %T", val, val)
 		return nil
 	}
 	b.OpenTag(tag, attr)
@@ -145,7 +144,6 @@ func Save(val any, b *saver.Buffer, tag string) error {
 			}
 			xmlTag, ok := f.Tag.Lookup("xml")
 			if !ok {
-				//log.Printf("No XML tag present for %v", f.Name)
 				continue
 			}
 			// Structure that have empty value into their fields are ignored.

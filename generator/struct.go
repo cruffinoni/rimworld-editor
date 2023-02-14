@@ -11,19 +11,20 @@ import (
 type member struct {
 	T    any
 	Attr attributes.Attributes
+	Name string
 }
 
 type StructInfo struct {
 	Name    string
 	Members map[string]*member
+	Order   []*member
 }
 
 const (
 	flagNone = 0 << iota
 	// skipChild indicates that the child of the current element should be skipped
 	// and directly handled by the function handleElement.
-	// DEPRECATED: skipped child are now automatically detected
-	skipChild = 1 << iota
+	forceChildApplied = 1 << iota
 	// forceChild is a flag that forces the child of the current child to be used
 	// A.K.A., skip the current child and use the child of the current child
 	// Useful for the case of list with custom tag
@@ -70,12 +71,11 @@ var UniqueNumber = 0
 func createStructure(e *xml.Element, flag uint) any {
 	// forceChild is a flag that forces the child of the current child to be used
 	// It is useful for the case of lists
-	if flag&forceChild == forceChild {
+	if flag&forceChild > 0 {
 		flag &^= forceChild
-		//log.Println("Forcing child flag")
 		// Quick way to determine if the child is a structure
 		if e.Child != nil && e.Child.Child != nil {
-			return createStructure(e.Child, flag)
+			return createStructure(e.Child, flag|forceChildApplied)
 		} else {
 			panic("generate.createStructure|forceChild: missing child")
 		}
@@ -97,6 +97,10 @@ func createStructure(e *xml.Element, flag uint) any {
 	if e.Parent != nil && name == e.Parent.GetName() {
 		name += InnerKeyword
 	}
+	// vals is a special case where it serves as a transversal tag
+	if name == "vals" && e.Parent != nil {
+		name = e.Parent.GetName() + "_" + name
+	}
 	if (flag & forceRandomName) > 0 {
 		flag &^= forceRandomName
 		name += strconv.Itoa(UniqueNumber)
@@ -113,12 +117,15 @@ func createStructure(e *xml.Element, flag uint) any {
 	// If "forceFullCheck" is asked, it means we are in a slice/map, and we want
 	// to check all nodes to have all members possible
 	if (flag & forceFullCheck) > 0 {
-		flag &^= forceFullCheck
 		n := e
-		// log.Printf("Forcefullcheck on %s & %p", e.XMLPath(), n.Child)
-		if n.Child != nil {
+		//log.Printf("Forcefullcheck on %s & %p", e.XMLPath(), n.Child)
+
+		// forceChildApplied has been applied and so, we are in the children level and not
+		// in the main structure level
+		if n.Child != nil && forceChildApplied&flag == 0 {
 			n = n.Child
 		}
+		flag &^= forceFullCheck | forceChildApplied
 		for n != nil {
 			if err := handleElement(n.Child, s, flag); err != nil {
 				panic(err)
@@ -126,5 +133,6 @@ func createStructure(e *xml.Element, flag uint) any {
 			n = n.Next
 		}
 	}
+	flag &^= forceChildApplied
 	return s
 }

@@ -221,9 +221,11 @@ func handleElement(e *xml.Element, st *StructInfo, flag uint) error {
 		}
 		n = n.Next
 	}
-	if m, ok := RegisteredMembers[st.Name]; ok && !hasSameMembers(m, st) {
-		//log.Printf("WARNING: struct %s (length %d - %p) is different from %s (length %d - %p)", m.Name, len(m.Members), m, st.Name, len(st.Members), st)
-		fixMembers(m, st)
+	if m, ok := RegisteredMembers[st.Name]; ok {
+		if !hasSameMembers(m, st) {
+			log.Printf("WARNING: struct %s (length %d - %p) is different from %s (length %d - %p)", m.Name, len(m.Members), m, st.Name, len(st.Members), st)
+			fixMembers(m, st)
+		}
 	} else {
 		RegisteredMembers[st.Name] = st
 	}
@@ -239,7 +241,9 @@ func (s *StructInfo) addMember(name string, attr attributes.Attributes, t any) {
 		s.Members[name] = &member{
 			T:    t,
 			Attr: attr,
+			Name: name,
 		}
+		s.Order = append(s.Order, s.Members[name])
 	} else {
 		// Check if the existing member and the new member are of the same type
 		if kind, okKind := s.Members[name].T.(reflect.Kind); !isSameType(s.Members[name].T, t) || (okKind && kind != t.(reflect.Kind)) {

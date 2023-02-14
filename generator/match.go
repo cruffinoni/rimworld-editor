@@ -133,11 +133,13 @@ func fixMembers(a, b *StructInfo) {
 	for name, m := range a.Members {
 		if _, ok := b.Members[name]; !ok {
 			b.Members[name] = m
+			b.Order = append(b.Order, m)
 		}
 	}
 	for name, m := range b.Members {
 		if _, ok := a.Members[name]; !ok {
 			a.Members[name] = m
+			a.Order = append(a.Order, m)
 		}
 	}
 	for i := range a.Members {

@@ -58,9 +58,6 @@ func castToInterface[T any](val any) (T, bool) {
 }
 
 func (m *Map[K, V]) TransformToXML(b *saver.Buffer) error {
-	if m.Capacity() == 0 {
-		return nil
-	}
 	b.OpenTag(m.tag, m.attr)
 	b.Write([]byte("\n"))
 	defer func() {
@@ -175,12 +172,12 @@ func (m *Map[K, V]) Assign(e *xml.Element) error {
 	if e.Child == nil {
 		return nil
 	}
-	log.Printf("Tag: %v", m.tag)
+	//log.Printf("Tag: %v", m.tag)
 	keys := path.FindWithPath("keys>[...]", e)
 	if len(keys) == 0 {
 		return errors.New("Map/Assign: no key")
 	}
-	log.Printf("e=%v", e.GetName())
+	//log.Printf("e=%v", e.GetName())
 	values := path.FindWithPath("values>[...]", e)
 	if len(values) == 0 {
 		return errors.New("Map/Assign: no value")
@@ -188,18 +185,18 @@ func (m *Map[K, V]) Assign(e *xml.Element) error {
 	if len(keys) != len(values) {
 		return errors.New("Map/Assign: keys length differs from values length")
 	}
-	log.Printf("Keys: %v, Value: %v", keys[0].XMLPath(), values[0].XMLPath())
-	log.Printf("Keys: %+v, Value: %+v", keys[0].Data, values[0].Data)
+	//log.Printf("Keys: %v, Value: %v", keys[0].XMLPath(), values[0].XMLPath())
+	//log.Printf("Keys: %+v, Value: %+v", keys[0].Data, values[0].Data)
 	kKind := reflect.TypeOf(zero[K]()).Kind()
 	vKind := reflect.TypeOf(zero[V]()).Kind()
 	_, isEmpty := any(zero[V]()).(*primary.Empty)
-	log.Printf("%T is empty ? %v", zero[V](), isEmpty)
+	//log.Printf("%T is empty ? %v", zero[V](), isEmpty)
 	for i, key := range keys {
 		if key.Data == nil {
 			log.Panicf("Map/Assign: no data for key %s", key.StartElement.Name.Local)
 		}
-		//log.Printf("There is data? %+v\n> %+v\n>> %+v\n>>>%+v", values[i], values[i].Child, values[i].Child.Child, values[i].Child.Child.Child)
-		log.Printf("Type ok? '%T'", zero[V]())
+		////log.Printf("There is data? %+v\n> %+v\n>> %+v\n>>>%+v", values[i], values[i].Child, values[i].Child.Child, values[i].Child.Child.Child)
+		//log.Printf("Type ok? '%T'", zero[V]())
 		// This might be a custom type that implements xml.Assigner interface
 		if _, ok := any(zero[V]()).(xml.Assigner); ok && !isEmpty {
 			if values[i].Child == nil {

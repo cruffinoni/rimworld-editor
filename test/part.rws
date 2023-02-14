@@ -1,545 +1,2272 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <savegame>
-	<type>
-		<li>
-			<createdFromNoExpansionGame>True</createdFromNoExpansionGame>
-			<foundation IsNull="True"/>
-			<name>Rustican 2</name>
-			<culture>Rustican</culture>
-			<memes/>
-			<precepts>
-				<li>
-					<name>cannibalisme</name>
-					<def>Cannibalism_Classic</def>
-					<ID>12</ID>
-					<randomSeed>-2137262173</randomSeed>
-					<usesDefiniteArticle>True</usesDefiniteArticle>
-				</li>
-				<li>
-					<name>cadavres</name>
-					<def>Corpses_Ugly</def>
-					<ID>13</ID>
-					<randomSeed>950454885</randomSeed>
-					<usesDefiniteArticle>True</usesDefiniteArticle>
-				</li>
-				<li>
-					<name>exécution</name>
-					<def>Execution_Classic</def>
-					<ID>18</ID>
-					<randomSeed>502274313</randomSeed>
-					<usesDefiniteArticle>True</usesDefiniteArticle>
-				</li>
-				<li>
-					<name>viande d'insecte</name>
-					<def>InsectMeatEating_Despised_Classic</def>
-					<ID>14</ID>
-					<randomSeed>-837163784</randomSeed>
-					<usesDefiniteArticle>True</usesDefiniteArticle>
-				</li>
-				<li>
-					<name>nom marital</name>
-					<def>MarriageName_UsuallyMans</def>
-					<ID>16</ID>
-					<randomSeed>-855175996</randomSeed>
-					<usesDefiniteArticle>True</usesDefiniteArticle>
-				</li>
-				<li>
-					<name>manger la pâte nutritive</name>
-					<def>NutrientPasteEating_Disgusting</def>
-					<ID>11</ID>
-					<randomSeed>-1141618061</randomSeed>
-					<usesDefiniteArticle>True</usesDefiniteArticle>
-				</li>
-				<li>
-					<name>utilisation des organes</name>
-					<def>OrganUse_Classic</def>
-					<ID>17</ID>
-					<randomSeed>-1204706330</randomSeed>
-					<usesDefiniteArticle>True</usesDefiniteArticle>
-				</li>
-				<li>
-					<name>traite des esclaves</name>
-					<def>Slavery_Classic</def>
-					<ID>19</ID>
-					<randomSeed>-301498631</randomSeed>
-					<usesDefiniteArticle>True</usesDefiniteArticle>
-				</li>
-				<li>
-					<name>amour physique</name>
-					<def>Lovin_Free</def>
-					<ID>15</ID>
-					<randomSeed>-196120713</randomSeed>
-					<usesDefiniteArticle>True</usesDefiniteArticle>
-				</li>
-				<li>
-					<name>Époux</name>
-					<def>SpouseCount_Female_MaxOne</def>
-					<ID>21</ID>
-					<randomSeed>-505669973</randomSeed>
-					<usesDefiniteArticle>True</usesDefiniteArticle>
-				</li>
-				<li>
-					<name>Épouses</name>
-					<def>SpouseCount_Male_MaxOne</def>
-					<ID>20</ID>
-					<randomSeed>1950680083</randomSeed>
-					<usesDefiniteArticle>True</usesDefiniteArticle>
-				</li>
-			</precepts>
-			<thingStyleCategories/>
-			<usedSymbols/>
-			<usedSymbolPacks/>
-			<style>
-				<hairFrequencies>
-					<vals>
-						<li>
-							<frequency>Normal</frequency>
-						</li>
-						<li>
-							<frequency>Normal</frequency>
-							<gender>Female</gender>
-						</li>
-						<li/>
-						<li/>
-						<li/>
-						<li>
-							<gender>Female</gender>
-						</li>
-						<li>
-							<gender>Any</gender>
-						</li>
-						<li>
-							<gender>Female</gender>
-						</li>
-						<li/>
-						<li/>
-						<li/>
-						<li>
-							<gender>Female</gender>
-						</li>
-						<li>
-							<gender>Female</gender>
-						</li>
-						<li>
-							<gender>Female</gender>
-						</li>
-						<li>
-							<gender>Female</gender>
-						</li>
-						<li>
-							<frequency>Normal</frequency>
-							<gender>Female</gender>
-						</li>
-						<li>
-							<frequency>Normal</frequency>
-							<gender>Female</gender>
-						</li>
-						<li>
-							<frequency>Normal</frequency>
-							<gender>Female</gender>
-						</li>
-						<li>
-							<frequency>Normal</frequency>
-							<gender>MaleUsually</gender>
-						</li>
-						<li>
-							<frequency>Normal</frequency>
-							<gender>Any</gender>
-						</li>
-						<li>
-							<frequency>Normal</frequency>
-						</li>
-						<li>
-							<frequency>Normal</frequency>
-							<gender>Female</gender>
-						</li>
-						<li>
-							<frequency>Normal</frequency>
-							<gender>Female</gender>
-						</li>
-						<li>
-							<gender>Female</gender>
-						</li>
-						<li>
-							<frequency>Normal</frequency>
-							<gender>Female</gender>
-						</li>
-						<li>
-							<frequency>Normal</frequency>
-						</li>
-						<li>
-							<frequency>Normal</frequency>
-						</li>
-						<li/>
-						<li>
-							<frequency>Normal</frequency>
-						</li>
-						<li>
-							<frequency>Normal</frequency>
-						</li>
-						<li>
-							<gender>MaleUsually</gender>
-						</li>
-						<li>
-							<gender>FemaleUsually</gender>
-						</li>
-						<li>
-							<gender>FemaleUsually</gender>
-						</li>
-						<li>
-							<gender>MaleUsually</gender>
-						</li>
-						<li>
-							<gender>MaleUsually</gender>
-						</li>
-						<li>
-							<gender>MaleUsually</gender>
-						</li>
-						<li>
-							<gender>Any</gender>
-						</li>
-						<li>
-							<gender>Any</gender>
-						</li>
-						<li>
-							<gender>FemaleUsually</gender>
-						</li>
-						<li>
-							<gender>FemaleUsually</gender>
-						</li>
-						<li>
-							<gender>FemaleUsually</gender>
-						</li>
-						<li/>
-						<li>
-							<gender>MaleUsually</gender>
-						</li>
-						<li>
-							<gender>MaleUsually</gender>
-						</li>
-						<li>
-							<gender>Any</gender>
-						</li>
-						<li>
-							<frequency>Normal</frequency>
-							<gender>Any</gender>
-						</li>
-						<li>
-							<gender>MaleUsually</gender>
-						</li>
-						<li>
-							<gender>Any</gender>
-						</li>
-						<li/>
-						<li>
-							<gender>MaleUsually</gender>
-						</li>
-					</vals>
-				</hairFrequencies>
-				<beardFrequencies>
-					<vals>
-						<li>
-							<frequency>Frequent</frequency>
-							<gender>Any</gender>
-						</li>
-						<li/>
-						<li/>
-						<li/>
-						<li>
-							<frequency>Uncommon</frequency>
-						</li>
-						<li>
-							<frequency>Uncommon</frequency>
-						</li>
-						<li/>
-						<li>
-							<frequency>Uncommon</frequency>
-						</li>
-						<li>
-							<frequency>Uncommon</frequency>
-						</li>
-						<li>
-							<frequency>Uncommon</frequency>
-						</li>
-						<li/>
-						<li/>
-						<li/>
-						<li/>
-						<li/>
-						<li/>
-						<li/>
-						<li>
-							<frequency>Uncommon</frequency>
-						</li>
-						<li>
-							<frequency>Uncommon</frequency>
-						</li>
-						<li/>
-						<li/>
-						<li>
-							<frequency>Uncommon</frequency>
-						</li>
-						<li/>
-						<li>
-							<frequency>Uncommon</frequency>
-						</li>
-						<li/>
-						<li>
-							<frequency>Uncommon</frequency>
-						</li>
-						<li/>
-						<li>
-							<frequency>Uncommon</frequency>
-						</li>
-						<li/>
-						<li/>
-						<li>
-							<frequency>Uncommon</frequency>
-						</li>
-					</vals>
-				</beardFrequencies>
-				<styleForThingDef>
-					<keys/>
-					<values/>
-				</styleForThingDef>
-			</style>
-			<id>1</id>
-			<development IsNull="True"/>
-		</li>
+	<meta>
+		<gameVersion>1.3.3326 rev562</gameVersion>
+		<modIds>
+			<li>brrainz.harmony</li>
+			<li>ludeon.rimworld</li>
+			<li>ludeon.rimworld.royalty</li>
+			<li>ludeon.rimworld.ideology</li>
+			<li>unlimitedhugs.hugslib</li>
+			<li>com.github.alandariva.moreplanning</li>
+			<li>void.charactereditor</li>
+		</modIds>
+		<modSteamIds>
+			<li>0</li>
+			<li>0</li>
+			<li>1149640</li>
+			<li>1392840</li>
+			<li>0</li>
+			<li>0</li>
+			<li>0</li>
+		</modSteamIds>
+		<modNames>
+			<li>Harmony</li>
+			<li>Core</li>
+			<li>Royalty</li>
+			<li>Ideology</li>
+			<li>HugsLib</li>
+			<li>More Planning 1.3</li>
+			<li>Character Editor</li>
+		</modNames>
+	</meta>
+	<game>
+		<currentMapIndex>0</currentMapIndex>
+		<info>
+			<realPlayTimeInteracting>23.91649</realPlayTimeInteracting>
+		</info>
+		<rules>
+			<disallowedBuildings/>
+			<disallowedDesignatorTypes/>
+		</rules>
+		<scenario>
+			<name>Brutalité nue</name>
+			<summary>Nu(e), seul(e) et complètement non préparé(e). Pourrez-vous
+				survivre ? Extrêmement difficile et injuste.
+			</summary>
+			<description>Vous avez été anesthésié(e) pour une opération mineure.
+				Maintenant, vous réveillez dans une nacelle qui s'écrase sur une
+				planète lointaine. Vous êtes pris(e) au dépourvu, nu(e), et
+				seul(e). Pourrez-vous survivre ?
 
-		<li>
-			<createdFromNoExpansionGame>True</createdFromNoExpansionGame>
-			<foundation/>
-			<name>Corunan</name>
-			<culture>Corunan</culture>
-			<memes/>
-			<precepts>
+				Avertissement : ce scénario ne vous ménagera pas et ne sera pas
+				loyal. Il est extrêmement difficile et la mort peut arriver à
+				tout moment.
+			</description>
+			<playerFaction>
+				<def>PlayerFaction</def>
+				<factionDef>PlayerColony</factionDef>
+			</playerFaction>
+			<parts>
+				<li Class="ScenPart_ConfigPage_ConfigureStartingPawns">
+					<def>ConfigPage_ConfigureStartingPawns</def>
+					<pawnCount>1</pawnCount>
+					<pawnChoiceCount>8</pawnChoiceCount>
+				</li>
+				<li Class="ScenPart_PlayerPawnsArriveMethod">
+					<def>PlayerPawnsArriveMethod</def>
+					<method>DropPods</method>
+				</li>
+				<li Class="ScenPart_Naked">
+					<def>Naked</def>
+					<chance>1</chance>
+					<context>PlayerStarter</context>
+				</li>
+				<li Class="ScenPart_GameStartDialog">
+					<def>GameStartDialog</def>
+					<text>C'était censé être une opération mineure. Juste une
+						heure sous anesthésie. Vous vous sentiez totalement en
+						sécurité.
+
+						Vous vous réveillez à l'intérieur d'une nacelle dans
+						l'atmosphère d'un monde lointain.
+
+						À l'exception d'un mystérieux liquide visqueux sur votre
+						corps, vous êtes totalement nu(e). Sans préparation,
+						sans fournitures et sans outils, pourrez-vous survivre ?
+					</text>
+					<closeSound>GameStartSting</closeSound>
+				</li>
+			</parts>
+		</scenario>
+		<tickManager>
+			<ticksGame>690</ticksGame>
+			<gameStartAbsTick>615000</gameStartAbsTick>
+			<startingYear>5500</startingYear>
+		</tickManager>
+		<playSettings>
+			<showLearningHelper>True</showLearningHelper>
+			<showZones>True</showZones>
+			<showColonistBar>True</showColonistBar>
+			<autoHomeArea>True</autoHomeArea>
+			<lockNorthUp>True</lockNorthUp>
+			<usePlanetDayNightSystem>True</usePlanetDayNightSystem>
+			<showExpandingIcons>True</showExpandingIcons>
+			<showWorldFeatures>True</showWorldFeatures>
+			<defaultCareForHumanlikeColonists>Best
+			</defaultCareForHumanlikeColonists>
+			<defaultCareForAnimalColonists>HerbalOrWorse
+			</defaultCareForAnimalColonists>
+			<defaultCareForHumanlikeColonistPrisoners>HerbalOrWorse
+			</defaultCareForHumanlikeColonistPrisoners>
+			<defaultCareForHumanlikeNeutrals>HerbalOrWorse
+			</defaultCareForHumanlikeNeutrals>
+			<defaultCareForAnimalNeutrals>HerbalOrWorse
+			</defaultCareForAnimalNeutrals>
+			<defaultCareForHumanlikeEnemies>HerbalOrWorse
+			</defaultCareForHumanlikeEnemies>
+		</playSettings>
+		<storyWatcher>
+			<statsRecord>
+				<greatestPopulation>1</greatestPopulation>
+			</statsRecord>
+			<watcherAdaptation/>
+			<watcherPopAdaptation>
+				<adaptDays>0.5</adaptDays>
+			</watcherPopAdaptation>
+		</storyWatcher>
+		<gameEnder/>
+		<letterStack>
+			<letters/>
+		</letterStack>
+		<researchManager>
+			<progress>
+				<keys>
+					<li>PsychoidBrewing</li>
+					<li>TreeSowing</li>
+					<li>Brewing</li>
+					<li>ComplexFurniture</li>
+					<li>PassiveCooler</li>
+					<li>Stonecutting</li>
+					<li>ComplexClothing</li>
+					<li>DrugProduction</li>
+					<li>Cocoa</li>
+					<li>Devilstrand</li>
+					<li>CarpetMaking</li>
+					<li>Pemmican</li>
+					<li>Smithing</li>
+					<li>RecurveBow</li>
+					<li>PsychiteRefining</li>
+					<li>WakeUpProduction</li>
+					<li>GoJuiceProduction</li>
+					<li>PenoxycylineProduction</li>
+					<li>LongBlades</li>
+					<li>PlateArmor</li>
+					<li>Greatbow</li>
+					<li>Electricity</li>
+					<li>Batteries</li>
+					<li>BiofuelRefining</li>
+					<li>WatermillGenerator</li>
+					<li>NutrientPaste</li>
+					<li>SolarPanels</li>
+					<li>AirConditioning</li>
+					<li>Autodoors</li>
+					<li>Hydroponics</li>
+					<li>TubeTelevision</li>
+					<li>PackagedSurvivalMeal</li>
+					<li>Firefoam</li>
+					<li>IEDs</li>
+					<li>GeothermalPower</li>
+					<li>SterileMaterials</li>
+					<li>ColoredLights</li>
+					<li>Machining</li>
+					<li>SmokepopBelt</li>
+					<li>Prosthetics</li>
+					<li>Gunsmithing</li>
+					<li>FlakArmor</li>
+					<li>Mortars</li>
+					<li>BlowbackOperation</li>
+					<li>GasOperation</li>
+					<li>GunTurrets</li>
+					<li>MicroelectronicsBasics</li>
+					<li>FlatscreenTelevision</li>
+					<li>MoisturePump</li>
+					<li>HospitalBed</li>
+					<li>DeepDrilling</li>
+					<li>GroundPenetratingScanner</li>
+					<li>TransportPod</li>
+					<li>MedicineProduction</li>
+					<li>LongRangeMineralScanner</li>
+					<li>ShieldBelt</li>
+					<li>PrecisionRifling</li>
+					<li>HeavyTurrets</li>
+					<li>MultibarrelWeapons</li>
+					<li>MultiAnalyzer</li>
+					<li>VitalsMonitor</li>
+					<li>Fabrication</li>
+					<li>AdvancedFabrication</li>
+					<li>Cryptosleep</li>
+					<li>ReconArmor</li>
+					<li>PoweredArmor</li>
+					<li>ChargedShot</li>
+					<li>Bionics</li>
+					<li>SniperTurret</li>
+					<li>ShipBasics</li>
+					<li>ShipCryptosleep</li>
+					<li>ShipReactor</li>
+					<li>ShipEngine</li>
+					<li>ShipComputerCore</li>
+					<li>ShipSensorCluster</li>
+				</keys>
+				<values>
+					<li>0</li>
+					<li>0</li>
+					<li>0</li>
+					<li>300</li>
+					<li>400</li>
+					<li>300</li>
+					<li>600</li>
+					<li>0</li>
+					<li>0</li>
+					<li>0</li>
+					<li>0</li>
+					<li>0</li>
+					<li>0</li>
+					<li>0</li>
+					<li>0</li>
+					<li>0</li>
+					<li>0</li>
+					<li>0</li>
+					<li>0</li>
+					<li>0</li>
+					<li>0</li>
+					<li>1600</li>
+					<li>0</li>
+					<li>0</li>
+					<li>0</li>
+					<li>400</li>
+					<li>0</li>
+					<li>500</li>
+					<li>0</li>
+					<li>0</li>
+					<li>0</li>
+					<li>0</li>
+					<li>0</li>
+					<li>0</li>
+					<li>0</li>
+					<li>0</li>
+					<li>0</li>
+					<li>0</li>
+					<li>0</li>
+					<li>0</li>
+					<li>0</li>
+					<li>0</li>
+					<li>0</li>
+					<li>0</li>
+					<li>0</li>
+					<li>0</li>
+					<li>0</li>
+					<li>0</li>
+					<li>0</li>
+					<li>0</li>
+					<li>0</li>
+					<li>0</li>
+					<li>0</li>
+					<li>0</li>
+					<li>0</li>
+					<li>0</li>
+					<li>0</li>
+					<li>0</li>
+					<li>0</li>
+					<li>0</li>
+					<li>0</li>
+					<li>0</li>
+					<li>0</li>
+					<li>0</li>
+					<li>0</li>
+					<li>0</li>
+					<li>0</li>
+					<li>0</li>
+					<li>0</li>
+					<li>0</li>
+					<li>0</li>
+					<li>0</li>
+					<li>0</li>
+					<li>0</li>
+					<li>0</li>
+				</values>
+			</progress>
+			<techprints>
+				<keys/>
+				<values/>
+			</techprints>
+		</researchManager>
+		<storyteller>
+			<def>Cassandra</def>
+			<difficulty>Peaceful</difficulty>
+			<incidentQueue>
+				<queuedIncidents/>
+			</incidentQueue>
+		</storyteller>
+		<history>
+			<archive>
+				<archivables>
+					<li Class="ArchivedDialog">
+						<text>C'était censé être une opération mineure. Juste
+							une heure sous anesthésie. Vous vous sentiez
+							totalement en sécurité.
+
+							Vous vous réveillez à l'intérieur d'une nacelle dans
+							l'atmosphère d'un monde lointain.
+
+							À l'exception d'un mystérieux liquide visqueux sur
+							votre corps, vous êtes totalement nu(e). Sans
+							préparation, sans fournitures et sans outils,
+							pourrez-vous survivre ?
+						</text>
+						<relatedFaction>null</relatedFaction>
+					</li>
+				</archivables>
+				<pinnedArchivables/>
+			</archive>
+			<autoRecorderGroups>
 				<li>
-					<name>cannibalisme</name>
-					<def>Cannibalism_Classic</def>
-					<ID>23</ID>
-					<randomSeed>-606671294</randomSeed>
-					<usesDefiniteArticle>True</usesDefiniteArticle>
+					<def>Wealth</def>
+					<recorders>
+						<li>
+							<def>Wealth_Total</def>
+							<records>
+								rLlZRQ==
+							</records>
+						</li>
+						<li>
+							<def>Wealth_Items</def>
+							<records>
+								AAAAAA==
+							</records>
+						</li>
+						<li>
+							<def>Wealth_Buildings</def>
+							<records>
+								V5PQRA==
+							</records>
+						</li>
+						<li>
+							<def>Wealth_Pawns</def>
+							<records>
+								AODiRA==
+							</records>
+						</li>
+					</recorders>
 				</li>
 				<li>
-					<name>cadavres</name>
-					<def>Corpses_Ugly</def>
-					<ID>24</ID>
-					<randomSeed>1865187567</randomSeed>
-					<usesDefiniteArticle>True</usesDefiniteArticle>
+					<def>Population</def>
+					<recorders>
+						<li>
+							<def>FreeColonists</def>
+							<records>
+								AACAPw==
+							</records>
+						</li>
+						<li>
+							<def>Prisoners</def>
+							<records>
+								AAAAAA==
+							</records>
+						</li>
+					</recorders>
 				</li>
 				<li>
-					<name>exécution</name>
-					<def>Execution_Classic</def>
-					<ID>29</ID>
-					<randomSeed>-422599061</randomSeed>
-					<usesDefiniteArticle>True</usesDefiniteArticle>
+					<def>ColonistMood</def>
+					<recorders>
+						<li>
+							<def>ColonistMood</def>
+							<records>
+								AABIQg==
+							</records>
+						</li>
+					</recorders>
 				</li>
 				<li>
-					<name>viande d'insecte</name>
-					<def>InsectMeatEating_Despised_Classic</def>
-					<ID>25</ID>
-					<randomSeed>968103858</randomSeed>
-					<usesDefiniteArticle>True</usesDefiniteArticle>
+					<def>Debug</def>
+					<recorders>
+						<li>
+							<def>Adaptation</def>
+							<records>
+								AAAAAA==
+							</records>
+						</li>
+						<li>
+							<def>ThreatPoints</def>
+							<records>
+								AABgQA==
+							</records>
+						</li>
+						<li>
+							<def>PopAdaptation</def>
+							<records>
+								AAAAAA==
+							</records>
+						</li>
+						<li>
+							<def>PopIntent</def>
+							<records>
+								AAAAAA==
+							</records>
+						</li>
+					</recorders>
 				</li>
-				<li>
-					<name>nom marital</name>
-					<def>MarriageName_UsuallyMans</def>
-					<ID>27</ID>
-					<randomSeed>1553466286</randomSeed>
-					<usesDefiniteArticle>True</usesDefiniteArticle>
-				</li>
-				<li>
-					<name>manger la pâte nutritive</name>
-					<def>NutrientPasteEating_Disgusting</def>
-					<ID>22</ID>
-					<randomSeed>-1696315431</randomSeed>
-					<usesDefiniteArticle>True</usesDefiniteArticle>
-				</li>
-				<li>
-					<name>utilisation des organes</name>
-					<def>OrganUse_Classic</def>
-					<ID>28</ID>
-					<randomSeed>2028129588</randomSeed>
-					<usesDefiniteArticle>True</usesDefiniteArticle>
-				</li>
-				<li>
-					<name>traite des esclaves</name>
-					<def>Slavery_Classic</def>
-					<ID>30</ID>
-					<randomSeed>-470866308</randomSeed>
-					<usesDefiniteArticle>True</usesDefiniteArticle>
-				</li>
-				<li>
-					<name>amour physique</name>
-					<def>Lovin_Free</def>
-					<ID>26</ID>
-					<randomSeed>-1442272627</randomSeed>
-					<usesDefiniteArticle>True</usesDefiniteArticle>
-				</li>
-				<li>
-					<name>Époux</name>
-					<def>SpouseCount_Female_MaxOne</def>
-					<ID>32</ID>
-					<randomSeed>-954237569</randomSeed>
-					<usesDefiniteArticle>True</usesDefiniteArticle>
-				</li>
-				<li>
-					<name>Épouses</name>
-					<def>SpouseCount_Male_MaxOne</def>
-					<ID>31</ID>
-					<randomSeed>246528037</randomSeed>
-					<usesDefiniteArticle>True</usesDefiniteArticle>
-				</li>
-			</precepts>
-			<thingStyleCategories/>
-			<usedSymbols/>
-			<usedSymbolPacks/>
-			<style>
-				<hairFrequencies>
+			</autoRecorderGroups>
+			<lastPsylinkAvailable>0</lastPsylinkAvailable>
+			<historyEventsManager>
+				<colonistEvents>
 					<vals>
-						<li/>
 						<li>
-							<gender>Female</gender>
-						</li>
-						<li/>
-						<li/>
-						<li/>
-						<li>
-							<gender>Female</gender>
+							<ticksGame IsNull="True"/>
+							<customGoodwill IsNull="True"/>
 						</li>
 						<li>
-							<gender>Any</gender>
+							<ticksGame IsNull="True"/>
+							<customGoodwill IsNull="True"/>
 						</li>
 						<li>
-							<gender>Female</gender>
-						</li>
-						<li/>
-						<li/>
-						<li/>
-						<li>
-							<gender>Female</gender>
+							<ticksGame IsNull="True"/>
+							<customGoodwill IsNull="True"/>
 						</li>
 						<li>
-							<gender>Female</gender>
+							<ticksGame IsNull="True"/>
+							<customGoodwill IsNull="True"/>
 						</li>
 						<li>
-							<gender>Female</gender>
+							<ticksGame IsNull="True"/>
+							<customGoodwill IsNull="True"/>
 						</li>
 						<li>
-							<gender>Female</gender>
+							<ticksGame IsNull="True"/>
+							<customGoodwill IsNull="True"/>
 						</li>
 						<li>
-							<gender>Female</gender>
+							<ticksGame IsNull="True"/>
+							<customGoodwill IsNull="True"/>
 						</li>
 						<li>
-							<gender>Female</gender>
+							<ticksGame IsNull="True"/>
+							<customGoodwill IsNull="True"/>
 						</li>
 						<li>
-							<gender>Female</gender>
+							<ticksGame IsNull="True"/>
+							<customGoodwill IsNull="True"/>
 						</li>
 						<li>
-							<gender>MaleUsually</gender>
+							<ticksGame IsNull="True"/>
+							<customGoodwill IsNull="True"/>
 						</li>
 						<li>
-							<gender>Any</gender>
-						</li>
-						<li/>
-						<li>
-							<gender>Female</gender>
+							<ticksGame IsNull="True"/>
+							<customGoodwill IsNull="True"/>
 						</li>
 						<li>
-							<gender>Female</gender>
+							<ticksGame IsNull="True"/>
+							<customGoodwill IsNull="True"/>
 						</li>
 						<li>
-							<gender>Female</gender>
+							<ticksGame IsNull="True"/>
+							<customGoodwill IsNull="True"/>
 						</li>
 						<li>
-							<gender>Female</gender>
-						</li>
-						<li/>
-						<li/>
-						<li/>
-						<li/>
-						<li/>
-						<li>
-							<gender>MaleUsually</gender>
+							<ticksGame IsNull="True"/>
+							<customGoodwill IsNull="True"/>
 						</li>
 						<li>
-							<gender>FemaleUsually</gender>
+							<ticksGame IsNull="True"/>
+							<customGoodwill IsNull="True"/>
 						</li>
 						<li>
-							<gender>FemaleUsually</gender>
+							<ticksGame IsNull="True"/>
+							<customGoodwill IsNull="True"/>
 						</li>
 						<li>
-							<gender>MaleUsually</gender>
+							<ticksGame IsNull="True"/>
+							<customGoodwill IsNull="True"/>
 						</li>
 						<li>
-							<gender>MaleUsually</gender>
+							<ticksGame IsNull="True"/>
+							<customGoodwill IsNull="True"/>
 						</li>
 						<li>
-							<gender>MaleUsually</gender>
+							<ticksGame IsNull="True"/>
+							<customGoodwill IsNull="True"/>
 						</li>
 						<li>
-							<frequency>Normal</frequency>
-							<gender>Any</gender>
+							<ticksGame IsNull="True"/>
+							<customGoodwill IsNull="True"/>
 						</li>
 						<li>
-							<frequency>Normal</frequency>
-							<gender>Any</gender>
+							<ticksGame IsNull="True"/>
+							<customGoodwill IsNull="True"/>
 						</li>
 						<li>
-							<frequency>Normal</frequency>
-							<gender>FemaleUsually</gender>
+							<ticksGame IsNull="True"/>
+							<customGoodwill IsNull="True"/>
 						</li>
 						<li>
-							<frequency>Normal</frequency>
-							<gender>FemaleUsually</gender>
+							<ticksGame IsNull="True"/>
+							<customGoodwill IsNull="True"/>
 						</li>
 						<li>
-							<frequency>Normal</frequency>
-							<gender>FemaleUsually</gender>
+							<ticksGame IsNull="True"/>
+							<customGoodwill IsNull="True"/>
 						</li>
 						<li>
-							<frequency>Normal</frequency>
+							<ticksGame IsNull="True"/>
+							<customGoodwill IsNull="True"/>
 						</li>
 						<li>
-							<frequency>Normal</frequency>
-							<gender>MaleUsually</gender>
+							<ticksGame IsNull="True"/>
+							<customGoodwill IsNull="True"/>
 						</li>
 						<li>
-							<frequency>Normal</frequency>
-							<gender>MaleUsually</gender>
+							<ticksGame IsNull="True"/>
+							<customGoodwill IsNull="True"/>
 						</li>
 						<li>
-							<frequency>Normal</frequency>
-							<gender>Any</gender>
+							<ticksGame IsNull="True"/>
+							<customGoodwill IsNull="True"/>
 						</li>
 						<li>
-							<frequency>Normal</frequency>
-							<gender>Any</gender>
+							<ticksGame IsNull="True"/>
+							<customGoodwill IsNull="True"/>
 						</li>
 						<li>
-							<frequency>Normal</frequency>
-							<gender>MaleUsually</gender>
+							<ticksGame IsNull="True"/>
+							<customGoodwill IsNull="True"/>
 						</li>
 						<li>
-							<frequency>Normal</frequency>
-							<gender>Any</gender>
+							<ticksGame IsNull="True"/>
+							<customGoodwill IsNull="True"/>
 						</li>
-						<li/>
 						<li>
-							<gender>MaleUsually</gender>
+							<ticksGame IsNull="True"/>
+							<customGoodwill IsNull="True"/>
+						</li>
+						<li>
+							<ticksGame IsNull="True"/>
+							<customGoodwill IsNull="True"/>
+						</li>
+						<li>
+							<ticksGame IsNull="True"/>
+							<customGoodwill IsNull="True"/>
+						</li>
+						<li>
+							<ticksGame IsNull="True"/>
+							<customGoodwill IsNull="True"/>
+						</li>
+						<li>
+							<ticksGame IsNull="True"/>
+							<customGoodwill IsNull="True"/>
+						</li>
+						<li>
+							<ticksGame IsNull="True"/>
+							<customGoodwill IsNull="True"/>
+						</li>
+						<li>
+							<ticksGame IsNull="True"/>
+							<customGoodwill IsNull="True"/>
+						</li>
+						<li>
+							<ticksGame IsNull="True"/>
+							<customGoodwill IsNull="True"/>
+						</li>
+						<li>
+							<ticksGame IsNull="True"/>
+							<customGoodwill IsNull="True"/>
+						</li>
+						<li>
+							<ticksGame IsNull="True"/>
+							<customGoodwill IsNull="True"/>
+						</li>
+						<li>
+							<ticksGame IsNull="True"/>
+							<customGoodwill IsNull="True"/>
+						</li>
+						<li>
+							<ticksGame IsNull="True"/>
+							<customGoodwill IsNull="True"/>
+						</li>
+						<li>
+							<ticksGame IsNull="True"/>
+							<customGoodwill IsNull="True"/>
+						</li>
+						<li>
+							<ticksGame IsNull="True"/>
+							<customGoodwill IsNull="True"/>
+						</li>
+						<li>
+							<ticksGame IsNull="True"/>
+							<customGoodwill IsNull="True"/>
+						</li>
+						<li>
+							<ticksGame IsNull="True"/>
+							<customGoodwill IsNull="True"/>
+						</li>
+						<li>
+							<ticksGame IsNull="True"/>
+							<customGoodwill IsNull="True"/>
+						</li>
+						<li>
+							<ticksGame IsNull="True"/>
+							<customGoodwill IsNull="True"/>
+						</li>
+						<li>
+							<ticksGame IsNull="True"/>
+							<customGoodwill IsNull="True"/>
+						</li>
+						<li>
+							<ticksGame IsNull="True"/>
+							<customGoodwill IsNull="True"/>
+						</li>
+						<li>
+							<ticksGame IsNull="True"/>
+							<customGoodwill IsNull="True"/>
+						</li>
+						<li>
+							<ticksGame IsNull="True"/>
+							<customGoodwill IsNull="True"/>
+						</li>
+						<li>
+							<ticksGame IsNull="True"/>
+							<customGoodwill IsNull="True"/>
+						</li>
+						<li>
+							<ticksGame IsNull="True"/>
+							<customGoodwill IsNull="True"/>
+						</li>
+						<li>
+							<ticksGame IsNull="True"/>
+							<customGoodwill IsNull="True"/>
+						</li>
+						<li>
+							<ticksGame IsNull="True"/>
+							<customGoodwill IsNull="True"/>
+						</li>
+						<li>
+							<ticksGame IsNull="True"/>
+							<customGoodwill IsNull="True"/>
+						</li>
+						<li>
+							<ticksGame IsNull="True"/>
+							<customGoodwill IsNull="True"/>
+						</li>
+						<li>
+							<ticksGame IsNull="True"/>
+							<customGoodwill IsNull="True"/>
+						</li>
+						<li>
+							<ticksGame IsNull="True"/>
+							<customGoodwill IsNull="True"/>
+						</li>
+						<li>
+							<ticksGame IsNull="True"/>
+							<customGoodwill IsNull="True"/>
+						</li>
+						<li>
+							<ticksGame IsNull="True"/>
+							<customGoodwill IsNull="True"/>
+						</li>
+						<li>
+							<ticksGame IsNull="True"/>
+							<customGoodwill IsNull="True"/>
+						</li>
+						<li>
+							<ticksGame IsNull="True"/>
+							<customGoodwill IsNull="True"/>
+						</li>
+						<li>
+							<ticksGame IsNull="True"/>
+							<customGoodwill IsNull="True"/>
+						</li>
+						<li>
+							<ticksGame IsNull="True"/>
+							<customGoodwill IsNull="True"/>
+						</li>
+						<li>
+							<ticksGame IsNull="True"/>
+							<customGoodwill IsNull="True"/>
+						</li>
+						<li>
+							<ticksGame IsNull="True"/>
+							<customGoodwill IsNull="True"/>
+						</li>
+						<li>
+							<ticksGame IsNull="True"/>
+							<customGoodwill IsNull="True"/>
+						</li>
+						<li>
+							<ticksGame IsNull="True"/>
+							<customGoodwill IsNull="True"/>
+						</li>
+						<li>
+							<ticksGame IsNull="True"/>
+							<customGoodwill IsNull="True"/>
+						</li>
+						<li>
+							<ticksGame IsNull="True"/>
+							<customGoodwill IsNull="True"/>
+						</li>
+						<li>
+							<ticksGame IsNull="True"/>
+							<customGoodwill IsNull="True"/>
+						</li>
+						<li>
+							<ticksGame IsNull="True"/>
+							<customGoodwill IsNull="True"/>
+						</li>
+						<li>
+							<ticksGame IsNull="True"/>
+							<customGoodwill IsNull="True"/>
+						</li>
+						<li>
+							<ticksGame IsNull="True"/>
+							<customGoodwill IsNull="True"/>
+						</li>
+						<li>
+							<ticksGame IsNull="True"/>
+							<customGoodwill IsNull="True"/>
+						</li>
+						<li>
+							<ticksGame IsNull="True"/>
+							<customGoodwill IsNull="True"/>
+						</li>
+						<li>
+							<ticksGame IsNull="True"/>
+							<customGoodwill IsNull="True"/>
+						</li>
+						<li>
+							<ticksGame IsNull="True"/>
+							<customGoodwill IsNull="True"/>
+						</li>
+						<li>
+							<ticksGame IsNull="True"/>
+							<customGoodwill IsNull="True"/>
+						</li>
+						<li>
+							<ticksGame IsNull="True"/>
+							<customGoodwill IsNull="True"/>
+						</li>
+						<li>
+							<ticksGame IsNull="True"/>
+							<customGoodwill IsNull="True"/>
+						</li>
+						<li>
+							<ticksGame IsNull="True"/>
+							<customGoodwill IsNull="True"/>
+						</li>
+						<li>
+							<ticksGame IsNull="True"/>
+							<customGoodwill IsNull="True"/>
+						</li>
+						<li>
+							<ticksGame IsNull="True"/>
+							<customGoodwill IsNull="True"/>
+						</li>
+						<li>
+							<ticksGame IsNull="True"/>
+							<customGoodwill IsNull="True"/>
+						</li>
+						<li>
+							<ticksGame IsNull="True"/>
+							<customGoodwill IsNull="True"/>
+						</li>
+						<li>
+							<ticksGame IsNull="True"/>
+							<customGoodwill IsNull="True"/>
 						</li>
 					</vals>
-				</hairFrequencies>
-				<styleForThingDef>
+				</colonistEvents>
+				<eventsAffectingFaction>
 					<keys/>
 					<values/>
-				</styleForThingDef>
-			</style>
-			<id>2</id>
-			<development/>
-		</li>
-	</type>
+				</eventsAffectingFaction>
+			</historyEventsManager>
+		</history>
+		<taleManager>
+			<tales>
+				<li Class="Tale_SinglePawn">
+					<def>LandedInPod</def>
+					<date>615286</date>
+					<surroundings>
+						<tile>2560</tile>
+						<temperature>5.393801</temperature>
+						<weather>Clear</weather>
+						<roomRole>None</roomRole>
+					</surroundings>
+					<pawnData>
+						<pawn>Thing_Human492</pawn>
+						<kind>Colonist</kind>
+						<faction>Faction_10</faction>
+						<gender>Male</gender>
+						<age>28</age>
+						<chronologicalAge>974</chronologicalAge>
+						<relationInfo/>
+						<everBeenColonistOrTameAnimal>True
+						</everBeenColonistOrTameAnimal>
+						<royalTitles/>
+						<name Class="NameTriple">
+							<first>Nikolai</first>
+							<nick>Box</nick>
+							<last>Johansen</last>
+						</name>
+					</pawnData>
+				</li>
+			</tales>
+		</taleManager>
+		<playLog>
+			<entries/>
+		</playLog>
+		<battleLog>
+			<battles/>
+		</battleLog>
+		<outfitDatabase>
+			<outfits>
+				<li>
+					<uniqueId>1</uniqueId>
+					<label>Tout</label>
+					<filter>
+						<disallowedSpecialFilters/>
+						<allowedDefs>
+							<li>Apparel_TribalA</li>
+							<li>Apparel_Parka</li>
+							<li>Apparel_Pants</li>
+							<li>Apparel_BasicShirt</li>
+							<li>Apparel_CollarShirt</li>
+							<li>Apparel_Duster</li>
+							<li>Apparel_Jacket</li>
+							<li>Apparel_CowboyHat</li>
+							<li>Apparel_BowlerHat</li>
+							<li>Apparel_TribalHeaddress</li>
+							<li>Apparel_Tuque</li>
+							<li>Apparel_WarMask</li>
+							<li>Apparel_WarVeil</li>
+							<li>Apparel_PsychicFoilHelmet</li>
+							<li>Apparel_HatHood</li>
+							<li>Apparel_PlateArmor</li>
+							<li>Apparel_FlakVest</li>
+							<li>Apparel_FlakPants</li>
+							<li>Apparel_FlakJacket</li>
+							<li>Apparel_PowerArmor</li>
+							<li>Apparel_ArmorRecon</li>
+							<li>Apparel_SimpleHelmet</li>
+							<li>Apparel_AdvancedHelmet</li>
+							<li>Apparel_PowerArmorHelmet</li>
+							<li>Apparel_ArmorHelmetRecon</li>
+							<li>Apparel_ShieldBelt</li>
+							<li>Apparel_SmokepopBelt</li>
+							<li>Apparel_PsychicShockLance</li>
+							<li>Apparel_PsychicInsanityLance</li>
+							<li>OrbitalTargeterBombardment</li>
+							<li>OrbitalTargeterPowerBeam</li>
+							<li>TornadoGenerator</li>
+						</allowedDefs>
+						<allowedHitPointsPercents>0~1</allowedHitPointsPercents>
+						<allowedQualityLevels>Awful~Legendary
+						</allowedQualityLevels>
+					</filter>
+				</li>
+				<li>
+					<uniqueId>2</uniqueId>
+					<label>Ouvrier</label>
+					<filter>
+						<disallowedSpecialFilters>
+							<li>AllowDeadmansApparel</li>
+						</disallowedSpecialFilters>
+						<allowedDefs>
+							<li>Apparel_CowboyHat</li>
+							<li>Apparel_BowlerHat</li>
+							<li>Apparel_TribalHeaddress</li>
+							<li>Apparel_Tuque</li>
+							<li>Apparel_Parka</li>
+							<li>Apparel_Pants</li>
+							<li>Apparel_BasicShirt</li>
+							<li>Apparel_CollarShirt</li>
+							<li>Apparel_Duster</li>
+							<li>Apparel_Jacket</li>
+						</allowedDefs>
+						<allowedHitPointsPercents>0~1</allowedHitPointsPercents>
+						<allowedQualityLevels>Awful~Legendary
+						</allowedQualityLevels>
+					</filter>
+				</li>
+				<li>
+					<uniqueId>3</uniqueId>
+					<label>Soldat</label>
+					<filter>
+						<disallowedSpecialFilters>
+							<li>AllowDeadmansApparel</li>
+						</disallowedSpecialFilters>
+						<allowedDefs>
+							<li>Apparel_Tuque</li>
+							<li>Apparel_WarMask</li>
+							<li>Apparel_WarVeil</li>
+							<li>Apparel_SimpleHelmet</li>
+							<li>Apparel_AdvancedHelmet</li>
+							<li>Apparel_PowerArmorHelmet</li>
+							<li>Apparel_ArmorHelmetRecon</li>
+							<li>Apparel_Parka</li>
+							<li>Apparel_Pants</li>
+							<li>Apparel_BasicShirt</li>
+							<li>Apparel_CollarShirt</li>
+							<li>Apparel_PlateArmor</li>
+							<li>Apparel_FlakVest</li>
+							<li>Apparel_FlakPants</li>
+							<li>Apparel_FlakJacket</li>
+							<li>Apparel_PowerArmor</li>
+							<li>Apparel_ArmorRecon</li>
+						</allowedDefs>
+						<allowedHitPointsPercents>0~1</allowedHitPointsPercents>
+						<allowedQualityLevels>Awful~Legendary
+						</allowedQualityLevels>
+					</filter>
+				</li>
+				<li>
+					<uniqueId>4</uniqueId>
+					<label>Nudiste</label>
+					<filter>
+						<disallowedSpecialFilters>
+							<li>AllowDeadmansApparel</li>
+						</disallowedSpecialFilters>
+						<allowedDefs>
+							<li>Apparel_ShieldBelt</li>
+							<li>Apparel_CowboyHat</li>
+							<li>Apparel_BowlerHat</li>
+							<li>Apparel_TribalHeaddress</li>
+							<li>Apparel_Tuque</li>
+							<li>Apparel_WarMask</li>
+							<li>Apparel_WarVeil</li>
+							<li>Apparel_SimpleHelmet</li>
+							<li>Apparel_AdvancedHelmet</li>
+							<li>Apparel_PowerArmorHelmet</li>
+							<li>Apparel_ArmorHelmetRecon</li>
+							<li>Apparel_PsychicFoilHelmet</li>
+							<li>Apparel_HatHood</li>
+							<li>Apparel_SmokepopBelt</li>
+							<li>Apparel_PsychicShockLance</li>
+							<li>Apparel_PsychicInsanityLance</li>
+							<li>OrbitalTargeterBombardment</li>
+							<li>OrbitalTargeterPowerBeam</li>
+							<li>TornadoGenerator</li>
+						</allowedDefs>
+						<allowedHitPointsPercents>0~1</allowedHitPointsPercents>
+						<allowedQualityLevels>Awful~Legendary
+						</allowedQualityLevels>
+					</filter>
+				</li>
+			</outfits>
+		</outfitDatabase>
+		<drugPolicyDatabase>
+			<policies>
+				<li>
+					<uniqueId>1</uniqueId>
+					<label>Drogues sociales</label>
+					<drugs>
+						<li>
+							<drug>Beer</drug>
+							<allowedForJoy>True</allowedForJoy>
+						</li>
+						<li>
+							<drug>SmokeleafJoint</drug>
+							<allowedForJoy>True</allowedForJoy>
+						</li>
+						<li>
+							<drug>Ambrosia</drug>
+							<allowedForAddiction>True</allowedForAddiction>
+						</li>
+						<li>
+							<drug>Yayo</drug>
+							<allowedForAddiction>True</allowedForAddiction>
+						</li>
+						<li>
+							<drug>Flake</drug>
+							<allowedForAddiction>True</allowedForAddiction>
+						</li>
+						<li>
+							<drug>PsychiteTea</drug>
+							<allowedForAddiction>True</allowedForAddiction>
+						</li>
+						<li>
+							<drug>GoJuice</drug>
+							<allowedForAddiction>True</allowedForAddiction>
+						</li>
+						<li>
+							<drug>WakeUp</drug>
+							<allowedForAddiction>True</allowedForAddiction>
+						</li>
+						<li>
+							<drug>Penoxycyline</drug>
+							<allowedForAddiction>True</allowedForAddiction>
+						</li>
+						<li>
+							<drug>Luciferium</drug>
+							<allowedForAddiction>True</allowedForAddiction>
+						</li>
+					</drugs>
+					<sourceDef>SocialDrugs</sourceDef>
+				</li>
+				<li>
+					<uniqueId>2</uniqueId>
+					<label>Pas de drogues</label>
+					<drugs>
+						<li>
+							<drug>Beer</drug>
+							<allowedForAddiction>True</allowedForAddiction>
+						</li>
+						<li>
+							<drug>SmokeleafJoint</drug>
+							<allowedForAddiction>True</allowedForAddiction>
+						</li>
+						<li>
+							<drug>Ambrosia</drug>
+							<allowedForAddiction>True</allowedForAddiction>
+						</li>
+						<li>
+							<drug>Yayo</drug>
+							<allowedForAddiction>True</allowedForAddiction>
+						</li>
+						<li>
+							<drug>Flake</drug>
+							<allowedForAddiction>True</allowedForAddiction>
+						</li>
+						<li>
+							<drug>PsychiteTea</drug>
+							<allowedForAddiction>True</allowedForAddiction>
+						</li>
+						<li>
+							<drug>GoJuice</drug>
+							<allowedForAddiction>True</allowedForAddiction>
+						</li>
+						<li>
+							<drug>WakeUp</drug>
+							<allowedForAddiction>True</allowedForAddiction>
+						</li>
+						<li>
+							<drug>Penoxycyline</drug>
+							<allowedForAddiction>True</allowedForAddiction>
+						</li>
+						<li>
+							<drug>Luciferium</drug>
+							<allowedForAddiction>True</allowedForAddiction>
+						</li>
+					</drugs>
+					<sourceDef>NoDrugs</sourceDef>
+				</li>
+				<li>
+					<uniqueId>3</uniqueId>
+					<label>Sans restriction</label>
+					<drugs>
+						<li>
+							<drug>Beer</drug>
+							<allowedForAddiction>True</allowedForAddiction>
+							<allowedForJoy>True</allowedForJoy>
+						</li>
+						<li>
+							<drug>SmokeleafJoint</drug>
+							<allowedForAddiction>True</allowedForAddiction>
+							<allowedForJoy>True</allowedForJoy>
+						</li>
+						<li>
+							<drug>Ambrosia</drug>
+							<allowedForAddiction>True</allowedForAddiction>
+							<allowedForJoy>True</allowedForJoy>
+						</li>
+						<li>
+							<drug>Yayo</drug>
+							<allowedForAddiction>True</allowedForAddiction>
+							<allowedForJoy>True</allowedForJoy>
+						</li>
+						<li>
+							<drug>Flake</drug>
+							<allowedForAddiction>True</allowedForAddiction>
+							<allowedForJoy>True</allowedForJoy>
+						</li>
+						<li>
+							<drug>PsychiteTea</drug>
+							<allowedForAddiction>True</allowedForAddiction>
+							<allowedForJoy>True</allowedForJoy>
+						</li>
+						<li>
+							<drug>GoJuice</drug>
+							<allowedForAddiction>True</allowedForAddiction>
+							<allowedForJoy>True</allowedForJoy>
+						</li>
+						<li>
+							<drug>WakeUp</drug>
+							<allowedForAddiction>True</allowedForAddiction>
+							<allowedForJoy>True</allowedForJoy>
+						</li>
+						<li>
+							<drug>Penoxycyline</drug>
+							<allowedForAddiction>True</allowedForAddiction>
+						</li>
+						<li>
+							<drug>Luciferium</drug>
+							<allowedForAddiction>True</allowedForAddiction>
+						</li>
+					</drugs>
+					<sourceDef>Unrestricted</sourceDef>
+				</li>
+				<li>
+					<uniqueId>4</uniqueId>
+					<label>Une boisson par jour</label>
+					<drugs>
+						<li>
+							<drug>Beer</drug>
+							<allowedForJoy>True</allowedForJoy>
+							<allowScheduled>True</allowScheduled>
+							<takeToInventory>1</takeToInventory>
+						</li>
+						<li>
+							<drug>SmokeleafJoint</drug>
+							<allowedForJoy>True</allowedForJoy>
+						</li>
+						<li>
+							<drug>Ambrosia</drug>
+							<allowedForAddiction>True</allowedForAddiction>
+						</li>
+						<li>
+							<drug>Yayo</drug>
+							<allowedForAddiction>True</allowedForAddiction>
+						</li>
+						<li>
+							<drug>Flake</drug>
+							<allowedForAddiction>True</allowedForAddiction>
+						</li>
+						<li>
+							<drug>PsychiteTea</drug>
+							<allowedForAddiction>True</allowedForAddiction>
+						</li>
+						<li>
+							<drug>GoJuice</drug>
+							<allowedForAddiction>True</allowedForAddiction>
+						</li>
+						<li>
+							<drug>WakeUp</drug>
+							<allowedForAddiction>True</allowedForAddiction>
+						</li>
+						<li>
+							<drug>Penoxycyline</drug>
+							<allowedForAddiction>True</allowedForAddiction>
+						</li>
+						<li>
+							<drug>Luciferium</drug>
+							<allowedForAddiction>True</allowedForAddiction>
+						</li>
+					</drugs>
+					<sourceDef>OneDrinkPerDay</sourceDef>
+				</li>
+			</policies>
+		</drugPolicyDatabase>
+		<foodRestrictionDatabase>
+			<foodRestrictions>
+				<li>
+					<id>1</id>
+					<label>Gastronomique</label>
+					<filter>
+						<disallowedSpecialFilters/>
+						<allowedDefs>
+							<li>Beer</li>
+							<li>Ambrosia</li>
+							<li>MealSurvivalPack</li>
+							<li>MealNutrientPaste</li>
+							<li>MealSimple</li>
+							<li>MealFine</li>
+							<li>MealFine_Veg</li>
+							<li>MealFine_Meat</li>
+							<li>MealLavish</li>
+							<li>MealLavish_Veg</li>
+							<li>MealLavish_Meat</li>
+							<li>Kibble</li>
+							<li>Pemmican</li>
+							<li>Chocolate</li>
+							<li>Milk</li>
+							<li>InsectJelly</li>
+							<li>EggChickenUnfertilized</li>
+							<li>EggChickenFertilized</li>
+							<li>EggCobraFertilized</li>
+							<li>EggIguanaFertilized</li>
+							<li>EggTortoiseFertilized</li>
+							<li>EggCassowaryFertilized</li>
+							<li>EggEmuFertilized</li>
+							<li>EggOstrichFertilized</li>
+							<li>EggTurkeyFertilized</li>
+							<li>EggDuckUnfertilized</li>
+							<li>EggDuckFertilized</li>
+							<li>EggGooseUnfertilized</li>
+							<li>EggGooseFertilized</li>
+							<li>RawPotatoes</li>
+							<li>RawFungus</li>
+							<li>RawRice</li>
+							<li>RawAgave</li>
+							<li>RawCorn</li>
+							<li>RawBerries</li>
+							<li>Hay</li>
+							<li>RawHops</li>
+							<li>PsychoidLeaves</li>
+							<li>SmokeleafLeaves</li>
+							<li>Glowstool</li>
+							<li>Agarilux</li>
+							<li>Bryolux</li>
+							<li>Plant_Rose</li>
+							<li>Plant_Daylily</li>
+							<li>Plant_Rice</li>
+							<li>Plant_Potato</li>
+							<li>Plant_Corn</li>
+							<li>Plant_Strawberry</li>
+							<li>Plant_Haygrass</li>
+							<li>Plant_Cotton</li>
+							<li>Plant_Devilstrand</li>
+							<li>Plant_Healroot</li>
+							<li>Plant_Hops</li>
+							<li>Plant_Smokeleaf</li>
+							<li>Plant_Psychoid</li>
+							<li>Plant_TreeCocoa</li>
+							<li>Plant_Ambrosia</li>
+							<li>Plant_Agave</li>
+							<li>Plant_PincushionCactus</li>
+							<li>Plant_SaguaroCactus</li>
+							<li>Plant_TreeDrago</li>
+							<li>Plant_Grass</li>
+							<li>Plant_TallGrass</li>
+							<li>Plant_Bush</li>
+							<li>Plant_Brambles</li>
+							<li>Plant_HealrootWild</li>
+							<li>Plant_TreeWillow</li>
+							<li>Plant_TreeCypress</li>
+							<li>Plant_TreeMaple</li>
+							<li>Plant_Chokevine</li>
+							<li>Plant_Dandelion</li>
+							<li>Plant_Astragalus</li>
+							<li>Plant_Moss</li>
+							<li>Plant_Berry</li>
+							<li>Plant_TreeOak</li>
+							<li>Plant_TreePoplar</li>
+							<li>Plant_TreePine</li>
+							<li>Plant_TreeBirch</li>
+							<li>Plant_ShrubLow</li>
+							<li>Plant_Alocasia</li>
+							<li>Plant_Clivia</li>
+							<li>Plant_Rafflesia</li>
+							<li>Plant_TreeTeak</li>
+							<li>Plant_TreeCecropia</li>
+							<li>Plant_TreePalm</li>
+							<li>Plant_TreeBamboo</li>
+							<li>Meat_Bear_Grizzly</li>
+							<li>Meat_Cassowary</li>
+							<li>Meat_Cougar</li>
+							<li>Meat_Panther</li>
+							<li>Meat_Lynx</li>
+							<li>Meat_Cat</li>
+							<li>Meat_YorkshireTerrier</li>
+							<li>Meat_GuineaPig</li>
+							<li>Meat_LabradorRetriever</li>
+							<li>Meat_Husky</li>
+							<li>Meat_Monkey</li>
+							<li>Meat_Chicken</li>
+							<li>Meat_Duck</li>
+							<li>Meat_Turkey</li>
+							<li>Meat_Cow</li>
+							<li>Meat_Boomalope</li>
+							<li>Meat_Muffalo</li>
+							<li>Meat_Bison</li>
+							<li>Meat_Dromedary</li>
+							<li>Meat_Goat</li>
+							<li>Meat_Elk</li>
+							<li>Meat_Yak</li>
+							<li>Meat_Caribou</li>
+							<li>Meat_Horse</li>
+							<li>Meat_Donkey</li>
+							<li>Meat_Elephant</li>
+							<li>Meat_Rhinoceros</li>
+							<li>Meat_Hare</li>
+							<li>Meat_Megaspider</li>
+							<li>Meat_Thrumbo</li>
+							<li>Meat_Cobra</li>
+							<li>Meat_Tortoise</li>
+							<li>Meat_Alphabeaver</li>
+							<li>Meat_Pig</li>
+							<li>Meat_Ibex</li>
+							<li>Meat_Deer</li>
+							<li>Meat_Gazelle</li>
+							<li>Meat_Chinchilla</li>
+							<li>Meat_Sheep</li>
+							<li>Meat_Alpaca</li>
+							<li>Meat_Megasloth</li>
+							<li>Meat_Capybara</li>
+							<li>Meat_Squirrel</li>
+							<li>Meat_Rat</li>
+							<li>Meat_Boomrat</li>
+							<li>Meat_Raccoon</li>
+							<li>Meat_Iguana</li>
+							<li>Meat_Warg</li>
+							<li>Meat_Wolf_Timber</li>
+							<li>Meat_Fox_Fennec</li>
+							<li>Meat_Human</li>
+							<li>Corpse_Bear_Grizzly</li>
+							<li>Corpse_Bear_Polar</li>
+							<li>Corpse_Ostrich</li>
+							<li>Corpse_Emu</li>
+							<li>Corpse_Cassowary</li>
+							<li>Corpse_Cougar</li>
+							<li>Corpse_Panther</li>
+							<li>Corpse_Lynx</li>
+							<li>Corpse_Cat</li>
+							<li>Corpse_YorkshireTerrier</li>
+							<li>Corpse_GuineaPig</li>
+							<li>Corpse_LabradorRetriever</li>
+							<li>Corpse_Husky</li>
+							<li>Corpse_Monkey</li>
+							<li>Corpse_Chicken</li>
+							<li>Corpse_Duck</li>
+							<li>Corpse_Turkey</li>
+							<li>Corpse_Goose</li>
+							<li>Corpse_Cow</li>
+							<li>Corpse_Boomalope</li>
+							<li>Corpse_Muffalo</li>
+							<li>Corpse_Bison</li>
+							<li>Corpse_Dromedary</li>
+							<li>Corpse_Goat</li>
+							<li>Corpse_Elk</li>
+							<li>Corpse_Yak</li>
+							<li>Corpse_Caribou</li>
+							<li>Corpse_Horse</li>
+							<li>Corpse_Donkey</li>
+							<li>Corpse_Elephant</li>
+							<li>Corpse_Rhinoceros</li>
+							<li>Corpse_Hare</li>
+							<li>Corpse_Snowhare</li>
+							<li>Corpse_Megascarab</li>
+							<li>Corpse_Spelopede</li>
+							<li>Corpse_Megaspider</li>
+							<li>Corpse_Thrumbo</li>
+							<li>Corpse_Cobra</li>
+							<li>Corpse_Tortoise</li>
+							<li>Corpse_Alphabeaver</li>
+							<li>Corpse_Pig</li>
+							<li>Corpse_WildBoar</li>
+							<li>Corpse_Ibex</li>
+							<li>Corpse_Deer</li>
+							<li>Corpse_Gazelle</li>
+							<li>Corpse_Chinchilla</li>
+							<li>Corpse_Sheep</li>
+							<li>Corpse_Alpaca</li>
+							<li>Corpse_Megasloth</li>
+							<li>Corpse_Capybara</li>
+							<li>Corpse_Squirrel</li>
+							<li>Corpse_Rat</li>
+							<li>Corpse_Boomrat</li>
+							<li>Corpse_Raccoon</li>
+							<li>Corpse_Iguana</li>
+							<li>Corpse_Warg</li>
+							<li>Corpse_Wolf_Timber</li>
+							<li>Corpse_Wolf_Arctic</li>
+							<li>Corpse_Fox_Fennec</li>
+							<li>Corpse_Fox_Red</li>
+							<li>Corpse_Fox_Arctic</li>
+							<li>Corpse_Human</li>
+						</allowedDefs>
+						<allowedHitPointsPercents>0~1</allowedHitPointsPercents>
+						<allowedQualityLevels>Awful~Legendary
+						</allowedQualityLevels>
+					</filter>
+				</li>
+				<li>
+					<id>2</id>
+					<label>Raffiné</label>
+					<filter>
+						<disallowedSpecialFilters/>
+						<allowedDefs>
+							<li>Beer</li>
+							<li>Ambrosia</li>
+							<li>MealSurvivalPack</li>
+							<li>MealNutrientPaste</li>
+							<li>MealSimple</li>
+							<li>MealFine</li>
+							<li>MealFine_Veg</li>
+							<li>MealFine_Meat</li>
+							<li>Kibble</li>
+							<li>Pemmican</li>
+							<li>Chocolate</li>
+							<li>Milk</li>
+							<li>InsectJelly</li>
+							<li>EggChickenUnfertilized</li>
+							<li>EggChickenFertilized</li>
+							<li>EggCobraFertilized</li>
+							<li>EggIguanaFertilized</li>
+							<li>EggTortoiseFertilized</li>
+							<li>EggCassowaryFertilized</li>
+							<li>EggEmuFertilized</li>
+							<li>EggOstrichFertilized</li>
+							<li>EggTurkeyFertilized</li>
+							<li>EggDuckUnfertilized</li>
+							<li>EggDuckFertilized</li>
+							<li>EggGooseUnfertilized</li>
+							<li>EggGooseFertilized</li>
+							<li>RawPotatoes</li>
+							<li>RawFungus</li>
+							<li>RawRice</li>
+							<li>RawAgave</li>
+							<li>RawCorn</li>
+							<li>RawBerries</li>
+							<li>Hay</li>
+							<li>RawHops</li>
+							<li>PsychoidLeaves</li>
+							<li>SmokeleafLeaves</li>
+							<li>Glowstool</li>
+							<li>Agarilux</li>
+							<li>Bryolux</li>
+							<li>Plant_Rose</li>
+							<li>Plant_Daylily</li>
+							<li>Plant_Rice</li>
+							<li>Plant_Potato</li>
+							<li>Plant_Corn</li>
+							<li>Plant_Strawberry</li>
+							<li>Plant_Haygrass</li>
+							<li>Plant_Cotton</li>
+							<li>Plant_Devilstrand</li>
+							<li>Plant_Healroot</li>
+							<li>Plant_Hops</li>
+							<li>Plant_Smokeleaf</li>
+							<li>Plant_Psychoid</li>
+							<li>Plant_TreeCocoa</li>
+							<li>Plant_Ambrosia</li>
+							<li>Plant_Agave</li>
+							<li>Plant_PincushionCactus</li>
+							<li>Plant_SaguaroCactus</li>
+							<li>Plant_TreeDrago</li>
+							<li>Plant_Grass</li>
+							<li>Plant_TallGrass</li>
+							<li>Plant_Bush</li>
+							<li>Plant_Brambles</li>
+							<li>Plant_HealrootWild</li>
+							<li>Plant_TreeWillow</li>
+							<li>Plant_TreeCypress</li>
+							<li>Plant_TreeMaple</li>
+							<li>Plant_Chokevine</li>
+							<li>Plant_Dandelion</li>
+							<li>Plant_Astragalus</li>
+							<li>Plant_Moss</li>
+							<li>Plant_Berry</li>
+							<li>Plant_TreeOak</li>
+							<li>Plant_TreePoplar</li>
+							<li>Plant_TreePine</li>
+							<li>Plant_TreeBirch</li>
+							<li>Plant_ShrubLow</li>
+							<li>Plant_Alocasia</li>
+							<li>Plant_Clivia</li>
+							<li>Plant_Rafflesia</li>
+							<li>Plant_TreeTeak</li>
+							<li>Plant_TreeCecropia</li>
+							<li>Plant_TreePalm</li>
+							<li>Plant_TreeBamboo</li>
+							<li>Meat_Bear_Grizzly</li>
+							<li>Meat_Cassowary</li>
+							<li>Meat_Cougar</li>
+							<li>Meat_Panther</li>
+							<li>Meat_Lynx</li>
+							<li>Meat_Cat</li>
+							<li>Meat_YorkshireTerrier</li>
+							<li>Meat_GuineaPig</li>
+							<li>Meat_LabradorRetriever</li>
+							<li>Meat_Husky</li>
+							<li>Meat_Monkey</li>
+							<li>Meat_Chicken</li>
+							<li>Meat_Duck</li>
+							<li>Meat_Turkey</li>
+							<li>Meat_Cow</li>
+							<li>Meat_Boomalope</li>
+							<li>Meat_Muffalo</li>
+							<li>Meat_Bison</li>
+							<li>Meat_Dromedary</li>
+							<li>Meat_Goat</li>
+							<li>Meat_Elk</li>
+							<li>Meat_Yak</li>
+							<li>Meat_Caribou</li>
+							<li>Meat_Horse</li>
+							<li>Meat_Donkey</li>
+							<li>Meat_Elephant</li>
+							<li>Meat_Rhinoceros</li>
+							<li>Meat_Hare</li>
+							<li>Meat_Megaspider</li>
+							<li>Meat_Thrumbo</li>
+							<li>Meat_Cobra</li>
+							<li>Meat_Tortoise</li>
+							<li>Meat_Alphabeaver</li>
+							<li>Meat_Pig</li>
+							<li>Meat_Ibex</li>
+							<li>Meat_Deer</li>
+							<li>Meat_Gazelle</li>
+							<li>Meat_Chinchilla</li>
+							<li>Meat_Sheep</li>
+							<li>Meat_Alpaca</li>
+							<li>Meat_Megasloth</li>
+							<li>Meat_Capybara</li>
+							<li>Meat_Squirrel</li>
+							<li>Meat_Rat</li>
+							<li>Meat_Boomrat</li>
+							<li>Meat_Raccoon</li>
+							<li>Meat_Iguana</li>
+							<li>Meat_Warg</li>
+							<li>Meat_Wolf_Timber</li>
+							<li>Meat_Fox_Fennec</li>
+							<li>Meat_Human</li>
+							<li>Corpse_Bear_Grizzly</li>
+							<li>Corpse_Bear_Polar</li>
+							<li>Corpse_Ostrich</li>
+							<li>Corpse_Emu</li>
+							<li>Corpse_Cassowary</li>
+							<li>Corpse_Cougar</li>
+							<li>Corpse_Panther</li>
+							<li>Corpse_Lynx</li>
+							<li>Corpse_Cat</li>
+							<li>Corpse_YorkshireTerrier</li>
+							<li>Corpse_GuineaPig</li>
+							<li>Corpse_LabradorRetriever</li>
+							<li>Corpse_Husky</li>
+							<li>Corpse_Monkey</li>
+							<li>Corpse_Chicken</li>
+							<li>Corpse_Duck</li>
+							<li>Corpse_Turkey</li>
+							<li>Corpse_Goose</li>
+							<li>Corpse_Cow</li>
+							<li>Corpse_Boomalope</li>
+							<li>Corpse_Muffalo</li>
+							<li>Corpse_Bison</li>
+							<li>Corpse_Dromedary</li>
+							<li>Corpse_Goat</li>
+							<li>Corpse_Elk</li>
+							<li>Corpse_Yak</li>
+							<li>Corpse_Caribou</li>
+							<li>Corpse_Horse</li>
+							<li>Corpse_Donkey</li>
+							<li>Corpse_Elephant</li>
+							<li>Corpse_Rhinoceros</li>
+							<li>Corpse_Hare</li>
+							<li>Corpse_Snowhare</li>
+							<li>Corpse_Megascarab</li>
+							<li>Corpse_Spelopede</li>
+							<li>Corpse_Megaspider</li>
+							<li>Corpse_Thrumbo</li>
+							<li>Corpse_Cobra</li>
+							<li>Corpse_Tortoise</li>
+							<li>Corpse_Alphabeaver</li>
+							<li>Corpse_Pig</li>
+							<li>Corpse_WildBoar</li>
+							<li>Corpse_Ibex</li>
+							<li>Corpse_Deer</li>
+							<li>Corpse_Gazelle</li>
+							<li>Corpse_Chinchilla</li>
+							<li>Corpse_Sheep</li>
+							<li>Corpse_Alpaca</li>
+							<li>Corpse_Megasloth</li>
+							<li>Corpse_Capybara</li>
+							<li>Corpse_Squirrel</li>
+							<li>Corpse_Rat</li>
+							<li>Corpse_Boomrat</li>
+							<li>Corpse_Raccoon</li>
+							<li>Corpse_Iguana</li>
+							<li>Corpse_Warg</li>
+							<li>Corpse_Wolf_Timber</li>
+							<li>Corpse_Wolf_Arctic</li>
+							<li>Corpse_Fox_Fennec</li>
+							<li>Corpse_Fox_Red</li>
+							<li>Corpse_Fox_Arctic</li>
+							<li>Corpse_Human</li>
+						</allowedDefs>
+						<allowedHitPointsPercents>0~1</allowedHitPointsPercents>
+						<allowedQualityLevels>Awful~Legendary
+						</allowedQualityLevels>
+					</filter>
+				</li>
+				<li>
+					<id>3</id>
+					<label>Simple</label>
+					<filter>
+						<disallowedSpecialFilters/>
+						<allowedDefs>
+							<li>Beer</li>
+							<li>Ambrosia</li>
+							<li>MealNutrientPaste</li>
+							<li>MealSimple</li>
+							<li>Kibble</li>
+							<li>Pemmican</li>
+							<li>Chocolate</li>
+							<li>Milk</li>
+							<li>InsectJelly</li>
+							<li>EggChickenUnfertilized</li>
+							<li>EggChickenFertilized</li>
+							<li>EggCobraFertilized</li>
+							<li>EggIguanaFertilized</li>
+							<li>EggTortoiseFertilized</li>
+							<li>EggCassowaryFertilized</li>
+							<li>EggEmuFertilized</li>
+							<li>EggOstrichFertilized</li>
+							<li>EggTurkeyFertilized</li>
+							<li>EggDuckUnfertilized</li>
+							<li>EggDuckFertilized</li>
+							<li>EggGooseUnfertilized</li>
+							<li>EggGooseFertilized</li>
+							<li>RawPotatoes</li>
+							<li>RawFungus</li>
+							<li>RawRice</li>
+							<li>RawAgave</li>
+							<li>RawCorn</li>
+							<li>RawBerries</li>
+							<li>Hay</li>
+							<li>RawHops</li>
+							<li>PsychoidLeaves</li>
+							<li>SmokeleafLeaves</li>
+							<li>Glowstool</li>
+							<li>Agarilux</li>
+							<li>Bryolux</li>
+							<li>Plant_Rose</li>
+							<li>Plant_Daylily</li>
+							<li>Plant_Rice</li>
+							<li>Plant_Potato</li>
+							<li>Plant_Corn</li>
+							<li>Plant_Strawberry</li>
+							<li>Plant_Haygrass</li>
+							<li>Plant_Cotton</li>
+							<li>Plant_Devilstrand</li>
+							<li>Plant_Healroot</li>
+							<li>Plant_Hops</li>
+							<li>Plant_Smokeleaf</li>
+							<li>Plant_Psychoid</li>
+							<li>Plant_TreeCocoa</li>
+							<li>Plant_Ambrosia</li>
+							<li>Plant_Agave</li>
+							<li>Plant_PincushionCactus</li>
+							<li>Plant_SaguaroCactus</li>
+							<li>Plant_TreeDrago</li>
+							<li>Plant_Grass</li>
+							<li>Plant_TallGrass</li>
+							<li>Plant_Bush</li>
+							<li>Plant_Brambles</li>
+							<li>Plant_HealrootWild</li>
+							<li>Plant_TreeWillow</li>
+							<li>Plant_TreeCypress</li>
+							<li>Plant_TreeMaple</li>
+							<li>Plant_Chokevine</li>
+							<li>Plant_Dandelion</li>
+							<li>Plant_Astragalus</li>
+							<li>Plant_Moss</li>
+							<li>Plant_Berry</li>
+							<li>Plant_TreeOak</li>
+							<li>Plant_TreePoplar</li>
+							<li>Plant_TreePine</li>
+							<li>Plant_TreeBirch</li>
+							<li>Plant_ShrubLow</li>
+							<li>Plant_Alocasia</li>
+							<li>Plant_Clivia</li>
+							<li>Plant_Rafflesia</li>
+							<li>Plant_TreeTeak</li>
+							<li>Plant_TreeCecropia</li>
+							<li>Plant_TreePalm</li>
+							<li>Plant_TreeBamboo</li>
+							<li>Meat_Bear_Grizzly</li>
+							<li>Meat_Cassowary</li>
+							<li>Meat_Cougar</li>
+							<li>Meat_Panther</li>
+							<li>Meat_Lynx</li>
+							<li>Meat_Cat</li>
+							<li>Meat_YorkshireTerrier</li>
+							<li>Meat_GuineaPig</li>
+							<li>Meat_LabradorRetriever</li>
+							<li>Meat_Husky</li>
+							<li>Meat_Monkey</li>
+							<li>Meat_Chicken</li>
+							<li>Meat_Duck</li>
+							<li>Meat_Turkey</li>
+							<li>Meat_Cow</li>
+							<li>Meat_Boomalope</li>
+							<li>Meat_Muffalo</li>
+							<li>Meat_Bison</li>
+							<li>Meat_Dromedary</li>
+							<li>Meat_Goat</li>
+							<li>Meat_Elk</li>
+							<li>Meat_Yak</li>
+							<li>Meat_Caribou</li>
+							<li>Meat_Horse</li>
+							<li>Meat_Donkey</li>
+							<li>Meat_Elephant</li>
+							<li>Meat_Rhinoceros</li>
+							<li>Meat_Hare</li>
+							<li>Meat_Megaspider</li>
+							<li>Meat_Thrumbo</li>
+							<li>Meat_Cobra</li>
+							<li>Meat_Tortoise</li>
+							<li>Meat_Alphabeaver</li>
+							<li>Meat_Pig</li>
+							<li>Meat_Ibex</li>
+							<li>Meat_Deer</li>
+							<li>Meat_Gazelle</li>
+							<li>Meat_Chinchilla</li>
+							<li>Meat_Sheep</li>
+							<li>Meat_Alpaca</li>
+							<li>Meat_Megasloth</li>
+							<li>Meat_Capybara</li>
+							<li>Meat_Squirrel</li>
+							<li>Meat_Rat</li>
+							<li>Meat_Boomrat</li>
+							<li>Meat_Raccoon</li>
+							<li>Meat_Iguana</li>
+							<li>Meat_Warg</li>
+							<li>Meat_Wolf_Timber</li>
+							<li>Meat_Fox_Fennec</li>
+							<li>Meat_Human</li>
+							<li>Corpse_Bear_Grizzly</li>
+							<li>Corpse_Bear_Polar</li>
+							<li>Corpse_Ostrich</li>
+							<li>Corpse_Emu</li>
+							<li>Corpse_Cassowary</li>
+							<li>Corpse_Cougar</li>
+							<li>Corpse_Panther</li>
+							<li>Corpse_Lynx</li>
+							<li>Corpse_Cat</li>
+							<li>Corpse_YorkshireTerrier</li>
+							<li>Corpse_GuineaPig</li>
+							<li>Corpse_LabradorRetriever</li>
+							<li>Corpse_Husky</li>
+							<li>Corpse_Monkey</li>
+							<li>Corpse_Chicken</li>
+							<li>Corpse_Duck</li>
+							<li>Corpse_Turkey</li>
+							<li>Corpse_Goose</li>
+							<li>Corpse_Cow</li>
+							<li>Corpse_Boomalope</li>
+							<li>Corpse_Muffalo</li>
+							<li>Corpse_Bison</li>
+							<li>Corpse_Dromedary</li>
+							<li>Corpse_Goat</li>
+							<li>Corpse_Elk</li>
+							<li>Corpse_Yak</li>
+							<li>Corpse_Caribou</li>
+							<li>Corpse_Horse</li>
+							<li>Corpse_Donkey</li>
+							<li>Corpse_Elephant</li>
+							<li>Corpse_Rhinoceros</li>
+							<li>Corpse_Hare</li>
+							<li>Corpse_Snowhare</li>
+							<li>Corpse_Megascarab</li>
+							<li>Corpse_Spelopede</li>
+							<li>Corpse_Megaspider</li>
+							<li>Corpse_Thrumbo</li>
+							<li>Corpse_Cobra</li>
+							<li>Corpse_Tortoise</li>
+							<li>Corpse_Alphabeaver</li>
+							<li>Corpse_Pig</li>
+							<li>Corpse_WildBoar</li>
+							<li>Corpse_Ibex</li>
+							<li>Corpse_Deer</li>
+							<li>Corpse_Gazelle</li>
+							<li>Corpse_Chinchilla</li>
+							<li>Corpse_Sheep</li>
+							<li>Corpse_Alpaca</li>
+							<li>Corpse_Megasloth</li>
+							<li>Corpse_Capybara</li>
+							<li>Corpse_Squirrel</li>
+							<li>Corpse_Rat</li>
+							<li>Corpse_Boomrat</li>
+							<li>Corpse_Raccoon</li>
+							<li>Corpse_Iguana</li>
+							<li>Corpse_Warg</li>
+							<li>Corpse_Wolf_Timber</li>
+							<li>Corpse_Wolf_Arctic</li>
+							<li>Corpse_Fox_Fennec</li>
+							<li>Corpse_Fox_Red</li>
+							<li>Corpse_Fox_Arctic</li>
+							<li>Corpse_Human</li>
+						</allowedDefs>
+						<allowedHitPointsPercents>0~1</allowedHitPointsPercents>
+						<allowedQualityLevels>Awful~Legendary
+						</allowedQualityLevels>
+					</filter>
+				</li>
+				<li>
+					<id>4</id>
+					<label>Pâte</label>
+					<filter>
+						<disallowedSpecialFilters/>
+						<allowedDefs>
+							<li>Beer</li>
+							<li>Ambrosia</li>
+							<li>MealNutrientPaste</li>
+							<li>Kibble</li>
+							<li>Pemmican</li>
+							<li>Chocolate</li>
+							<li>Milk</li>
+							<li>InsectJelly</li>
+							<li>EggChickenUnfertilized</li>
+							<li>EggChickenFertilized</li>
+							<li>EggCobraFertilized</li>
+							<li>EggIguanaFertilized</li>
+							<li>EggTortoiseFertilized</li>
+							<li>EggCassowaryFertilized</li>
+							<li>EggEmuFertilized</li>
+							<li>EggOstrichFertilized</li>
+							<li>EggTurkeyFertilized</li>
+							<li>EggDuckUnfertilized</li>
+							<li>EggDuckFertilized</li>
+							<li>EggGooseUnfertilized</li>
+							<li>EggGooseFertilized</li>
+							<li>RawPotatoes</li>
+							<li>RawFungus</li>
+							<li>RawRice</li>
+							<li>RawAgave</li>
+							<li>RawCorn</li>
+							<li>RawBerries</li>
+							<li>Hay</li>
+							<li>RawHops</li>
+							<li>PsychoidLeaves</li>
+							<li>SmokeleafLeaves</li>
+							<li>Glowstool</li>
+							<li>Agarilux</li>
+							<li>Bryolux</li>
+							<li>Plant_Rose</li>
+							<li>Plant_Daylily</li>
+							<li>Plant_Rice</li>
+							<li>Plant_Potato</li>
+							<li>Plant_Corn</li>
+							<li>Plant_Strawberry</li>
+							<li>Plant_Haygrass</li>
+							<li>Plant_Cotton</li>
+							<li>Plant_Devilstrand</li>
+							<li>Plant_Healroot</li>
+							<li>Plant_Hops</li>
+							<li>Plant_Smokeleaf</li>
+							<li>Plant_Psychoid</li>
+							<li>Plant_TreeCocoa</li>
+							<li>Plant_Ambrosia</li>
+							<li>Plant_Agave</li>
+							<li>Plant_PincushionCactus</li>
+							<li>Plant_SaguaroCactus</li>
+							<li>Plant_TreeDrago</li>
+							<li>Plant_Grass</li>
+							<li>Plant_TallGrass</li>
+							<li>Plant_Bush</li>
+							<li>Plant_Brambles</li>
+							<li>Plant_HealrootWild</li>
+							<li>Plant_TreeWillow</li>
+							<li>Plant_TreeCypress</li>
+							<li>Plant_TreeMaple</li>
+							<li>Plant_Chokevine</li>
+							<li>Plant_Dandelion</li>
+							<li>Plant_Astragalus</li>
+							<li>Plant_Moss</li>
+							<li>Plant_Berry</li>
+							<li>Plant_TreeOak</li>
+							<li>Plant_TreePoplar</li>
+							<li>Plant_TreePine</li>
+							<li>Plant_TreeBirch</li>
+							<li>Plant_ShrubLow</li>
+							<li>Plant_Alocasia</li>
+							<li>Plant_Clivia</li>
+							<li>Plant_Rafflesia</li>
+							<li>Plant_TreeTeak</li>
+							<li>Plant_TreeCecropia</li>
+							<li>Plant_TreePalm</li>
+							<li>Plant_TreeBamboo</li>
+							<li>Meat_Bear_Grizzly</li>
+							<li>Meat_Cassowary</li>
+							<li>Meat_Cougar</li>
+							<li>Meat_Panther</li>
+							<li>Meat_Lynx</li>
+							<li>Meat_Cat</li>
+							<li>Meat_YorkshireTerrier</li>
+							<li>Meat_GuineaPig</li>
+							<li>Meat_LabradorRetriever</li>
+							<li>Meat_Husky</li>
+							<li>Meat_Monkey</li>
+							<li>Meat_Chicken</li>
+							<li>Meat_Duck</li>
+							<li>Meat_Turkey</li>
+							<li>Meat_Cow</li>
+							<li>Meat_Boomalope</li>
+							<li>Meat_Muffalo</li>
+							<li>Meat_Bison</li>
+							<li>Meat_Dromedary</li>
+							<li>Meat_Goat</li>
+							<li>Meat_Elk</li>
+							<li>Meat_Yak</li>
+							<li>Meat_Caribou</li>
+							<li>Meat_Horse</li>
+							<li>Meat_Donkey</li>
+							<li>Meat_Elephant</li>
+							<li>Meat_Rhinoceros</li>
+							<li>Meat_Hare</li>
+							<li>Meat_Megaspider</li>
+							<li>Meat_Thrumbo</li>
+							<li>Meat_Cobra</li>
+							<li>Meat_Tortoise</li>
+							<li>Meat_Alphabeaver</li>
+							<li>Meat_Pig</li>
+							<li>Meat_Ibex</li>
+							<li>Meat_Deer</li>
+							<li>Meat_Gazelle</li>
+							<li>Meat_Chinchilla</li>
+							<li>Meat_Sheep</li>
+							<li>Meat_Alpaca</li>
+							<li>Meat_Megasloth</li>
+							<li>Meat_Capybara</li>
+							<li>Meat_Squirrel</li>
+							<li>Meat_Rat</li>
+							<li>Meat_Boomrat</li>
+							<li>Meat_Raccoon</li>
+							<li>Meat_Iguana</li>
+							<li>Meat_Warg</li>
+							<li>Meat_Wolf_Timber</li>
+							<li>Meat_Fox_Fennec</li>
+							<li>Meat_Human</li>
+							<li>Corpse_Bear_Grizzly</li>
+							<li>Corpse_Bear_Polar</li>
+							<li>Corpse_Ostrich</li>
+							<li>Corpse_Emu</li>
+							<li>Corpse_Cassowary</li>
+							<li>Corpse_Cougar</li>
+							<li>Corpse_Panther</li>
+							<li>Corpse_Lynx</li>
+							<li>Corpse_Cat</li>
+							<li>Corpse_YorkshireTerrier</li>
+							<li>Corpse_GuineaPig</li>
+							<li>Corpse_LabradorRetriever</li>
+							<li>Corpse_Husky</li>
+							<li>Corpse_Monkey</li>
+							<li>Corpse_Chicken</li>
+							<li>Corpse_Duck</li>
+							<li>Corpse_Turkey</li>
+							<li>Corpse_Goose</li>
+							<li>Corpse_Cow</li>
+							<li>Corpse_Boomalope</li>
+							<li>Corpse_Muffalo</li>
+							<li>Corpse_Bison</li>
+							<li>Corpse_Dromedary</li>
+							<li>Corpse_Goat</li>
+							<li>Corpse_Elk</li>
+							<li>Corpse_Yak</li>
+							<li>Corpse_Caribou</li>
+							<li>Corpse_Horse</li>
+							<li>Corpse_Donkey</li>
+							<li>Corpse_Elephant</li>
+							<li>Corpse_Rhinoceros</li>
+							<li>Corpse_Hare</li>
+							<li>Corpse_Snowhare</li>
+							<li>Corpse_Megascarab</li>
+							<li>Corpse_Spelopede</li>
+							<li>Corpse_Megaspider</li>
+							<li>Corpse_Thrumbo</li>
+							<li>Corpse_Cobra</li>
+							<li>Corpse_Tortoise</li>
+							<li>Corpse_Alphabeaver</li>
+							<li>Corpse_Pig</li>
+							<li>Corpse_WildBoar</li>
+							<li>Corpse_Ibex</li>
+							<li>Corpse_Deer</li>
+							<li>Corpse_Gazelle</li>
+							<li>Corpse_Chinchilla</li>
+							<li>Corpse_Sheep</li>
+							<li>Corpse_Alpaca</li>
+							<li>Corpse_Megasloth</li>
+							<li>Corpse_Capybara</li>
+							<li>Corpse_Squirrel</li>
+							<li>Corpse_Rat</li>
+							<li>Corpse_Boomrat</li>
+							<li>Corpse_Raccoon</li>
+							<li>Corpse_Iguana</li>
+							<li>Corpse_Warg</li>
+							<li>Corpse_Wolf_Timber</li>
+							<li>Corpse_Wolf_Arctic</li>
+							<li>Corpse_Fox_Fennec</li>
+							<li>Corpse_Fox_Red</li>
+							<li>Corpse_Fox_Arctic</li>
+							<li>Corpse_Human</li>
+						</allowedDefs>
+						<allowedHitPointsPercents>0~1</allowedHitPointsPercents>
+						<allowedQualityLevels>Awful~Legendary
+						</allowedQualityLevels>
+					</filter>
+				</li>
+				<li>
+					<id>5</id>
+					<label>Aliment cru</label>
+					<filter>
+						<disallowedSpecialFilters/>
+						<allowedDefs>
+							<li>Beer</li>
+							<li>Ambrosia</li>
+							<li>Kibble</li>
+							<li>Milk</li>
+							<li>EggChickenUnfertilized</li>
+							<li>EggChickenFertilized</li>
+							<li>EggCobraFertilized</li>
+							<li>EggIguanaFertilized</li>
+							<li>EggTortoiseFertilized</li>
+							<li>EggCassowaryFertilized</li>
+							<li>EggEmuFertilized</li>
+							<li>EggOstrichFertilized</li>
+							<li>EggTurkeyFertilized</li>
+							<li>EggDuckUnfertilized</li>
+							<li>EggDuckFertilized</li>
+							<li>EggGooseUnfertilized</li>
+							<li>EggGooseFertilized</li>
+							<li>RawPotatoes</li>
+							<li>RawFungus</li>
+							<li>RawRice</li>
+							<li>RawAgave</li>
+							<li>RawCorn</li>
+							<li>RawBerries</li>
+							<li>Hay</li>
+							<li>RawHops</li>
+							<li>PsychoidLeaves</li>
+							<li>SmokeleafLeaves</li>
+							<li>Glowstool</li>
+							<li>Agarilux</li>
+							<li>Bryolux</li>
+							<li>Plant_Rose</li>
+							<li>Plant_Daylily</li>
+							<li>Plant_Rice</li>
+							<li>Plant_Potato</li>
+							<li>Plant_Corn</li>
+							<li>Plant_Strawberry</li>
+							<li>Plant_Haygrass</li>
+							<li>Plant_Cotton</li>
+							<li>Plant_Devilstrand</li>
+							<li>Plant_Healroot</li>
+							<li>Plant_Hops</li>
+							<li>Plant_Smokeleaf</li>
+							<li>Plant_Psychoid</li>
+							<li>Plant_TreeCocoa</li>
+							<li>Plant_Ambrosia</li>
+							<li>Plant_Agave</li>
+							<li>Plant_PincushionCactus</li>
+							<li>Plant_SaguaroCactus</li>
+							<li>Plant_TreeDrago</li>
+							<li>Plant_Grass</li>
+							<li>Plant_TallGrass</li>
+							<li>Plant_Bush</li>
+							<li>Plant_Brambles</li>
+							<li>Plant_HealrootWild</li>
+							<li>Plant_TreeWillow</li>
+							<li>Plant_TreeCypress</li>
+							<li>Plant_TreeMaple</li>
+							<li>Plant_Chokevine</li>
+							<li>Plant_Dandelion</li>
+							<li>Plant_Astragalus</li>
+							<li>Plant_Moss</li>
+							<li>Plant_Berry</li>
+							<li>Plant_TreeOak</li>
+							<li>Plant_TreePoplar</li>
+							<li>Plant_TreePine</li>
+							<li>Plant_TreeBirch</li>
+							<li>Plant_ShrubLow</li>
+							<li>Plant_Alocasia</li>
+							<li>Plant_Clivia</li>
+							<li>Plant_Rafflesia</li>
+							<li>Plant_TreeTeak</li>
+							<li>Plant_TreeCecropia</li>
+							<li>Plant_TreePalm</li>
+							<li>Plant_TreeBamboo</li>
+							<li>Meat_Bear_Grizzly</li>
+							<li>Meat_Cassowary</li>
+							<li>Meat_Cougar</li>
+							<li>Meat_Panther</li>
+							<li>Meat_Lynx</li>
+							<li>Meat_Cat</li>
+							<li>Meat_YorkshireTerrier</li>
+							<li>Meat_GuineaPig</li>
+							<li>Meat_LabradorRetriever</li>
+							<li>Meat_Husky</li>
+							<li>Meat_Monkey</li>
+							<li>Meat_Chicken</li>
+							<li>Meat_Duck</li>
+							<li>Meat_Turkey</li>
+							<li>Meat_Cow</li>
+							<li>Meat_Boomalope</li>
+							<li>Meat_Muffalo</li>
+							<li>Meat_Bison</li>
+							<li>Meat_Dromedary</li>
+							<li>Meat_Goat</li>
+							<li>Meat_Elk</li>
+							<li>Meat_Yak</li>
+							<li>Meat_Caribou</li>
+							<li>Meat_Horse</li>
+							<li>Meat_Donkey</li>
+							<li>Meat_Elephant</li>
+							<li>Meat_Rhinoceros</li>
+							<li>Meat_Hare</li>
+							<li>Meat_Megaspider</li>
+							<li>Meat_Thrumbo</li>
+							<li>Meat_Cobra</li>
+							<li>Meat_Tortoise</li>
+							<li>Meat_Alphabeaver</li>
+							<li>Meat_Pig</li>
+							<li>Meat_Ibex</li>
+							<li>Meat_Deer</li>
+							<li>Meat_Gazelle</li>
+							<li>Meat_Chinchilla</li>
+							<li>Meat_Sheep</li>
+							<li>Meat_Alpaca</li>
+							<li>Meat_Megasloth</li>
+							<li>Meat_Capybara</li>
+							<li>Meat_Squirrel</li>
+							<li>Meat_Rat</li>
+							<li>Meat_Boomrat</li>
+							<li>Meat_Raccoon</li>
+							<li>Meat_Iguana</li>
+							<li>Meat_Warg</li>
+							<li>Meat_Wolf_Timber</li>
+							<li>Meat_Fox_Fennec</li>
+							<li>Meat_Human</li>
+							<li>Corpse_Bear_Grizzly</li>
+							<li>Corpse_Bear_Polar</li>
+							<li>Corpse_Ostrich</li>
+							<li>Corpse_Emu</li>
+							<li>Corpse_Cassowary</li>
+							<li>Corpse_Cougar</li>
+							<li>Corpse_Panther</li>
+							<li>Corpse_Lynx</li>
+							<li>Corpse_Cat</li>
+							<li>Corpse_YorkshireTerrier</li>
+							<li>Corpse_GuineaPig</li>
+							<li>Corpse_LabradorRetriever</li>
+							<li>Corpse_Husky</li>
+							<li>Corpse_Monkey</li>
+							<li>Corpse_Chicken</li>
+							<li>Corpse_Duck</li>
+							<li>Corpse_Turkey</li>
+							<li>Corpse_Goose</li>
+							<li>Corpse_Cow</li>
+							<li>Corpse_Boomalope</li>
+							<li>Corpse_Muffalo</li>
+							<li>Corpse_Bison</li>
+							<li>Corpse_Dromedary</li>
+							<li>Corpse_Goat</li>
+							<li>Corpse_Elk</li>
+							<li>Corpse_Yak</li>
+							<li>Corpse_Caribou</li>
+							<li>Corpse_Horse</li>
+							<li>Corpse_Donkey</li>
+							<li>Corpse_Elephant</li>
+							<li>Corpse_Rhinoceros</li>
+							<li>Corpse_Hare</li>
+							<li>Corpse_Snowhare</li>
+							<li>Corpse_Megascarab</li>
+							<li>Corpse_Spelopede</li>
+							<li>Corpse_Megaspider</li>
+							<li>Corpse_Thrumbo</li>
+							<li>Corpse_Cobra</li>
+							<li>Corpse_Tortoise</li>
+							<li>Corpse_Alphabeaver</li>
+							<li>Corpse_Pig</li>
+							<li>Corpse_WildBoar</li>
+							<li>Corpse_Ibex</li>
+							<li>Corpse_Deer</li>
+							<li>Corpse_Gazelle</li>
+							<li>Corpse_Chinchilla</li>
+							<li>Corpse_Sheep</li>
+							<li>Corpse_Alpaca</li>
+							<li>Corpse_Megasloth</li>
+							<li>Corpse_Capybara</li>
+							<li>Corpse_Squirrel</li>
+							<li>Corpse_Rat</li>
+							<li>Corpse_Boomrat</li>
+							<li>Corpse_Raccoon</li>
+							<li>Corpse_Iguana</li>
+							<li>Corpse_Warg</li>
+							<li>Corpse_Wolf_Timber</li>
+							<li>Corpse_Wolf_Arctic</li>
+							<li>Corpse_Fox_Fennec</li>
+							<li>Corpse_Fox_Red</li>
+							<li>Corpse_Fox_Arctic</li>
+							<li>Corpse_Human</li>
+						</allowedDefs>
+						<allowedHitPointsPercents>0~1</allowedHitPointsPercents>
+						<allowedQualityLevels>Awful~Legendary
+						</allowedQualityLevels>
+					</filter>
+				</li>
+				<li>
+					<id>6</id>
+					<label>Rien</label>
+					<filter>
+						<disallowedSpecialFilters/>
+						<allowedDefs/>
+						<allowedHitPointsPercents>0~1</allowedHitPointsPercents>
+						<allowedQualityLevels>Awful~Legendary
+						</allowedQualityLevels>
+					</filter>
+				</li>
+			</foodRestrictions>
+		</foodRestrictionDatabase>
+		<tutor>
+			<activeLesson>
+				<activeLesson IsNull="True"/>
+			</activeLesson>
+			<learningReadout>
+				<activeConcepts/>
+			</learningReadout>
+			<tutorialState>
+				<startingItems/>
+			</tutorialState>
+		</tutor>
+		<dateNotifier>
+			<lastSeason>Spring</lastSeason>
+		</dateNotifier>
+		<uniqueIDsManager>
+			<nextThingID>20543</nextThingID>
+			<nextFactionID>11</nextFactionID>
+			<nextTaleID>1</nextTaleID>
+			<nextWorldObjectID>7</nextWorldObjectID>
+			<nextMapID>1</nextMapID>
+			<nextAreaID>5</nextAreaID>
+			<nextJobID>249</nextJobID>
+			<nextWorldFeatureID>5</nextWorldFeatureID>
+			<nextHediffID>24</nextHediffID>
+			<nextArchivedDialogID>1</nextArchivedDialogID>
+			<nextMessageID>1</nextMessageID>
+			<nextIdeoID>9</nextIdeoID>
+			<nextPreceptID>99</nextPreceptID>
+		</uniqueIDsManager>
+		<questManager>
+			<quests/>
+		</questManager>
+		<transportShipManager>
+			<ships/>
+		</transportShipManager>
+		<components>
+			<li Class="GameComponent_DebugTools"/>
+			<li Class="GameComponent_OnetimeNotification">
+				<sendAICoreRequestReminder>True</sendAICoreRequestReminder>
+			</li>
+		</components>
+		<world>
+			<info>
+				<name>Monde de Wade</name>
+				<planetCoverage>0.05</planetCoverage>
+				<seedString>humantic</seedString>
+				<persistentRandomValue>-1688611196</persistentRandomValue>
+				<overallRainfall>Normal</overallRainfall>
+				<overallTemperature>Normal</overallTemperature>
+				<initialMapSize>(250, 1, 250)</initialMapSize>
+				<factionCounts>
+					<keys>
+						<li>OutlanderCivil</li>
+						<li>OutlanderRough</li>
+						<li>Pirate</li>
+						<li>TribeCivil</li>
+						<li>TribeRough</li>
+						<li>TribeSavage</li>
+						<li>Mechanoid</li>
+						<li>Insect</li>
+					</keys>
+					<values>
+						<li>1</li>
+						<li>1</li>
+						<li>1</li>
+						<li>1</li>
+						<li>1</li>
+						<li>1</li>
+						<li>1</li>
+						<li>1</li>
+					</values>
+				</factionCounts>
+			</info>
+		</world>
+	</game>
 </savegame>

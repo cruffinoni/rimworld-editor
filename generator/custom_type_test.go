@@ -5,6 +5,7 @@ import (
 	"strings"
 	"testing"
 
+	"github.com/go-test/deep"
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/require"
 
@@ -46,6 +47,7 @@ func Test_createCustomType(t *testing.T) {
 			},
 			want: createCustomSliceForTest(reflect.String),
 		},
+
 		"slice_struct": {
 			args: args{
 				xmlContent: `
@@ -180,6 +182,66 @@ func Test_createCustomType(t *testing.T) {
 						},
 					}),
 				},
+			})),
+		},
+
+		"slice_struct_variable": {
+			args: args{
+				xmlContent: `
+<?xml version="1.0" encoding="utf-8"?>
+<savegame>
+	<things>
+		<thing>
+			<def>Filth_RubbleRock</def>
+			<id>Filth_RubbleRock3236</id>
+			<map>0</map>
+			<pos>(184, 0, 3)</pos>
+			<questTags />
+			<disappearAfterTicks>2931683</disappearAfterTicks>
+		</thing>
+		<thing>
+			<def>Filth_RubbleRock</def>
+			<id>Filth_RubbleRock3237</id>
+			<map>0</map>
+			<pos>(185, 0, 3)</pos>
+			<questTags />
+			<disappearAfterTicks>2944394</disappearAfterTicks>
+		</thing>
+		<thing>
+			<def>Plant_Grass</def>
+			<id>Plant_Grass8968</id>
+			<map>0</map>
+			<pos>(95, 0, 245)</pos>
+			<health>85</health>
+			<questTags />
+			<growth>0.649532</growth>
+			<age>821805</age>
+		</thing>
+	</things>
+</savegame>
+`,
+			},
+			want: createCustomSliceForTest(createStructForTest("things", map[string]*member{
+				"id":                  {T: reflect.String},
+				"pos":                 {T: reflect.String},
+				"def":                 {T: reflect.String},
+				"map":                 {T: reflect.Int64},
+				"disappearAfterTicks": {T: reflect.Int64},
+				"questTags":           {T: createEmptyType()},
+				"growth":              {T: reflect.Float64},
+				"age":                 {T: reflect.Int64},
+				"health":              {T: reflect.Int64},
+				"thing": {T: createStructForTest("thing", map[string]*member{
+					"id":                  {T: reflect.String},
+					"pos":                 {T: reflect.String},
+					"def":                 {T: reflect.String},
+					"map":                 {T: reflect.Int64},
+					"disappearAfterTicks": {T: reflect.Int64},
+					"questTags":           {T: createEmptyType()},
+					"growth":              {T: reflect.Float64},
+					"age":                 {T: reflect.Int64},
+					"health":              {T: reflect.Int64},
+				})},
 			})),
 		},
 
@@ -332,8 +394,12 @@ func Test_createCustomType(t *testing.T) {
 			got := res.(*CustomType)
 			wanted := tt.want.(*CustomType)
 			require.Equal(t, wanted.Name, got.Name)
-			assert.Equal(t, wanted.Type1, got.Type1)
-			assert.Equal(t, wanted.Type2, got.Type2)
+			if diff := deep.Equal(wanted.Type1, got.Type1); diff != nil {
+				assert.FailNow(t, strings.Join(diff, "\n"))
+			}
+			if diff := deep.Equal(wanted.Type2, got.Type2); diff != nil {
+				assert.FailNow(t, strings.Join(diff, "\n"))
+			}
 		})
 	}
 }
