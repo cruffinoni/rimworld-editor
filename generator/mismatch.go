@@ -3,6 +3,7 @@ package generator
 import (
 	"fmt"
 	"log"
+	"math"
 	"reflect"
 	"sort"
 )
@@ -72,7 +73,7 @@ func (s *StructInfo) printOrderedMembers() {
 	sort.Strings(m)
 	log.Printf("Struct %v", s.Name)
 	for _, k := range m {
-		log.Printf("'%s' > %T", k, s.Members[k])
+		log.Printf("'%s' > %T (%v)", k, s.Members[k].T, s.Members[k].T)
 	}
 	fmt.Printf("\n")
 }
@@ -82,10 +83,11 @@ func fixTypeMismatch(a, b *member) {
 	case *CustomType:
 		if ctB, okB := b.T.(*CustomType); okB {
 			fixCustomType(va, ctB)
-		} else if structType, okStruct := b.T.(*StructInfo); okStruct {
-			if isRelevantType(va) {
-				log.Panicf("fixTypeMismatch: double relevant type => %T & %T", va, structType)
-			}
+		} else if _, okStruct := b.T.(*StructInfo); okStruct {
+			//if isRelevantType(va) {
+			//	structType.printOrderedMembers()
+			//	log.Printf("fixTypeMismatch: double relevant type => %T (%v w/ t %T) & %T (%v w/ %d members)", va, va.Name, va.Type1, structType, structType.Name, len(structType.Order))
+			//}
 			a.T = b.T
 		} else {
 			b.T = a.T
@@ -96,14 +98,41 @@ func fixTypeMismatch(a, b *member) {
 		} else {
 			b.T = a.T
 		}
+	case *FixedArray:
+		if bFArr, okStruct := b.T.(*FixedArray); okStruct {
+			if va.Size != bFArr.Size {
+				va.Size = int(math.Max(float64(va.Size), float64(bFArr.Size)))
+				bFArr.Size = va.Size
+			}
+			if !isSameType(va.PrimaryType, bFArr.PrimaryType) {
+				va.PrimaryType = bFArr.PrimaryType
+				log.Printf("mismatch type in fixed array w/ %+v (len %d) & %+v (len %d)", va.PrimaryType, va.Size, bFArr.PrimaryType, bFArr.Size)
+			}
+		} else {
+			b.T = a.T
+		}
 	case reflect.Kind:
-		bt := b.T.(reflect.Kind)
+		bt, ok := b.T.(reflect.Kind)
+		if !ok {
+			if isRelevantType(b.T) {
+				log.Printf("b type ('%v') is not reflect.Kind type w/ %T", b.Name, b.T)
+			} else {
+				b.T = a.T
+			}
+		}
 		if va == reflect.Int64 && bt == reflect.Float64 {
 			a.T = reflect.Float64
 		} else if va == reflect.Float64 && bt == reflect.Int64 {
 			b.T = reflect.Float64
 		}
 	}
+}
+
+type explainations struct {
+}
+
+func explainIsSameType(a, b any) []string {
+
 }
 
 func isSameType(a, b any) bool {
@@ -124,8 +153,26 @@ func isSameType(a, b any) bool {
 		} else {
 			return false
 		}
+	case *FixedArray:
+		if bFixArr, ok := b.(*FixedArray); ok {
+			return isSameType(bFixArr.PrimaryType, va.PrimaryType) && va.Size == bFixArr.Size
+		} else {
+			return false
+		}
+	case reflect.Kind:
+		if bKind, ok := b.(reflect.Kind); ok {
+			return bKind == va
+		} else {
+			return false
+		}
 	default:
 		return reflect.TypeOf(a) == reflect.TypeOf(b)
+	}
+}
+
+func updateOrderedMembers(a *StructInfo) {
+	for i := range a.Order {
+		a.Order[i] = a.Members[a.Order[i].Name]
 	}
 }
 
@@ -142,6 +189,11 @@ func fixMembers(a, b *StructInfo) {
 			a.Order = append(a.Order, m)
 		}
 	}
+	/*if a.Name == "hediffs" {
+		log.Printf(">>Hediffs:")
+		a.printOrderedMembers()
+		b.printOrderedMembers()
+	}*/
 	for i := range a.Members {
 		if _, ok := b.Members[i]; !ok {
 			a.printOrderedMembers()
@@ -150,6 +202,8 @@ func fixMembers(a, b *StructInfo) {
 		}
 		if !isSameType(a.Members[i].T, b.Members[i].T) {
 			fixTypeMismatch(a.Members[i], b.Members[i])
+			updateOrderedMembers(a)
+			updateOrderedMembers(b)
 		}
 	}
 }

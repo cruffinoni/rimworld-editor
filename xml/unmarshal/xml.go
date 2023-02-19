@@ -149,33 +149,43 @@ func Element(element *xml.Element, dest any) error {
 				log.Fatalf("unmarshal: field %v has multiple pointer", fieldValue.Type())
 			case reflect.String, reflect.Int, reflect.Int8, reflect.Int16, reflect.Int32, reflect.Int64, reflect.Bool, reflect.Float32, reflect.Float64:
 				attributeDataToField(fieldValue, n)
-			case reflect.Slice:
+			case reflect.Array:
+				l := fieldValue.Len()
 				// Create a slice
-				fieldValue.Set(reflect.MakeSlice(fieldValue.Type(), 0, 0))
+				fieldValue.Set(reflect.New(reflect.ArrayOf(l, fieldValue.Type().Elem())).Elem())
 				// If there is no child element, we are done and left the slice empty
 				if n.Child == nil {
-					log.Println("unmarshal: slice empty")
+					log.Println("unmarshal: array empty")
 					continue
 				}
 				// ft is the type of the slice
 				ft := fieldValue.Type().Elem()
 				// Let's avoid to skip elements in our linked list
 				nBefore := n.Child
+				idx := 0
 				for nBefore != nil {
 					// Special case for xml.Element, set directly to the field
 					if ft == elementStruct {
-						fieldValue.Set(reflect.Append(fieldValue, reflect.ValueOf(nBefore)))
+						fieldValue.Index(idx).Set(reflect.ValueOf(nBefore))
 					} else if primary.IsEmbeddedPrimaryType(ft.Name()) {
-						fieldValue.Set(reflect.Append(fieldValue, createValueFromPrimaryType(ft, nBefore)))
+						fieldValue.Index(idx).Set(createValueFromPrimaryType(ft, nBefore))
 					} else {
 						if ft.Kind() != reflect.Ptr {
-							panic("unmarshal: slice element type must be a pointer")
+							panic("unmarshal: array element type must be a pointer")
 						}
 						newEntry := reflect.New(ft.Elem())
-						if err := Element(nBefore, newEntry.Interface().(xml.Assigner)); err != nil {
-							panic(err)
+						if nBefore.Child == nil {
+							newEntry.Interface().(xml.Assigner).SetAttributes(nBefore.Attr)
+						} else {
+							if err := Element(nBefore.Child, newEntry.Interface().(xml.Assigner)); err != nil {
+								panic(err)
+							}
 						}
-						fieldValue.Set(reflect.Append(fieldValue, newEntry))
+						fieldValue.Index(idx).Set(newEntry)
+					}
+					idx++
+					if idx >= l {
+						log.Panicf("index out of range: %v | %v (%d len)", n.XMLPath(), ft.String(), l)
 					}
 					nBefore = nBefore.Next
 				}

@@ -2,6 +2,7 @@ package generator
 
 import (
 	"strconv"
+	"strings"
 
 	"github.com/cruffinoni/rimworld-editor/helper"
 	"github.com/cruffinoni/rimworld-editor/xml"
@@ -98,7 +99,8 @@ func createStructure(e *xml.Element, flag uint) any {
 		name += InnerKeyword
 	}
 	// vals is a special case where it serves as a transversal tag
-	if name == "vals" && e.Parent != nil {
+	if (name == "vals" || strings.Contains(strings.ToLower(name), "inner")) && e.Parent != nil {
+		//log.Printf("Special case for: %v = %v", name, e.Parent.GetName()+"_"+name)
 		name = e.Parent.GetName() + "_" + name
 	}
 	if (flag & forceRandomName) > 0 {

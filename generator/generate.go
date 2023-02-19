@@ -38,14 +38,19 @@ func getTypeFromArray(e *xml.Element) reflect.Kind {
 
 	// Determine if the element is a structure or slice
 	// In some cases, the first structure may have no data, so we check its siblings for a child
-	// We only need to do this once
+	// Note to run the check until we find a valid sibling with a child.
+	// Think about the case where only the last value has a child of a huge array
 	if k.Next != nil && k.Next.GetName() == k.GetName() {
 		// This part of code is aimed to list with multiple elements
-		if k.Next.Child != nil {
-			if helper.IsListTag(k.Next.Child.GetName()) {
-				return determineArrayOrSliceKind(k)
+		n := k.Next
+		for n != nil && n.GetName() == k.GetName() {
+			if n.Child != nil {
+				if helper.IsListTag(n.Child.GetName()) {
+					return determineArrayOrSliceKind(n)
+				}
+				return reflect.Struct
 			}
-			return reflect.Struct
+			n = n.Next
 		}
 	} else if k.Child != nil {
 		// On the other hand, this part only check the first element
@@ -155,6 +160,12 @@ func hasSameMembers(a, b *StructInfo) bool {
 			if ctB, okB := b.Members[i].T.(*CustomType); !okB || ct.Type1 != ctB.Type1 || ct.Type2 != ctB.Type2 {
 				return false
 			}
+		} else if af, ok := a.Members[i].T.(*FixedArray); ok {
+			if afB, okB := b.Members[i].T.(*FixedArray); okB {
+				if af.PrimaryType != afB.PrimaryType || af.Size != afB.Size {
+					return false
+				}
+			}
 		}
 	}
 	return true
@@ -223,7 +234,9 @@ func handleElement(e *xml.Element, st *StructInfo, flag uint) error {
 	}
 	if m, ok := RegisteredMembers[st.Name]; ok {
 		if !hasSameMembers(m, st) {
-			log.Printf("WARNING: struct %s (length %d - %p) is different from %s (length %d - %p)", m.Name, len(m.Members), m, st.Name, len(st.Members), st)
+			/*if st.Name == "hediffs" {
+				log.Printf("WARNING: struct %s (length %d - %p) is different from %s (length %d - %p)", m.Name, len(m.Members), m, st.Name, len(st.Members), st)
+			}*/
 			fixMembers(m, st)
 		}
 	} else {
@@ -250,6 +263,7 @@ func (s *StructInfo) addMember(name string, attr attributes.Attributes, t any) {
 			//log.Printf("Type mismatch: %v > %v", name, s.Members[name])
 			// If the types are different, fix the type mismatch
 			fixTypeMismatch(s.Members[name], &member{
+				Name: name,
 				T:    t,
 				Attr: attr,
 			})

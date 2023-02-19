@@ -129,7 +129,7 @@ func generateStructToPath(path string, s *generator.StructInfo) error {
 		panic("empty struct name")
 	}
 	buf.writeToBody("type " + structName + " struct {\nAttr attributes.Attributes\n")
-	log.Printf("S: %s", s.Name)
+	//log.Printf("S: %s", s.Name)
 	for _, m := range generator.RegisteredMembers[s.Name].Order { // Use the best matched version of s.name
 		buf.writeToBody("\t" + strcase.ToCamel(m.Name) + " ")
 		switch va := m.T.(type) {

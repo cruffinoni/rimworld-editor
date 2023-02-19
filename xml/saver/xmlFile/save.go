@@ -58,12 +58,12 @@ func Save(val any, b *saver.Buffer, tag string) error {
 		v = v.Elem()
 	}
 	vi := v.Interface()
+	kind := v.Kind()
 	// If the value is of type primary.Empty, write an empty tag with the given attributes and return.
-	if _, ok := val.(*primary.Empty); ok {
+	if _, ok := val.(*primary.Empty); ok || kind == reflect.Ptr && v.IsZero() {
 		b.WriteEmptyTag(tag, attr)
 		return nil
 	}
-	kind := v.Kind()
 	//if kind == reflect.Int64 {
 	//	log.Printf("Debug: => %v & %T", val, val)
 	//}
@@ -74,8 +74,7 @@ func Save(val any, b *saver.Buffer, tag string) error {
 	}
 	b.OpenTag(tag, attr)
 	switch kind {
-	// The `reflect.Slice` case may not be supported in later versions to give way to custom types: `primary.Empty`, `types.Slice`, etc.
-	case reflect.Slice:
+	case reflect.Array:
 		j := v.Len()
 		// This is a special case in case the type has a custom
 		// implementation of the TransformToXML() method.
