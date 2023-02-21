@@ -216,6 +216,10 @@ func handleElement(e *xml.Element, st *StructInfo, flag uint) error {
 			}
 			//log.Printf("Add member %T w/ %v (%s) to %v", t, n.XMLPath(), n.GetName(), st.Name)
 			st.addMember(n.GetName(), n.Attr, t)
+		} else {
+			// If we reach this code section, it means that we may have a list with no child, an empty list.
+			t = createArrayOrSlice(n, flag)
+			st.addMember(n.GetName(), n.Attr, t)
 		}
 		n = n.Next
 	}
