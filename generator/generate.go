@@ -199,7 +199,7 @@ func handleElement(e *xml.Element, st *StructInfo, flag uint) error {
 				if !n.Attr.Empty() {
 					t = &CustomType{
 						Name:       "EmbeddedType",
-						Pkg:        "primary",
+						Pkg:        "*primary",
 						Type1:      t,
 						ImportPath: paths.PrimaryTypesPath,
 					}

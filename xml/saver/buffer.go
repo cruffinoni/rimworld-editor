@@ -15,22 +15,47 @@ type Buffer struct {
 	buffer    []byte
 	depth     int
 	bufferLen int
+
+	lastPoint int
+	lastDepth int
 }
 
 func NewBuffer() *Buffer {
 	b := &Buffer{
 		buffer: make([]byte, 0),
 		// depth starts at -1 because the first tag is not indented.
-		depth: -1,
+		depth:     -1,
+		lastPoint: -1,
 	}
 	b.Write([]byte("<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n"))
 	return b
 }
 
 func (b *Buffer) Write(p []byte) (int, error) {
+	if len(p) > 1 {
+		b.lastPoint = b.bufferLen
+	}
 	b.bufferLen += len(p)
 	b.buffer = append(b.buffer, p...)
 	return len(p), nil
+}
+
+func (b *Buffer) RevertToLatestPoint() {
+	if b.lastPoint == -1 {
+		return
+	}
+	if b.lastDepth > b.depth {
+		for b.lastDepth > b.depth {
+			b.IncreaseDepth()
+		}
+	} else {
+		for b.lastDepth < b.depth {
+			b.DecreaseDepth()
+		}
+	}
+	b.buffer = b.buffer[:b.lastPoint]
+	b.lastPoint = -1
+	b.bufferLen = len(b.buffer)
 }
 
 func (b *Buffer) Len() int {
@@ -101,10 +126,12 @@ func (b *Buffer) CloseTagWithIndent(tag string) {
 }
 
 func (b *Buffer) IncreaseDepth() {
+	b.lastDepth = b.depth
 	b.depth++
 }
 
 func (b *Buffer) DecreaseDepth() {
+	b.lastDepth = b.depth
 	b.depth--
 }
 

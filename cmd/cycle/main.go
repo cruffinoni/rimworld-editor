@@ -36,6 +36,7 @@ func main() {
 	if err := unmarshal.Element(fo.XML.Root.Child, save); err != nil {
 		log.Fatal(err)
 	}
+	save.ValidateField("Savegame")
 	log.Print("Generating XML file to folder")
 	buffer, err := xmlFile.SaveWithBuffer(save)
 	if err != nil {

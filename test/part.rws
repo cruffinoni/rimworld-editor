@@ -1,16 +1,11 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <savegame>
-	<components>
-		<li Class="GameComponent_DebugTools"/>
-		<li Class="GameComponent_OnetimeNotification">
-			<sendAICoreRequestReminder>True</sendAICoreRequestReminder>
-		</li>
-		<li Class="GameComponent_Bossgroup">
-			<killedBosses/>
-			<timesCalledBossgroups>
-				<keys/>
-				<values/>
-			</timesCalledBossgroups>
-		</li>
-	</components>
+	<things>
+		<carryTracker>
+			<innerContainer>
+				<maxStacks>1</maxStacks>
+				<innerList/>
+			</innerContainer>
+		</carryTracker>
+	</things>
 </savegame>

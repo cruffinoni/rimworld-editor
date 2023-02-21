@@ -8,6 +8,7 @@ import (
 
 	"github.com/cruffinoni/rimworld-editor/xml"
 	"github.com/cruffinoni/rimworld-editor/xml/path"
+	"github.com/cruffinoni/rimworld-editor/xml/types/embedded"
 	"github.com/cruffinoni/rimworld-editor/xml/types/primary"
 )
 
@@ -134,6 +135,7 @@ func Element(element *xml.Element, dest any) error {
 	}
 	for n != nil {
 		f := findFieldFromName(t, v, n.GetName())
+		//log.Printf("n: %v | %v", n.GetName(), n.Attr)
 		if f != -1 {
 			fieldValue := v.Field(f)
 			if canValidate {
@@ -174,7 +176,7 @@ func Element(element *xml.Element, dest any) error {
 					// Special case for xml.Element, set directly to the field
 					if ft == elementStruct {
 						fieldValue.Index(idx).Set(reflect.ValueOf(nBefore))
-					} else if primary.IsEmbeddedPrimaryType(ft.Name()) {
+					} else if embedded.IsEmbeddedPrimaryType(ft.Name()) {
 						fieldValue.Index(idx).Set(createValueFromPrimaryType(ft, nBefore))
 					} else {
 						if ft.Kind() != reflect.Ptr {
@@ -199,7 +201,7 @@ func Element(element *xml.Element, dest any) error {
 				if isXMLElement(fieldValue) {
 					fieldPtr.Set(reflect.ValueOf(n))
 					break
-				} else if primary.IsEmbeddedPrimaryType(typeName) ||
+				} else if embedded.IsEmbeddedPrimaryType(typeName) ||
 					isEmptyType(typeName) {
 					// it must be a safe cast because the structures are known
 					cast := fieldValue.Addr().Interface().(xml.Assigner)
@@ -210,6 +212,9 @@ func Element(element *xml.Element, dest any) error {
 					if fieldValue.Kind() == reflect.Ptr {
 						fieldPtr = makePointer(fieldValue)
 						fieldValue = fieldPtr.Elem()
+					}
+					if cast, ok := fieldValue.Addr().Interface().(xml.Assigner); ok {
+						cast.SetAttributes(n.Attr)
 					}
 					// Otherwise, we need to call the unmarshal function recursively
 					if err := Element(n.Child, fieldValue.Addr().Interface().(xml.Assigner)); err != nil {

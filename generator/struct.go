@@ -84,7 +84,8 @@ func createStructure(e *xml.Element, flag uint) any {
 		if e.Child != nil && e.Child.Child != nil {
 			return createStructure(e.Child, flag|forceChildApplied)
 		} else {
-			panic("generate.createStructure|forceChild: missing child")
+			// The array authorized cells to be empty
+			//panic("generate.createStructure|forceChild: missing child")
 		}
 	}
 	if e.Child == nil {

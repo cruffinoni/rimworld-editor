@@ -52,3 +52,10 @@ func createFixedArray(e *xml.Element, flag uint, o *offset) any {
 	}
 	return f
 }
+
+func (a *FixedArray) ValidateField(_ string) {
+}
+
+func (a *FixedArray) IsValidField(_ string) bool {
+	return true
+}

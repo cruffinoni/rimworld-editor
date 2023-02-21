@@ -2,6 +2,8 @@ package xmlFile
 
 import (
 	_xml "encoding/xml"
+	"errors"
+	"log"
 	"reflect"
 	"strconv"
 	"strings"
@@ -35,6 +37,8 @@ func castToInterface[T any](val any) (T, bool) {
 	return *new(T), false
 }
 
+var ErrEmptyValue = errors.New("empty value")
+
 // Save recursively saves the given value to the provided buffer with the given tag.
 func Save(val any, b *saver.Buffer, tag string) error {
 	if val == nil {
@@ -49,9 +53,6 @@ func Save(val any, b *saver.Buffer, tag string) error {
 		return nil
 	}
 	validator, implValidator := castToInterface[xml.FieldValidator](v.Interface())
-	if implValidator && !validator.IsValidField(t.Name()) {
-		return nil
-	}
 	transformer, implTransformer := castToInterface[saver.Transformer](v.Interface())
 	var attr attributes.Attributes
 	//y, z := castToInterface[saver.Transformer](v.Interface())
@@ -85,12 +86,31 @@ func Save(val any, b *saver.Buffer, tag string) error {
 		// implementation of the TransformToXML() method.
 		if implTransformer {
 			if err := transformer.TransformToXML(b); err != nil {
-				return err
+				if errors.Is(err, ErrEmptyValue) {
+					b.RevertToLatestPoint()
+					b.WriteEmptyTag(tag, attr)
+					return nil
+				}
 			}
 		}
 		for i := 0; i < j; i++ {
 			b.Write([]byte("\n"))
-			if err := Save(v.Index(i).Interface(), b, "li"); err != nil {
+			vi := v.Index(i)
+			// Sometimes it does not detect nil as it should
+			if vi.Kind() == reflect.Ptr && vi.IsNil() {
+				b.WriteEmptyTag("li", nil)
+				continue
+			}
+			idxInterface := v.Index(i).Interface()
+			if fieldValidator, ok := idxInterface.(xml.FieldValidator); ok && fieldValidator != nil && fieldValidator.CountValidatedField() == 0 {
+				if attributeAssigner, ok := castToInterface[xml.AttributeAssigner](idxInterface); ok {
+					b.WriteEmptyTag("li", attributeAssigner.GetAttributes())
+					continue
+				} else {
+					log.Fatal("can't cast child to attribute assigner")
+				}
+			}
+			if err := Save(idxInterface, b, "li"); err != nil {
 				return err
 			}
 		}
@@ -118,19 +138,42 @@ func Save(val any, b *saver.Buffer, tag string) error {
 		if vi == nil {
 			return nil
 		}
-		b.Write([]byte("\n"))
 		if implTransformer {
 			if err := transformer.TransformToXML(b); err != nil {
+				if errors.Is(err, ErrEmptyValue) {
+					b.RevertToLatestPoint()
+					b.WriteEmptyTag(tag, attr)
+					return nil
+				}
 				return err
 			}
 			b.Write([]byte("\n"))
 			b.CloseTagWithIndent(tag)
 			return nil
 		}
+		if implValidator && validator.CountValidatedField() == 0 {
+			b.RevertToLatestPoint()
+			b.WriteEmptyTag(tag, attr)
+			return nil
+		}
+		b.Write([]byte("\n"))
 		for i := 0; i < v.NumField(); i++ {
 			f := t.Field(i)
 			vf := v.Field(i)
 			if !vf.CanInterface() {
+				continue
+			}
+			xmlTag, ok := f.Tag.Lookup("xml")
+			if !ok {
+				continue
+			}
+			//if !implValidator {
+			//	log.Printf("Validator implemented for %T (field %v): invalid field", v.Interface(), f.Name)
+			//} else {
+			//	log.Printf("Validator implemented for %T (field %v): > %v", v.Interface(), f.Name, validator.IsValidField(f.Name))
+			//}
+			if implValidator && !validator.IsValidField(f.Name) {
+				//log.Printf("Ignoring field %v", f.Name)
 				continue
 			}
 			// The field might be a custom type that implements saver.Transformer.
@@ -144,10 +187,6 @@ func Save(val any, b *saver.Buffer, tag string) error {
 				}
 				// We don't close the tag since it's only a MEMBER of the struct, so it can't decide
 				// whenever the struct is completely parsed.
-				continue
-			}
-			xmlTag, ok := f.Tag.Lookup("xml")
-			if !ok {
 				continue
 			}
 			// Structure that have empty value into their fields are ignored.

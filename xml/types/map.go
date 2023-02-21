@@ -63,6 +63,7 @@ func (m *Map[K, V]) TransformToXML(b *saver.Buffer) error {
 	defer func() {
 		b.Write([]byte("\n"))
 		b.CloseTagWithIndent(m.tag)
+		b.Write([]byte("\n"))
 	}()
 	if m.m == nil || m.Capacity() == 0 {
 		b.WriteEmptyTag("keys", nil)
@@ -332,4 +333,15 @@ func (m *Map[K, V]) SetAttributes(_ attributes.Attributes) {
 
 func (m *Map[K, V]) GetAttributes() attributes.Attributes {
 	return nil
+}
+
+func (m *Map[K, V]) ValidateField(_ string) {
+}
+
+func (m *Map[K, V]) IsValidField(_ string) bool {
+	return true
+}
+
+func (m *Map[K, V]) CountValidatedField() int {
+	return m.Capacity()
 }

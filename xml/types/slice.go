@@ -21,18 +21,19 @@ type sliceData[T any] struct {
 	str  string
 	attr attributes.Attributes
 	fmt.Stringer
-	tag  string
-	kind reflect.Kind
+	tag    string
+	hidden bool
+	kind   reflect.Kind
 }
 
 func (s *sliceData[T]) Assign(e *xml.Element) error {
 	var err error
-	log.Printf("Assign on slicedata called: %v", e.XMLPath())
+	// log.Printf("Assign on slicedata called: %v > %v", e.XMLPath(), e.Attr)
 	s.kind = reflect.TypeOf(s.data).Kind()
-	log.Printf("Kind: %s & %T", s.kind, s.data)
 	if s.kind == reflect.Ptr {
 		err = unmarshal.Element(e, s.data)
 	} else if helper.IsReflectPrimaryType(s.kind) {
+		s.hidden = e.Data == nil
 		switch s.kind {
 		case reflect.String:
 			s.data = castTemplate[T](e.Data.GetString())
@@ -93,7 +94,12 @@ func (s *sliceData[T]) GetXMLTag() []byte {
 }
 
 func (s *sliceData[T]) TransformToXML(b *saver.Buffer) error {
-	//log.Printf("sliceData.TransformToXML => %v (? %T)", s.tag, s.data)
+	//log.Printf("sliceData.TransformToXML => %v (? %T) [Hidden: %v | %v]", s.tag, s.data, s.hidden, s.attr)
+	//log.Printf("Is hidden: %v (%T)", s.hidden, s.data)
+	if implFieldValidating, ok := castToInterface[xml.FieldValidator](s.data); ok && implFieldValidating.CountValidatedField() == 0 {
+		b.WriteEmptyTag(s.tag, s.attr)
+		return nil
+	}
 	b.OpenTag(s.tag, s.attr)
 	if err := xmlFile.Save(s.data, b, ""); err != nil {
 		return err
@@ -125,8 +131,10 @@ func (s *Slice[T]) TransformToXML(b *saver.Buffer) error {
 	//	log.Print("Slice.TransformToXML: No repeating tag specified.")
 	//	return nil
 	//}
-	//log.Printf("Repeating tag: %v", s.repeatingTag)
-	//b.OpenTag(s.repeatingTag, s.attr)
+	//log.Printf("Name: '%v' w/ cap %d", s.name, s.cap)
+	if s.cap == 0 {
+		return xmlFile.ErrEmptyValue
+	}
 	for _, v := range s.data {
 		if err := v.TransformToXML(b); err != nil {
 			return err
@@ -188,20 +196,17 @@ func (s *Slice[T]) Assign(e *xml.Element) error {
 		case reflect.String, reflect.Bool, reflect.Int, reflect.Int8, reflect.Int16, reflect.Int32, reflect.Int64, reflect.Uint, reflect.Uint8, reflect.Uint16, reflect.Uint32, reflect.Uint64, reflect.Float32, reflect.Float64:
 			sd.data = zero[T]()
 		}
-		var attr attributes.Attributes
 		if n.Child != nil {
-			attr = n.Child.Attr
 			if err := unmarshal.Element(n.Child, &sd); err != nil {
 				return err
 			}
 		} else {
-			attr = n.Attr
 			if err := unmarshal.Element(n, &sd); err != nil {
 				return err
 			}
 		}
+		sd.SetAttributes(n.Attr)
 		s.data = append(s.data, sd)
-		sd.SetAttributes(attr)
 		n = n.Next
 	}
 	s.cap = len(s.data)
@@ -234,4 +239,15 @@ func (s *Slice[T]) SetAttributes(attributes attributes.Attributes) {
 
 func (s *Slice[T]) GetAttributes() attributes.Attributes {
 	return s.attr
+}
+
+func (s *Slice[T]) ValidateField(_ string) {
+}
+
+func (s *Slice[T]) IsValidField(_ string) bool {
+	return true
+}
+
+func (s *Slice[T]) CountValidatedField() int {
+	return s.cap
 }

@@ -1,13 +1,13 @@
-package primary
+package embedded
 
 import (
 	"fmt"
-	"log"
 	"reflect"
 
 	"github.com/cruffinoni/rimworld-editor/xml"
 	"github.com/cruffinoni/rimworld-editor/xml/attributes"
 	"github.com/cruffinoni/rimworld-editor/xml/saver"
+	"github.com/cruffinoni/rimworld-editor/xml/saver/xmlFile"
 )
 
 var (
@@ -47,20 +47,12 @@ type EmbeddedType[T comparable] struct {
 	attr attributes.Attributes
 }
 
-func (pt EmbeddedType[T]) TransformToXML(buffer *saver.Buffer) error {
+func (pt *EmbeddedType[T]) TransformToXML(buffer *saver.Buffer) error {
 	l := len(pt.str)
 	if l == 0 {
-		log.Printf("EmbeddedType.TransformToXML => str is empty: %#+v", pt)
-		buffer.WriteEmptyTag(pt.tag, pt.attr)
-		return nil
+		return xmlFile.ErrEmptyValue
 	}
-	buffer.OpenTag(pt.tag, pt.attr)
 	buffer.WriteString(pt.str)
-	if pt.str[len(pt.str)-1] != '\n' {
-		buffer.CloseTag(pt.tag)
-	} else {
-		buffer.CloseTagWithIndent(pt.tag)
-	}
 	return nil
 }
 
@@ -84,6 +76,24 @@ func (pt *EmbeddedType[T]) Assign(e *xml.Element) error {
 	}
 }
 
+func (pt *EmbeddedType[T]) GetXMLTag() []byte {
+	return []byte(pt.tag)
+}
+
+func (pt *EmbeddedType[T]) ValidateField(_ string) {
+}
+
+func (pt *EmbeddedType[T]) IsValidField(_ string) bool {
+	return len(pt.str) > 0
+}
+
+func (pt *EmbeddedType[T]) CountValidatedField() int {
+	if pt.IsValidField("") {
+		return 1
+	}
+	return 0
+}
+
 func (pt *EmbeddedType[T]) GetPath() string {
 	return ""
 }
@@ -96,6 +106,6 @@ func (pt *EmbeddedType[T]) GetAttributes() attributes.Attributes {
 	return pt.attr
 }
 
-func (pt EmbeddedType[T]) String() string {
+func (pt *EmbeddedType[T]) String() string {
 	return pt.str
 }

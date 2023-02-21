@@ -102,8 +102,12 @@ func writeRequiredInterfaces(b *buffer, structName string) {
 			b.writeToFooter("\t" + structIdentifier + ".Attr = attr\n")
 		case "ValidateField":
 			b.writeToFooter("\t if " + structIdentifier + ".FieldValidated == nil {" +
-				"\n\t\t " + structIdentifier + ".FieldValidated = make(map[string]bool)\n" + "\t}\n" +
+				"\n\t\t " + structIdentifier + ".FieldValidated = make(map[string]bool)\n\t}\n" +
 				"\t" + structIdentifier + ".FieldValidated[field] = true\n",
+			)
+		case "CountValidatedField":
+			b.writeToFooter("\t if " + structIdentifier + ".FieldValidated == nil {" +
+				"\n\t\t return 0\n\t}\n",
 			)
 		}
 		b.writeToFooter("\treturn ")
@@ -121,7 +125,12 @@ func writeRequiredInterfaces(b *buffer, structName string) {
 						b.writeToFooter("false")
 					}
 				case reflect.Int, reflect.Int8, reflect.Int16, reflect.Int32, reflect.Int64, reflect.Uint, reflect.Uint8, reflect.Uint16, reflect.Uint32, reflect.Uint64:
-					b.writeToFooter("0")
+					switch m.Name {
+					case "CountValidatedField":
+						b.writeToFooter("len(" + structIdentifier + ".FieldValidated)")
+					default:
+						b.writeToFooter("0")
+					}
 				case reflect.Float32, reflect.Float64:
 					b.writeToFooter("0.0")
 				case reflect.String:
