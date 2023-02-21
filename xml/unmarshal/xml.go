@@ -164,6 +164,9 @@ func Element(element *xml.Element, dest any) error {
 				nBefore := n.Child
 				idx := 0
 				for nBefore != nil {
+					if idx >= l && nBefore != nil {
+						log.Panicf("index out of range: %v | %v (%d/%d len)", n.XMLPath(), ft.String(), l)
+					}
 					// Special case for xml.Element, set directly to the field
 					if ft == elementStruct {
 						fieldValue.Index(idx).Set(reflect.ValueOf(nBefore))
@@ -184,9 +187,6 @@ func Element(element *xml.Element, dest any) error {
 						fieldValue.Index(idx).Set(newEntry)
 					}
 					idx++
-					if idx >= l {
-						log.Panicf("index out of range: %v | %v (%d len)", n.XMLPath(), ft.String(), l)
-					}
 					nBefore = nBefore.Next
 				}
 			case reflect.Struct:

@@ -1,6 +1,7 @@
 package xmlFile
 
 import (
+	_xml "encoding/xml"
 	"reflect"
 	"strconv"
 	"strings"
@@ -100,7 +101,7 @@ func Save(val any, b *saver.Buffer, tag string) error {
 			b.Write([]byte{'\n'})
 			b.IncreaseDepth()
 		}
-		b.Write([]byte(v.String()))
+		_xml.Escape(b, []byte(v.String()))
 		if multipleLineTxt {
 			b.Write([]byte{'\n'})
 			b.DecreaseDepth()

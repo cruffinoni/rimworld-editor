@@ -52,7 +52,8 @@ func getTypeFromArray(e *xml.Element) reflect.Kind {
 			}
 			n = n.Next
 		}
-	} else if k.Child != nil {
+	}
+	if k.Child != nil {
 		// On the other hand, this part only check the first element
 		if helper.IsListTag(k.Child.GetName()) {
 			return determineArrayOrSliceKind(k)
@@ -150,22 +151,8 @@ func hasSameMembers(a, b *StructInfo) bool {
 		return false
 	}
 	for i := range a.Members {
-		if b.Members[i] == nil {
+		if !isSameType(a.Members[i], b.Members[i]) {
 			return false
-		}
-		if reflect.TypeOf(a.Members[i]) != reflect.TypeOf(b.Members[i]) {
-			return false
-		}
-		if ct, ok := a.Members[i].T.(*CustomType); ok {
-			if ctB, okB := b.Members[i].T.(*CustomType); !okB || ct.Type1 != ctB.Type1 || ct.Type2 != ctB.Type2 {
-				return false
-			}
-		} else if af, ok := a.Members[i].T.(*FixedArray); ok {
-			if afB, okB := b.Members[i].T.(*FixedArray); okB {
-				if af.PrimaryType != afB.PrimaryType || af.Size != afB.Size {
-					return false
-				}
-			}
 		}
 	}
 	return true
@@ -234,9 +221,7 @@ func handleElement(e *xml.Element, st *StructInfo, flag uint) error {
 	}
 	if m, ok := RegisteredMembers[st.Name]; ok {
 		if !hasSameMembers(m, st) {
-			/*if st.Name == "hediffs" {
-				log.Printf("WARNING: struct %s (length %d - %p) is different from %s (length %d - %p)", m.Name, len(m.Members), m, st.Name, len(st.Members), st)
-			}*/
+			//log.Printf("WARNING: struct %s (length %d - %p) is different from %s (length %d - %p)", m.Name, len(m.Members), m, st.Name, len(st.Members), st)
 			fixMembers(m, st)
 		}
 	} else {
@@ -259,7 +244,7 @@ func (s *StructInfo) addMember(name string, attr attributes.Attributes, t any) {
 		s.Order = append(s.Order, s.Members[name])
 	} else {
 		// Check if the existing member and the new member are of the same type
-		if kind, okKind := s.Members[name].T.(reflect.Kind); !isSameType(s.Members[name].T, t) || (okKind && kind != t.(reflect.Kind)) {
+		if !isSameType(s.Members[name].T, t) {
 			//log.Printf("Type mismatch: %v > %v", name, s.Members[name])
 			// If the types are different, fix the type mismatch
 			fixTypeMismatch(s.Members[name], &member{

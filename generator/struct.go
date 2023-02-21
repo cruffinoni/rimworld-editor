@@ -66,6 +66,12 @@ func GenerateGoFiles(root *xml.Element) *StructInfo {
 
 var UniqueNumber = 0
 
+func addUniqueNumber(name string) string {
+	name += strconv.Itoa(UniqueNumber)
+	UniqueNumber++
+	return name
+}
+
 // createStructure creates a new structure from the given element.
 // Then the function will recursively call handleElement on the children of the element.
 // It removes the duplicates from the members of the struct.
@@ -105,8 +111,7 @@ func createStructure(e *xml.Element, flag uint) any {
 	}
 	if (flag & forceRandomName) > 0 {
 		flag &^= forceRandomName
-		name += strconv.Itoa(UniqueNumber)
-		UniqueNumber++
+		addUniqueNumber(name)
 	}
 	s := &StructInfo{
 		Name:    name,

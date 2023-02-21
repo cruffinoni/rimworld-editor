@@ -27,9 +27,10 @@ func NewBuffer() *Buffer {
 	return b
 }
 
-func (b *Buffer) Write(p []byte) {
+func (b *Buffer) Write(p []byte) (int, error) {
 	b.bufferLen += len(p)
 	b.buffer = append(b.buffer, p...)
+	return len(p), nil
 }
 
 func (b *Buffer) Len() int {
