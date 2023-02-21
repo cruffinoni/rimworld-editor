@@ -1,31 +1,16 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <savegame>
-	<a>
-		<b>
-			<c>
-				<things>
-					<ageTracker>
-						<ageBiologicalTicks>112327274</ageBiologicalTicks>
-						<birthAbsTicks>-177104774</birthAbsTicks>
-						<growth>1</growth>
-						<nextGrowthCheckTick>240</nextGrowthCheckTick>
-						<ageReversalDemandedAtAgeTicks>114607274
-						</ageReversalDemandedAtAgeTicks>
-						<lifeStageChange>True</lifeStageChange>
-					</ageTracker>
-				</things>
-				<things>
-					<ageTracker>
-						<ageBiologicalTicks>1111</ageBiologicalTicks>
-						<birthAbsTicks>-98989</birthAbsTicks>
-						<growth>0.885218</growth>
-						<nextGrowthCheckTick>4464444</nextGrowthCheckTick>
-						<ageReversalDemandedAtAgeTicks>324513131111111111
-						</ageReversalDemandedAtAgeTicks>
-						<lifeStageChange>True</lifeStageChange>
-					</ageTracker>
-				</things>
-			</c>
-		</b>
-	</a>
+	<components>
+		<li Class="GameComponent_DebugTools"/>
+		<li Class="GameComponent_OnetimeNotification">
+			<sendAICoreRequestReminder>True</sendAICoreRequestReminder>
+		</li>
+		<li Class="GameComponent_Bossgroup">
+			<killedBosses/>
+			<timesCalledBossgroups>
+				<keys/>
+				<values/>
+			</timesCalledBossgroups>
+		</li>
+	</components>
 </savegame>

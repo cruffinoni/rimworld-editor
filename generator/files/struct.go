@@ -32,6 +32,7 @@ type generic struct{}
 
 type require interface {
 	xml.Assigner
+	xml.FieldValidator
 	algorithm.Comparable[generic]
 }
 
@@ -59,8 +60,11 @@ func writeRequiredInterfaces(b *buffer, structName string) {
 				if localGenericName == m.Type.In(j).Name() {
 					b.writeToFooter("*" + structName)
 				} else {
-					if m.Name == "SetAttributes" {
+					switch m.Name {
+					case "SetAttributes":
 						b.writeToFooter("attr ")
+					case "ValidateField", "IsValidField":
+						b.writeToFooter("field ")
 					}
 					b.writeToFooter(m.Type.In(j).String())
 				}
@@ -91,8 +95,16 @@ func writeRequiredInterfaces(b *buffer, structName string) {
 			}
 		}
 		b.writeToFooter(" {\n")
-		if m.Name == "SetAttributes" {
+
+		// Function's content
+		switch m.Name {
+		case "SetAttributes":
 			b.writeToFooter("\t" + structIdentifier + ".Attr = attr\n")
+		case "ValidateField":
+			b.writeToFooter("\t if " + structIdentifier + ".FieldValidated == nil {" +
+				"\n\t\t " + structIdentifier + ".FieldValidated = make(map[string]bool)\n" + "\t}\n" +
+				"\t" + structIdentifier + ".FieldValidated[field] = true\n",
+			)
 		}
 		b.writeToFooter("\treturn ")
 		if numReturnedValue > 0 {
@@ -102,7 +114,12 @@ func writeRequiredInterfaces(b *buffer, structName string) {
 				}
 				switch rt.Kind() {
 				case reflect.Bool:
-					b.writeToFooter("false")
+					switch m.Name {
+					case "IsValidField":
+						b.writeToFooter(structIdentifier + ".FieldValidated[field]")
+					default:
+						b.writeToFooter("false")
+					}
 				case reflect.Int, reflect.Int8, reflect.Int16, reflect.Int32, reflect.Int64, reflect.Uint, reflect.Uint8, reflect.Uint16, reflect.Uint32, reflect.Uint64:
 					b.writeToFooter("0")
 				case reflect.Float32, reflect.Float64:
@@ -110,9 +127,10 @@ func writeRequiredInterfaces(b *buffer, structName string) {
 				case reflect.String:
 					b.writeToFooter(`""`)
 				case reflect.Pointer, reflect.Interface, reflect.Slice, reflect.Array, reflect.Map:
-					if m.Name == "GetAttributes" {
+					switch m.Name {
+					case "GetAttributes":
 						b.writeToFooter(structIdentifier + ".Attr")
-					} else {
+					default:
 						b.writeToFooter("nil")
 					}
 				default:

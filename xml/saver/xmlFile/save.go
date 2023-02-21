@@ -48,6 +48,10 @@ func Save(val any, b *saver.Buffer, tag string) error {
 	if v.IsZero() && v.Kind() == reflect.Ptr {
 		return nil
 	}
+	validator, implValidator := castToInterface[xml.FieldValidator](v.Interface())
+	if implValidator && !validator.IsValidField(t.Name()) {
+		return nil
+	}
 	transformer, implTransformer := castToInterface[saver.Transformer](v.Interface())
 	var attr attributes.Attributes
 	//y, z := castToInterface[saver.Transformer](v.Interface())

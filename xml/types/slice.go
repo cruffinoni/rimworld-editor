@@ -27,7 +27,9 @@ type sliceData[T any] struct {
 
 func (s *sliceData[T]) Assign(e *xml.Element) error {
 	var err error
+	log.Printf("Assign on slicedata called: %v", e.XMLPath())
 	s.kind = reflect.TypeOf(s.data).Kind()
+	log.Printf("Kind: %s & %T", s.kind, s.data)
 	if s.kind == reflect.Ptr {
 		err = unmarshal.Element(e, s.data)
 	} else if helper.IsReflectPrimaryType(s.kind) {

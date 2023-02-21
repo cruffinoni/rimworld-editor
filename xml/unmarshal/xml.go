@@ -115,6 +115,7 @@ func Element(element *xml.Element, dest any) error {
 			n = skipPath(n, skippingPath)
 		}
 	}
+	validator, canValidate := dest.(xml.FieldValidator)
 
 	t := reflect.TypeOf(dest)
 	if t.Kind() != reflect.Pointer {
@@ -135,6 +136,9 @@ func Element(element *xml.Element, dest any) error {
 		f := findFieldFromName(t, v, n.GetName())
 		if f != -1 {
 			fieldValue := v.Field(f)
+			if canValidate {
+				validator.ValidateField(t.Field(f).Name)
+			}
 			fieldKind := fieldValue.Kind()
 			var fieldPtr reflect.Value
 			// If the field is a pointer, we need to allocate a new value
@@ -165,7 +169,7 @@ func Element(element *xml.Element, dest any) error {
 				idx := 0
 				for nBefore != nil {
 					if idx >= l && nBefore != nil {
-						log.Panicf("index out of range: %v | %v (%d/%d len)", n.XMLPath(), ft.String(), l)
+						log.Panicf("index out of range: %v | %v (%d len)", n.XMLPath(), ft.String(), l)
 					}
 					// Special case for xml.Element, set directly to the field
 					if ft == elementStruct {
