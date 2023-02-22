@@ -68,7 +68,8 @@ func getTypeFromArray(e *xml.Element) reflect.Kind {
 				// Float64 and Int64 can be interchangeable
 				!(kdk == reflect.Float64 && kt == reflect.Int64) &&
 				!(kdk == reflect.Int64 && kt == reflect.Float64) {
-				log.Panicf("primary.EmbeddedType: found type %v, expected %v on path %v ('%v')", kdk, kt, k.XMLPath(), k.Data.GetData())
+				log.Printf("Data: '%v' & kind %s", k.Data, k.Data.Kind())
+				log.Panicf("getTypeFromArray: found type %v, expected %v on path %v ('%v')", kdk, kt, k.XMLPath(), k.Data.GetData())
 			}
 			// Float64 and Int64 can be interchangeable, but we prefer to keep Float64
 			if !(kt == reflect.Float64 && kdk == reflect.Int64) {
@@ -111,10 +112,12 @@ func determineTypeFromData(e *xml.Element, flag uint) any {
 	if t == reflect.Struct || t == reflect.Slice {
 		c := e.Child
 		if (flag & ignoreSlice) > 0 {
-			// Ignore this element since we are in a map.
 			flag &^= ignoreSlice
-			//log.Println("Ignoring slice")
-			return determineTypeFromData(c, flag)
+			if c.Child == nil {
+				return determineTypeFromData(c, flag)
+			}
+			// The map contains a substructure, we don't need to recheck it.
+			// Ignore this element since we are in a map.
 		}
 		// If the child is a list, let's create a slice from it
 		if helper.IsListTag(c.Child.GetName()) {

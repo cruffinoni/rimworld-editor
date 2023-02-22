@@ -106,8 +106,8 @@ func writeCustomType(c *generator.CustomType, b *buffer, path string) error {
 
 func generateStructToPath(path string, s *generator.StructInfo) error {
 	if _, err := os.Stat(path + "/" + strcase.ToSnake(s.Name) + ".go"); !errors.Is(err, os.ErrNotExist) {
-		log.Printf("generateStructToPath: file already exists at: %v", path+"/"+strcase.ToSnake(s.Name)+".go")
-		log.Printf("Size: %d from %p", len(s.Members), s)
+		//log.Printf("generateStructToPath: file already exists at: %v", path+"/"+strcase.ToSnake(s.Name)+".go")
+		//log.Printf("Size: %d from %p", len(s.Members), s)
 		return nil
 	}
 	f, err := os.Create(path + "/" + strcase.ToSnake(s.Name) + ".go")

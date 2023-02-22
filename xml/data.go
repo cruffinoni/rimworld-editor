@@ -29,7 +29,7 @@ type associatedRegex struct {
 var (
 	HexRegex     = regexp.MustCompile(`^(0x|#)[0-9a-fA-F]{2,}$`)
 	IntegerRegex = regexp.MustCompile(`^-?[0-9]+$`)
-	FloatRegex   = regexp.MustCompile(`^-?[0-9]*\.?[0-9]+([eE]\+[0-9]+)?$`)
+	FloatRegex   = regexp.MustCompile(`^-?[0-9]*\.?[0-9]+([eE][+-][0-9]+)?$`)
 	BoolRegex    = regexp.MustCompile(`^(TRUE|FALSE|true|false)$`)
 
 	AllPatterns = []associatedRegex{

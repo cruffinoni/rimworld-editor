@@ -3,6 +3,8 @@ package main
 import (
 	"flag"
 	"log"
+	"math"
+	"runtime/debug"
 
 	"github.com/cruffinoni/rimworld-editor/file"
 	"github.com/cruffinoni/rimworld-editor/generated"
@@ -17,6 +19,10 @@ func main() {
 		path     string
 		fileName string
 	)
+	// 1000000000-byte
+	// 1000000000-byte limit
+	debug.SetMaxStack(1 << 30)
+	debug.SetMemoryLimit(int64(5 * math.Pow(2.0, 30)))
 	flag.StringVar(&path, "path", "", "Path to the save game file")
 	flag.StringVar(&fileName, "fileName", "CUSTOM_FILE", "File name for the generated XML")
 	flag.Parse()

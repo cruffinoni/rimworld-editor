@@ -221,6 +221,7 @@ func isSameType(a, b any) bool {
 	if a == nil || b == nil {
 		return a == b
 	}
+	log.Printf("checking %v & %v", a, b)
 	switch va := a.(type) {
 	case *CustomType:
 		if bType, ok := b.(*CustomType); ok && bType != nil {

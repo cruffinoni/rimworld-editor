@@ -6,6 +6,7 @@ import "github.com/cruffinoni/rimworld-editor/generated"
 type Options struct {
 	Verbose  bool
 	Generate bool
+	Save     bool
 	Output   string
 	Input    string
 	Mode     string
