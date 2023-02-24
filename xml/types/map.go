@@ -17,10 +17,7 @@ import (
 	"github.com/cruffinoni/rimworld-editor/xml/types/primary"
 )
 
-// Map is a map of K to V and require the XML file to have a "keys" and "values"
-// element.
-
-type Pair[K, V any] struct {
+type Pair[K comparable, V any] struct {
 	Key   K
 	Value V
 }

@@ -48,22 +48,6 @@ const (
 	InnerKeyword = "_Inner"
 )
 
-var RegisteredMembers = make(map[string]*StructInfo)
-
-// GenerateGoFiles generates the Go files (with the corresponding structs)
-// for the given XML file, but it doesn't write anything.
-// To do that, call WriteGoFile.
-func GenerateGoFiles(root *xml.Element) *StructInfo {
-	s := &StructInfo{
-		Members: make(map[string]*member),
-	}
-	RegisteredMembers = make(map[string]*StructInfo)
-	if err := handleElement(root, s, flagNone); err != nil {
-		panic(err)
-	}
-	return s
-}
-
 var UniqueNumber = 0
 
 func addUniqueNumber(name string) string {

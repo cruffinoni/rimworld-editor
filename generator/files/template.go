@@ -130,7 +130,7 @@ func generateStructToPath(path string, s *generator.StructInfo) error {
 	}
 	buf.writeToBody("type " + structName + " struct {\nAttr attributes.Attributes\nFieldValidated map[string]bool\n\n")
 	//log.Printf("S: %s", s.Name)
-	for _, m := range generator.RegisteredMembers[s.Name].Order { // Use the best matched version of s.name
+	for _, m := range generator.RegisteredMembers[s.Name][0].Order { // Use the best matched version of s.name
 		buf.writeToBody("\t" + strcase.ToCamel(m.Name) + " ")
 		switch va := m.T.(type) {
 		case *generator.CustomType:

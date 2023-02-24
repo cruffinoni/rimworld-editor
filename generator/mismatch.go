@@ -18,11 +18,6 @@ func isRelevantType(t1 any) bool {
 			return false
 		}
 	}
-	// Int64 is not relevant compared to other type making him erased by float64 in
-	// almost all cases of comparison that implicates an int64.
-	if reflect.TypeOf(t1).Kind() == reflect.Int64 {
-		return false
-	}
 	return true
 }
 
@@ -33,23 +28,47 @@ func isRelevantType(t1 any) bool {
 func fixCustomType(a, b *CustomType) {
 	if a == nil {
 		a = b
+		return
 	}
 	if b == nil {
 		b = a
+		return
 	}
-	if a.Type1 != b.Type1 {
-		if isRelevantType(a.Type1) && !isRelevantType(b.Type1) {
+	if !isSameType(a.Type1, b.Type1, 0) {
+		log.Printf("T1 & T2: %v & %v", a.Type1, b.Type1)
+		a1 := reflect.TypeOf(a.Type1)
+		b1 := reflect.TypeOf(b.Type1)
+		if isRelevantType(a.Type1) && !isRelevantType(b.Type1) || (a.Type1 != nil && a1.Kind() == reflect.Float64 && b1.Kind() == reflect.Int64) {
 			b.Type1 = a.Type1
 			// If the main type is changed, update the package name, type name, and import path
 			b.Name = a.Name
 			b.Pkg = a.Pkg
 			b.ImportPath = a.ImportPath
-		} else if !isRelevantType(a.Type1) && isRelevantType(b.Type1) {
+		} else if !isRelevantType(a.Type1) && isRelevantType(b.Type1) || (b.Type1 != nil && b1.Kind() == reflect.Float64 && a1.Kind() == reflect.Int64) {
 			a.Type1 = b.Type1
 			// Perform the same update here
 			a.Name = b.Name
 			a.Pkg = b.Pkg
 			a.ImportPath = b.ImportPath
+		} else {
+			// Both type are relevant, let's finish the checks
+			switch va := a.Type1.(type) {
+			case reflect.Kind:
+				if bKind, ok := b.Type1.(reflect.Kind); ok {
+					if va == reflect.Int64 && bKind == reflect.Float64 {
+						a.Type1 = reflect.Float64
+					} else if va == reflect.Float64 && bKind == reflect.Int64 {
+						b.Type1 = reflect.Float64
+					}
+					// We know when a map is doesn't have any value has a type1 with string and type2 with primary.Empty
+					// Let's check if it's a map with string as type1 and see if the type2 is another type
+					if va == reflect.String && a.Name == "Map" && bKind != reflect.String {
+						a.Type1 = b.Type2
+					}
+				} else {
+					log.Panicf("can't decide on which type work on between %T & %T", a.Type1, b.Type1)
+				}
+			}
 		}
 	}
 	// Keep the relevant type between both `type2` fields.
@@ -105,7 +124,7 @@ func fixTypeMismatch(a, b *member) {
 				va.Size = int(math.Max(float64(va.Size), float64(bFArr.Size)))
 				bFArr.Size = va.Size
 			}
-			if !isSameType(va.PrimaryType, bFArr.PrimaryType) {
+			if !isSameType(bFArr.PrimaryType, va.PrimaryType, 0) {
 				log.Printf("'%v' | '%v'", a.Name, a.Attr)
 				log.Printf("mismatch type in fixed array w/ %T (len %d) & %T (len %d)", va.PrimaryType, va.Size, bFArr.PrimaryType, bFArr.Size)
 				log.Printf("%+v", va.PrimaryType)
@@ -159,10 +178,10 @@ func explainIsSameType(a, b any, e *explainations) *explainations {
 			if va.Pkg != bType.Pkg {
 				e.content = append(e.content, fmt.Sprintf("[CustomType] a pkg is diff from b ('%v' != '%v')", va.Pkg, bType.Pkg))
 			}
-			if !isSameType(va.Type1, bType.Type1) {
+			if !isSameType(bType.Type1, va.Type1, 0) {
 				e.content = append(e.content, fmt.Sprintf("[CustomType] a type1 is diff from b (%T != %T)", va.Type1, bType.Type1))
 			}
-			if !isSameType(va.Type2, bType.Type2) {
+			if !isSameType(bType.Type2, va.Type2, 0) {
 				e.content = append(e.content, fmt.Sprintf("[CustomType] a type2 is diff from b (%T != %T)", va.Type2, bType.Type2))
 			}
 			return e
@@ -175,7 +194,7 @@ func explainIsSameType(a, b any, e *explainations) *explainations {
 			if va.Name != bType.Name {
 				e.content = append(e.content, fmt.Sprintf("[StructInfo] a name is diff from b ('%v' != '%v')", va.Name, bType.Name))
 			}
-			if !hasSameMembers(va, bType) {
+			if !hasSameMembers(bType, va, 0) {
 				e.content = append(e.content, fmt.Sprintf("[StructInfo] a has not the same members of b (len: %d <> %d)", len(va.Members), len(bType.Members)))
 				va.printOrderedMembers()
 				bType.printOrderedMembers()
@@ -186,7 +205,7 @@ func explainIsSameType(a, b any, e *explainations) *explainations {
 		}
 	case *FixedArray:
 		if bFixArr, ok := b.(*FixedArray); ok {
-			if !isSameType(bFixArr.PrimaryType, va.PrimaryType) {
+			if !isSameType(va.PrimaryType, bFixArr.PrimaryType, 0) {
 				e.content = append(e.content, fmt.Sprintf("[FixedArray] a is not same type w/ b (%T != %T)", bFixArr.PrimaryType, va.PrimaryType))
 				return e
 			}
@@ -217,36 +236,42 @@ func explainIsSameType(a, b any, e *explainations) *explainations {
 	return e
 }
 
-func isSameType(a, b any) bool {
+const MaxDepth = 100
+
+func isSameType(a, b any, depth uint32) bool {
+	if depth > MaxDepth {
+		return true
+	}
 	if a == nil || b == nil {
 		return a == b
 	}
-	log.Printf("checking %v & %v", a, b)
 	switch va := a.(type) {
+	case nil:
+		return a == b
 	case *CustomType:
 		if bType, ok := b.(*CustomType); ok && bType != nil {
 			return va.Name == bType.Name && va.Pkg == bType.Pkg &&
-				isSameType(va.Type1, bType.Type1) && isSameType(va.Type2, bType.Type2)
+				isSameType(bType.Type1, va.Type1, depth+1) && isSameType(bType.Type2, va.Type2, depth+1)
 		} else {
 			return false
 		}
 	case *StructInfo:
 		if bType, ok := b.(*StructInfo); ok && bType != nil {
 			//log.Printf("So: %v/%v => %v", va.Name, bType.Name, hasSameMembers(va, bType))
-			return va.Name == bType.Name && hasSameMembers(va, bType)
+			return va.Name == bType.Name && hasSameMembers(bType, va, depth+1)
 		} else {
 			return false
 		}
 	case *FixedArray:
 		if bFixArr, ok := b.(*FixedArray); ok && bFixArr != nil {
 			//log.Printf("%T & %T && %d & %d", bFixArr.PrimaryType, va.PrimaryType, va.Size, bFixArr.Size)
-			return isSameType(bFixArr.PrimaryType, va.PrimaryType) && va.Size == bFixArr.Size
+			return isSameType(va.PrimaryType, bFixArr.PrimaryType, depth+1) && va.Size == bFixArr.Size
 		} else {
 			return false
 		}
 	case *member:
 		if bMember, ok := b.(*member); ok && bMember != nil {
-			return va.Name == bMember.Name && isSameType(va.T, bMember.T)
+			return va.Name == bMember.Name && isSameType(bMember.T, va.T, depth+1)
 		} else {
 			return false
 		}
@@ -280,18 +305,13 @@ func fixMembers(a, b *StructInfo) {
 			a.Order = append(a.Order, m)
 		}
 	}
-	/*if a.Name == "hediffs" {
-		log.Printf(">>Hediffs:")
-		a.printOrderedMembers()
-		b.printOrderedMembers()
-	}*/
 	for i := range a.Members {
 		if _, ok := b.Members[i]; !ok {
 			a.printOrderedMembers()
 			b.printOrderedMembers()
 			log.Panicf("fixMembers: '%v' doesn't exist in b", i)
 		}
-		if !isSameType(a.Members[i].T, b.Members[i].T) {
+		if !isSameType(b.Members[i].T, a.Members[i].T, 0) {
 			fixTypeMismatch(a.Members[i], b.Members[i])
 			updateOrderedMembers(a)
 			updateOrderedMembers(b)

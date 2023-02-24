@@ -113,11 +113,7 @@ func determineTypeFromData(e *xml.Element, flag uint) any {
 		c := e.Child
 		if (flag & ignoreSlice) > 0 {
 			flag &^= ignoreSlice
-			if c.Child == nil {
-				return determineTypeFromData(c, flag)
-			}
-			// The map contains a substructure, we don't need to recheck it.
-			// Ignore this element since we are in a map.
+			return determineTypeFromData(c, flag)
 		}
 		// If the child is a list, let's create a slice from it
 		if helper.IsListTag(c.Child.GetName()) {
@@ -149,12 +145,12 @@ func determineTypeFromData(e *xml.Element, flag uint) any {
 	return t
 }
 
-func hasSameMembers(a, b *StructInfo) bool {
+func hasSameMembers(b, a *StructInfo, depth uint32) bool {
 	if len(a.Members) != len(b.Members) {
 		return false
 	}
 	for i := range a.Members {
-		if !isSameType(a.Members[i], b.Members[i]) {
+		if !isSameType(b.Members[i], a.Members[i], depth+1) {
 			return false
 		}
 	}
@@ -226,14 +222,15 @@ func handleElement(e *xml.Element, st *StructInfo, flag uint) error {
 		}
 		n = n.Next
 	}
-	if m, ok := RegisteredMembers[st.Name]; ok {
-		if !hasSameMembers(m, st) {
-			//log.Printf("WARNING: struct %s (length %d - %p) is different from %s (length %d - %p)", m.Name, len(m.Members), m, st.Name, len(st.Members), st)
-			fixMembers(m, st)
-		}
-	} else {
-		RegisteredMembers[st.Name] = st
-	}
+	RegisteredMembers[st.Name] = append(RegisteredMembers[st.Name], st)
+	//if _, ok := RegisteredMembers[st.Name]; ok {
+	//if !hasSameMembers(m, st) {
+	//log.Printf("WARNING: struct %s (length %d - %p) is different from %s (length %d - %p)", m.Name, len(m.Members), m, st.Name, len(st.Members), st)
+	//fixMembers(m, st)
+	//}
+	//} else {
+	//	RegisteredMembers[st.Name] = st
+	//}
 	return nil
 }
 
@@ -251,7 +248,7 @@ func (s *StructInfo) addMember(name string, attr attributes.Attributes, t any) {
 		s.Order = append(s.Order, s.Members[name])
 	} else {
 		// Check if the existing member and the new member are of the same type
-		if !isSameType(s.Members[name].T, t) {
+		if !isSameType(t, s.Members[name].T, 0) {
 			//log.Printf("Type mismatch: %v > %v", name, s.Members[name])
 			// If the types are different, fix the type mismatch
 			fixTypeMismatch(s.Members[name], &member{
