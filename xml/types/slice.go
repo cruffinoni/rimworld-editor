@@ -8,6 +8,7 @@ import (
 
 	"github.com/cruffinoni/rimworld-editor/helper"
 	"github.com/cruffinoni/rimworld-editor/xml/saver/xmlFile"
+	"github.com/cruffinoni/rimworld-editor/xml/types/primary"
 
 	"github.com/cruffinoni/rimworld-editor/xml"
 	"github.com/cruffinoni/rimworld-editor/xml/attributes"
@@ -96,7 +97,8 @@ func (s *sliceData[T]) GetXMLTag() []byte {
 func (s *sliceData[T]) TransformToXML(b *saver.Buffer) error {
 	//log.Printf("sliceData.TransformToXML => %v (? %T) [Hidden: %v | %v]", s.tag, s.data, s.hidden, s.attr)
 	//log.Printf("Is hidden: %v (%T)", s.hidden, s.data)
-	if implFieldValidating, ok := castToInterface[xml.FieldValidator](s.data); ok && implFieldValidating.CountValidatedField() == 0 {
+	_, okEmpty := any(s.data).(*primary.Empty)
+	if implFieldValidating, ok := castToInterface[xml.FieldValidator](s.data); ok && implFieldValidating.CountValidatedField() == 0 || okEmpty {
 		b.WriteEmptyTag(s.tag, s.attr)
 		return nil
 	}
@@ -131,7 +133,7 @@ func (s *Slice[T]) TransformToXML(b *saver.Buffer) error {
 	//	log.Print("Slice.TransformToXML: No repeating tag specified.")
 	//	return nil
 	//}
-	//log.Printf("Name: '%v' w/ cap %d", s.name, s.cap)
+	// log.Printf("Name: '%v' w/ cap %d w/ %s / %v", s.name, s.cap, s.repeatingTag, s.data)
 	if s.cap == 0 {
 		return xmlFile.ErrEmptyValue
 	}
@@ -184,6 +186,7 @@ func (s *Slice[T]) Assign(e *xml.Element) error {
 	//		n = n.Child
 	//	}
 	//}
+	//log.Printf("Assigning: %v / %v", e.XMLPath(), e.Attr)
 	for n != nil {
 		sd := sliceData[T]{
 			tag: n.GetName(),

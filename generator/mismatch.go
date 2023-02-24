@@ -35,7 +35,6 @@ func fixCustomType(a, b *CustomType) {
 		return
 	}
 	if !isSameType(a.Type1, b.Type1, 0) {
-		log.Printf("T1 & T2: %v & %v", a.Type1, b.Type1)
 		a1 := reflect.TypeOf(a.Type1)
 		b1 := reflect.TypeOf(b.Type1)
 		if isRelevantType(a.Type1) && !isRelevantType(b.Type1) || (a.Type1 != nil && a1.Kind() == reflect.Float64 && b1.Kind() == reflect.Int64) {

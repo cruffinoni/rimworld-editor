@@ -98,7 +98,6 @@ func Save(val any, b *saver.Buffer, tag string) error {
 			vi := v.Index(i)
 			// Sometimes it does not detect nil as it should
 			if vi.Kind() == reflect.Ptr && vi.IsNil() {
-				b.WriteEmptyTag("li", nil)
 				continue
 			}
 			idxInterface := v.Index(i).Interface()

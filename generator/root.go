@@ -25,7 +25,6 @@ func GenerateGoFiles(root *xml.Element) *StructInfo {
 		l := len(RegisteredMembers[i])
 		log.Printf("Fixing %s (%d fix to do)...", i, l)
 		for j := 0; j < l; j++ {
-			log.Printf("Comparing.")
 			fixMembers(RegisteredMembers[i][0], RegisteredMembers[i][j])
 		}
 	}

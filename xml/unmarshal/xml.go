@@ -102,6 +102,16 @@ func skipPath(element *xml.Element, pathStr string) *xml.Element {
 	return n
 }
 
+func determineArraySize(e *xml.Element) int {
+	c := 0
+	n := e
+	for n != nil {
+		c++
+		n = n.Next
+	}
+	return c
+}
+
 func Element(element *xml.Element, dest any) error {
 	// Do a copy of the element to avoid modifying the original
 	n := element

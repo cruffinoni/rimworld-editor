@@ -145,12 +145,15 @@ func determineTypeFromData(e *xml.Element, flag uint) any {
 	return t
 }
 
-func hasSameMembers(b, a *StructInfo, depth uint32) bool {
+func hasSameMembers(a, b *StructInfo, depth uint32) bool {
 	if len(a.Members) != len(b.Members) {
 		return false
 	}
 	for i := range a.Members {
-		if !isSameType(b.Members[i], a.Members[i], depth+1) {
+		if _, ok := b.Members[i]; !ok {
+			return false
+		}
+		if !isSameType(a.Members[i], b.Members[i], depth+1) {
 			return false
 		}
 	}
