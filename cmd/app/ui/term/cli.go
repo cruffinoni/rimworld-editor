@@ -7,6 +7,7 @@ import (
 
 	"github.com/cruffinoni/rimworld-editor/cmd/app/ui"
 	"github.com/cruffinoni/rimworld-editor/cmd/app/ui/term/faction"
+	"github.com/cruffinoni/rimworld-editor/cmd/app/ui/term/pawn"
 	"github.com/cruffinoni/rimworld-editor/generated"
 
 	"github.com/c-bata/go-prompt"
@@ -61,10 +62,28 @@ func (c *Console) Init(options *ui.Options, save *generated.Savegame) {
 		description: "Exit the console",
 		handler:     c.exit,
 	})
-	c.commands.RegisterCommand(&config{
+	rp := pawn.RegisterPawns(c.save)
+	pl := pawn.NewList(c.save, rp)
+	pi := pawn.NewInjury(rp)
+	pawnCmd := c.commands.RegisterCommand(&config{
 		name:        "pawn",
 		description: "Pawn commands",
+	}).RegisterCommand(
+		&config{
+			name:        "world-alive",
+			description: "List all pawns that alive in the game",
+			handler:     pl.ListAllPawns,
+		},
+	)
+	pawnCmd.RegisterCommand(&config{
+		name:        "injury",
+		description: "Commands to manipulate pawn's injury",
+	}).RegisterCommand(&config{
+		name:        "remove-all",
+		description: "Remove all injuries from a pawn",
+		handler:     pi.RemoveInjuries,
 	})
+
 	fl := faction.List{SG: c.save}
 	c.commands.RegisterCommand(&config{
 		name:        "faction",

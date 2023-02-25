@@ -109,10 +109,6 @@ func fixTypeMismatch(a, b *member) error {
 		if ctB, okB := b.T.(*CustomType); okB {
 			return fixCustomType(va, ctB)
 		} else if _, okStruct := b.T.(*StructInfo); okStruct {
-			//if isRelevantType(va) {
-			//	structType.printOrderedMembers()
-			//	log.Printf("fixTypeMismatch: double relevant type => %T (%v w/ t %T) & %T (%v w/ %d members)", va, va.Name, va.Type1, structType, structType.Name, len(structType.Order))
-			//}
 			a.T = b.T
 		} else {
 			b.T = a.T
@@ -149,7 +145,6 @@ func fixTypeMismatch(a, b *member) error {
 			// We have completely 2 different types with same name. Example of tag <name> which might be a structure representing the name, forename and surname
 			// of a pawn but can be also a string for "feature" tag.
 			if isRelevantType(b.T) {
-				//log.Printf("b type ('%v' | %+v) is not reflect.Kind type w/ %T", b.Name, b, b.T)
 				addUniqueNumber(b.Name)
 			} else {
 				b.T = a.T

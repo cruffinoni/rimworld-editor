@@ -222,14 +222,6 @@ func handleElement(e *xml.Element, st *StructInfo, flag uint) error {
 		n = n.Next
 	}
 	RegisteredMembers[st.Name] = append(RegisteredMembers[st.Name], st)
-	//if _, ok := RegisteredMembers[st.Name]; ok {
-	//if !hasSameMembers(m, st) {
-	//log.Printf("WARNING: struct %s (length %d - %p) is different from %s (length %d - %p)", m.Name, len(m.Members), m, st.Name, len(st.Members), st)
-	//fixMembers(m, st)
-	//}
-	//} else {
-	//	RegisteredMembers[st.Name] = st
-	//}
 	return nil
 }
 

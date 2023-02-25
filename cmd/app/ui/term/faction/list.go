@@ -12,7 +12,7 @@ type List struct {
 	SG *generated.Savegame
 }
 
-func getFactionId(loadID int64) string {
+func GetFactionID(loadID int64) string {
 	return "Faction_" + strconv.FormatInt(loadID, 10)
 }
 
@@ -22,7 +22,7 @@ func (l *List) ListAllFactions(args []string) error {
 	ite := iterator.NewSliceIterator[*generated.AllFactions](l.SG.Game.World.FactionManager.AllFactions)
 	for i := ite; i.HasNext(); i = i.Next() {
 		v := i.Value()
-		allFac[getFactionId(v.LoadID)] = v
+		allFac[GetFactionID(v.LoadID)] = v
 	}
 	for id, f := range allFac {
 		log.Printf("Faction %s (named '%s') - %s", f.Def, f.Name, id)
@@ -40,7 +40,7 @@ func (l *List) ListAllFactions(args []string) error {
 		for i := iterator.NewSliceIterator[*generated.Relations](f.Relations); i.HasNext(); i = i.Next() {
 			r := i.Value()
 			log.Printf("\t- %s (%s) => %s (%s) : %d",
-				f.Def, id, allFac[r.Other].Def, getFactionId(allFac[r.Other].LoadID), r.Goodwill)
+				f.Def, id, allFac[r.Other].Def, GetFactionID(allFac[r.Other].LoadID), r.Goodwill)
 		}
 		log.Println("")
 	}

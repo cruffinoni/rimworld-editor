@@ -166,6 +166,11 @@ func (s *Slice[T]) GetFromIndex(idx int) T {
 	return *new(T)
 }
 
+func (s *Slice[T]) Reset() {
+	s.cap = 0
+	s.data = make([]sliceData[T], 0)
+}
+
 func (s *Slice[T]) Assign(e *xml.Element) error {
 	s.data = make([]sliceData[T], 0)
 	n := e
