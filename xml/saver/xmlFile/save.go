@@ -37,6 +37,10 @@ func castToInterface[T any](val any) (T, bool) {
 	return *new(T), false
 }
 
+func capitalize(s string) string {
+	return strings.ToUpper(s[:1]) + s[1:]
+}
+
 var ErrEmptyValue = errors.New("empty value")
 
 // Save recursively saves the given value to the provided buffer with the given tag.
@@ -129,6 +133,8 @@ func Save(val any, b *saver.Buffer, tag string) error {
 			b.Write([]byte{'\n'})
 			b.DecreaseDepth()
 		}
+	case reflect.Bool:
+		b.Write([]byte(capitalize(strconv.FormatBool(v.Bool()))))
 	case reflect.Int64:
 		b.Write([]byte(strconv.FormatInt(v.Int(), 10)))
 	case reflect.Float64:

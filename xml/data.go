@@ -28,9 +28,9 @@ type associatedRegex struct {
 
 var (
 	HexRegex     = regexp.MustCompile(`^(0x|#)[0-9a-fA-F]{2,}$`)
-	IntegerRegex = regexp.MustCompile(`^-?[0-9]+$`)
-	FloatRegex   = regexp.MustCompile(`^-?[0-9]*\.?[0-9]+([eE][+-][0-9]+)?$`)
-	BoolRegex    = regexp.MustCompile(`^(TRUE|FALSE|true|false)$`)
+	IntegerRegex = regexp.MustCompile(`^-?[0-9]{1,18}$`)
+	FloatRegex   = regexp.MustCompile(`^-?(?:\d{1,18}(?:\.\d{1,18})?|\.\d{1,18})(?:[eE][+-]?\d{1,18})?$`)
+	BoolRegex    = regexp.MustCompile(`(?i)^(true|false)$`)
 
 	AllPatterns = []associatedRegex{
 		{pattern: IntegerRegex, kind: reflect.Int64},
@@ -69,7 +69,7 @@ func (d *Data) lazyCheck(destKind reflect.Kind) {
 		return
 	}
 	if destKind != d.t {
-		log.Panicf("lazyCheck: type mismatch: %v != %v (data: %v)", d.t, destKind, d.data)
+		log.Panicf("lazyCheck: type mismatch: expected %v, got %v (data: %v)", destKind, d.t, d.data)
 	}
 }
 
@@ -118,7 +118,7 @@ func (d *Data) GetFloat64() float64 {
 
 func (d *Data) GetBool() bool {
 	d.lazyCheck(reflect.Bool)
-	b, err := strconv.ParseBool(d.data)
+	b, err := strconv.ParseBool(strings.ToLower(d.data))
 	if err != nil {
 		log.Panicf("can't convert to bool: %v > %v", d.data, err)
 		return false

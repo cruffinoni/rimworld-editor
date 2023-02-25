@@ -30,15 +30,9 @@ const (
 	// A.K.A., skip the current child and use the child of the current child
 	// Useful for the case of list with custom tag
 	forceChild
-
-	// Ignore the slice tag (li) because we don't need it there. Used for maps where
-	// only values inside the li tag is interesting
-	ignoreSlice
-
 	// Sometimes, there is no name attributed to a multiple grouped data and most
 	// likely happens in lists. It's not possible for us to do the same thing.
 	forceRandomName
-
 	// Force to make a full check of all values in a list. This is persistent for lists
 	// because a structure may vary from a one to another.
 	forceFullCheck

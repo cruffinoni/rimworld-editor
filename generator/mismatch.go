@@ -1,12 +1,12 @@
 package generator
 
 import (
+	"errors"
 	"fmt"
 	"log"
 	"math"
 	"reflect"
 	"sort"
-	"strings"
 )
 
 func isRelevantType(t1 any) bool {
@@ -21,18 +21,20 @@ func isRelevantType(t1 any) bool {
 	return true
 }
 
+var ErrUnsolvableMismatch = errors.New("unsolvable mismatch")
+
 // fixCustomType compares two CustomType values and updates the values to ensure they are consistent.
 // If either `a` or `b` is nil, it is updated to the non-nil value.
 // The function checks the `type1` and `type2` fields and updates them if they are not the same.
 // The function ensures that the relevant type is kept between both CustomType values.
-func fixCustomType(a, b *CustomType) {
+func fixCustomType(a, b *CustomType) error {
 	if a == nil {
 		a = b
-		return
+		return nil
 	}
 	if b == nil {
 		b = a
-		return
+		return nil
 	}
 	if !isSameType(a.Type1, b.Type1, 0) {
 		a1 := reflect.TypeOf(a.Type1)
@@ -65,7 +67,10 @@ func fixCustomType(a, b *CustomType) {
 						a.Type1 = b.Type2
 					}
 				} else {
-					log.Panicf("can't decide on which type work on between %T & %T", a.Type1, b.Type1)
+					log.Printf("data a: %v -> %T", a.Name, a.Type1)
+					log.Printf("data b: %v -> %T", b.Name, b.Type1)
+					log.Printf("can't decide on which type work on between %T & %T", a.Type1, b.Type1)
+					return ErrUnsolvableMismatch
 				}
 			}
 		}
@@ -78,6 +83,7 @@ func fixCustomType(a, b *CustomType) {
 			a.Type2 = b.Type2
 		}
 	}
+	return nil
 }
 
 // printOrderedMembers print Members of s in an alphabetic order
@@ -97,11 +103,11 @@ func (s *StructInfo) printOrderedMembers() {
 	fmt.Printf("\n")
 }
 
-func fixTypeMismatch(a, b *member) {
+func fixTypeMismatch(a, b *member) error {
 	switch va := a.T.(type) {
 	case *CustomType:
 		if ctB, okB := b.T.(*CustomType); okB {
-			fixCustomType(va, ctB)
+			return fixCustomType(va, ctB)
 		} else if _, okStruct := b.T.(*StructInfo); okStruct {
 			//if isRelevantType(va) {
 			//	structType.printOrderedMembers()
@@ -124,14 +130,15 @@ func fixTypeMismatch(a, b *member) {
 				bFArr.Size = va.Size
 			}
 			if !isSameType(bFArr.PrimaryType, va.PrimaryType, 0) {
-				log.Printf("'%v' | '%v'", a.Name, a.Attr)
-				log.Printf("mismatch type in fixed array w/ %T (len %d) & %T (len %d)", va.PrimaryType, va.Size, bFArr.PrimaryType, bFArr.Size)
-				log.Printf("%+v", va.PrimaryType)
-				log.Printf("%+v", bFArr.PrimaryType)
-				if ex := explainIsSameType(va.PrimaryType, bFArr.PrimaryType, &explainations{content: make([]string, 0)}); len(ex.content) > 0 {
-					log.Printf("%s", strings.Join(ex.content, "\n"))
-				}
-				va.PrimaryType = bFArr.PrimaryType
+				return nil
+				//log.Printf("'%v' | '%v'", a.Name, a.Attr)
+				//log.Printf("mismatch type in fixed array w/ %T (len %d) & %T (len %d)", va.PrimaryType, va.Size, bFArr.PrimaryType, bFArr.Size)
+				//log.Printf("%+v", va.PrimaryType)
+				//log.Printf("%+v", bFArr.PrimaryType)
+				//if ex := explainIsSameType(va.PrimaryType, bFArr.PrimaryType, &explainations{content: make([]string, 0)}); len(ex.content) > 0 {
+				//	log.Printf("%s", strings.Join(ex.content, "\n"))
+				//}
+				//va.PrimaryType = bFArr.PrimaryType
 			}
 		} else {
 			b.T = a.T
@@ -142,7 +149,7 @@ func fixTypeMismatch(a, b *member) {
 			// We have completely 2 different types with same name. Example of tag <name> which might be a structure representing the name, forename and surname
 			// of a pawn but can be also a string for "feature" tag.
 			if isRelevantType(b.T) {
-				log.Printf("b type ('%v' | %+v) is not reflect.Kind type w/ %T", b.Name, b, b.T)
+				//log.Printf("b type ('%v' | %+v) is not reflect.Kind type w/ %T", b.Name, b, b.T)
 				addUniqueNumber(b.Name)
 			} else {
 				b.T = a.T
@@ -154,6 +161,7 @@ func fixTypeMismatch(a, b *member) {
 			b.T = reflect.Float64
 		}
 	}
+	return nil
 }
 
 type explainations struct {
@@ -286,7 +294,17 @@ func isSameType(a, b any, depth uint32) bool {
 }
 
 func updateOrderedMembers(a *StructInfo) {
-	for i := range a.Order {
+	l := len(a.Order)
+	for i := 0; i < l; i++ {
+		if _, ok := a.Members[a.Order[i].Name]; !ok {
+			if i+1 >= len(a.Order) {
+				a.Order = a.Order[:i]
+			} else {
+				a.Order = append(a.Order[:i], a.Order[i+1:]...)
+			}
+			l--
+			continue
+		}
 		a.Order[i] = a.Members[a.Order[i].Name]
 	}
 }
@@ -311,9 +329,35 @@ func fixMembers(a, b *StructInfo) {
 			log.Panicf("fixMembers: '%v' doesn't exist in b", i)
 		}
 		if !isSameType(b.Members[i].T, a.Members[i].T, 0) {
-			fixTypeMismatch(a.Members[i], b.Members[i])
+			err := fixTypeMismatch(a.Members[i], b.Members[i])
+			if errors.Is(err, ErrUnsolvableMismatch) {
+				addUniqueNumber(b.Members[i].Name)
+			}
 			updateOrderedMembers(a)
 			updateOrderedMembers(b)
 		}
+	}
+}
+
+func toUpperIfNeeded(r []byte) string {
+	if r[0] >= 'a' && r[0] <= 'z' {
+		r[0] -= 32
+		return string(r)
+	}
+	return string(r)
+}
+
+func deleteTitleDuplicate(a *StructInfo) {
+	edited := false
+	for i := range a.Members {
+		toTitle := toUpperIfNeeded([]byte(i))
+		if _, okBasic := a.Members[toTitle]; okBasic && toTitle != i {
+			delete(a.Members, toTitle)
+			edited = true
+			log.Printf("%v & %v, deleting %v", i, toTitle, toTitle)
+		}
+	}
+	if edited {
+		updateOrderedMembers(a)
 	}
 }

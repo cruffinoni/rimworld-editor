@@ -27,7 +27,7 @@ func main() {
 		flag.Usage()
 		return
 	}
-	//log.Printf("Opening and decoding XML file from %s", path)
+	log.Printf("Opening and decoding XML file from %s", path)
 	fo, err = file.Open(path)
 	if err != nil {
 		log.Fatal(err)
@@ -37,7 +37,7 @@ func main() {
 		fileName = "C_" + strconv.FormatInt(time.Now().Unix(), 10)
 	}
 	save := &generated.Savegame{}
-	//log.Println("Unmarshalling XML...")
+	log.Println("Unmarshalling XML...")
 	if err := unmarshal.Element(fo.XML.Root.Child, save); err != nil {
 		log.Fatal(err)
 	}

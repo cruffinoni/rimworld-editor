@@ -1,45 +1,39 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <savegame>
-	<outcomeEffect Class="RitualOutcomeEffectWorker_FromQuality">
-		<def>AttendedFuneral</def>
-		<compDatas>
-			<li IsNull="True"/>
-			<li Class="RitualOutcomeComp_DataThingPresence">
-				<presentForTicks>
-					<keys/>
-					<values/>
-				</presentForTicks>
-			</li>
-		</compDatas>
-	</outcomeEffect>
-	<b>
-		<outcomeEffect Class="RitualOutcomeEffectWorker_FromQuality">
-			<def>CelebratedDate</def>
-			<compDatas>
-				<li IsNull="True"/>
-				<li IsNull="True"/>
-				<li IsNull="True"/>
-				<li Class="RitualOutcomeComp_DataThingPresence">
-					<presentForTicks>
+	<c>
+		<banksByFaction>
+			<keys>
+				<li>Faction_0</li>
+				<li>Faction_6</li>
+			</keys>
+			<values>
+				<li>
+					<parentFaction>Faction_0</parentFaction>
+					<depositAmount>69045</depositAmount>
+					<loans/>
+					<loanLastTimeTaken>
 						<keys/>
 						<values/>
-					</presentForTicks>
+					</loanLastTimeTaken>
 				</li>
-				<li IsNull="True"/>
-			</compDatas>
-		</outcomeEffect>
-	</b>
-	<c>
-		<beardFrequencies>
-			<vals>
 				<li>
-					<frequency>Frequent</frequency>
-					<gender>Any</gender>
+					<parentFaction>Faction_6</parentFaction>
+					<loans/>
+					<loanLastTimeTaken>
+						<keys/>
+						<values/>
+					</loanLastTimeTaken>
 				</li>
-				<li/>
-				<li/>
-				<li/>
-			</vals>
-		</beardFrequencies>
+			</values>
+		</banksByFaction>
+
+		<a>
+			<keys>
+				<li>FAC</li>
+			</keys>
+			<values>
+				<li>57684</li>
+			</values>
+		</a>
 	</c>
 </savegame>

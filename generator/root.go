@@ -27,6 +27,7 @@ func GenerateGoFiles(root *xml.Element) *StructInfo {
 		for j := 0; j < l; j++ {
 			fixMembers(RegisteredMembers[i][0], RegisteredMembers[i][j])
 		}
+		deleteTitleDuplicate(RegisteredMembers[i][0])
 	}
 	return s
 }

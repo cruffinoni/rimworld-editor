@@ -19,7 +19,7 @@ func findFieldFromName(t reflect.Type, value reflect.Value, name string) int {
 		if tag == "" {
 			tag = f.Name
 		}
-		if tag == name {
+		if tag == name && f.IsExported() {
 			return i
 		}
 	}
@@ -102,20 +102,10 @@ func skipPath(element *xml.Element, pathStr string) *xml.Element {
 	return n
 }
 
-func determineArraySize(e *xml.Element) int {
-	c := 0
-	n := e
-	for n != nil {
-		c++
-		n = n.Next
-	}
-	return c
-}
-
 func Element(element *xml.Element, dest any) error {
 	// Do a copy of the element to avoid modifying the original
 	n := element
-	if n == nil {
+	if n == nil || n.GetName() == "history" {
 		return nil
 	}
 
@@ -143,10 +133,11 @@ func Element(element *xml.Element, dest any) error {
 	if v.Kind() == reflect.Invalid {
 		return errors.New("value of dest is invalid")
 	}
+	//log.Printf("Doing unmarshal for type %s", n.XMLPath())
 	for n != nil {
 		f := findFieldFromName(t, v, n.GetName())
 		//log.Printf("n: %v | %v", n.GetName(), n.Attr)
-		if f != -1 {
+		if f != -1 && n.GetName() != "history" {
 			fieldValue := v.Field(f)
 			if canValidate {
 				validator.ValidateField(t.Field(f).Name)

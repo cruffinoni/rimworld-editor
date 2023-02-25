@@ -44,7 +44,7 @@ func createCustomTypeForMap(e *xml.Element, flag uint) any {
 	//log.Printf("Determining key type from %s", e.Child.XMLPath())
 	var (
 		c = e.Child
-		k = determineTypeFromData(c, flag|ignoreSlice|forceFullCheck)
+		k = determineTypeFromData(c, flag|forceFullCheck)
 		v any
 	)
 	if ct, ok := k.(*CustomType); ok {
@@ -57,7 +57,7 @@ func createCustomTypeForMap(e *xml.Element, flag uint) any {
 	//log.Printf("Key type: %T", k)
 	c = c.Next
 	//log.Printf("Determining value type from '%v'", c.XMLPath())
-	v = determineTypeFromData(c, flag|ignoreSlice|forceFullCheck)
+	v = determineTypeFromData(c, flag|forceFullCheck)
 	//log.Printf("Value type: %T", v)
 	// By default, maps are strings to strings
 	if k == reflect.Invalid || v == reflect.Invalid {

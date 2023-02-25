@@ -13,8 +13,10 @@ import (
 	"github.com/cruffinoni/rimworld-editor/xml/attributes"
 	"github.com/cruffinoni/rimworld-editor/xml/path"
 	"github.com/cruffinoni/rimworld-editor/xml/saver"
+	"github.com/cruffinoni/rimworld-editor/xml/saver/xmlFile"
 	"github.com/cruffinoni/rimworld-editor/xml/types/iterator"
 	"github.com/cruffinoni/rimworld-editor/xml/types/primary"
+	"github.com/cruffinoni/rimworld-editor/xml/unmarshal"
 )
 
 type Pair[K comparable, V any] struct {
@@ -112,7 +114,9 @@ func (m *Map[K, V]) TransformToXML(b *saver.Buffer) error {
 				b.Write([]byte{'\n'})
 			}
 		} else {
-			b.WriteString(fmt.Sprintf("%v", v))
+			if err := xmlFile.Save(v, b, ""); err != nil {
+				return err
+			}
 		}
 		if unicode.IsSpace(rune(b.Buffer()[b.Len()-1])) {
 			b.WriteStringWithIndent("</li>\n")
@@ -193,8 +197,7 @@ func (m *Map[K, V]) Assign(e *xml.Element) error {
 		if key.Data == nil {
 			log.Panicf("Map/Assign: no data for key %s", key.StartElement.Name.Local)
 		}
-		////log.Printf("There is data? %+v\n> %+v\n>> %+v\n>>>%+v", values[i], values[i].Child, values[i].Child.Child, values[i].Child.Child.Child)
-		//log.Printf("Type ok? '%T'", zero[V]())
+
 		// This might be a custom type that implements xml.Assigner interface
 		if _, ok := any(zero[V]()).(xml.Assigner); ok && !isEmpty {
 			if values[i].Child == nil {
@@ -208,10 +211,13 @@ func (m *Map[K, V]) Assign(e *xml.Element) error {
 			subValueVal = subValueVal.Elem()
 			if subValueVal.Kind() == reflect.Ptr {
 				subValueVal.Set(reflect.New(subValueVal.Type().Elem()))
+				if err := unmarshal.Element(values[i].Child, subValueVal.Interface()); err != nil {
+					return err
+				}
 			}
-			if err := subValueVal.Interface().(xml.Assigner).Assign(values[i].Child); err != nil { // Use the child because we don't to assign the <li> tag element
-				return err
-			}
+			//if err := subValueVal.Interface().(xml.Assigner).Assign(values[i].Child); err != nil { // Use the child because we don't to assign the <li> tag element
+			//	return err
+			//}
 			//log.Printf("Res: %v (%T)", subValueVal.Interface().(V), subValueVal.Interface().(V))
 			m.m[castDataFromKind[K](kKind, key.Data)] = subValueVal.Interface().(V)
 			//log.Printf("!!=> %v > %v", castDataFromKind[K](kKind, key.Data), m.m[castDataFromKind[K](kKind, key.Data)])

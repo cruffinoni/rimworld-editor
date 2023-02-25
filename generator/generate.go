@@ -111,10 +111,6 @@ func determineTypeFromData(e *xml.Element, flag uint) any {
 	// We need to define this struct with of this all members
 	if t == reflect.Struct || t == reflect.Slice {
 		c := e.Child
-		if (flag & ignoreSlice) > 0 {
-			flag &^= ignoreSlice
-			return determineTypeFromData(c, flag)
-		}
 		// If the child is a list, let's create a slice from it
 		if helper.IsListTag(c.Child.GetName()) {
 			// We set the forceChild flag to true to force the function createStructure
