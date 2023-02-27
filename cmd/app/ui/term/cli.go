@@ -2,12 +2,12 @@ package term
 
 import (
 	"fmt"
-	"log"
 	"strings"
 
 	"github.com/cruffinoni/rimworld-editor/cmd/app/ui"
 	"github.com/cruffinoni/rimworld-editor/cmd/app/ui/term/faction"
 	"github.com/cruffinoni/rimworld-editor/cmd/app/ui/term/pawn"
+	"github.com/cruffinoni/rimworld-editor/cmd/app/ui/term/printer"
 	"github.com/cruffinoni/rimworld-editor/generated"
 
 	"github.com/c-bata/go-prompt"
@@ -35,13 +35,13 @@ func (c *Console) Execute([]string) error {
 			continue
 		}
 		if err := c.commands.Parse(f); err != nil {
-			log.Println(err)
+			printer.PrintError(err)
 			if err != errUnknownCommand {
 				c.shouldExit = true
 			}
 		}
 		if c.shouldExit {
-			log.Println("Execution ended.")
+			printer.PrintS("Execution ended.")
 			break
 		}
 	}
@@ -62,19 +62,20 @@ func (c *Console) Init(options *ui.Options, save *generated.Savegame) {
 		description: "Exit the console",
 		handler:     c.exit,
 	})
-	rp := pawn.RegisterPawns(c.save)
-	pl := pawn.NewList(c.save, rp)
-	pi := pawn.NewInjury(rp)
+	rf := faction.RegisterFactions(c.save)
+	rp := pawn.RegisterPawns(c.save, rf)
+	pl := pawn.NewList(c.save, rp, rf)
 	pawnCmd := c.commands.RegisterCommand(&config{
 		name:        "pawn",
 		description: "Pawn commands",
-	}).RegisterCommand(
-		&config{
-			name:        "world-alive",
-			description: "List all pawns that alive in the game",
-			handler:     pl.ListAllPawns,
-		},
-	)
+	})
+	pawnCmd.RegisterCommand(&config{
+		name:        "world",
+		description: "List all pawns that alive in the game including your pawns and the faction leaders",
+		handler:     pl.ListAllPawns,
+	})
+
+	pi := pawn.NewInjury(rp)
 	pawnCmd.RegisterCommand(&config{
 		name:        "injury",
 		description: "Commands to manipulate pawn's injury",
@@ -82,9 +83,13 @@ func (c *Console) Init(options *ui.Options, save *generated.Savegame) {
 		name:        "remove-all",
 		description: "Remove all injuries from a pawn",
 		handler:     pi.RemoveInjuries,
+	}, &config{
+		name:        "list",
+		description: "List all injuries from a pawn",
+		handler:     pi.List,
 	})
 
-	fl := faction.List{SG: c.save}
+	fl := faction.NewList(c.save, rf)
 	c.commands.RegisterCommand(&config{
 		name:        "faction",
 		description: "Faction commands",

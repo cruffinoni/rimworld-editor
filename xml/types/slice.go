@@ -158,12 +158,10 @@ func (s *Slice[T]) Capacity() int {
 }
 
 func (s *Slice[T]) GetFromIndex(idx int) T {
-	for i, d := range s.data {
-		if i == idx {
-			return d.data
-		}
+	if idx < 0 || idx >= len(s.data) {
+		return *new(T)
 	}
-	return *new(T)
+	return s.data[idx].data
 }
 
 func (s *Slice[T]) Reset() {
