@@ -1,7 +1,9 @@
 package iterator
 
 type MapIndexer[K, V any] interface {
-	SliceIndexer[V]
+	GetFromIndex(idx int) V
+	Capacity() int
+	Set(key K, value V)
 	GetKeyFromIndex(idx int) K
 }
 

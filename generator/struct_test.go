@@ -670,7 +670,7 @@ func TestGenerateGoFiles(t *testing.T) {
 	for name, tt := range tests {
 		t.Run(name, func(t *testing.T) {
 			root := resetVarsAndReadBuffer(t, tt.args)
-			if diff := deep.Equal(tt.want, GenerateGoFiles(root)); diff != nil {
+			if diff := deep.Equal(tt.want, GenerateGoFiles(root, true)); diff != nil {
 				assert.FailNow(t, strings.Join(diff, "\n"))
 			}
 		})

@@ -15,7 +15,7 @@ func NewList(sg *generated.Savegame, r Registerer) *List {
 	return &List{r: r, sg: sg}
 }
 
-func (l *List) ListAllFactions(_ []string) error {
+func (l *List) ListAllFactions() {
 	allFac := map[string]*generated.AllFactions{}
 	printer.PrintS("Summary of all factions...")
 	ite := iterator.NewSliceIterator[*generated.AllFactions](l.sg.Game.World.FactionManager.AllFactions)
@@ -27,5 +27,5 @@ func (l *List) ListAllFactions(_ []string) error {
 		PrintFactionInformation(l.r, f, true)
 		printer.PrintS("")
 	}
-	return nil
+	return
 }

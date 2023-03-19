@@ -39,8 +39,10 @@ var (
 		"red":     1,
 		"green":   2,
 		"yellow":  3,
-		"cyan":    4,
+		"blue":    4,
 		"magenta": 5,
+		"cyan":    6,
+		"white":   7,
 	}
 	colorOptions = map[string]int{
 		"reset":      Reset,

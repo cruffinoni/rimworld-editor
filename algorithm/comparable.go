@@ -6,7 +6,7 @@ type Comparable[T any] interface {
 	Less(rhs T) bool
 	Greater(rhs T) bool
 	Equal(rhs T) bool
-	Value() T
+	Val() T
 }
 
 type Findable[T any] interface {

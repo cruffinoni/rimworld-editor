@@ -17,17 +17,24 @@ type Opening struct {
 
 func Open(fileName string) (*Opening, error) {
 	fileOpening := &Opening{fileName: fileName}
-	content, err := os.ReadFile(fileName)
-	if err != nil {
+	if err := fileOpening.ReOpen(); err != nil {
 		return nil, err
+	}
+	return fileOpening, nil
+}
+
+func (o *Opening) ReOpen() error {
+	content, err := os.ReadFile(o.fileName)
+	if err != nil {
+		return err
 	}
 	reader := bytes.NewReader(content)
 	decoder := _xml.NewDecoder(reader)
 	decoder.CharsetReader = charset.NewReaderLabel
-	if err := decoder.Decode(&fileOpening.XML); err != nil {
-		return nil, err
+	if err := decoder.Decode(&o.XML); err != nil {
+		return err
 	}
-	return fileOpening, nil
+	return nil
 }
 
 func ReadFromBuffer(buffer string) (*Opening, error) {

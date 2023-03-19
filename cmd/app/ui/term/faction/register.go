@@ -35,27 +35,27 @@ func PrintFactionInformation(rf Registerer, f *generated.AllFactions, withRelati
 	id := GetFactionID(f.LoadID)
 	printer.PrintSf("Faction %s (named '%s') - %s", f.Def, f.Name, id)
 	if f.Def == "PlayerColony" {
-		printer.PrintS("This is the player's faction")
+		printer.PrintS("{-BOLD,F_GREEN}This is the player's faction")
 	} else {
-		printer.PrintS("This is a faction controlled by the IA")
+		printer.PrintS("{-F_MAGENTA}This is a faction controlled by the IA")
 	}
 	if f.Leader == "null" {
 		printer.PrintS("The faction doesn't have any leader")
 	} else {
-		printer.PrintSf("Faction's leader: %s", f.Leader)
+		printer.PrintSf("Faction's leader: {-BOLD}%s", f.Leader)
 	}
 	if withRelations {
 		printer.PrintS("Relations:")
 		for i := iterator.NewSliceIterator[*generated.Relations](f.Relations); i.HasNext(); i = i.Next() {
 			r := i.Value()
 			if r.Goodwill > 75 {
-				printer.PrintSf("\t- %s (%s) => %s (%s) : {-F_GREEN}%d",
+				printer.PrintSf("\t- %s (%s) => %s (%s) : {-BOLD,F_GREEN}%d",
 					f.Def, id, rf[r.Other].Def, GetFactionID(rf[r.Other].LoadID), r.Goodwill)
 			} else if r.Goodwill < -50 {
-				printer.PrintSf("\t- %s (%s) => %s (%s) : {-F_RED}%d",
+				printer.PrintSf("\t- %s (%s) => %s (%s) : {-BOLD,F_RED}%d",
 					f.Def, id, rf[r.Other].Def, GetFactionID(rf[r.Other].LoadID), r.Goodwill)
 			} else {
-				printer.PrintSf("\t- %s (%s) => %s (%s) : {-F_YELLOW}%d",
+				printer.PrintSf("\t- %s (%s) => %s (%s) : {-BOLD,F_YELLOW}%d",
 					f.Def, id, rf[r.Other].Def, GetFactionID(rf[r.Other].LoadID), r.Goodwill)
 			}
 		}

@@ -103,6 +103,15 @@ func (s *StructInfo) printOrderedMembers() {
 	fmt.Printf("\n")
 }
 
+func containsParentMember(s *StructInfo, a *member) bool {
+	for n := range s.Members {
+		if n == a.Name {
+			return true
+		}
+	}
+	return false
+}
+
 func fixTypeMismatch(a, b *member) error {
 	switch va := a.T.(type) {
 	case *CustomType:
@@ -115,7 +124,9 @@ func fixTypeMismatch(a, b *member) error {
 		}
 	case *StructInfo:
 		if bStruct, okStruct := b.T.(*StructInfo); okStruct {
-			fixMembers(va, bStruct)
+			if !containsParentMember(va, a) {
+				fixMembers(va, bStruct)
+			}
 		} else {
 			b.T = a.T
 		}
@@ -145,7 +156,7 @@ func fixTypeMismatch(a, b *member) error {
 			// We have completely 2 different types with same name. Example of tag <name> which might be a structure representing the name, forename and surname
 			// of a pawn but can be also a string for "feature" tag.
 			if isRelevantType(b.T) {
-				addUniqueNumber(b.Name)
+				b.Name = addUniqueNumber(b.Name)
 			} else {
 				b.T = a.T
 			}
@@ -240,50 +251,104 @@ func explainIsSameType(a, b any, e *explainations) *explainations {
 
 const MaxDepth = 100
 
-func isSameType(a, b any, depth uint32) bool {
+func hasSameMembers(a, b *StructInfo, depth uint32) bool {
+	//log.Printf("A: %v & b %v => %d", a.Name, b.Name, depth)
 	if depth > MaxDepth {
-		return true
+		return false
 	}
+	if len(a.Members) != len(b.Members) {
+		return false
+	}
+	for i := range a.Members {
+		if _, ok := b.Members[i]; !ok {
+			return false
+		}
+		if getTypeName(a.Name) == getTypeName(a.Members[i].Name) ||
+			getTypeName(a.Name) == getTypeName(b.Members[i].Name) {
+			return false
+		}
+		if !isSameType(a.Members[i], b.Members[i], depth+1) {
+			return false
+		}
+	}
+	return true
+}
+
+func getTypeName(a any) string {
+	switch va := a.(type) {
+	case *CustomType:
+		return getTypeName(va.Type1)
+	case *StructInfo:
+		return va.Name
+	case *FixedArray:
+		return getTypeName(va.PrimaryType)
+	case *member:
+		return va.Name
+	default:
+		return ""
+	}
+}
+
+// isSameType compares the types of two objects a and b and returns true if they are the same type.
+// depth is used to prevent infinite recursion in case of nested types.
+func isSameType(a, b any, depth uint32) bool {
+	// If depth has exceeded MaxDepth, log a message and return false to stop further recursion.
+	if depth > MaxDepth {
+		log.Printf("Max depth reached")
+		return false
+	}
+	// If either a or b is nil, compare their equality and return the result.
 	if a == nil || b == nil {
 		return a == b
 	}
+	// Check the type of a using type switch.
 	switch va := a.(type) {
-	case nil:
-		return a == b
 	case *CustomType:
+		// If a is a pointer to CustomType, compare its properties with b.
 		if bType, ok := b.(*CustomType); ok && bType != nil {
+			// If the type's name is the same as the parent's name, return false to avoid infinite recursion.
+			if getTypeName(va.Type1) == getTypeName(bType.Type1) || getTypeName(va.Type2) == getTypeName(bType.Type2) {
+				return false
+			}
+			// Compare the properties of CustomType a with b recursively using isSameType.
 			return va.Name == bType.Name && va.Pkg == bType.Pkg &&
 				isSameType(bType.Type1, va.Type1, depth+1) && isSameType(bType.Type2, va.Type2, depth+1)
 		} else {
 			return false
 		}
 	case *StructInfo:
+		// If a is a pointer to StructInfo, compare its properties with b.
 		if bType, ok := b.(*StructInfo); ok && bType != nil {
-			//log.Printf("So: %v/%v => %v", va.Name, bType.Name, hasSameMembers(va, bType))
+			// Compare the properties of StructInfo a with b recursively using hasSameMembers.
 			return va.Name == bType.Name && hasSameMembers(bType, va, depth+1)
 		} else {
 			return false
 		}
 	case *FixedArray:
+		// If a is a pointer to FixedArray, compare its properties with b.
 		if bFixArr, ok := b.(*FixedArray); ok && bFixArr != nil {
-			//log.Printf("%T & %T && %d & %d", bFixArr.PrimaryType, va.PrimaryType, va.Size, bFixArr.Size)
+			// Compare the properties of FixedArray a with b recursively using isSameType.
 			return isSameType(va.PrimaryType, bFixArr.PrimaryType, depth+1) && va.Size == bFixArr.Size
 		} else {
 			return false
 		}
 	case *member:
+		// If a is a pointer to member, compare its properties with b.
 		if bMember, ok := b.(*member); ok && bMember != nil {
+			// Compare the properties of member a with b recursively using isSameType.
 			return va.Name == bMember.Name && isSameType(bMember.T, va.T, depth+1)
 		} else {
 			return false
 		}
 	case reflect.Kind:
+		// If a is of type reflect.Kind, compare its value with b.
 		if bKind, ok := b.(reflect.Kind); ok {
 			return bKind == va
 		} else {
 			return false
 		}
 	default:
+		// For all other types, compare their types using reflect.TypeOf.
 		return reflect.TypeOf(a) == reflect.TypeOf(b)
 	}
 }
@@ -323,10 +388,16 @@ func fixMembers(a, b *StructInfo) {
 			b.printOrderedMembers()
 			log.Panicf("fixMembers: '%v' doesn't exist in b", i)
 		}
-		if !isSameType(b.Members[i].T, a.Members[i].T, 0) {
+		if !isSameType(a.Members[i].T, b.Members[i].T, 0) {
+			if getTypeName(a.Members[i].T) == i || getTypeName(b.Members[i].T) == i {
+				continue
+			}
+			//log.Printf("%T (%v) | %T (%v) is not same type", a.Members[i].T, a.Members[i].Name, b.Members[i].T, b.Members[i].Name)
 			err := fixTypeMismatch(a.Members[i], b.Members[i])
 			if errors.Is(err, ErrUnsolvableMismatch) {
-				addUniqueNumber(b.Members[i].Name)
+				b.Members[i].Name = addUniqueNumber(b.Members[i].Name)
+			} else if err != nil {
+				log.Fatal(err.Error())
 			}
 			updateOrderedMembers(a)
 			updateOrderedMembers(b)
@@ -349,7 +420,6 @@ func deleteTitleDuplicate(a *StructInfo) {
 		if _, okBasic := a.Members[toTitle]; okBasic && toTitle != i {
 			delete(a.Members, toTitle)
 			edited = true
-			log.Printf("%v & %v, deleting %v", i, toTitle, toTitle)
 		}
 	}
 	if edited {

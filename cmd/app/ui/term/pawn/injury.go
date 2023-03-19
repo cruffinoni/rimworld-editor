@@ -19,67 +19,67 @@ func NewInjury(rp PawnsRegisterer) *Injury {
 	}
 }
 
-func (i *Injury) RemoveInjuries(args []string) error {
-	if len(args) == 0 {
-		printer.PrintErrorS("At least, one pawn name is required (e.g. Thing_Human1046")
-		return nil
-	}
-	p, ok := i.RegisteredPawns[args[0]]
+func (i *Injury) RemoveInjuries(pawnID string) {
+	p, ok := i.RegisteredPawns[pawnID]
 	if !ok {
-		printer.PrintErrorS("Pawn not found.")
-		return nil
+		printer.PrintErrorSf("Pawn %s not found", pawnID)
+		return
 	}
 	p.HealthTracker.HediffSet.Hediffs.Reset()
-	printer.PrintSf("All injury for %s has been removed", args[0])
-	return nil
+	printer.PrintSf("All injuries has been removed for {-BOLD,GREEN}%s", pawnID)
+	return
 }
 
-func (i *Injury) Remove(args []string) error {
-	if len(args) == 0 {
-		printer.PrintErrorS("One pawn name is required (e.g. Thing_Human1046) and one injury id is required")
-		return nil
-	}
-	p, ok := i.RegisteredPawns[args[0]]
+func (i *Injury) Heal(pawnID string) {
+	p, ok := i.RegisteredPawns[pawnID]
 	if !ok {
-		printer.PrintErrorS("Pawn not found.")
-		return nil
+		printer.PrintErrorSf("Pawn %s not found", pawnID)
+		return
 	}
-	loadID, err := strconv.Atoi(args[1])
-	if err != nil {
-		printer.PrintError(err)
-		return nil
-	}
-	injury, okFind := algorithm.FindInSliceIf[*generated.Hediffs](p.HealthTracker.HediffSet.Hediffs, func(hediffs *generated.Hediffs) bool {
-		return hediffs.LoadID == int64(loadID)
+	algorithm.SliceForeach[*generated.Hediffs](p.HealthTracker.HediffSet.Hediffs, func(h *generated.Hediffs) {
+
 	})
-	if !okFind {
-		printer.PrintSf("Injury '%s' not found.", args[1])
-		return nil
-	}
-	printer.PrintSf("Injury %+v found", injury)
-	return nil
 }
 
-func (i *Injury) List(args []string) error {
-	if len(args) == 0 {
-		printer.PrintErrorS("At least, one pawn name is required (e.g. Thing_Human1046)")
-		return nil
+func (i *Injury) Remove(pawnID string, injuryIds []string) {
+	if len(injuryIds) == 0 {
+		printer.PrintErrorS("At least one injury id is required")
+		return
 	}
-	p, ok := i.RegisteredPawns[args[0]]
+	p, ok := i.RegisteredPawns[pawnID]
 	if !ok {
-		printer.PrintErrorS("Pawn not found.")
-		return nil
+		printer.PrintErrorSf("Pawn %s not found", pawnID)
+		return
 	}
-	printer.PrintSf("%s's injuries:", args[0])
+	totalInjuries := p.HealthTracker.HediffSet.Hediffs.Capacity()
+	for i := 0; i < totalInjuries; i++ {
+		for _, j := range injuryIds {
+			currentInjury := p.HealthTracker.HediffSet.Hediffs.GetFromIndex(i)
+			if j != strconv.FormatInt(currentInjury.LoadID, 10) {
+				continue
+			}
+			printer.PrintSf("Injury {-RED,BOLD}%s {-RESET}removed", currentInjury.LoadID)
+			p.HealthTracker.HediffSet.Hediffs.Remove(i)
+			injuryIds = append(injuryIds[:i], injuryIds[i+1:]...)
+		}
+	}
+}
+
+func (i *Injury) List(pawnID string) {
+	p, ok := i.RegisteredPawns[pawnID]
+	if !ok {
+		printer.PrintErrorSf("Pawn %s not found", pawnID)
+		return
+	}
+	printer.PrintSf("{-BOLD,MAGENTA}%s{-RESET}'s injuries:", pawnID)
 	if p.HealthTracker.HediffSet.Hediffs.Capacity() == 0 {
-		return nil
+		return
 	}
 	for i := iterator.NewSliceIterator[*generated.Hediffs](p.HealthTracker.HediffSet.Hediffs); i.HasNext(); i = i.Next() {
 		v := i.Value()
-		printer.PrintSf("%v (ID: %v) with a sevirity of %f", v.Def, v.LoadID, v.Severity*100.0)
-		if v.CombatLogText != "null" {
+		printer.PrintSf("%v ({-BOLD}load ID: %v{-RESET}) with a severity of {-RED}%f", v.Def, v.LoadID, v.Severity*100.0)
+		if v.CombatLogText != "null" && v.CombatLogText != "" {
 			printer.PrintSf("Logs: %s", v.CombatLogText)
 		}
 	}
-	return nil
 }

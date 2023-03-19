@@ -1,8 +1,13 @@
 package iterator
 
+import "github.com/cruffinoni/rimworld-editor/xml/attributes"
+
 type SliceIndexer[V any] interface {
 	GetFromIndex(idx int) V
 	Capacity() int
+	Set(value V, attr attributes.Attributes, idx int)
+	Add(value V, attr attributes.Attributes)
+	Remove(idx int)
 }
 
 type SliceIterator[V any] struct {

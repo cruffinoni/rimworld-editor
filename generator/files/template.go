@@ -46,26 +46,26 @@ func getTypeName(t any) string {
 	}
 }
 
-func checkTypeAndApply(t any, buffer *buffer, path string) error {
+func checkTypeAndApply(t any, buffer *buffer, path string, registeredMembers generator.MemberVersioning) error {
 	switch va := t.(type) {
 	case *generator.StructInfo:
-		return generateStructToPath(path, va)
+		return generateStructToPath(path, va, registeredMembers)
 	case *xml.Element:
 		buffer.writeImport(paths.HeaderXml)
 	case *generator.CustomType:
 		var err error
 		buffer.writeImport(va.ImportPath)
-		if err = checkTypeAndApply(va.Type1, buffer, path); err != nil {
+		if err = checkTypeAndApply(va.Type1, buffer, path, registeredMembers); err != nil {
 			return err
 		}
 		if va.Type2 != nil {
-			if err = checkTypeAndApply(va.Type2, buffer, path); err != nil {
+			if err = checkTypeAndApply(va.Type2, buffer, path, registeredMembers); err != nil {
 				return err
 			}
 		}
 	case *generator.FixedArray:
 		buffer.writeToBody(fmt.Sprintf("[%d]", va.Size))
-		if err := checkTypeAndApply(va.PrimaryType, buffer, path); err != nil {
+		if err := checkTypeAndApply(va.PrimaryType, buffer, path, registeredMembers); err != nil {
 			return err
 		}
 	}
@@ -81,7 +81,7 @@ func removeInnerKeyword(s string) string {
 	return strings.Replace(s, generator.InnerKeyword, "", -1)
 }
 
-func writeCustomType(c *generator.CustomType, b *buffer, path string) error {
+func writeCustomType(c *generator.CustomType, b *buffer, path string, registeredMembers generator.MemberVersioning) error {
 	var err error
 	b.writeImport(c.ImportPath)
 	//log.Printf("Custom type %+v", *c)
@@ -91,11 +91,11 @@ func writeCustomType(c *generator.CustomType, b *buffer, path string) error {
 		return nil
 	}
 	b.writeToBody("[" + getTypeName(c.Type1))
-	if err = checkTypeAndApply(c.Type1, b, path); err != nil {
+	if err = checkTypeAndApply(c.Type1, b, path, registeredMembers); err != nil {
 		return err
 	}
 	if c.Type2 != nil {
-		if err = checkTypeAndApply(c.Type2, b, path); err != nil {
+		if err = checkTypeAndApply(c.Type2, b, path, registeredMembers); err != nil {
 			return err
 		}
 		b.writeToBody(", " + getTypeName(c.Type2))
@@ -104,7 +104,7 @@ func writeCustomType(c *generator.CustomType, b *buffer, path string) error {
 	return err
 }
 
-func generateStructToPath(path string, s *generator.StructInfo) error {
+func generateStructToPath(path string, s *generator.StructInfo, registeredMembers generator.MemberVersioning) error {
 	if _, err := os.Stat(path + "/" + strcase.ToSnake(s.Name) + ".go"); !errors.Is(err, os.ErrNotExist) {
 		//log.Printf("generateStructToPath: file already exists at: %v", path+"/"+strcase.ToSnake(s.Name)+".go")
 		//log.Printf("Size: %d from %p", len(s.Members), s)
@@ -129,12 +129,12 @@ func generateStructToPath(path string, s *generator.StructInfo) error {
 		panic("empty struct name")
 	}
 	buf.writeToBody("type " + structName + " struct {\nAttr attributes.Attributes\nFieldValidated map[string]bool\n\n")
-	//log.Printf("S: %s", s.Name)
-	for _, m := range generator.RegisteredMembers[s.Name][0].Order { // Use the best matched version of s.name
+	//log.Printf("S: %s | %d", s.Name, len(registeredMembers[s.Name]))
+	for _, m := range registeredMembers[s.Name][0].Order { // Use the best matched version of s.name
 		buf.writeToBody("\t" + strcase.ToCamel(m.Name) + " ")
 		switch va := m.T.(type) {
 		case *generator.CustomType:
-			if err = writeCustomType(va, buf, path); err != nil {
+			if err = writeCustomType(va, buf, path, registeredMembers); err != nil {
 				return err
 			}
 		case reflect.Kind:
@@ -142,9 +142,9 @@ func generateStructToPath(path string, s *generator.StructInfo) error {
 		case *generator.StructInfo:
 			buf.writeToBody("*" + strcase.ToCamel(va.Name))
 			if s.Name == va.Name {
-				return fmt.Errorf("duplicate name for %s & %s", s.Name, va.Name)
+				log.Panicf("duplicate name for %s & %s", s.Name, va.Name)
 			}
-			if err = generateStructToPath(path, va); err != nil {
+			if err = generateStructToPath(path, va, registeredMembers); err != nil {
 				return err
 			}
 		case *xml.Element:
@@ -153,7 +153,7 @@ func generateStructToPath(path string, s *generator.StructInfo) error {
 			buf.writeToBody("*xml.Element")
 		case *generator.FixedArray:
 			buf.writeToBody(fmt.Sprintf("[%d] %s", va.Size, getTypeName(va.PrimaryType)))
-			if err := checkTypeAndApply(va.PrimaryType, buf, path); err != nil {
+			if err := checkTypeAndApply(va.PrimaryType, buf, path, registeredMembers); err != nil {
 				return err
 			}
 		}

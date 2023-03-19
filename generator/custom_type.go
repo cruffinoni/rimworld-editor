@@ -58,7 +58,7 @@ func createCustomTypeForMap(e *xml.Element, flag uint) any {
 	c = c.Next
 	//log.Printf("Determining value type from '%v'", c.XMLPath())
 	v = determineTypeFromData(c, flag|forceFullCheck)
-	//log.Printf("Value type: %T", v)
+	//log.Printf("Val type: %T", v)
 	// By default, maps are strings to strings
 	if k == reflect.Invalid || v == reflect.Invalid {
 		return &CustomType{

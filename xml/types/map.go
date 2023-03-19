@@ -25,7 +25,7 @@ type Pair[K comparable, V any] struct {
 }
 
 func (p *Pair[K, V]) Equal(rhs *Pair[K, V]) bool {
-	//return p.Key == rhs.Key && p.Value == rhs.Value
+	//return p.Key == rhs.Key && p.Val == rhs.Val
 	return true
 }
 
@@ -187,8 +187,8 @@ func (m *Map[K, V]) Assign(e *xml.Element) error {
 	if len(keys) != len(values) {
 		return errors.New("Map/Assign: keys length differs from values length")
 	}
-	//log.Printf("Keys: %v, Value: %v", keys[0].XMLPath(), values[0].XMLPath())
-	//log.Printf("Keys: %+v, Value: %+v", keys[0].Data, values[0].Data)
+	//log.Printf("Keys: %v, Val: %v", keys[0].XMLPath(), values[0].XMLPath())
+	//log.Printf("Keys: %+v, Val: %+v", keys[0].Data, values[0].Data)
 	kKind := reflect.TypeOf(zero[K]()).Kind()
 	vKind := reflect.TypeOf(zero[V]()).Kind()
 	_, isEmpty := any(zero[V]()).(*primary.Empty)

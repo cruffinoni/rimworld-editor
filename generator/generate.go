@@ -141,23 +141,17 @@ func determineTypeFromData(e *xml.Element, flag uint) any {
 	return t
 }
 
-func hasSameMembers(a, b *StructInfo, depth uint32) bool {
-	if len(a.Members) != len(b.Members) {
-		return false
-	}
-	for i := range a.Members {
-		if _, ok := b.Members[i]; !ok {
-			return false
-		}
-		if !isSameType(a.Members[i], b.Members[i], depth+1) {
-			return false
-		}
-	}
-	return true
-}
-
 func handleElement(e *xml.Element, st *StructInfo, flag uint) error {
 	n := e
+	// This is a special case where the root node has been created outside the process.
+	// To recognize this special node, we don't set any name to it, but it refers as the root node.
+	if st.Name == "" {
+		*st = StructInfo{
+			Name:    addUniqueNumber("GeneratedStructStarter"),
+			Members: make(map[string]*member),
+			Order:   make([]*member, 0),
+		}
+	}
 	for n != nil {
 		var t any
 		if n.Child != nil {
@@ -183,13 +177,7 @@ func handleElement(e *xml.Element, st *StructInfo, flag uint) error {
 						t = createStructure(n, flag)
 					}
 				}
-				// This is a special case where the root node has been created outside the process.
-				// To recognize this special node, we don't set any name to it, but it refers as the root node.
-				if st.Name == "" {
-					*st = *t.(*StructInfo)
-				} else {
-					st.addMember(n.GetName(), n.Attr, t)
-				}
+				st.addMember(n.GetName(), n.Attr, t)
 			}
 		} else if !helper.IsListTag(n.GetName()) {
 			if n.Data != nil {

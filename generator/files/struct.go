@@ -15,17 +15,21 @@ import (
 // WriteGoFile writes the struct Go code to the given path.
 // It writes recursively the members of the struct. If a member is a struct,
 // it will call WriteGoFile on it.
-func WriteGoFile(path string, s *generator.StructInfo) error {
-	path = "./" + path
-	if _, err := os.Stat(path); err == nil {
-		if err = os.RemoveAll(path); err != nil {
-			return err
+func WriteGoFile(path string, s *generator.StructInfo, deleteFolder bool, registeredMember generator.MemberVersioning) error {
+	if deleteFolder {
+		if _, err := os.Stat(path); err == nil {
+			if err = os.RemoveAll(path); err != nil {
+				return err
+			}
 		}
 	}
-	if err := os.Mkdir(path, os.ModePerm); err != nil {
+	if err := os.MkdirAll(path, os.ModePerm); err != nil {
 		return err
 	}
-	return generateStructToPath(path, s)
+	if registeredMember == nil {
+		registeredMember = generator.RegisteredMembers
+	}
+	return generateStructToPath(path, s, registeredMember)
 }
 
 type generic struct{}

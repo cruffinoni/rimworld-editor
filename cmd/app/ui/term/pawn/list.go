@@ -20,22 +20,17 @@ func NewList(sg *generated.Savegame, rp PawnsRegisterer, rf faction.Registerer) 
 	}
 }
 
-func (l *List) ListAllPawns(_ []string) error {
+func (l *List) ListAllPawns() {
 	for k, v := range l.rp {
-		printer.PrintSf("Pawns {-BOLD}%s{-RESET} registered", k)
+		printer.PrintSf("Pawn {-BOLD}%s{-RESET} registered", k)
 		if v.Name == nil {
 			printer.PrintSf("name is nil: %v", v.Name)
 			continue
 		}
-		if v.Name.Name != "" {
-			printer.PrintSf("Full name: {-F_GREEN}%s {-F_MAGENTA}%s {-F_CYAN}%s", v.Name.First, v.Name.Name, v.Name.Last)
-		} else {
-			printer.PrintSf("Full name: {-F_GREEN}%s {-F_CYAN}%s", v.Name.First, v.Name.Last)
-		}
+		printer.PrintSf("Full name: %s", getPawnFullNameColorFormatted(v))
 		if fac, ok := l.rf[v.Faction]; ok {
 			faction.PrintFactionInformation(l.rf, fac, false)
 		}
 		printer.Print([]byte{})
 	}
-	return nil
 }

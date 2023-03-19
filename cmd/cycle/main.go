@@ -39,8 +39,8 @@ func main() {
 		return
 	}
 	log.Print("Generating go files to './generated")
-	root := generator.GenerateGoFiles(fo.XML.Root)
-	if err = files.WriteGoFile("./generated", root); err != nil {
+	root := generator.GenerateGoFiles(fo.XML.Root, true)
+	if err = files.WriteGoFile("./generated", root, true, nil); err != nil {
 		log.Fatal(err)
 	}
 	save := &generated.Savegame{}

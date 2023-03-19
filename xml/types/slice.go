@@ -53,7 +53,7 @@ func (s *sliceData[T]) Assign(e *xml.Element) error {
 	if err != nil {
 		return err
 	}
-	s.UpdateStringRepresentation(s.data)
+	s.UpdateStringRepresentation()
 	return err
 }
 
@@ -69,8 +69,8 @@ func (s *sliceData[T]) GetAttributes() attributes.Attributes {
 	return s.attr
 }
 
-func (s *sliceData[T]) UpdateStringRepresentation(v T) {
-	t := reflect.TypeOf(v)
+func (s *sliceData[T]) UpdateStringRepresentation() {
+	t := reflect.TypeOf(s.data)
 	// We check if the type T implements the interface fmt.Stringer and has a
 	// custom String() method.
 	if ok := t.Implements(reflect.TypeOf(new(fmt.Stringer)).Elem()); ok {
@@ -78,11 +78,11 @@ func (s *sliceData[T]) UpdateStringRepresentation(v T) {
 		// If it's the case, we get the method String() of the type T and
 		// call it.
 		if m, ok = t.MethodByName("String"); ok {
-			s.str = m.Func.Call([]reflect.Value{reflect.ValueOf(v)})[0].String()
+			s.str = m.Func.Call([]reflect.Value{reflect.ValueOf(s.data)})[0].String()
 		}
 	} else {
 		// Otherwise we use a basic string representation.
-		s.str = fmt.Sprintf("'%+v'", v)
+		s.str = fmt.Sprintf("'%+v'", s.data)
 	}
 }
 
@@ -157,11 +157,57 @@ func (s *Slice[T]) Capacity() int {
 	return s.cap
 }
 
+func (s *Slice[T]) Set(value T, attr attributes.Attributes, idx int) {
+	old := s.data[idx]
+	if attr == nil {
+		attr = old.attr
+	}
+	if idx >= s.cap || idx < 0 {
+		panic("Slice index out of bounds")
+	}
+	d := sliceData[T]{
+		data: value,
+		attr: attr,
+		tag:  old.tag,
+		kind: old.kind,
+	}
+	d.UpdateStringRepresentation()
+	if helper.IsReflectPrimaryType(d.kind) {
+		d.hidden = true
+	}
+}
+
+func (s *Slice[T]) Add(value T, attr attributes.Attributes) {
+	d := sliceData[T]{
+		data: value,
+		attr: attr,
+		tag:  s.repeatingTag,
+		kind: reflect.TypeOf(value).Kind(),
+	}
+	d.UpdateStringRepresentation()
+	if helper.IsReflectPrimaryType(d.kind) {
+		d.hidden = true
+	}
+	s.data = append(s.data, d)
+}
+
 func (s *Slice[T]) GetFromIndex(idx int) T {
 	if idx < 0 || idx >= len(s.data) {
-		return *new(T)
+		panic("out of bound/GetFromIndex: overflow/underflow")
 	}
 	return s.data[idx].data
+}
+
+func (s *Slice[T]) Remove(idx int) {
+	if idx < 0 || idx >= len(s.data) {
+		panic("out of bound/Remove: overflow/underflow")
+	}
+	if idx == s.cap-1 {
+		s.data = s.data[:idx]
+	} else {
+		s.data = append(s.data[:idx], s.data[idx+1:]...)
+	}
+	s.cap--
 }
 
 func (s *Slice[T]) Reset() {

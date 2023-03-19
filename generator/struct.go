@@ -42,10 +42,10 @@ const (
 	InnerKeyword = "_Inner"
 )
 
-var UniqueNumber = 0
+var UniqueNumber = int64(0)
 
 func addUniqueNumber(name string) string {
-	name += strconv.Itoa(UniqueNumber)
+	name += strconv.FormatInt(UniqueNumber, 10)
 	UniqueNumber++
 	return name
 }
@@ -80,17 +80,26 @@ func createStructure(e *xml.Element, flag uint) any {
 
 	// In this case, the child has the same name as his parent which
 	// is very confusing for structure names.
-	if e.Parent != nil && name == e.Parent.GetName() {
+	p := e.Parent
+	if p != nil && name == p.GetName() {
+		for p != nil {
+			name += "_" + p.GetName()
+			p = p.Parent
+		}
 		name += InnerKeyword
 	}
 	// vals is a special case where it serves as a transversal tag
-	if (name == "vals" || strings.Contains(strings.ToLower(name), "inner")) && e.Parent != nil {
+	if (name == "vals" || name == "values" || strings.Contains(strings.ToLower(name), "inner")) && e.Parent != nil {
 		//log.Printf("Special case for: %v = %v", name, e.Parent.GetName()+"_"+name)
-		name = e.Parent.GetName() + "_" + name
+		p := e.Parent
+		for p != nil && name == p.GetName() {
+			name = p.GetName() + "_" + name
+			p = p.Parent
+		}
 	}
 	if (flag & forceRandomName) > 0 {
 		flag &^= forceRandomName
-		addUniqueNumber(name)
+		name = addUniqueNumber(name)
 	}
 	s := &StructInfo{
 		Name:    name,

@@ -73,7 +73,7 @@ func (l *Writer) formatColor(buffer []byte) []byte {
 }
 
 func (l *Writer) WriteToError(b []byte) {
-	b = append([]byte("{-B_RED,BOLD}Error: {-RESET}"), b...)
+	b = append([]byte("{-F_RED,BOLD}Error:{-RESET} "), b...)
 	l.write(b, l.err)
 }
 
@@ -92,7 +92,12 @@ func (l *Writer) write(b []byte, out *os.File) {
 	}
 }
 
-func (l *Writer) WriteToStdf(format string, a ...interface{}) {
+func (l *Writer) WriteToStdf(format string, a ...any) {
 	b := []byte(fmt.Sprintf(format, a...))
 	l.write(b, l.out)
+}
+
+func (l *Writer) WriteToErrf(format string, a ...any) {
+	b := []byte(fmt.Sprintf(format, a...))
+	l.WriteToError(b)
 }

@@ -5,13 +5,13 @@ import (
 )
 
 func FindInSliceIf[T any](arr iterator.SliceIndexer[T], pred func(T) bool) (T, bool) {
-	for i := 0; i < arr.Capacity(); i++ {
-		if pred(arr.GetFromIndex(i)) {
-			return arr.GetFromIndex(i), true
+	for i, j := 0, arr.Capacity(); i < j; i++ {
+		val := arr.GetFromIndex(i)
+		if pred(val) {
+			return val, true
 		}
 	}
-	var t T
-	return t, false
+	return *new(T), false
 }
 
 func SliceForeach[T any](arr iterator.SliceIndexer[T], f func(T)) {
@@ -32,8 +32,19 @@ func FindInSlice[C Comparable[T], T any](ref iterator.SliceIndexer[C], comp T) (
 	SliceForeach(ref, func(v C) {
 		if !found && v.Equal(comp) {
 			found = true
-			value = v.Value()
+			value = v.Val()
 		}
 	})
 	return value, found
 }
+
+//func SetInSliceIf[T any](arr iterator.SliceIndexer[T], pred func(T) bool, value T, attr attributes.Attributes) bool {
+//	for i, j := 0, arr.Capacity(); i < j; i++ {
+//		val := arr.GetFromIndex(i)
+//		if pred(val) {
+//			arr.Set(value, attr, i)
+//			return true
+//		}
+//	}
+//	return false
+//}
