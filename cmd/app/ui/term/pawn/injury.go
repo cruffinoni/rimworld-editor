@@ -78,8 +78,8 @@ func (i *Injury) List(pawnID string) {
 	for i := iterator.NewSliceIterator[*generated.Hediffs](p.HealthTracker.HediffSet.Hediffs); i.HasNext(); i = i.Next() {
 		v := i.Value()
 		printer.PrintSf("%v ({-BOLD}load ID: %v{-RESET}) with a severity of {-RED}%f", v.Def, v.LoadID, v.Severity*100.0)
-		if v.CombatLogText != "null" && v.CombatLogText != "" {
-			printer.PrintSf("Logs: %s", v.CombatLogText)
-		}
+		// if v.CombatLogText != "null" && v.CombatLogText != "" {
+		// 	printer.PrintSf("Logs: %s", v.CombatLogText)
+		// }
 	}
 }

@@ -35,12 +35,12 @@ func main() {
 		return
 	}
 	s.Stop()
-	//s.Prefix = "Generating go files to './generated'... "
+	// s.Prefix = "Generating go files to './generated'... "
 	s.FinalMSG = "Go files successfully generated\n"
-	//s.Start()
+	// s.Start()
 	root := generator.GenerateGoFiles(fo.XML.Root, true)
-	if err = files.WriteGoFile("./generated", root, true, nil); err != nil {
+	if err = files.DefaultGoWriter.WriteGoFile("./generated", root); err != nil {
 		log.Fatal(err)
 	}
-	//s.Stop()
+	// s.Stop()
 }

@@ -12,11 +12,27 @@ import (
 	"github.com/cruffinoni/rimworld-editor/xml"
 )
 
+type GoWriter struct {
+	forcedPackageName string
+	registeredMember  generator.MemberVersioning
+	deleteFolder      bool
+}
+
+func NewGoWriter(registeredMember generator.MemberVersioning, deleteFolder bool, forcedPackageName string) *GoWriter {
+	return &GoWriter{
+		forcedPackageName: forcedPackageName,
+		registeredMember:  registeredMember,
+		deleteFolder:      deleteFolder,
+	}
+}
+
+var DefaultGoWriter = NewGoWriter(nil, true, "")
+
 // WriteGoFile writes the struct Go code to the given path.
 // It writes recursively the members of the struct. If a member is a struct,
 // it will call WriteGoFile on it.
-func WriteGoFile(path string, s *generator.StructInfo, deleteFolder bool, registeredMember generator.MemberVersioning) error {
-	if deleteFolder {
+func (gw *GoWriter) WriteGoFile(path string, s *generator.StructInfo) error {
+	if gw.deleteFolder {
 		if _, err := os.Stat(path); err == nil {
 			if err = os.RemoveAll(path); err != nil {
 				return err
@@ -26,10 +42,10 @@ func WriteGoFile(path string, s *generator.StructInfo, deleteFolder bool, regist
 	if err := os.MkdirAll(path, os.ModePerm); err != nil {
 		return err
 	}
-	if registeredMember == nil {
-		registeredMember = generator.RegisteredMembers
+	if gw.registeredMember == nil {
+		gw.registeredMember = generator.RegisteredMembers
 	}
-	return generateStructToPath(path, s, registeredMember)
+	return gw.generateStructToPath(path, s)
 }
 
 type generic struct{}

@@ -10,12 +10,23 @@ import (
 
 var ErrOSNotSupported = errors.New("operating system not supported")
 
-func GetSavegamePath() (string, error) {
-	var path string
-	var err error
+const (
+	Windows = "windows"
+	Darwin  = "macos"
+	Linux   = "linux"
+)
 
-	switch runtime.GOOS {
-	case "windows":
+func GetSavegamePath(opeSystem string) (string, error) {
+	var (
+		path string
+		err  error
+	)
+
+	if opeSystem == "" {
+		opeSystem = runtime.GOOS
+	}
+	switch opeSystem {
+	case Windows:
 		localLowAppData := os.Getenv("LOCALLOWAPPDATA")
 		if localLowAppData != "" {
 			path = filepath.Join(localLowAppData, "Ludeon Studios", "RimWorld by Ludeon Studios", "Saves")
@@ -23,9 +34,9 @@ func GetSavegamePath() (string, error) {
 			appData := os.Getenv("LOCALAPPDATA")
 			path = filepath.Join(appData, "..", "LocalLow", "Ludeon Studios", "RimWorld by Ludeon Studios", "Saves")
 		}
-	case "darwin":
+	case Darwin:
 		path = filepath.Join(os.Getenv("HOME"), "Library", "Application Support", "RimWorld", "Saves")
-	case "linux":
+	case Linux:
 		path = filepath.Join(os.Getenv("HOME"), ".config", "unity3d", "Ludeon Studios", "RimWorld", "Saves")
 	default:
 		return "", ErrOSNotSupported
@@ -34,13 +45,8 @@ func GetSavegamePath() (string, error) {
 	return path, err
 }
 
-func GetLatestSavegameFiles(maxFile int) ([]os.FileInfo, error) {
-	savegamePath, err := GetSavegamePath()
-	if err != nil {
-		return nil, err
-	}
-
-	dir, err := os.Open(savegamePath)
+func GetLatestSavegameFiles(maxFile int, savePath string) ([]os.FileInfo, error) {
+	dir, err := os.Open(savePath)
 	if err != nil {
 		return nil, err
 	}

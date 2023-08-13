@@ -11,6 +11,7 @@ type Options struct {
 	Input                   string
 	MaxSaveGameFileDiscover int
 	Mode                    string
+	OperatingSystem         string
 }
 
 type Mode interface {

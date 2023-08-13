@@ -9,10 +9,10 @@ import (
 
 type buffer struct {
 	writtenHeaders map[string]bool
-	header         string
+	header         strings.Builder
 	imp            []string
-	body           string
-	footer         string
+	body           strings.Builder
+	footer         strings.Builder
 }
 
 func (b *buffer) writeImport(imp ...string) {
@@ -26,20 +26,20 @@ func (b *buffer) writeImport(imp ...string) {
 }
 
 func (b *buffer) writeToHeader(s string) {
-	b.header += s
+	b.header.WriteString(s)
 }
 
 func (b *buffer) writeToBody(s string) {
-	b.body += s
+	b.body.WriteString(s)
 }
 
 func (b *buffer) writeToFooter(s string) {
-	b.footer += s
+	b.footer.WriteString(s)
 }
 
 func (b *buffer) bytes() []byte {
 	builder := strings.Builder{}
-	builder.WriteString(b.header)
+	builder.WriteString(b.header.String())
 	if len(b.imp) > 1 {
 		sort.Sort(sort.StringSlice(b.imp))
 		builder.WriteString("\nimport (\n")
@@ -50,7 +50,7 @@ func (b *buffer) bytes() []byte {
 	} else if len(b.imp) == 1 {
 		builder.WriteString("\nimport " + b.imp[0] + "\n")
 	}
-	builder.WriteString(b.body)
-	builder.WriteString(b.footer)
+	builder.WriteString(b.body.String())
+	builder.WriteString(b.footer.String())
 	return []byte(builder.String())
 }

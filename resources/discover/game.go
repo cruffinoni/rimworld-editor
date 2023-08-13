@@ -9,11 +9,14 @@ import (
 
 var ErrPathNotFound = errors.New("game path not found")
 
-func GetGamePath() (string, error) {
+func GetGamePath(opeSystem string) (string, error) {
 	var gameDir string
 
-	switch runtime.GOOS {
-	case "windows":
+	if opeSystem == "" {
+		opeSystem = runtime.GOOS
+	}
+	switch opeSystem {
+	case Windows:
 		// Check all possible locations on Windows
 		possibleDirs := []string{
 			os.Getenv("ProgramFiles(x86)"),
@@ -30,9 +33,9 @@ func GetGamePath() (string, error) {
 				break
 			}
 		}
-	case "darwin":
+	case Darwin:
 		gameDir = filepath.Join(os.Getenv("HOME"), "Library", "Application Support", "Steam", "steamapps", "common", "RimWorld")
-	case "linux":
+	case Linux:
 		gameDir = filepath.Join(os.Getenv("HOME"), ".steam", "steam", "steamapps", "common", "RimWorld")
 	default:
 		return "", ErrOSNotSupported

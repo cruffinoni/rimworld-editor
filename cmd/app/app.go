@@ -33,8 +33,6 @@ const (
 	modeGUI     = "gui"
 )
 
-var modes = []string{modeConsole, modeGUI}
-
 func isValidMode(mode string) bool {
 	return mode == modeConsole || mode == modeGUI
 }
@@ -60,14 +58,14 @@ func CreateApplication() *Application {
 	app.StringOptPtr(&app.Mode, "m mode", modeConsole, "The mode to run the application in")
 	app.IntOptPtr(&app.MaxSaveGameFileDiscover, "mx maxnb", 10, "Maximum number of save games to discover")
 	app.StringOptPtr(&app.Input, "ds defaultsave", "", "Default save game to load from your Rimworld saves game folder")
+	app.StringOptPtr(&app.OperatingSystem, "operating-system os", "", "Force a operating system file path finding")
 	app.Before = app.beforeExecution
-	//app.Spec = "[DEFAULT_SAVEGAME] [-m mode] [-o output] [-g generate] [-s save] [-v verbose]"
 	app.Action = func() {
 		if app.Mode == modeConsole {
 			app.ui = &term.Console{}
 		} else if app.Mode == modeGUI {
 			panic("not implemented")
-			//app.ui = app.guiMode
+			// app.ui = app.guiMode
 		}
 		save := &generated.Savegame{}
 		log.Println("Unmarshalling XML...")
@@ -100,7 +98,7 @@ func (app *Application) SaveGameFile(sg *generated.Savegame) error {
 	if err != nil {
 		log.Panic(err)
 	}
-	p, err := discover.GetSavegamePath()
+	p, err := discover.GetSavegamePath(app.OperatingSystem)
 	if err != nil {
 		return err
 	}
@@ -119,13 +117,13 @@ func (app *Application) beforeExecution() {
 		cli.Exit(1)
 	}
 	gameData := resources.NewGameData()
-	err := gameData.DiscoverGameData()
+	err := gameData.DiscoverGameData(app.OperatingSystem)
 	if err != nil {
 		log.Fatal(err)
 	}
-	//gameData.PrintThemes()
-	//e, err := gameData.FindElement("", "Scavenger22")
-	//log.Printf("E: %v & Err %v", e.XMLPath(), err)
+	// gameData.PrintThemes()
+	// e, err := gameData.FindElement("", "Scavenger22")
+	// log.Printf("E: %v & Err %v", e.XMLPath(), err)
 	if err := gameData.GenerateGoFiles(); err != nil {
 		log.Fatal(err)
 	}
@@ -139,7 +137,7 @@ func (app *Application) beforeExecution() {
 		s.Start()
 		root := generator.GenerateGoFiles(app.fileOpening.XML.Root, true)
 		s.Stop()
-		if err = files.WriteGoFile(app.Output, root, true, nil); err != nil {
+		if err = files.DefaultGoWriter.WriteGoFile(app.Output, root); err != nil {
 			log.Fatal(err)
 		}
 		if err = app.fileOpening.ReOpen(); err != nil {
@@ -158,11 +156,14 @@ func (app *Application) RunWithArgs(args []string) error {
 
 func (app *Application) ReadSaveGame() error {
 	var savegame string
-	savegamesDirPath, err := discover.GetSavegamePath()
+	savegamesDirPath, err := discover.GetSavegamePath(app.OperatingSystem)
 	if err != nil {
 		return err
 	}
-	saves, err := discover.GetLatestSavegameFiles(app.MaxSaveGameFileDiscover)
+	saves, err := discover.GetLatestSavegameFiles(app.MaxSaveGameFileDiscover, savegamesDirPath)
+	if err != nil {
+		return err
+	}
 	if app.Input != "" {
 		for _, s := range saves {
 			if s.Name() == app.Input {
