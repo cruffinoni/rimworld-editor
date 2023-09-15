@@ -7,6 +7,7 @@ import (
 	"log"
 	"os"
 	"path/filepath"
+	"reflect"
 	"strings"
 
 	"github.com/cruffinoni/rimworld-editor/cmd/app/ui/term/printer"
@@ -25,10 +26,10 @@ type GameData struct {
 }
 
 type GroupedThematic struct {
-	elements map[string]*xml.Element
-	cap      int
-	mv       generator.MemberVersioning
-	roots    []*generator.StructInfo
+	elements    map[string]*xml.Element
+	cap         int
+	mv          generator.MemberVersioning
+	structInfos []*generator.StructInfo
 }
 
 func NewGameData() *GameData {
@@ -38,9 +39,9 @@ func NewGameData() *GameData {
 }
 
 func (g *GameData) PrintThemes() {
-	log.Println("Game fileData themes:")
+	printer.Print("Game fileData themes:")
 	for theme, elements := range g.fileData {
-		log.Printf("  %s: %d elements", theme, elements.cap)
+		printer.Printf("  %s: %d elements", theme, elements.cap)
 	}
 }
 
@@ -50,12 +51,16 @@ func (g *GameData) DiscoverGameData(opeSystem string) error {
 		return err
 	}
 	gp = filepath.Join(gp, "Data")
+	//gp = "C:\\Users\\toixd\\GolandProjects\\rimworld-editor\\test"
 	log.Println(gp)
 	err = filepath.Walk(gp, func(path string, info fs.FileInfo, err error) error {
 		if err != nil {
 			return fmt.Errorf("error walking %s: %w", path, err)
 		}
 		if info.IsDir() {
+			return nil
+		}
+		if info.Name() == "About" {
 			return nil
 		}
 		if !strings.HasSuffix(info.Name(), ".xml") {
@@ -66,8 +71,10 @@ func (g *GameData) DiscoverGameData(opeSystem string) error {
 		if err != nil {
 			return fmt.Errorf("error opening %s: %w", path, err)
 		}
-		dir := filepath.Base(filepath.Dir(path))
-		// log.Printf("Full dir of %s: %s", dir, filepath.Dir(path))
+		// There is a case where we have "StoryTeller" and "Storyteller" for the same type of data
+		// So we set the directory name to lower before using ToCamel
+		dir := strcase.ToCamel(strings.ToLower(filepath.Base(filepath.Dir(path))))
+		//log.Printf("Full dir of %s: %s", dir, filepath.Dir(path))
 		if g.fileData[dir] == nil {
 			g.fileData[dir] = &GroupedThematic{elements: make(map[string]*xml.Element)}
 		}
@@ -89,16 +96,18 @@ func (gp *GroupedThematic) mergeMemberVersioning(from generator.MemberVersioning
 	}
 }
 
+const generatedFolderBasePath = "./resources/generated/"
+
 func (g *GameData) generateRegisteredTypeFile() error {
 	var (
 		f   *os.File
 		err error
 	)
-	basePath := "./resources/generated/"
 	githubPath := "github.com/cruffinoni/rimworld-editor/resources/generated/"
-	if f, err = os.Create(basePath + "global_game_type.go"); err != nil {
+	if f, err = os.Create(generatedFolderBasePath + "global_game_type.go"); err != nil {
 		return err
 	}
+	defer f.Close()
 	body := strings.Builder{}
 	header := strings.Builder{}
 	fullFileContent := strings.Builder{}
@@ -107,9 +116,9 @@ func (g *GameData) generateRegisteredTypeFile() error {
 	header.WriteString("import (\n")
 	body.WriteString("var GlobalGameData = map[string]any {\n")
 	for p := range g.fileData {
-		log.Printf("-> %v", p)
+		//log.Printf("-> %v", p)
 		header.WriteString("\t\"" + githubPath + p + "\"\n")
-		body.WriteString("\t\"" + p + "\": " + strcase.ToSnake(p) + ".GeneratedStructStarter0{},\n")
+		body.WriteString("\t\"" + p + "\": &" + strcase.ToSnake(p) + ".GeneratedStructStarter0{},\n")
 	}
 	body.WriteString("\n}")
 	header.WriteString("\n)\n")
@@ -127,24 +136,104 @@ func (g *GameData) generateRegisteredTypeFile() error {
 	return nil
 }
 
+func (g *GameData) displayMV(mv generator.MemberVersioning) {
+	for k, v := range mv {
+		log.Printf("Struct has %v -> %d", k, len(v))
+	}
+	log.Printf("Same type? %v", generator.IsSameType(mv["GeneratedStructStarter0"][0].Order[0], mv["GeneratedStructStarter0"][1].Order[0], 0))
+	for _, i := range mv["GeneratedStructStarter0"] {
+		i.PrintOrderedMembers()
+	}
+}
+
 func (g *GameData) GenerateGoFiles() error {
-	basePath := "./resources/generated/"
-	if _, err := os.Stat(basePath); err == nil {
-		if err = os.RemoveAll(basePath); err != nil {
+	if _, err := os.Stat(generatedFolderBasePath); err == nil {
+		if err = os.RemoveAll(generatedFolderBasePath); err != nil {
 			return err
 		}
 	}
+	//s1m1 := &generator.Member{
+	//	T: &generator.CustomType{
+	//		Name: "Slice",
+	//		Pkg:  "*types",
+	//		Type1: &generator.StructInfo{
+	//			Name: "s1_m1_m2",
+	//			Members: map[string]*generator.Member{
+	//				"s1_m1_m2_m3": {
+	//					T:    reflect.String,
+	//					Name: "s1_m1_m2_m3",
+	//				},
+	//			},
+	//			Order: []*generator.Member{
+	//				{
+	//					T:    reflect.String,
+	//					Name: "s1_m1_m2_m3",
+	//				},
+	//			},
+	//		},
+	//		ImportPath: paths.CustomTypesPath,
+	//	},
+	//	Attr: nil,
+	//	Name: "member1",
+	//}
+	//s1 := &generator.StructInfo{
+	//	Name: "S1",
+	//	Members: map[string]*generator.Member{
+	//		"member1": s1m1,
+	//	},
+	//	Order: []*generator.Member{
+	//		s1m1,
+	//	},
+	//}
+	//
+	//s2m1 := &generator.Member{
+	//	T: &generator.StructInfo{
+	//		Name: "s2_m1_m2",
+	//		Members: map[string]*generator.Member{
+	//			"s2_m1_m2_m3": {
+	//				T:    reflect.String,
+	//				Name: "s2_m1_m2_m3",
+	//			},
+	//		},
+	//		Order: []*generator.Member{
+	//			{
+	//				T:    reflect.String,
+	//				Name: "s2_m1_m2_m3",
+	//			},
+	//		},
+	//	},
+	//	Attr: nil,
+	//	Name: "member1",
+	//}
+	//s2 := &generator.StructInfo{
+	//	Name: "S2",
+	//	Members: map[string]*generator.Member{
+	//		"member1": s2m1,
+	//	},
+	//	Order: []*generator.Member{
+	//		s2m1,
+	//	},
+	//}
+	//
+	//generator.FixMembers(s1, s2)
+	//s1.PrintOrderedMembers()
+	////s2.PrintOrderedMembers()
+	//os.Exit(0)
+
 	for p := range g.fileData {
-		printer.PrintSf("[%s] Processing {-BOLD,F_RED}%d{-RESET} element(s) ...", p, len(g.fileData[p].elements))
+		printer.Printf("[%s] Processing {-BOLD,F_RED}%d{-RESET} thematics...", p, len(g.fileData[p].elements))
 		for _, element := range g.fileData[p].elements {
 			root := generator.GenerateGoFiles(element, false)
+			//log.Printf("Path: %v", p)
 			g.fileData[p].mergeMemberVersioning(generator.RegisteredMembers)
-			g.fileData[p].roots = append(g.fileData[p].roots, root)
+			g.fileData[p].structInfos = append(g.fileData[p].structInfos, root)
 		}
+		//g.displayMV(g.fileData[p].mv)
+		//log.Printf("Gonna fix this")
 		generator.FixRegisteredMembers(g.fileData[p].mv)
-		for _, r := range g.fileData[p].roots {
+		for _, r := range g.fileData[p].structInfos {
 			gw := files.NewGoWriter(g.fileData[p].mv, false, strcase.ToSnake(p))
-			if err := gw.WriteGoFile(basePath+p, r); err != nil {
+			if err := gw.WriteGoFile(generatedFolderBasePath+p, r); err != nil {
 				log.Fatal(err)
 			}
 		}
@@ -152,6 +241,28 @@ func (g *GameData) GenerateGoFiles() error {
 	return g.generateRegisteredTypeFile()
 }
 
-func (g *GameData) ReadGameFiles() {
+func DirectSafeCast[T any](s any) T {
+	c, ok := s.(T)
+	if !ok {
+		log.Panicf("can't cast to %v", reflect.TypeOf(s).Name())
+	}
+	return c
+}
 
+func (g *GameData) ReadGameFiles() error {
+	printer.Printf("Reading game files from generated structure ({-BOLD,F_RED}%d{-RESET} thematics)...", len(g.fileData))
+	//for p, gt := range g.fileData {
+	//	printer.Printf("Thematic {F_RED}%s", p)
+	//	if s, ok := generated_resources.GlobalGameData[p]; !ok {
+	//		printer.PrintErrorSf("Path not registered: %v", p)
+	//		return nil
+	//	} else {
+	//		for _, elem := range gt.elements {
+	//			if err := unmarshal.Element(elem, s); err != nil {
+	//				log.Fatal(err)
+	//			}
+	//		}
+	//	}
+	//}
+	return nil
 }

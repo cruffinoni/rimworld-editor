@@ -9,7 +9,7 @@ import (
 	"github.com/cruffinoni/rimworld-editor/xml/attributes"
 )
 
-type member struct {
+type Member struct {
 	T    any
 	Attr attributes.Attributes
 	Name string
@@ -17,8 +17,8 @@ type member struct {
 
 type StructInfo struct {
 	Name    string
-	Members map[string]*member
-	Order   []*member
+	Members map[string]*Member
+	Order   []*Member
 }
 
 const (
@@ -50,6 +50,20 @@ func addUniqueNumber(name string) string {
 	return name
 }
 
+// It seems sometimes "node", "nodes" and "subNodes" are used multiple times at multiple levels inside the same file
+// so let's consider those names like non-unique and local to their context
+func needToForceRandomName(name string) bool {
+	switch name {
+	case "node":
+	case "nodes":
+	case "subnodes":
+		return true
+	}
+	return false
+}
+
+const maxTransversalDepth = 10
+
 // createStructure creates a new structure from the given element.
 // Then the function will recursively call handleElement on the children of the element.
 // It removes the duplicates from the members of the struct.
@@ -62,7 +76,7 @@ func createStructure(e *xml.Element, flag uint) any {
 		if e.Child != nil && e.Child.Child != nil {
 			return createStructure(e.Child, flag|forceChildApplied)
 		} else {
-			// The array authorized cells to be empty
+			// The array authorize cells to be empty
 			//panic("generate.createStructure|forceChild: missing child")
 		}
 	}
@@ -70,11 +84,15 @@ func createStructure(e *xml.Element, flag uint) any {
 		panic("generate.createStructure: missing child")
 	}
 	name := e.GetName()
+	lowerName := strings.ToLower(name)
 
-	// This case comes when the tag is an innerList of a list which can happen multiple times
-	// in the file, so we need to set it a random name
-	if helper.IsListTag(name) {
-		//log.Printf("generate.createStructure: '%s' & child name: %v", name, e.Child.GetName())
+	if needToForceRandomName(lowerName) && (flag&forceRandomName) == 0 {
+		flag |= forceRandomName
+	} else if helper.IsListTag(name) {
+		// This case comes when the tag is an innerList of a list which can happen multiple times
+		// in the file, so we need to set it a random name
+
+		//log.Printf("generate.createStructure: '%s' & child name: %v & e %v & %v", name, e.Child.GetName(), lowerName, e.Parent.GetName())
 		return createStructure(e.Parent, flag|forceRandomName)
 	}
 
@@ -89,12 +107,14 @@ func createStructure(e *xml.Element, flag uint) any {
 		name += InnerKeyword
 	}
 	// vals is a special case where it serves as a transversal tag
-	if (name == "vals" || name == "values" || strings.Contains(strings.ToLower(name), "inner")) && e.Parent != nil {
+	if (name == "vals" || name == "values" || strings.Contains(lowerName, "inner")) && e.Parent != nil {
 		//log.Printf("Special case for: %v = %v", name, e.Parent.GetName()+"_"+name)
-		p := e.Parent
-		for p != nil && name == p.GetName() {
-			name = p.GetName() + "_" + name
-			p = p.Parent
+		depth := 0
+		parent := e.Parent
+		for parent != nil && depth < maxTransversalDepth {
+			depth++
+			name = parent.GetName() + "_" + name
+			parent = parent.Parent
 		}
 	}
 	if (flag & forceRandomName) > 0 {
@@ -103,17 +123,14 @@ func createStructure(e *xml.Element, flag uint) any {
 	}
 	s := &StructInfo{
 		Name:    name,
-		Members: make(map[string]*member),
+		Members: make(map[string]*Member),
 	}
 	// The forceFullCheck check apply only to this structure, not to the children
-	if err := handleElement(e.Child, s, flag&^forceFullCheck); err != nil {
-		panic(err)
-	}
+
 	// If "forceFullCheck" is asked, it means we are in a slice/map, and we want
 	// to check all nodes to have all members possible
 	if (flag & forceFullCheck) > 0 {
 		n := e
-		//log.Printf("Forcefullcheck on %s & %p", e.XMLPath(), n.Child)
 
 		// forceChildApplied has been applied and so, we are in the children level and not
 		// in the main structure level
@@ -127,7 +144,40 @@ func createStructure(e *xml.Element, flag uint) any {
 			}
 			n = n.Next
 		}
+	} else {
+		if err := handleElement(e.Child, s, flag&^forceFullCheck); err != nil {
+			panic(err)
+		}
 	}
 	flag &^= forceChildApplied
 	return s
+}
+
+// addMember adds a new Member to the StructInfo map.
+// If the Member already exists, the function checks if the type of the existing Member and the new Member are the same.
+// If they are not, the function fixes the type mismatch.
+func (s *StructInfo) addMember(name string, attr attributes.Attributes, t any) {
+	// If there is no existing Member with the same name, add the new Member to the map
+	if _, ok := s.Members[name]; !ok {
+		s.Members[name] = &Member{
+			T:    t,
+			Attr: attr,
+			Name: name,
+		}
+		s.Order = append(s.Order, s.Members[name])
+	} else {
+		// Check if the existing Member and the new Member are of the same type
+		if !IsSameType(t, s.Members[name].T, 0) {
+			// log.Printf("Type mismatch: %v > %v | %v", name, s.Members[name].T, t)
+			// If the types are different, fix the type mismatch
+			err := fixTypeMismatch(s.Members[name], &Member{
+				Name: name,
+				T:    t,
+				Attr: attr,
+			})
+			if err != nil {
+				panic(err)
+			}
+		}
+	}
 }

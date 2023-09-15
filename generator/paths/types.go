@@ -1,6 +1,7 @@
 package paths
 
 const (
+	EmbeddedTypePath = "xml/types/embedded"
 	CustomTypesPath  = "xml/types"
 	PrimaryTypesPath = "xml/types/primary"
 	HeaderXml        = "xml"

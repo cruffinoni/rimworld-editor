@@ -84,14 +84,14 @@ var (
 )
 
 func (c *Command) PrintUsage() {
-	printer.PrintSf("%s's usage: %s", c.Name, c.Usage)
-	//printer.PrintSf("%s [%q]", c.Name, strings.Join(c.getChildCommandNames(), "|"))
+	printer.Printf("%s's usage: %s", c.Name, c.Usage)
+	//printer.Printf("%s [%q]", c.Name, strings.Join(c.getChildCommandNames(), "|"))
 }
 
 func (c *Command) PrintHelp() {
 	log.Printf("%+v & %d", c.childCmds, len(c.childCmds))
-	printer.PrintSf("%s's help: %s", c.Name, c.Description)
-	printer.PrintSf("%s [%q]", c.Name, strings.Join(c.getChildCommandNames(), "|"))
+	printer.Printf("%s's help: %s", c.Name, c.Description)
+	printer.Printf("%s [%q]", c.Name, strings.Join(c.getChildCommandNames(), "|"))
 }
 
 func (c *Command) findParam(name string) *Params {
@@ -176,7 +176,7 @@ func (c *Command) RunWithArgs(args []string) error {
 		names := n.getCommandNames(true)
 		for _, name := range names {
 			if name == args[0] {
-				printer.PrintSf("(cmd) Command '%s' found", name)
+				printer.Printf("(cmd) Command '%s' found", name)
 				if len(n.childCmds) > 0 {
 					if len(args) == 1 {
 						n.PrintUsage()

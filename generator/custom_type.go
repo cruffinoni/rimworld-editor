@@ -18,6 +18,10 @@ type CustomType struct {
 	ImportPath string
 }
 
+func IsEmptyType(c *CustomType) bool {
+	return c.Name == "Empty" && c.Pkg == "*primary"
+}
+
 func createEmptyType() any {
 	return &CustomType{
 		Name:       "Empty",

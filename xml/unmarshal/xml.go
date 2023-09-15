@@ -144,10 +144,12 @@ func Element(element *xml.Element, dest any) error {
 			}
 			fieldKind := fieldValue.Kind()
 			var fieldPtr reflect.Value
-			// If the field is a pointer, we need to allocate a new value
+			// If the field is a pointer, we need to allocate a new value if it has not been done before
 			if fieldKind == reflect.Ptr {
-				fieldPtr = makePointer(fieldValue)
-				fieldValue = fieldPtr.Elem()
+				if fieldValue.IsNil() {
+					fieldValue.Set(reflect.New(fieldValue.Type().Elem())) // Allocate new value for the pointer
+				}
+				fieldValue = fieldValue.Elem()
 				fieldKind = fieldValue.Kind()
 			}
 			switch fieldKind {
@@ -155,6 +157,7 @@ func Element(element *xml.Element, dest any) error {
 				// The function doesn't support multiple pointers (a.k.a. pointers to pointers)
 				log.Fatalf("unmarshal: field %v has multiple pointer", fieldValue.Type())
 			case reflect.String, reflect.Int, reflect.Int8, reflect.Int16, reflect.Int32, reflect.Int64, reflect.Bool, reflect.Float32, reflect.Float64:
+				log.Printf("Attributing data: %v / %s > '%v'", n.XMLPath(), fieldKind.String(), n.Data)
 				attributeDataToField(fieldValue, n)
 			case reflect.Array:
 				l := fieldValue.Len()
@@ -206,14 +209,9 @@ func Element(element *xml.Element, dest any) error {
 					isEmptyType(typeName) {
 					// it must be a safe cast because the structures are known
 					cast := fieldValue.Addr().Interface().(xml.Assigner)
-					// We know, for sure, that struct doesn't return any error
 					_ = cast.Assign(n)
 					cast.SetAttributes(n.Attr)
 				} else {
-					if fieldValue.Kind() == reflect.Ptr {
-						fieldPtr = makePointer(fieldValue)
-						fieldValue = fieldPtr.Elem()
-					}
 					if cast, ok := fieldValue.Addr().Interface().(xml.Assigner); ok {
 						cast.SetAttributes(n.Attr)
 					}

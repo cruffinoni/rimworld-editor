@@ -68,9 +68,9 @@ func Test_createCustomType(t *testing.T) {
 </savegame>
 `,
 			},
-			want: createCustomSliceForTest(createStructForTest("vals", map[string]*member{
+			want: createCustomSliceForTest(createStructForTest("vals", map[string]*Member{
 				"quests": {
-					T: createStructForTest("quests", map[string]*member{
+					T: createStructForTest("quests", map[string]*Member{
 						"completed": {
 							T: reflect.String,
 						},
@@ -100,9 +100,9 @@ func Test_createCustomType(t *testing.T) {
 </savegame>
 `,
 			},
-			want: createCustomSliceForTest(createStructForTest("vals", map[string]*member{
+			want: createCustomSliceForTest(createStructForTest("vals", map[string]*Member{
 				"quests": {
-					T: createStructForTest("quests", map[string]*member{
+					T: createStructForTest("quests", map[string]*Member{
 						"completed": {
 							T: reflect.String,
 						},
@@ -132,9 +132,9 @@ func Test_createCustomType(t *testing.T) {
 </savegame>
 `,
 			},
-			want: createCustomSliceForTest(createStructForTest("vals", map[string]*member{
+			want: createCustomSliceForTest(createStructForTest("vals", map[string]*Member{
 				"quests": {
-					T: createStructForTest("quests", map[string]*member{
+					T: createStructForTest("quests", map[string]*Member{
 						"completed": {
 							T: reflect.String,
 						},
@@ -165,9 +165,9 @@ func Test_createCustomType(t *testing.T) {
 </savegame>
 `,
 			},
-			want: createCustomSliceForTest(createStructForTest("vals", map[string]*member{
+			want: createCustomSliceForTest(createStructForTest("vals", map[string]*Member{
 				"quests": {
-					T: createStructForTest("quests", map[string]*member{
+					T: createStructForTest("quests", map[string]*Member{
 						"completed": {
 							T: reflect.String,
 						},
@@ -221,7 +221,7 @@ func Test_createCustomType(t *testing.T) {
 </savegame>
 `,
 			},
-			want: createCustomSliceForTest(createStructForTest("things", map[string]*member{
+			want: createCustomSliceForTest(createStructForTest("things", map[string]*Member{
 				"id":                  {T: reflect.String},
 				"pos":                 {T: reflect.String},
 				"def":                 {T: reflect.String},
@@ -231,7 +231,7 @@ func Test_createCustomType(t *testing.T) {
 				"growth":              {T: reflect.Float64},
 				"age":                 {T: reflect.Int64},
 				"health":              {T: reflect.Int64},
-				"thing": {T: createStructForTest("thing", map[string]*member{
+				"thing": {T: createStructForTest("thing", map[string]*Member{
 					"id":                  {T: reflect.String},
 					"pos":                 {T: reflect.String},
 					"def":                 {T: reflect.String},
@@ -264,7 +264,7 @@ func Test_createCustomType(t *testing.T) {
 </savegame>
 `,
 			},
-			want: createCustomSliceForTest(createStructForTest("vals", map[string]*member{
+			want: createCustomSliceForTest(createStructForTest("vals", map[string]*Member{
 				"progression": {
 					T: reflect.Float64,
 				},
@@ -290,7 +290,7 @@ func Test_createCustomType(t *testing.T) {
 </savegame>
 `,
 			},
-			want: createCustomSliceForTest(createStructForTest("vals", map[string]*member{
+			want: createCustomSliceForTest(createStructForTest("vals", map[string]*Member{
 				"count": {
 					T: reflect.Int64,
 				},

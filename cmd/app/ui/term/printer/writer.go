@@ -15,11 +15,13 @@ type Writer struct {
 }
 
 func NewPrint() *Writer {
-	return &Writer{
+	w := &Writer{
 		out: os.Stdout,
 		in:  os.Stdin,
 		err: os.Stderr,
 	}
+	//w.out, _ = os.OpenFile("out.log", os.O_RDWR|os.O_CREATE|os.O_TRUNC, 0755)
+	return w
 }
 
 func (l *Writer) formatColor(buffer []byte) []byte {
@@ -87,6 +89,7 @@ func (l *Writer) write(b []byte, out *os.File) {
 	if !bytes.HasSuffix(b, []byte("\n")) {
 		_, err = out.Write([]byte("\n"))
 	}
+	//time.Sleep(50 * time.Millisecond)
 	if err != nil {
 		panic(err)
 	}

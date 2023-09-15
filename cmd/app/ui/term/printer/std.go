@@ -2,11 +2,7 @@ package printer
 
 var globalPrint = NewPrint()
 
-func Print(p []byte) {
-	globalPrint.WriteToStd(p)
-}
-
-func PrintSf(p string, a ...any) {
+func Printf(p string, a ...any) {
 	globalPrint.WriteToStdf(p, a...)
 }
 
@@ -26,6 +22,6 @@ func PrintErrorSf(err string, args ...any) {
 	globalPrint.WriteToErrf(err, args...)
 }
 
-func PrintS(s string) {
+func Print(s string) {
 	globalPrint.WriteToStd([]byte(s))
 }

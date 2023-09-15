@@ -164,12 +164,14 @@ func castDataFromKind[T any](kind reflect.Kind, d *xml.Data) T {
 }
 
 func (m *Map[K, V]) Assign(e *xml.Element) error {
-	m.m = make(map[K]V)
-	if e.Parent != nil {
-		m.tag = e.Parent.GetName()
-		m.attr = e.Parent.GetAttributes()
-	} else {
-		return fmt.Errorf("map.Assign: map's parent is nil")
+	if m.Capacity() == 0 {
+		m.m = make(map[K]V)
+		if e.Parent != nil {
+			m.tag = e.Parent.GetName()
+			m.attr = e.Parent.GetAttributes()
+		} else {
+			return fmt.Errorf("map.Assign: map's parent is nil")
+		}
 	}
 	if e.Child == nil {
 		return nil
@@ -255,7 +257,7 @@ func (m *Map[K, V]) Assign(e *xml.Element) error {
 			})
 		}
 	} else {
-		// Custom type must implement operator<
+		// Custom type must implement operator< with the function "func (MapComparable) Less(key reflect.Value, other T) bool"
 		if !reflect.TypeOf(zero[K]()).Implements(reflect.TypeOf((*MapComparable[Map[K, V]])(nil)).Elem()) {
 			panic("Map/Assign: custom type must implement MapComparable interface")
 		}
@@ -282,7 +284,7 @@ func (m *Map[K, V]) GetFromIndex(idx int) V {
 		return zero[V]()
 	}
 	if idx < 0 || idx >= len(m.m) {
-		log.Panic("Map/GetFromIndex: index out of range")
+		log.Panic("Map/At: index out of range")
 		return zero[V]()
 	}
 	i := 0
@@ -292,7 +294,7 @@ func (m *Map[K, V]) GetFromIndex(idx int) V {
 		}
 		i++
 	}
-	log.Panicf("Map/GetFromIndex: index %d not found", idx)
+	log.Panicf("Map/At: index %d not found", idx)
 	return zero[V]()
 }
 
@@ -301,7 +303,7 @@ func (m *Map[K, V]) GetKeyFromIndex(idx int) K {
 		return zero[K]()
 	}
 	if idx < 0 || idx >= len(m.m) {
-		log.Panic("Map/GetFromIndex: index out of range")
+		log.Panic("Map/At: index out of range")
 		return zero[K]()
 	}
 	for i, k := range m.sortedKeys {

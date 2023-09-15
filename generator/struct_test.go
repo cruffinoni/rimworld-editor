@@ -23,7 +23,7 @@ func Test_createStructure(t *testing.T) {
 </savegame>
 `,
 			},
-			want: createStructForTest("quests", map[string]*member{
+			want: createStructForTest("quests", map[string]*Member{
 				"completed": {
 					T: reflect.String,
 				},
@@ -41,7 +41,7 @@ func Test_createStructure(t *testing.T) {
 </savegame>
 `,
 			},
-			want: createStructForTest("quests", map[string]*member{
+			want: createStructForTest("quests", map[string]*Member{
 				"completed": {
 					T: createEmptyType(),
 				},
@@ -82,9 +82,9 @@ func Test_createStructure(t *testing.T) {
 		</savegame>
 		`,
 			},
-			want: createStructForTest("skills", map[string]*member{
+			want: createStructForTest("skills", map[string]*Member{
 				"skills": {
-					T: createCustomSliceForTest(createStructForTest("skills_Inner", map[string]*member{
+					T: createCustomSliceForTest(createStructForTest("skills_Inner", map[string]*Member{
 						"def": {
 							T: reflect.String,
 						},
@@ -113,7 +113,7 @@ func Test_createStructure(t *testing.T) {
 </savegame>
 `,
 			},
-			want: createStructForTest("quests", map[string]*member{
+			want: createStructForTest("quests", map[string]*Member{
 				"completed": {
 					T: createEmptyType(),
 					Attr: map[string]string{
@@ -625,9 +625,9 @@ func TestGenerateGoFiles(t *testing.T) {
 </savegame>
 `,
 			},
-			want: createStructForTest("savegame", map[string]*member{
+			want: createStructForTest("savegame", map[string]*Member{
 				"type": {
-					T: createCustomSliceForTest(createStructForTest("type", map[string]*member{
+					T: createCustomSliceForTest(createStructForTest("type", map[string]*Member{
 						"foundation":                 {T: createEmptyType()},
 						"id":                         {T: reflect.Int64},
 						"culture":                    {T: reflect.String},
@@ -638,7 +638,7 @@ func TestGenerateGoFiles(t *testing.T) {
 						"name":                       {T: reflect.String},
 						"memes":                      {T: createEmptyType()},
 						"precepts": {
-							T: createCustomSliceForTest(createStructForTest("precepts", map[string]*member{
+							T: createCustomSliceForTest(createStructForTest("precepts", map[string]*Member{
 								"name":                {T: reflect.String},
 								"def":                 {T: reflect.String},
 								"ID":                  {T: reflect.Int64},
@@ -648,11 +648,11 @@ func TestGenerateGoFiles(t *testing.T) {
 						},
 						"thingStyleCategories": {T: createEmptyType()},
 						"style": {
-							T: createStructForTest("style", map[string]*member{
+							T: createStructForTest("style", map[string]*Member{
 								"hairFrequencies": {
-									T: createStructForTest("hairFrequencies", map[string]*member{
+									T: createStructForTest("hairFrequencies", map[string]*Member{
 										"vals": {
-											T: createFixedArrayForTest(50, createStructForTest("vals", map[string]*member{
+											T: createFixedArrayForTest(50, createStructForTest("vals", map[string]*Member{
 												"frequency": {T: reflect.String},
 												"gender":    {T: reflect.String},
 											})),

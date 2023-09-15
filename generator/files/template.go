@@ -5,6 +5,7 @@ import (
 	"fmt"
 	"go/format"
 	"log"
+	"math/rand"
 	"os"
 	"reflect"
 	"strings"
@@ -106,6 +107,20 @@ func (gw *GoWriter) writeCustomType(c *generator.CustomType, b *buffer, path str
 
 const basicPackageName = "generated"
 
+func transformToPrivateCamelCase(name string) string {
+	if name[0] < 'A' || name[0] > 'Z' {
+		forcePrivate := false
+		if name[0] == '_' {
+			forcePrivate = true
+		}
+		name = strcase.ToCamel(name)
+		if forcePrivate {
+			return name + "_"
+		}
+	}
+	return name
+}
+
 func (gw *GoWriter) generateStructToPath(path string, s *generator.StructInfo) error {
 	if _, err := os.Stat(path + "/" + strcase.ToSnake(s.Name) + ".go"); !errors.Is(err, os.ErrNotExist) {
 		// log.Printf("generateStructToPath: file already exists at: %v", path+"/"+strcase.ToSnake(s.Name)+".go")
@@ -136,8 +151,19 @@ func (gw *GoWriter) generateStructToPath(path string, s *generator.StructInfo) e
 	}
 	buf.writeToBody("type " + structName + " struct {\nAttr attributes.Attributes\nFieldValidated map[string]bool\n\n")
 	// log.Printf("S: %s | %d", s.Name, len(registeredMembers[s.Name]))
+	namesRegistered := make(map[string]bool)
 	for _, m := range gw.registeredMember[s.Name][0].Order { // Use the best matched version of s.name
-		buf.writeToBody("\t" + strcase.ToCamel(m.Name) + " ")
+		// Make a copy of the original name for XML tag
+		originalName := m.Name
+		// Sometimes, name contains "_" at the beginning, so we need to keep it in a way that it's accepted in Go
+		m.Name = transformToPrivateCamelCase(m.Name)
+		// The name has been already registered for this structure, it happens when there is 2 names like: "_something", "_Something"
+		// The camel case remove both "_" and change the first letter to an uppercase one leaving with the same symbol twice.
+		if namesRegistered[m.Name] {
+			m.Name = fmt.Sprintf("%s_%d", strcase.ToCamel(originalName), rand.Intn(100000))
+		}
+		namesRegistered[m.Name] = true
+		buf.writeToBody("\t" + m.Name + " ")
 		switch va := m.T.(type) {
 		case *generator.CustomType:
 			if err = gw.writeCustomType(va, buf, path); err != nil {
@@ -148,7 +174,9 @@ func (gw *GoWriter) generateStructToPath(path string, s *generator.StructInfo) e
 		case *generator.StructInfo:
 			buf.writeToBody("*" + strcase.ToCamel(va.Name))
 			if s.Name == va.Name {
-				log.Panicf("duplicate name for %s & %s", s.Name, va.Name)
+				s.PrintOrderedMembers()
+				va.PrintOrderedMembers()
+				log.Panicf("duplicate name for %s & %s\n> s: %+v\nva: %+v", s.Name, va.Name, s, va)
 			}
 			if err = gw.generateStructToPath(path, va); err != nil {
 				return err
@@ -163,7 +191,7 @@ func (gw *GoWriter) generateStructToPath(path string, s *generator.StructInfo) e
 				return err
 			}
 		}
-		buf.writeToBody(" `xml:\"" + removeInnerKeyword(m.Name) + "\"`\n")
+		buf.writeToBody(" `xml:\"" + removeInnerKeyword(originalName) + "\"`\n")
 	}
 	buf.writeToFooter("}\n")
 	writeRequiredInterfaces(buf, structName)

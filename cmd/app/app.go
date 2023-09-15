@@ -53,7 +53,7 @@ func CreateApplication() *Application {
 	app.Version("version", cliVersion)
 	app.BoolOptPtr(&app.Verbose, "v verbose", false, "Verbose mode")
 	app.BoolOptPtr(&app.Generate, "g generate", false, "Generate go files from xml")
-	app.BoolOptPtr(&app.Save, "s save", false, "Save your modifications when exiting the application")
+	app.BoolOptPtr(&app.Save, "s save", true, "Save your modifications when exiting the application")
 	app.StringOptPtr(&app.Output, "o output", "generated", "Output folder for generated files")
 	app.StringOptPtr(&app.Mode, "m mode", modeConsole, "The mode to run the application in")
 	app.IntOptPtr(&app.MaxSaveGameFileDiscover, "mx maxnb", 10, "Maximum number of save games to discover")
@@ -84,7 +84,7 @@ func CreateApplication() *Application {
 			return
 		}
 		if app.Save {
-			log.Println("End of execution, generating new file...")
+			printer.Print("End of execution, generating new file...")
 			if err := app.SaveGameFile(save); err != nil {
 				printer.PrintError(err)
 			}
@@ -117,6 +117,7 @@ func (app *Application) beforeExecution() {
 		cli.Exit(1)
 	}
 	gameData := resources.NewGameData()
+	printer.Print("Discovering game data...")
 	err := gameData.DiscoverGameData(app.OperatingSystem)
 	if err != nil {
 		log.Fatal(err)
@@ -124,7 +125,11 @@ func (app *Application) beforeExecution() {
 	// gameData.PrintThemes()
 	// e, err := gameData.FindElement("", "Scavenger22")
 	// log.Printf("E: %v & Err %v", e.XMLPath(), err)
+	printer.Print("Generating Go files from game data...")
 	if err := gameData.GenerateGoFiles(); err != nil {
+		log.Fatal(err)
+	}
+	if err := gameData.ReadGameFiles(); err != nil {
 		log.Fatal(err)
 	}
 	os.Exit(0)
@@ -194,7 +199,7 @@ func (app *Application) ReadSaveGame() error {
 	if err != nil {
 		printer.PrintError(err)
 	} else {
-		printer.PrintSf("Savegame found at %v", savegame)
+		printer.Printf("Savegame found at %v", savegame)
 	}
 	return err
 }

@@ -16,14 +16,14 @@ var (
 
 func init() {
 	TypeNames = []string{
-		reflect.TypeOf((*EmbeddedType[int])(nil)).Elem().Name(),
-		reflect.TypeOf((*EmbeddedType[int64])(nil)).Elem().Name(),
-		reflect.TypeOf((*EmbeddedType[uint])(nil)).Elem().Name(),
-		reflect.TypeOf((*EmbeddedType[uint64])(nil)).Elem().Name(),
-		reflect.TypeOf((*EmbeddedType[float64])(nil)).Elem().Name(),
-		reflect.TypeOf((*EmbeddedType[float32])(nil)).Elem().Name(),
-		reflect.TypeOf((*EmbeddedType[bool])(nil)).Elem().Name(),
-		reflect.TypeOf((*EmbeddedType[string])(nil)).Elem().Name(),
+		reflect.TypeOf((*Type[int])(nil)).Elem().Name(),
+		reflect.TypeOf((*Type[int64])(nil)).Elem().Name(),
+		reflect.TypeOf((*Type[uint])(nil)).Elem().Name(),
+		reflect.TypeOf((*Type[uint64])(nil)).Elem().Name(),
+		reflect.TypeOf((*Type[float64])(nil)).Elem().Name(),
+		reflect.TypeOf((*Type[float32])(nil)).Elem().Name(),
+		reflect.TypeOf((*Type[bool])(nil)).Elem().Name(),
+		reflect.TypeOf((*Type[string])(nil)).Elem().Name(),
 	}
 }
 
@@ -36,7 +36,7 @@ func IsEmbeddedPrimaryType(name string) bool {
 	return false
 }
 
-type EmbeddedType[T comparable] struct {
+type Type[T comparable] struct {
 	fmt.Stringer
 	saver.Transformer
 
@@ -47,7 +47,7 @@ type EmbeddedType[T comparable] struct {
 	attr attributes.Attributes
 }
 
-func (pt *EmbeddedType[T]) TransformToXML(buffer *saver.Buffer) error {
+func (pt *Type[T]) TransformToXML(buffer *saver.Buffer) error {
 	l := len(pt.str)
 	if l == 0 {
 		return xmlFile.ErrEmptyValue
@@ -63,7 +63,7 @@ func lazyCheck(data any) {
 	}
 }
 
-func (pt *EmbeddedType[T]) Assign(e *xml.Element) error {
+func (pt *Type[T]) Assign(e *xml.Element) error {
 	// The type T must be a primitive type.
 	lazyCheck(pt.data)
 	if v, ok := e.Data.GetData().(T); ok {
@@ -76,36 +76,36 @@ func (pt *EmbeddedType[T]) Assign(e *xml.Element) error {
 	}
 }
 
-func (pt *EmbeddedType[T]) GetXMLTag() []byte {
+func (pt *Type[T]) GetXMLTag() []byte {
 	return []byte(pt.tag)
 }
 
-func (pt *EmbeddedType[T]) ValidateField(_ string) {
+func (pt *Type[T]) ValidateField(_ string) {
 }
 
-func (pt *EmbeddedType[T]) IsValidField(_ string) bool {
+func (pt *Type[T]) IsValidField(_ string) bool {
 	return len(pt.str) > 0
 }
 
-func (pt *EmbeddedType[T]) CountValidatedField() int {
+func (pt *Type[T]) CountValidatedField() int {
 	if pt.IsValidField("") {
 		return 1
 	}
 	return 0
 }
 
-func (pt *EmbeddedType[T]) GetPath() string {
+func (pt *Type[T]) GetPath() string {
 	return ""
 }
 
-func (pt *EmbeddedType[T]) SetAttributes(attributes attributes.Attributes) {
+func (pt *Type[T]) SetAttributes(attributes attributes.Attributes) {
 	pt.attr = attributes
 }
 
-func (pt *EmbeddedType[T]) GetAttributes() attributes.Attributes {
+func (pt *Type[T]) GetAttributes() attributes.Attributes {
 	return pt.attr
 }
 
-func (pt *EmbeddedType[T]) String() string {
+func (pt *Type[T]) String() string {
 	return pt.str
 }

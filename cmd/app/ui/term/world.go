@@ -15,7 +15,7 @@ func (c *Console) growAllPlants(percent float64) {
 	}
 
 	count := 0
-	ite := iterator.NewSliceIterator[*generated.Thing](c.save.Game.Maps.GetFromIndex(0).Things)
+	ite := iterator.NewSliceIterator[*generated.Thing](c.save.Game.Maps.At(0).Things)
 	for i := ite; i.HasNext(); i = i.Next() {
 		t := i.Value()
 		if t.Attr.Get("Class") != "Plant" {
@@ -24,6 +24,6 @@ func (c *Console) growAllPlants(percent float64) {
 		t.Growth = growth
 		count++
 	}
-	printer.PrintSf("{-BOLD,GREEN}%d plants{-RESET} edited to %.2f%% growth percentage", count, growth*100.0)
+	printer.Printf("{-BOLD,GREEN}%d plants{-RESET} edited to %.2f%% growth percentage", count, growth*100.0)
 	return
 }

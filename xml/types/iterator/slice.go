@@ -3,7 +3,7 @@ package iterator
 import "github.com/cruffinoni/rimworld-editor/xml/attributes"
 
 type SliceIndexer[V any] interface {
-	GetFromIndex(idx int) V
+	At(idx int) V
 	Capacity() int
 	Set(value V, attr attributes.Attributes, idx int)
 	Add(value V, attr attributes.Attributes)
@@ -38,7 +38,7 @@ func (si *SliceIterator[V]) Prev() *SliceIterator[V] {
 
 func (si *SliceIterator[V]) Value() V {
 	if si.HasNext() {
-		return si.m.GetFromIndex(si.idx)
+		return si.m.At(si.idx)
 	}
 	panic("iterator overflow")
 }

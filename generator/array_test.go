@@ -33,7 +33,7 @@ func Test_createFixedArray(t *testing.T) {
 				Size: 3,
 				PrimaryType: &StructInfo{
 					Name: "vals",
-					Members: map[string]*member{
+					Members: map[string]*Member{
 						"frequency": {},
 						"gender":    {},
 					},
@@ -58,7 +58,7 @@ func Test_createFixedArray(t *testing.T) {
 				Size: 3,
 				PrimaryType: &StructInfo{
 					Name:    "vals",
-					Members: map[string]*member{},
+					Members: map[string]*Member{},
 				},
 			},
 		},
@@ -86,7 +86,7 @@ func Test_createFixedArray(t *testing.T) {
 				Size: 2,
 				PrimaryType: &StructInfo{
 					Name: "vals",
-					Members: map[string]*member{
+					Members: map[string]*Member{
 						"technology": {
 							T: createCustomSliceForTest(&emptyStructWithAttr{}),
 						},
@@ -120,7 +120,7 @@ func Test_createFixedArray(t *testing.T) {
 				Size: 2,
 				PrimaryType: &StructInfo{
 					Name: "vals",
-					Members: map[string]*member{
+					Members: map[string]*Member{
 						"technology": {
 							T: &FixedArray{
 								Size: 4,

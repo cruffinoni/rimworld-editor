@@ -191,9 +191,9 @@ func (s *Slice[T]) Add(value T, attr attributes.Attributes) {
 	s.data = append(s.data, d)
 }
 
-func (s *Slice[T]) GetFromIndex(idx int) T {
+func (s *Slice[T]) At(idx int) T {
 	if idx < 0 || idx >= len(s.data) {
-		panic("out of bound/GetFromIndex: overflow/underflow")
+		panic("out of bound/At: overflow/underflow")
 	}
 	return s.data[idx].data
 }
@@ -216,7 +216,9 @@ func (s *Slice[T]) Reset() {
 }
 
 func (s *Slice[T]) Assign(e *xml.Element) error {
-	s.data = make([]sliceData[T], 0)
+	if s.cap == 0 {
+		s.data = make([]sliceData[T], 0)
+	}
 	n := e
 	if n == nil {
 		log.Printf("n is nil")

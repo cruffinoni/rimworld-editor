@@ -35,7 +35,7 @@ type emptyStructWithAttr struct {
 	Attr attributes.Attributes
 }
 
-func createStructForTest(name string, m map[string]*member) *StructInfo {
+func createStructForTest(name string, m map[string]*Member) *StructInfo {
 	for _, v := range m {
 		if v.Attr == nil {
 			v.Attr = make(attributes.Attributes)

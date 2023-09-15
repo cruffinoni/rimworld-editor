@@ -7,7 +7,6 @@ import (
 	"github.com/cruffinoni/rimworld-editor/generator/paths"
 	"github.com/cruffinoni/rimworld-editor/helper"
 	"github.com/cruffinoni/rimworld-editor/xml"
-	"github.com/cruffinoni/rimworld-editor/xml/attributes"
 )
 
 func determineArrayOrSliceKind(e *xml.Element) reflect.Kind {
@@ -85,15 +84,14 @@ func createArrayOrSlice(e *xml.Element, flag uint) any {
 	k := e.Child
 	count := 0
 	for k != nil {
+		count++
 		if k.Data == nil && k.Child == nil && (count > 0 || k.Next != nil && k.Next.Next == nil) {
-			// Count must be > 0 because empty slice/array must be considered as
-			// slice
+			// Count must be > 0 because empty slice/array must be considered as slice
 			return createFixedArray(e, flag, &offset{
 				el:   k,
 				size: count,
 			})
 		}
-		count++
 		k = k.Next
 	}
 	return createCustomSlice(e, flag)
@@ -131,110 +129,93 @@ func determineTypeFromData(e *xml.Element, flag uint) any {
 		if !e.Attr.Empty() {
 			//log.Println("primary.EmbeddedType: found attributes on path", e.XMLPath())
 			return &CustomType{
-				Name:       "EmbeddedType",
-				Pkg:        "primary",
+				Name:       "Type",
+				Pkg:        "embedded",
 				Type1:      t,
-				ImportPath: paths.PrimaryTypesPath,
+				ImportPath: paths.EmbeddedTypePath,
 			}
 		}
 	}
 	return t
 }
 
+const BasicStructName = "GeneratedStructStarter"
+
+func processSpecialCase(st *StructInfo) {
+	*st = StructInfo{
+		Name:    addUniqueNumber(BasicStructName),
+		Members: make(map[string]*Member),
+		Order:   make([]*Member, 0),
+	}
+}
+
+func processChildNode(n *xml.Element, st *StructInfo, flag uint) error {
+	var t any
+	childName := n.Child.GetName()
+	if helper.IsListTag(childName) {
+		t = createArrayOrSlice(n, flag)
+	} else if childName == "keys" {
+		t = createCustomTypeForMap(n, flag)
+	} else if n.Child.Next != nil && n.Child.Next.GetName() == childName {
+		t = createArrayOrSlice(n, flag|forceChild)
+	} else {
+		t = createStructure(n, flag)
+	}
+	st.addMember(n.GetName(), n.Attr, t)
+	return nil
+}
+
+func processLeafNode(n *xml.Element, st *StructInfo, flag uint) {
+	var t any
+	if n.Data != nil {
+		t = n.Data.Kind()
+		if !n.Attr.Empty() {
+			t = &CustomType{
+				Name:       "Type",
+				Pkg:        "*embedded",
+				Type1:      t,
+				ImportPath: paths.EmbeddedTypePath,
+			}
+		}
+	} else if n.Next != nil && n.Next.GetName() == n.GetName() {
+		t = createArrayOrSlice(n, flag)
+		for n.Next != nil && n.Next.GetName() == n.GetName() {
+			n = n.Next
+		}
+	} else {
+		t = createEmptyType()
+	}
+	st.addMember(n.GetName(), n.Attr, t)
+}
+
 func handleElement(e *xml.Element, st *StructInfo, flag uint) error {
 	n := e
-	// This is a special case where the root node has been created outside the process.
-	// To recognize this special node, we don't set any name to it, but it refers as the root node.
+	//log.Printf("ST: %v", st.Name)
+	//if n != nil && n.GetName() == "li" {
+	//	log.Printf("n: %v", n.GetName())
+	//}
 	if st.Name == "" {
-		*st = StructInfo{
-			Name:    addUniqueNumber("GeneratedStructStarter"),
-			Members: make(map[string]*member),
-			Order:   make([]*member, 0),
-		}
+		processSpecialCase(st)
 	}
 	for n != nil {
-		var t any
 		if n.Child != nil {
-			// Skip the "li" tag (or any custom type) since it's a slice and should not be a member of the struct
 			if helper.IsListTag(n.GetName()) {
 				if err := handleElement(n.Child, st, flag); err != nil {
 					return err
 				}
 			} else {
-				childName := n.Child.GetName()
-				if helper.IsListTag(childName) {
-					t = createArrayOrSlice(n, flag)
-				} else if childName == "keys" {
-					// Maps are constant in terms of naming, and that's how we recognize them
-					t = createCustomTypeForMap(n, flag)
-				} else {
-					// Sometimes, slice are not marked as "li" so we need to check
-					// if the next sibling has the same name.
-					// If so, we consider it as a slice
-					if n.Child.Next != nil && n.Child.Next.GetName() == childName {
-						t = createArrayOrSlice(n, flag|forceChild)
-					} else {
-						t = createStructure(n, flag)
-					}
+				if err := processChildNode(n, st, flag); err != nil {
+					return err
 				}
-				st.addMember(n.GetName(), n.Attr, t)
 			}
 		} else if !helper.IsListTag(n.GetName()) {
-			if n.Data != nil {
-				t = n.Data.Kind()
-				if !n.Attr.Empty() {
-					t = &CustomType{
-						Name:       "EmbeddedType",
-						Pkg:        "*primary",
-						Type1:      t,
-						ImportPath: paths.PrimaryTypesPath,
-					}
-				}
-			} else if n.Next != nil && n.Next.GetName() == n.GetName() {
-				// This condition must not apply to list tags because empty elements in a list are valid
-				t = createArrayOrSlice(n, flag)
-				// Skip the next element since it's already handled
-				for n.Next != nil && n.Next.GetName() == n.GetName() {
-					n = n.Next
-				}
-			} else {
-				t = createEmptyType()
-			}
-			//log.Printf("Add member %T w/ %v (%s) to %v", t, n.XMLPath(), n.GetName(), st.Name)
-			st.addMember(n.GetName(), n.Attr, t)
+			processLeafNode(n, st, flag)
 		} else {
-			// If we reach this code section, it means that we may have a list with no child, an empty list.
-			t = createArrayOrSlice(n, flag)
+			t := createArrayOrSlice(n, flag)
 			st.addMember(n.GetName(), n.Attr, t)
 		}
 		n = n.Next
 	}
 	RegisteredMembers[st.Name] = append(RegisteredMembers[st.Name], st)
 	return nil
-}
-
-// addMember adds a new member to the StructInfo map.
-// If the member already exists, the function checks if the type of the existing member and the new member are the same.
-// If they are not, the function fixes the type mismatch.
-func (s *StructInfo) addMember(name string, attr attributes.Attributes, t any) {
-	// If there is no existing member with the same name, add the new member to the map
-	if _, ok := s.Members[name]; !ok {
-		s.Members[name] = &member{
-			T:    t,
-			Attr: attr,
-			Name: name,
-		}
-		s.Order = append(s.Order, s.Members[name])
-	} else {
-		// Check if the existing member and the new member are of the same type
-		if !isSameType(t, s.Members[name].T, 0) {
-			//log.Printf("Type mismatch: %v > %v", name, s.Members[name])
-			// If the types are different, fix the type mismatch
-			fixTypeMismatch(s.Members[name], &member{
-				Name: name,
-				T:    t,
-				Attr: attr,
-			})
-		}
-	}
 }

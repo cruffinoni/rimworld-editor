@@ -1,6 +1,7 @@
 package xml
 
 import (
+	"fmt"
 	"log"
 	"reflect"
 	"regexp"
@@ -124,4 +125,7 @@ func (d *Data) GetBool() bool {
 		return false
 	}
 	return b
+}
+func (d *Data) String() string {
+	return fmt.Sprintf("%v", d.data)
 }

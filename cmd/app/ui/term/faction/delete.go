@@ -35,46 +35,46 @@ func (d *Delete) Handle(args []string) error {
 	wg.Add(3)
 
 	go func() {
-		printer.PrintSf("Deleting faction {-BOLD,F_RED}'%s'{-RESET} from the available factions", args[0])
+		printer.Printf("Deleting faction {-BOLD,F_RED}'%s'{-RESET} from the available factions", args[0])
 		nbOfFac := d.sg.Game.World.FactionManager.AllFactions.Capacity()
 		for i := 0; i < nbOfFac; i++ {
-			if GetFactionID(d.sg.Game.World.FactionManager.AllFactions.GetFromIndex(i).LoadID) == args[0] {
+			if GetFactionID(d.sg.Game.World.FactionManager.AllFactions.At(i).LoadId) == args[0] {
 				d.sg.Game.World.FactionManager.AllFactions.Remove(i)
 				break
 			}
 		}
 		delete(d.reg, args[0])
-		printer.PrintSf("Faction {-BOLD,F_RED}'%s'{-RESET} deleted", args[0])
+		printer.Printf("Faction {-BOLD,F_RED}'%s'{-RESET} deleted", args[0])
 		wg.Done()
 	}()
 
 	go func() {
 		count := 0
-		printer.PrintSf("Deleting things (animals, objects, etc.) that belong to {-BOLD,F_RED}'%s'{-RESET}", args[0])
+		printer.Printf("Deleting things (animals, objects, etc.) that belong to {-BOLD,F_RED}'%s'{-RESET}", args[0])
 		for i, j := 0, d.sg.Game.Maps.Capacity(); i < j; i++ {
-			for k, l := 0, d.sg.Game.Maps.GetFromIndex(i).Things.Capacity(); k < l; k++ {
-				t := d.sg.Game.Maps.GetFromIndex(i).Things.GetFromIndex(k)
+			for k, l := 0, d.sg.Game.Maps.At(i).Things.Capacity(); k < l; k++ {
+				t := d.sg.Game.Maps.At(i).Things.At(k)
 				if t.Faction == args[0] {
-					d.sg.Game.Maps.GetFromIndex(i).Things.Remove(k)
+					d.sg.Game.Maps.At(i).Things.Remove(k)
 					count++
 				}
 			}
 		}
-		printer.PrintSf("{-BOLD,F_BLUE}%d{-RESET} objects removed", count)
+		printer.Printf("{-BOLD,F_BLUE}%d{-RESET} objects removed", count)
 		wg.Done()
 	}()
 
 	go func() {
 		count := 0
-		printer.PrintSf("Removing archives that are related to the faction {-BOLD,F_RED}'%s'{-RESET}", args[0])
+		printer.Printf("Removing archives that are related to the faction {-BOLD,F_RED}'%s'{-RESET}", args[0])
 		for i, j := 0, d.sg.Game.History.Archive.Archivables.Capacity(); i < j; i++ {
-			a := d.sg.Game.History.Archive.Archivables.GetFromIndex(i)
+			a := d.sg.Game.History.Archive.Archivables.At(i)
 			if a.RelatedFaction == args[0] {
 				d.sg.Game.History.Archive.Archivables.Remove(i)
 				count++
 			}
 		}
-		printer.PrintSf("{-BOLD,F_BLUE}%d{-RESET} archives removed", count)
+		printer.Printf("{-BOLD,F_BLUE}%d{-RESET} archives removed", count)
 		wg.Done()
 	}()
 	wg.Wait()

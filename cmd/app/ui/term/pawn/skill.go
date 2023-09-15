@@ -1,9 +1,9 @@
 package pawn
 
 import (
+	"github.com/cruffinoni/rimworld-editor/algorithm"
 	"github.com/iancoleman/strcase"
 
-	"github.com/cruffinoni/rimworld-editor/algorithm"
 	"github.com/cruffinoni/rimworld-editor/cmd/app/ui/term/faction"
 	"github.com/cruffinoni/rimworld-editor/cmd/app/ui/term/printer"
 	"github.com/cruffinoni/rimworld-editor/generated"
@@ -65,7 +65,7 @@ func (s *Skills) Edit(pawnID, skill, passion string, level int) {
 		return
 	}
 	for i, j := 0, v.Skills.Skills.Capacity(); i < j; i++ {
-		val := v.Skills.Skills.GetFromIndex(i)
+		val := v.Skills.Skills.At(i)
 		if val.Def == skill {
 			val.Level = int64(level)
 			if passion != PassionNone {
@@ -75,9 +75,9 @@ func (s *Skills) Edit(pawnID, skill, passion string, level int) {
 			val.XpSinceLastLevel = float64(s.calculateMaxXP(val.Level) * 1.0)
 			v.Skills.Skills.Set(val, val.Attr, i)
 			if passion != PassionNone {
-				printer.PrintSf("Skill {-BOLD}%s{-RESET} of {-BOLD}%s{-RESET} set to {-BOLD}%d{-RESET} with passion '{-BOLD}%s{-RESET}'", skill, getPawnFullNameColorFormatted(v), level, passion)
+				printer.Printf("Skill {-BOLD}%s{-RESET} of {-BOLD}%s{-RESET} set to {-BOLD}%d{-RESET} with passion '{-BOLD}%s{-RESET}'", skill, getPawnFullNameColorFormatted(v), level, passion)
 			} else {
-				printer.PrintSf("Skill {-BOLD}%s{-RESET} of {-BOLD}%s{-RESET} set to {-BOLD}%d{-RESET}", skill, getPawnFullNameColorFormatted(v), level)
+				printer.Printf("Skill {-BOLD}%s{-RESET} of {-BOLD}%s{-RESET} set to {-BOLD}%d{-RESET}", skill, getPawnFullNameColorFormatted(v), level)
 			}
 			return
 		}
@@ -106,7 +106,7 @@ func (s *Skills) ForceGraduate(pawnID string) {
 		return
 	}
 	for i, j := 0, v.Skills.Skills.Capacity(); i < j; i++ {
-		val := v.Skills.Skills.GetFromIndex(i)
+		val := v.Skills.Skills.At(i)
 		val.Level = int64(i + 1)
 		if val.Passion == "" {
 			val.Passion = PassionMinor
@@ -114,12 +114,12 @@ func (s *Skills) ForceGraduate(pawnID string) {
 		}
 		val.XpSinceLastLevel = float64(s.calculateMaxXP(val.Level) * 1.0)
 		v.Skills.Skills.Set(val, val.Attr, i)
-		printer.PrintSf("Skill {-BOLD}%s{-RESET} of {-BOLD}%s{-RESET} set to {-BOLD}%d{-RESET} with passion '{-BOLD}%s{-RESET}'", val.Def, getPawnFullNameColorFormatted(v), val.Level, val.Passion)
+		printer.Printf("Skill {-BOLD}%s{-RESET} of {-BOLD}%s{-RESET} set to {-BOLD}%d{-RESET} with passion '{-BOLD}%s{-RESET}'", val.Def, getPawnFullNameColorFormatted(v), val.Level, val.Passion)
 	}
 }
 
 func (s *Skills) printPawnSkill(fullName string, p *generated.Thing) {
-	printer.PrintSf("Pawn {-BOLD}%s's{-RESET} (%s) skills", fullName, getPawnFullNameColorFormatted(p))
+	printer.Printf("Pawn {-BOLD}%s's{-RESET} (%s) skills", fullName, getPawnFullNameColorFormatted(p))
 	algorithm.SliceForeach[*generated.SkillsSkillsLiPawnsAliveWorldPawnsWorldGameSavegameInner](p.Skills.Skills, func(skill *generated.SkillsSkillsLiPawnsAliveWorldPawnsWorldGameSavegameInner) {
 		var color string
 		if skill.Level <= 5 {
@@ -129,11 +129,11 @@ func (s *Skills) printPawnSkill(fullName string, p *generated.Thing) {
 		} else {
 			color = "F_GREEN"
 		}
-		printer.PrintSf("Skill: {-BOLD}%s", skill.Def)
+		printer.Printf("Skill: {-BOLD}%s", skill.Def)
 		if skill.Passion != "" {
-			printer.PrintSf("\tLevel: {-%s}%d{-RESET} | Passion: {-BOLD,F_CYAN}%s", color, skill.Level, skill.Passion)
+			printer.Printf("\tLevel: {-%s}%d{-RESET} | Passion: {-BOLD,F_CYAN}%s", color, skill.Level, skill.Passion)
 		} else {
-			printer.PrintSf("\tLevel: {-%s}%d", color, skill.Level)
+			printer.Printf("\tLevel: {-%s}%d", color, skill.Level)
 		}
 	})
 }
