@@ -28,16 +28,16 @@ type associatedRegex struct {
 }
 
 var (
-	HexRegex     = regexp.MustCompile(`^(0x|#)[0-9a-fA-F]{2,}$`)
-	IntegerRegex = regexp.MustCompile(`^-?[0-9]{1,18}$`)
-	FloatRegex   = regexp.MustCompile(`^-?(?:\d{1,18}(?:\.\d{1,18})?|\.\d{1,18})(?:[eE][+-]?\d{1,18})?$`)
-	BoolRegex    = regexp.MustCompile(`(?i)^(true|false)$`)
+	hexRegex     = regexp.MustCompile(`^(0x|#)[0-9a-fA-F]{2,}$`)
+	integerRegex = regexp.MustCompile(`^-?[0-9]{1,18}$`)
+	floatRegex   = regexp.MustCompile(`^-?(?:\d{1,18}(?:\.\d{1,18})?|\.\d{1,18})(?:[eE][+-]?\d{1,18})?$`)
+	boolRegex    = regexp.MustCompile(`(?i)^(true|false)$`)
 
 	AllPatterns = []associatedRegex{
-		{pattern: IntegerRegex, kind: reflect.Int64},
-		{pattern: FloatRegex, kind: reflect.Float64},
-		{pattern: BoolRegex, kind: reflect.Bool},
-		{pattern: HexRegex, kind: reflect.Uint64},
+		{pattern: integerRegex, kind: reflect.Int64},
+		{pattern: floatRegex, kind: reflect.Float64},
+		{pattern: boolRegex, kind: reflect.Bool},
+		{pattern: hexRegex, kind: reflect.Uint64},
 	}
 )
 

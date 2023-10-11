@@ -6,6 +6,7 @@ import (
 	"log"
 	"reflect"
 
+	"github.com/cruffinoni/rimworld-editor/helper"
 	"github.com/cruffinoni/rimworld-editor/xml"
 	"github.com/cruffinoni/rimworld-editor/xml/path"
 	"github.com/cruffinoni/rimworld-editor/xml/types/embedded"
@@ -43,11 +44,6 @@ func isXMLElement(v reflect.Value) bool {
 	return v.Type().Name() == elementStructName
 }
 
-func makePointer(v reflect.Value) reflect.Value {
-	v.Set(reflect.New(v.Type().Elem()))
-	return v
-}
-
 func attributeDataToField(v reflect.Value, e *xml.Element) {
 	if e.Data == nil {
 		return
@@ -67,7 +63,8 @@ func attributeDataToField(v reflect.Value, e *xml.Element) {
 func createValueFromPrimaryType(t reflect.Type, e *xml.Element) reflect.Value {
 	k := t.Kind()
 	if e.Data == nil {
-		log.Panicf("createValueFromPrimaryType: no data for %s", t.Name())
+		log.Printf("createValueFromPrimaryType: no data for %s", t.Name())
+		return reflect.Zero(t)
 	}
 	d := e.Data
 	if d.Kind() != k {
@@ -133,6 +130,13 @@ func Element(element *xml.Element, dest any) error {
 	if v.Kind() == reflect.Invalid {
 		return errors.New("value of dest is invalid")
 	}
+
+	if isXMLElement(v) {
+		log.Printf("special case: unmarshal: field %v is xml.Element", v.Type())
+		//reflect.ValueOf(dest).Set(reflect.ValueOf(&element))
+		v.Set(reflect.ValueOf(reflect.ValueOf(element).Elem().Interface().(xml.Element)))
+		return nil
+	}
 	//log.Printf("Doing unmarshal for type %s", n.XMLPath())
 	for n != nil {
 		f := findFieldFromName(t, v, n.GetName())
@@ -143,7 +147,6 @@ func Element(element *xml.Element, dest any) error {
 				validator.ValidateField(t.Field(f).Name)
 			}
 			fieldKind := fieldValue.Kind()
-			var fieldPtr reflect.Value
 			// If the field is a pointer, we need to allocate a new value if it has not been done before
 			if fieldKind == reflect.Ptr {
 				if fieldValue.IsNil() {
@@ -171,50 +174,50 @@ func Element(element *xml.Element, dest any) error {
 				// ft is the type of the slice
 				ft := fieldValue.Type().Elem()
 				// Let's avoid to skip elements in our linked list
-				nBefore := n.Child
+				nChild := n.Child
 				idx := 0
-				for nBefore != nil {
-					if idx >= l && nBefore != nil {
+				for nChild != nil {
+					if idx >= l && nChild != nil {
 						log.Panicf("index out of range: %v | %v (%d len)", n.XMLPath(), ft.String(), l)
 					}
 					// Special case for xml.Element, set directly to the field
 					if ft == elementStruct {
-						fieldValue.Index(idx).Set(reflect.ValueOf(nBefore))
-					} else if embedded.IsEmbeddedPrimaryType(ft.Name()) {
-						fieldValue.Index(idx).Set(createValueFromPrimaryType(ft, nBefore))
+						fieldValue.Index(idx).Set(reflect.ValueOf(nChild))
+					} else if embedded.IsEmbeddedPrimaryType(ft.Name()) || helper.IsReflectPrimaryType(ft.Kind()) {
+						fieldValue.Index(idx).Set(createValueFromPrimaryType(ft, nChild))
 					} else {
-						if ft.Kind() != reflect.Ptr {
+						if ft.Kind() == reflect.Ptr {
 							panic("unmarshal: array element type must be a pointer")
 						}
 						newEntry := reflect.New(ft.Elem())
-						if nBefore.Child == nil {
-							newEntry.Interface().(xml.Assigner).SetAttributes(nBefore.Attr)
+						if nChild.Child == nil {
+							newEntry.Interface().(xml.Assigner).SetAttributes(nChild.Attr)
 						} else {
-							if err := Element(nBefore.Child, newEntry.Interface().(xml.Assigner)); err != nil {
+							if err := Element(nChild.Child, newEntry.Interface().(xml.Assigner)); err != nil {
 								panic(err)
 							}
 						}
 						fieldValue.Index(idx).Set(newEntry)
 					}
 					idx++
-					nBefore = nBefore.Next
+					nChild = nChild.Next
 				}
 			case reflect.Struct:
 				typeName := fieldValue.Type().Name()
 				// Special case for xml.Element, set directly to the field
+				log.Printf("unmarshal: struct %v", typeName)
 				if isXMLElement(fieldValue) {
-					fieldPtr.Set(reflect.ValueOf(n))
+					log.Printf("unmarshal: field %v is xml.Element", fieldValue.Type())
+					log.Printf("Value of n: %T", n)
+					v.Field(f).Set(reflect.ValueOf(n))
 					break
-				} else if embedded.IsEmbeddedPrimaryType(typeName) ||
-					isEmptyType(typeName) {
+				} else if embedded.IsEmbeddedPrimaryType(typeName) || isEmptyType(typeName) {
 					// it must be a safe cast because the structures are known
 					cast := fieldValue.Addr().Interface().(xml.Assigner)
 					_ = cast.Assign(n)
 					cast.SetAttributes(n.Attr)
-				} else {
-					if cast, ok := fieldValue.Addr().Interface().(xml.Assigner); ok {
-						cast.SetAttributes(n.Attr)
-					}
+				} else if assigner, ok := fieldValue.Addr().Interface().(xml.Assigner); ok {
+					assigner.SetAttributes(n.Attr)
 					// Otherwise, we need to call the unmarshal function recursively
 					if err := Element(n.Child, fieldValue.Addr().Interface().(xml.Assigner)); err != nil {
 						panic(err)

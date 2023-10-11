@@ -10,6 +10,7 @@ import (
 	"github.com/cruffinoni/rimworld-editor/generator"
 	"github.com/cruffinoni/rimworld-editor/generator/paths"
 	"github.com/cruffinoni/rimworld-editor/xml"
+	"github.com/cruffinoni/rimworld-editor/xml/interface"
 )
 
 type GoWriter struct {
@@ -52,7 +53,7 @@ type generic struct{}
 
 type require interface {
 	xml.Assigner
-	xml.FieldValidator
+	xml_interface.FieldValidator
 	algorithm.Comparable[generic]
 }
 

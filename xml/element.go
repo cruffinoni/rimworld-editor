@@ -56,19 +56,22 @@ func (e *Element) ToXML(spacing int) string {
 
 func (e *Element) TransformToXML(buffer *saver.Buffer) error {
 	n := e
-	buffer.OpenTag(n.GetName(), n.Attr)
 	if n.Data != nil {
 		if n.Data.Kind() == reflect.Struct {
-			buffer.Write([]byte("\n"))
+			_, _ = buffer.Write([]byte("\n"))
 		}
-		buffer.Write([]byte(n.Data.GetString()))
+		_, _ = buffer.Write([]byte(n.Data.GetString()))
 	}
+	/*
+		else {
+			return xmlFile.ErrEmptyValue
+		}
+	*/
 	if n.Child != nil {
 		if err := n.Child.TransformToXML(buffer); err != nil {
 			return err
 		}
 	}
-	buffer.CloseTag(n.StartElement.Name.Local)
 	return nil
 }
 
@@ -85,11 +88,16 @@ func (e *Element) DisplayDebug() string {
 	return sb.String()
 }
 
+// GetIndex returns the index of the element in the list of elements or 0 if the element is not in a list
+func (e *Element) GetIndex() int {
+	return e.index
+}
+
 func (e *Element) Pretty(spacing int) string {
 	var sb strings.Builder
 	n := e
 	for n != nil {
-		sb.WriteString(strings.Repeat(" ", spacing) + "> " + n.StartElement.Name.Local)
+		sb.WriteString(strings.Repeat(" ", spacing) + "> " + n.xmlPath().String())
 		if !n.Attr.Empty() {
 			sb.WriteString(" [" + n.Attr.Join(", ") + "]")
 		}
@@ -112,10 +120,11 @@ func (e *Element) DisplayAllXMLPaths() string {
 		n  = e
 	)
 	for n != nil {
-		sb.WriteString(">" + n.StartElement.Name.Local)
+		sb.WriteString(">" + n.xmlPath().String())
 		if n.Child != nil {
 			sb.WriteString(n.Child.DisplayAllXMLPaths())
 		}
+		sb.WriteString("\n")
 		n = n.Next
 	}
 	return sb.String()

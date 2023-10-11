@@ -1,7 +1,6 @@
 package generator
 
 import (
-	"errors"
 	"log"
 	"math"
 	"reflect"
@@ -91,7 +90,7 @@ func fixTypeMismatch(a, b *Member) error {
 				b.T = a.T
 				return nil
 			}
-			return fixCustomType(&va, &vb)
+			return fixCustomType(va, vb)
 
 		// a: *CustomType[?]
 		// b: *StructInfo
@@ -441,9 +440,7 @@ func FixMembers(a, b *StructInfo) {
 
 			//log.Printf("%T (%v) | %T (%v) is not same type", a.Members[i].T, a.Members[i].Name, b.Members[i].T, b.Members[i].Name)
 			err := fixTypeMismatch(a.Members[i], b.Members[i])
-			if errors.Is(err, ErrUnsolvableMismatch) {
-				b.Members[i].Name = addUniqueNumber(b.Members[i].Name)
-			} else if err != nil {
+			if err != nil {
 				panic(err.Error())
 			}
 			updateOrderedMembers(a)

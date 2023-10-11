@@ -1,7 +1,9 @@
-// Package xml provides types and functions for working with XML elements and attributes.
+// Package xml_interface provides types and functions for working with XML elements and attributes.
 package xml
 
-import "github.com/cruffinoni/rimworld-editor/xml/attributes"
+import (
+	"github.com/cruffinoni/rimworld-editor/xml/attributes"
+)
 
 // AttributeAssigner is an interface for types that can set and get XML attributes.
 type AttributeAssigner interface {

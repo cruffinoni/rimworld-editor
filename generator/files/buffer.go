@@ -41,7 +41,7 @@ func (b *buffer) bytes() []byte {
 	builder := strings.Builder{}
 	builder.WriteString(b.header.String())
 	if len(b.imp) > 1 {
-		sort.Sort(sort.StringSlice(b.imp))
+		sort.Strings(b.imp)
 		builder.WriteString("\nimport (\n")
 		for _, v := range b.imp {
 			builder.WriteString(v)

@@ -15,7 +15,7 @@ import (
 	"github.com/cruffinoni/rimworld-editor/xml/types/primary"
 )
 
-// SaveWithBuffer takes in a value of any type, and returns a saver.Buffer and any error that occurs during the saving process.
+// SaveWithBuffer takes in a value of multiple type, and returns a saver.Buffer and multiple error that occurs during the saving process.
 func SaveWithBuffer(val any) (*saver.Buffer, error) {
 	b := saver.NewBuffer()
 	valType := reflect.TypeOf(val)
@@ -79,7 +79,7 @@ func Save(val any, b *saver.Buffer, tag string) error {
 	//}
 	//log.Printf("Content: '%v' (%T)", val, val)
 	if helper.IsReflectPrimaryType(kind) && (v.IsZero() || v.Kind() == reflect.String && val == "") && !(kind == reflect.Int64 || kind == reflect.Float64) {
-		//log.Printf("Skipping: %v & %T", val, val)
+		log.Printf("Skipping: %v & %T", val, val)
 		return nil
 	}
 	b.OpenTag(tag, attr)
@@ -98,7 +98,7 @@ func Save(val any, b *saver.Buffer, tag string) error {
 			}
 		}
 		for i := 0; i < j; i++ {
-			b.Write([]byte("\n"))
+			_, _ = b.Write([]byte("\n"))
 			vi := v.Index(i)
 			// Sometimes it does not detect nil as it should
 			if vi.Kind() == reflect.Ptr && vi.IsNil() {
@@ -118,27 +118,27 @@ func Save(val any, b *saver.Buffer, tag string) error {
 			}
 		}
 		if tag != "" {
-			b.Write([]byte("\n"))
+			_, _ = b.Write([]byte("\n"))
 		}
 		b.CloseTagWithIndent(tag)
 		return nil
 	case reflect.String:
 		multipleLineTxt := strings.Contains(v.String(), "\n")
 		if multipleLineTxt {
-			b.Write([]byte{'\n'})
+			_, _ = b.Write([]byte{'\n'})
 			b.IncreaseDepth()
 		}
 		_xml.Escape(b, []byte(v.String()))
 		if multipleLineTxt {
-			b.Write([]byte{'\n'})
+			_, _ = b.Write([]byte{'\n'})
 			b.DecreaseDepth()
 		}
 	case reflect.Bool:
-		b.Write([]byte(capitalize(strconv.FormatBool(v.Bool()))))
+		_, _ = b.Write([]byte(capitalize(strconv.FormatBool(v.Bool()))))
 	case reflect.Int64:
-		b.Write([]byte(strconv.FormatInt(v.Int(), 10)))
+		_, _ = b.Write([]byte(strconv.FormatInt(v.Int(), 10)))
 	case reflect.Float64:
-		b.Write([]byte(strconv.FormatFloat(v.Float(), 'f', -1, 64)))
+		_, _ = b.Write([]byte(strconv.FormatFloat(v.Float(), 'f', -1, 64)))
 	case reflect.Struct:
 		if vi == nil {
 			return nil
@@ -152,7 +152,7 @@ func Save(val any, b *saver.Buffer, tag string) error {
 				}
 				return err
 			}
-			b.Write([]byte("\n"))
+			_, _ = b.Write([]byte("\n"))
 			b.CloseTagWithIndent(tag)
 			return nil
 		}
@@ -161,7 +161,7 @@ func Save(val any, b *saver.Buffer, tag string) error {
 			b.WriteEmptyTag(tag, attr)
 			return nil
 		}
-		b.Write([]byte("\n"))
+		_, _ = b.Write([]byte("\n"))
 		for i := 0; i < v.NumField(); i++ {
 			f := t.Field(i)
 			vf := v.Field(i)
@@ -188,7 +188,7 @@ func Save(val any, b *saver.Buffer, tag string) error {
 					return err
 				}
 				if tag != "" {
-					b.Write([]byte("\n"))
+					_, _ = b.Write([]byte("\n"))
 				}
 				// We don't close the tag since it's only a MEMBER of the struct, so it can't decide
 				// whenever the struct is completely parsed.
@@ -201,10 +201,12 @@ func Save(val any, b *saver.Buffer, tag string) error {
 			if err := Save(vf.Interface(), b, xmlTag); err != nil {
 				return err
 			}
-			b.Write([]byte("\n"))
+			_, _ = b.Write([]byte("\n"))
 		}
 		b.CloseTagWithIndent(tag)
 		return nil
+	default:
+		log.Panicf("Unhandled type: %v", kind)
 	}
 	b.CloseTag(tag)
 	return nil

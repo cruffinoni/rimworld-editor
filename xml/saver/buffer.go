@@ -63,7 +63,7 @@ func (b *Buffer) Len() int {
 }
 
 func (b *Buffer) WriteString(s string) {
-	b.Write([]byte(s))
+	_, _ = b.Write([]byte(s))
 }
 
 func (b *Buffer) WriteStringWithIndent(s string) {
@@ -71,8 +71,8 @@ func (b *Buffer) WriteStringWithIndent(s string) {
 }
 
 func (b *Buffer) WriteWithIndent(p []byte) {
-	b.Write([]byte(strings.Repeat("\t", b.depth)))
-	b.Write(p)
+	_, _ = b.Write([]byte(strings.Repeat("\t", b.depth)))
+	_, _ = b.Write(p)
 }
 
 func (b *Buffer) OpenTag(tag string, attr attributes.Attributes) {
@@ -88,7 +88,7 @@ func (b *Buffer) writeTag(tag string, attr attributes.Attributes, open bool) {
 		return
 	}
 	if b.buffer[b.bufferLen-1] != '\n' {
-		b.Write([]byte("\n"))
+		_, _ = b.Write([]byte("\n"))
 	}
 	b.IncreaseDepth()
 	if attr != nil && !attr.Empty() {
@@ -113,7 +113,7 @@ func (b *Buffer) CloseTag(tag string) {
 	if tag == "" {
 		return
 	}
-	b.Write([]byte(`</` + tag + ">"))
+	_, _ = b.Write([]byte(`</` + tag + ">"))
 	b.DecreaseDepth()
 }
 
@@ -121,7 +121,7 @@ func (b *Buffer) CloseTagWithIndent(tag string) {
 	if tag == "" {
 		return
 	}
-	b.Write([]byte(strings.Repeat("\t", b.depth)))
+	_, _ = b.Write([]byte(strings.Repeat("\t", b.depth)))
 	b.CloseTag(tag)
 }
 
@@ -143,7 +143,7 @@ func (b *Buffer) ToFile(path string) error {
 	return os.WriteFile(path, b.buffer, 0644)
 }
 
-func (b *Buffer) Buffer() []byte {
+func (b *Buffer) Bytes() []byte {
 	return b.buffer
 }
 

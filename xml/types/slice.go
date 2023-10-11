@@ -29,10 +29,12 @@ type sliceData[T any] struct {
 
 func (s *sliceData[T]) Assign(e *xml.Element) error {
 	var err error
-	// log.Printf("Assign on slicedata called: %v > %v", e.XMLPath(), e.Attr)
+	log.Printf("Assign on slicedata called: %v (%v) > %T", e.XMLPath(), e.Attr, s.data)
 	s.kind = reflect.TypeOf(s.data).Kind()
 	if s.kind == reflect.Ptr {
 		err = unmarshal.Element(e, s.data)
+		s.hidden = reflect.ValueOf(s.data).IsZero()
+		log.Printf("Kind is ptr. Is it hidden ? %v", s.hidden)
 	} else if helper.IsReflectPrimaryType(s.kind) {
 		s.hidden = e.Data == nil
 		switch s.kind {
@@ -244,12 +246,15 @@ func (s *Slice[T]) Assign(e *xml.Element) error {
 		}
 		// Set sd.data to zero depending on the type of T. Either a pointer or a
 		// value.
+		log.Printf("Type: %v / %v", reflect.TypeOf(sd.data).Kind(), n.Child)
 		switch tType := reflect.TypeOf(sd.data).Kind(); tType {
 		case reflect.Ptr, reflect.Interface, reflect.Struct, reflect.Map, reflect.Slice:
 			sd.data = reflect.New(reflect.TypeOf(*new(T)).Elem()).Interface().(T)
 		case reflect.String, reflect.Bool, reflect.Int, reflect.Int8, reflect.Int16, reflect.Int32, reflect.Int64, reflect.Uint, reflect.Uint8, reflect.Uint16, reflect.Uint32, reflect.Uint64, reflect.Float32, reflect.Float64:
 			sd.data = zero[T]()
 		}
+
+		log.Printf("Child ? %v", n.Child != nil)
 		if n.Child != nil {
 			if err := unmarshal.Element(n.Child, &sd); err != nil {
 				return err
@@ -259,12 +264,17 @@ func (s *Slice[T]) Assign(e *xml.Element) error {
 				return err
 			}
 		}
+		log.Printf("Slice.Assign: %+v", sd.data)
 		sd.SetAttributes(n.Attr)
 		s.data = append(s.data, sd)
 		n = n.Next
 	}
 	s.cap = len(s.data)
-	//log.Printf("Slice.Assign: end => %s", s)
+	log.Printf("Slice.Assign: end => %s", s)
+
+	for _, d := range s.data {
+		log.Printf("Slice.Assign: %v", d)
+	}
 	return nil
 }
 

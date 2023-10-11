@@ -1,6 +1,7 @@
 package generator
 
 import (
+	"reflect"
 	"strconv"
 	"strings"
 
@@ -40,6 +41,10 @@ const (
 	// InnerKeyword is the keyword for cases when the name of the element is
 	// the same as the name of the parent.
 	InnerKeyword = "_Inner"
+
+	// Complex is a custom kind that is used when the type is too complex to be handled.
+	// For example, *types.Slice[*types.Slice[*types.Slice[[3]*Struct]]] is too complex and is not detected now.
+	Complex reflect.Kind = 100
 )
 
 var UniqueNumber = int64(0)

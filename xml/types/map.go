@@ -37,7 +37,7 @@ type MapComparable[T any] interface {
 
 // Map is a map of K to V.
 // We don't restrict the type K to MapComparable[Map[K, V]] because K might be
-// type of string, int or any primary type.
+// type of string, int or multiple primary type.
 type Map[K comparable, V any] struct {
 	MapComparable[Map[K, V]]
 	xml.Assigner
@@ -89,7 +89,7 @@ func (m *Map[K, V]) TransformToXML(b *saver.Buffer) error {
 		} else {
 			b.WriteString(fmt.Sprintf("%v", k))
 		}
-		if unicode.IsSpace(rune(b.Buffer()[b.Len()-1])) {
+		if unicode.IsSpace(rune(b.Bytes()[b.Len()-1])) {
 			b.WriteStringWithIndent("</li>\n")
 		} else {
 			b.WriteString("</li>\n")
@@ -118,7 +118,7 @@ func (m *Map[K, V]) TransformToXML(b *saver.Buffer) error {
 				return err
 			}
 		}
-		if unicode.IsSpace(rune(b.Buffer()[b.Len()-1])) {
+		if unicode.IsSpace(rune(b.Bytes()[b.Len()-1])) {
 			b.WriteStringWithIndent("</li>\n")
 		} else {
 			b.WriteString("</li>\n")
@@ -190,7 +190,7 @@ func (m *Map[K, V]) Assign(e *xml.Element) error {
 		return errors.New("Map/Assign: keys length differs from values length")
 	}
 	//log.Printf("Keys: %v, Val: %v", keys[0].XMLPath(), values[0].XMLPath())
-	//log.Printf("Keys: %+v, Val: %+v", keys[0].Data, values[0].Data)
+	//log.Printf("Keys: %+v, Val: %+v", keys[0].last, values[0].last)
 	kKind := reflect.TypeOf(zero[K]()).Kind()
 	vKind := reflect.TypeOf(zero[V]()).Kind()
 	_, isEmpty := any(zero[V]()).(*primary.Empty)
@@ -222,7 +222,7 @@ func (m *Map[K, V]) Assign(e *xml.Element) error {
 			//}
 			//log.Printf("Res: %v (%T)", subValueVal.Interface().(V), subValueVal.Interface().(V))
 			m.m[castDataFromKind[K](kKind, key.Data)] = subValueVal.Interface().(V)
-			//log.Printf("!!=> %v > %v", castDataFromKind[K](kKind, key.Data), m.m[castDataFromKind[K](kKind, key.Data)])
+			//log.Printf("!!=> %v > %v", castDataFromKind[K](kKind, key.last), m.m[castDataFromKind[K](kKind, key.last)])
 		} else if values[i].Data == nil || isEmpty {
 			// There is a key with no data
 			m.m[castDataFromKind[K](kKind, key.Data)] = zero[V]()
@@ -233,7 +233,7 @@ func (m *Map[K, V]) Assign(e *xml.Element) error {
 		} else {
 			m.m[castDataFromKind[K](kKind, key.Data)] = castDataFromKind[V](vKind, values[i].Data)
 		}
-		//log.Printf("=> %v > %v", castDataFromKind[K](kKind, key.Data), m.m[castDataFromKind[K](kKind, key.Data)])
+		//log.Printf("=> %v > %v", castDataFromKind[K](kKind, key.last), m.m[castDataFromKind[K](kKind, key.last)])
 	}
 	v := reflect.ValueOf(m.m)
 	k := reflect.ValueOf(zero[K]()).Kind()

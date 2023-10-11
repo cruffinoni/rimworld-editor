@@ -21,8 +21,8 @@ func GetGamePath(opeSystem string) (string, error) {
 		possibleDirs := []string{
 			os.Getenv("ProgramFiles(x86)"),
 			os.Getenv("ProgramFiles"),
-			"D:\\Program Files (x86)",
-			"D:\\Program Files",
+			"Element:\\Program Files (x86)",
+			"Element:\\Program Files",
 			"E:\\Program Files (x86)",
 			"E:\\Program Files",
 		}

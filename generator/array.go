@@ -13,6 +13,8 @@ type FixedArray struct {
 
 func createSubtype(e *xml.Element, flag uint, t any) any {
 	switch t {
+	case Complex:
+		return e
 	case reflect.Invalid:
 		// With an invalid type and no data, we can assume that the slice is empty
 		if e.Data == nil {
@@ -37,8 +39,8 @@ type offset struct {
 
 func createFixedArray(e *xml.Element, flag uint, o *offset) any {
 	f := &FixedArray{
-		PrimaryType: createSubtype(e, flag, getTypeFromArray(e)),
-		Size:        0,
+		PrimaryType: createSubtype(e, flag, getTypeFromArrayOrSlice(e)),
+		Size:        1, // Minimum size is 1
 	}
 	if o == nil {
 		o = &offset{el: e.Child}

@@ -38,7 +38,7 @@ func main() {
 	}
 	save := &generated.Savegame{}
 	log.Println("Unmarshalling XML...")
-	if err := unmarshal.Element(fo.XML.Root.Child, save); err != nil {
+	if err = unmarshal.Element(fo.XML.Root.Child, save); err != nil {
 		log.Fatal(err)
 	}
 	save.ValidateField("Savegame")
@@ -47,7 +47,7 @@ func main() {
 	if err != nil {
 		log.Panic(err)
 	}
-	if err := buffer.ToFile("generated/" + fileName + ".rws"); err != nil {
+	if err = buffer.ToFile("generated/" + fileName + ".rws"); err != nil {
 		log.Panic(err)
 	}
 }

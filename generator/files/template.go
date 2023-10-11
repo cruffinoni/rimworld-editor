@@ -26,7 +26,7 @@ func getTypeName(t any) string {
 		return va.String()
 	case *generator.CustomType:
 		var s strings.Builder
-		if va.Name == "Empty" {
+		if generator.IsEmptyType(va) || generator.IsMultipleType(va) {
 			s.WriteString(va.Pkg + "." + va.Name)
 			return s.String()
 		}
@@ -65,7 +65,8 @@ func (gw *GoWriter) checkTypeAndApply(t any, buffer *buffer, path string) error 
 			}
 		}
 	case *generator.FixedArray:
-		buffer.writeToBody(fmt.Sprintf("[%d]", va.Size))
+		// ????
+		//buffer.writeToBody(fmt.Sprintf("[%d]", va.Size))
 		if err := gw.checkTypeAndApply(va.PrimaryType, buffer, path); err != nil {
 			return err
 		}
@@ -87,6 +88,7 @@ func (gw *GoWriter) writeCustomType(c *generator.CustomType, b *buffer, path str
 	b.writeImport(c.ImportPath)
 	// log.Printf("Custom type %+v", *c)
 	b.writeToBody(c.Pkg + "." + c.Name)
+	//log.Printf("?? > %v", c.Pkg+"."+c.Name)
 	if c.Type1 == nil {
 		// log.Printf("Types: %v & %v", c.type1, c.type2)
 		return nil
