@@ -4,6 +4,8 @@ import (
 	"log"
 	"strings"
 
+	"github.com/cruffinoni/printer"
+
 	"github.com/cruffinoni/rimworld-editor/internal/xml"
 )
 
@@ -96,12 +98,12 @@ func (p *Path) Find(root *xml.Element) Elements {
 	}
 	if r = p.patterns[patternIdx].matcher.TrailingMatch(); r != nil {
 		if len(r) == 0 {
-			log.Printf("Find: not found at %s (%T)", cpyPatterns[0].path, cpyPatterns[0].matcher)
+			printer.Debugf("Find: not found at %s (%T)", cpyPatterns[0].path, cpyPatterns[0].matcher)
 		}
 		return r
 	}
 	if len(r) == 0 {
-		log.Printf("Find: not found at %s (%T)", cpyPatterns[0].path, cpyPatterns[0].matcher)
+		printer.Debugf("Find: not found at %s (%T)", cpyPatterns[0].path, cpyPatterns[0].matcher)
 	}
 	return nil
 }

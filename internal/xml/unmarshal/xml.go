@@ -6,6 +6,8 @@ import (
 	"log"
 	"reflect"
 
+	"github.com/cruffinoni/printer"
+
 	"github.com/cruffinoni/rimworld-editor/internal/helper"
 	"github.com/cruffinoni/rimworld-editor/internal/xml"
 	"github.com/cruffinoni/rimworld-editor/internal/xml/interface"
@@ -64,7 +66,7 @@ func attributeDataToField(v reflect.Value, e *xml.Element) {
 func createValueFromPrimaryType(t reflect.Type, e *xml.Element) reflect.Value {
 	k := t.Kind()
 	if e.Data == nil {
-		log.Printf("createValueFromPrimaryType: no data for %s", t.Name())
+		printer.Debugf("createValueFromPrimaryType: no data for %s", t.Name())
 		return reflect.Zero(t)
 	}
 	d := e.Data
@@ -133,15 +135,15 @@ func Element(element *xml.Element, dest any) error {
 	}
 
 	if isXMLElement(v) {
-		log.Printf("special case: unmarshal: field %v is xml.Element", v.Type())
+		printer.Debugf("special case: unmarshal: field %v is xml.Element", v.Type())
 		//reflect.ValueOf(dest).Set(reflect.ValueOf(&element))
 		v.Set(reflect.ValueOf(reflect.ValueOf(element).Elem().Interface().(xml.Element)))
 		return nil
 	}
-	//log.Printf("Doing unmarshal for type %s", n.XMLPath())
+	//printer.Debugf("Doing unmarshal for type %s", n.XMLPath())
 	for n != nil {
 		f := findFieldFromName(t, v, n.GetName())
-		//log.Printf("n: %v | %v & f: %v", n.GetName(), n.Attr, f)
+		//printer.Debugf("n: %v | %v & f: %v", n.GetName(), n.Attr, f)
 		if f != -1 && n.GetName() != "history" {
 			fieldValue := v.Field(f)
 			if canValidate {
@@ -161,7 +163,7 @@ func Element(element *xml.Element, dest any) error {
 				// The function doesn't support multiple pointers (a.k.a. pointers to pointers)
 				log.Fatalf("unmarshal: field %v has multiple pointer", fieldValue.Type())
 			case reflect.String, reflect.Int, reflect.Int8, reflect.Int16, reflect.Int32, reflect.Int64, reflect.Bool, reflect.Float32, reflect.Float64:
-				//log.Printf("Attributing data: %v / %s > '%v'", n.XMLPath(), fieldKind.String(), n.Data)
+				//printer.Debugf("Attributing data: %v / %s > '%v'", n.XMLPath(), fieldKind.String(), n.Data)
 				attributeDataToField(fieldValue, n)
 			case reflect.Array:
 				l := fieldValue.Len()
@@ -169,7 +171,7 @@ func Element(element *xml.Element, dest any) error {
 				fieldValue.Set(reflect.New(reflect.ArrayOf(l, fieldValue.Type().Elem())).Elem())
 				// If there is no child element, we are done and left the slice empty
 				if n.Child == nil {
-					log.Println("unmarshal: array empty")
+					printer.Debugf("unmarshal: array empty")
 					continue
 				}
 				// ft is the type of the slice
@@ -206,9 +208,9 @@ func Element(element *xml.Element, dest any) error {
 			case reflect.Struct:
 				typeName := fieldValue.Type().Name()
 				// Special case for xml.Element, set directly to the field
-				//log.Printf("unmarshal: struct %v", typeName)
+				//printer.Debugf("unmarshal: struct %v", typeName)
 				if isXMLElement(fieldValue) {
-					log.Printf("unmarshal: field %v is xml.Element", fieldValue.Type())
+					printer.Debugf("unmarshal: field %v is xml.Element", fieldValue.Type())
 					v.Field(f).Set(reflect.ValueOf(n))
 					break
 				} else if embedded.IsEmbeddedPrimaryType(typeName) || isEmptyType(typeName) {

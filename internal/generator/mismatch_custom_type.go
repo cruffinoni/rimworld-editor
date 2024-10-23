@@ -2,8 +2,9 @@ package generator
 
 import (
 	"errors"
-	"log"
 	"reflect"
+
+	"github.com/cruffinoni/printer"
 )
 
 var ErrUnsolvableMismatch = errors.New("unsolvable mismatch")
@@ -25,9 +26,9 @@ func fixCustomType(a, b *CustomType) error {
 		if !errors.Is(err, ErrUnsolvableMismatch) {
 			return err
 		}
-		log.Printf("(t1) data a: %v -> %T (%v)", a.Name, a.Type1, a.Type1)
-		log.Printf("(t1) data b: %v -> %T (%v)", b.Name, b.Type1, b.Type1)
-		log.Printf("Multiple type detected")
+		printer.Debugf("(t1) data a: %v -> %T (%v)", a.Name, a.Type1, a.Type1)
+		printer.Debugf("(t1) data b: %v -> %T (%v)", b.Name, b.Type1, b.Type1)
+		printer.Debugf("Multiple type detected")
 
 		// a: *CustomType[*multiple.Type] / *CustomType[*xml.Element]
 		// b: *CustomType[*multiple.Type] / *CustomType[*xml.Element]
@@ -36,9 +37,9 @@ func fixCustomType(a, b *CustomType) error {
 		return nil
 	}
 	if err := reconcileTypes(&a.Type2, &b.Type2, a, b); err != nil {
-		log.Printf("(t2) data a: %v -> %T (%+v)", a.Name, a.Type2, a.Type2)
-		log.Printf("(t2) data b: %v -> %T (%+v)", b.Name, b.Type2, b.Type2)
-		log.Printf("(t2) can't decide on which type work on between %T & %T", a.Type2, b.Type2)
+		printer.Debugf("(t2) data a: %v -> %T (%+v)", a.Name, a.Type2, a.Type2)
+		printer.Debugf("(t2) data b: %v -> %T (%+v)", b.Name, b.Type2, b.Type2)
+		printer.Debugf("(t2) can't decide on which type work on between %T & %T", a.Type2, b.Type2)
 		panic("Multiple type detected for type2")
 		return err
 	}

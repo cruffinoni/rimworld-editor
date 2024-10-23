@@ -10,6 +10,7 @@ import (
 	"reflect"
 	"strings"
 
+	"github.com/cruffinoni/printer"
 	"github.com/iancoleman/strcase"
 
 	"github.com/cruffinoni/rimworld-editor/internal/generator"
@@ -87,11 +88,11 @@ func removeInnerKeyword(s string) string {
 func (gw *GoWriter) writeCustomType(c *generator.CustomType, b *buffer, path string) error {
 	var err error
 	b.writeImport(c.ImportPath)
-	// log.Printf("Custom type %+v", *c)
+	// printer.Debugf("Custom type %+v", *c)
 	b.writeToBody(c.Pkg + "." + c.Name)
-	//log.Printf("?? > %v", c.Pkg+"."+c.Name)
+	//printer.Debugf("?? > %v", c.Pkg+"."+c.Name)
 	if c.Type1 == nil {
-		// log.Printf("Types: %v & %v", c.type1, c.type2)
+		// printer.Debugf("Types: %v & %v", c.type1, c.type2)
 		return nil
 	}
 	b.writeToBody("[" + getTypeName(c.Type1))
@@ -126,8 +127,8 @@ func transformToPrivateCamelCase(name string) string {
 
 func (gw *GoWriter) generateStructToPath(path string, s *generator.StructInfo) error {
 	if _, err := os.Stat(path + "/" + strcase.ToSnake(s.Name) + ".go"); !errors.Is(err, os.ErrNotExist) {
-		// log.Printf("generateStructToPath: file already exists at: %v", path+"/"+strcase.ToSnake(s.Name)+".go")
-		// log.Printf("Size: %d from %p", len(s.Members), s)
+		// printer.Debugf("generateStructToPath: file already exists at: %v", path+"/"+strcase.ToSnake(s.Name)+".go")
+		// printer.Debugf("Size: %d from %p", len(s.Members), s)
 		return nil
 	}
 	f, err := os.Create(path + "/" + strcase.ToSnake(s.Name) + ".go")
@@ -153,7 +154,7 @@ func (gw *GoWriter) generateStructToPath(path string, s *generator.StructInfo) e
 		panic("empty struct name")
 	}
 	buf.writeToBody("type " + structName + " struct {\nAttr attributes.Attributes\nFieldValidated map[string]bool\n\n")
-	// log.Printf("S: %s | %d", s.Name, len(registeredMembers[s.Name]))
+	// printer.Debugf("S: %s | %d", s.Name, len(registeredMembers[s.Name]))
 	namesRegistered := make(map[string]bool)
 	for _, m := range gw.registeredMember[s.Name][0].Order { // Use the best matched version of s.name
 		// Make a copy of the original name for XML tag
@@ -201,7 +202,7 @@ func (gw *GoWriter) generateStructToPath(path string, s *generator.StructInfo) e
 	var b []byte
 	b, err = format.Source(buf.bytes())
 	if err != nil {
-		log.Printf("Err: Format buffer:\n%s", buf.bytes())
+		printer.Debugf("Err: Format buffer:\n%s", buf.bytes())
 		return err
 	}
 	if _, err = f.Write(b); err != nil {

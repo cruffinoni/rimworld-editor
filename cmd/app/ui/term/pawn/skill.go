@@ -77,9 +77,9 @@ func (s *Skills) Edit(pawnID, skill, passion string, level int) {
 			val.XpSinceLastLevel = float64(s.calculateMaxXP(val.Level) * 1.0)
 			v.Skills.Skills.Set(val, val.Attr, i)
 			if passion != PassionNone {
-				printer.Printf("Skill {{{-BOLD}}}%s{{{-RESET}}} of {{{-BOLD}}}%s{{{-RESET}}} set to {{{-BOLD}}}%d{{{-RESET}}} with passion '{{{-BOLD}}}%s{{{-RESET}}}'", skill, getPawnFullNameColorFormatted(v), level, passion)
+				printer.Debugf("Skill {{{-BOLD}}}%s{{{-RESET}}} of {{{-BOLD}}}%s{{{-RESET}}} set to {{{-BOLD}}}%d{{{-RESET}}} with passion '{{{-BOLD}}}%s{{{-RESET}}}'", skill, getPawnFullNameColorFormatted(v), level, passion)
 			} else {
-				printer.Printf("Skill {{{-BOLD}}}%s{{{-RESET}}} of {{{-BOLD}}}%s{{{-RESET}}} set to {{{-BOLD}}}%d{{{-RESET}}}", skill, getPawnFullNameColorFormatted(v), level)
+				printer.Debugf("Skill {{{-BOLD}}}%s{{{-RESET}}} of {{{-BOLD}}}%s{{{-RESET}}} set to {{{-BOLD}}}%d{{{-RESET}}}", skill, getPawnFullNameColorFormatted(v), level)
 			}
 			return
 		}
@@ -116,12 +116,12 @@ func (s *Skills) ForceGraduate(pawnID string) {
 		}
 		val.XpSinceLastLevel = float64(s.calculateMaxXP(val.Level) * 1.0)
 		v.Skills.Skills.Set(val, val.Attr, i)
-		printer.Printf("Skill {{{-BOLD}}}%s{{{-RESET}}} of {{{-BOLD}}}%s{{{-RESET}}} set to {{{-BOLD}}}%d{{{-RESET}}} with passion '{{{-BOLD}}}%s{{{-RESET}}}'", val.Def, getPawnFullNameColorFormatted(v), val.Level, val.Passion)
+		printer.Debugf("Skill {{{-BOLD}}}%s{{{-RESET}}} of {{{-BOLD}}}%s{{{-RESET}}} set to {{{-BOLD}}}%d{{{-RESET}}} with passion '{{{-BOLD}}}%s{{{-RESET}}}'", val.Def, getPawnFullNameColorFormatted(v), val.Level, val.Passion)
 	}
 }
 
 func (s *Skills) printPawnSkill(fullName string, p *generated.Thing) {
-	printer.Printf("Pawn {{{-BOLD}}}%s's{{{-RESET}}} (%s) skills", fullName, getPawnFullNameColorFormatted(p))
+	printer.Debugf("Pawn {{{-BOLD}}}%s's{{{-RESET}}} (%s) skills", fullName, getPawnFullNameColorFormatted(p))
 	algorithm.SliceForeach[*generated.SkillsSkillsLiPawnsMothballedWorldPawnsWorldGameSavegameInner](p.Skills.Skills, func(skill *generated.SkillsSkillsLiPawnsMothballedWorldPawnsWorldGameSavegameInner) {
 		var color string
 		if skill.Level <= 5 {
@@ -131,11 +131,11 @@ func (s *Skills) printPawnSkill(fullName string, p *generated.Thing) {
 		} else {
 			color = "F_GREEN"
 		}
-		printer.Printf("Skill: {{{-BOLD}}}%s", skill.Def)
+		printer.Debugf("Skill: {{{-BOLD}}}%s", skill.Def)
 		if skill.Passion != "" {
-			printer.Printf("\tLevel: {-%s}%d{{{-RESET}}} | Passion: {{{-BOLD,F_CYAN}}}%s", color, skill.Level, skill.Passion)
+			printer.Debugf("\tLevel: {-%s}%d{{{-RESET}}} | Passion: {{{-BOLD,F_CYAN}}}%s", color, skill.Level, skill.Passion)
 		} else {
-			printer.Printf("\tLevel: {-%s}%d", color, skill.Level)
+			printer.Debugf("\tLevel: {-%s}%d", color, skill.Level)
 		}
 	})
 }

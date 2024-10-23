@@ -48,7 +48,7 @@ type ComputedArrayMatch struct {
 
 func (c *ComputedArrayMatch) StrictMatch(node *xml.Element, _ string) Elements {
 	if node.GetName()[:c.patternLength] == c.pattern {
-		//log.Printf("Total of matched count: %d", c.matchedCount)
+		//printer.Debugf("Total of matched count: %d", c.matchedCount)
 		if c.matchedCount == c.listIndex {
 			return Elements{node}
 		}

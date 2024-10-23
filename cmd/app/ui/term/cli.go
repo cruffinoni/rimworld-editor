@@ -42,7 +42,7 @@ func (c *Console) Execute([]string) error {
 		f = append([]string{"rimworld"}, f...)
 		_ = c.cli.Run(f)
 		if c.shouldExit {
-			printer.Print("Execution ended.")
+			printer.Debugf("Execution ended.")
 			break
 		}
 	}
@@ -57,7 +57,7 @@ func (c *Console) exit() {
 func (c *Console) Init(options *ui.Options, save *generated.Savegame) {
 	c.opt = options
 	c.save = save
-	log.Printf("Called here")
+	printer.Debugf("Called here")
 	rf := faction.RegisterFactions(c.save)
 	rp := pawn.RegisterPawns(c.save, rf)
 	fl := faction.NewList(c.save, rf)

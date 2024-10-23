@@ -23,15 +23,15 @@ func NewList(sg *generated.Savegame, rp PawnsRegisterer, rf faction.Registerer) 
 
 func (l *List) ListAllPawns() {
 	for k, v := range l.rp {
-		printer.Printf("Pawn {{{-BOLD}}}%s{{{-RESET}}} registered", k)
+		printer.Debugf("Pawn {{{-BOLD}}}%s{{{-RESET}}} registered", k)
 		if v.Name == nil {
-			printer.Printf("name is nil: %v", v.Name)
+			printer.Debugf("name is nil: %v", v.Name)
 			continue
 		}
-		printer.Printf("Full name: %s", getPawnFullNameColorFormatted(v))
+		printer.Debugf("Full name: %s", getPawnFullNameColorFormatted(v))
 		if fac, ok := l.rf[v.Faction]; ok {
 			faction.PrintFactionInformation(l.rf, fac, false)
 		}
-		printer.Print("")
+		printer.Debugf("")
 	}
 }

@@ -66,7 +66,7 @@ func processLeafNode(n *xml.Element, st *StructInfo, flag uint) {
 func handleElement(e *xml.Element, st *StructInfo, flag uint) error {
 	n := e
 	//if n != nil && n.GetName() == "li" {
-	//	log.Printf("n: %v", n.GetName())
+	//	printer.Debugf("n: %v", n.GetName())
 	//}
 	if st.Name == "" {
 		*st = StructInfo{

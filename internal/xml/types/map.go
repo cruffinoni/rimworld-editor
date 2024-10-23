@@ -8,6 +8,8 @@ import (
 	"sort"
 	"unicode"
 
+	"github.com/cruffinoni/printer"
+
 	"github.com/cruffinoni/rimworld-editor/internal/helper"
 
 	"github.com/cruffinoni/rimworld-editor/internal/xml"
@@ -152,12 +154,12 @@ func (m *Map[K, V]) Assign(e *xml.Element) error {
 	if e.Child == nil {
 		return nil
 	}
-	//log.Printf("Tag: %v", m.tag)
+	//printer.Debugf("Tag: %v", m.tag)
 	keys := path.FindWithPath("keys>[...]", e)
 	if len(keys) == 0 {
 		return errors.New("Map/Assign: no key")
 	}
-	//log.Printf("e=%v", e.GetName())
+	//printer.Debugf("e=%v", e.GetName())
 	values := path.FindWithPath("values>[...]", e)
 	if len(values) == 0 {
 		return errors.New("Map/Assign: no value")
@@ -165,12 +167,12 @@ func (m *Map[K, V]) Assign(e *xml.Element) error {
 	if len(keys) != len(values) {
 		return errors.New("Map/Assign: keys length differs from values length")
 	}
-	//log.Printf("Keys: %v, Val: %v", keys[0].XMLPath(), values[0].XMLPath())
-	//log.Printf("Keys: %+v, Val: %+v", keys[0].last, values[0].last)
+	//printer.Debugf("Keys: %v, Val: %v", keys[0].XMLPath(), values[0].XMLPath())
+	//printer.Debugf("Keys: %+v, Val: %+v", keys[0].last, values[0].last)
 	kKind := reflect.TypeOf(zero[K]()).Kind()
 	vKind := reflect.TypeOf(zero[V]()).Kind()
 	_, isEmpty := any(zero[V]()).(*primary.Empty)
-	//log.Printf("%T is empty ? %v", zero[V](), isEmpty)
+	//printer.Debugf("%T is empty ? %v", zero[V](), isEmpty)
 	for i, key := range keys {
 		if key.Data == nil {
 			log.Panicf("Map/Assign: no data for key %s", key.GetName())
@@ -185,13 +187,13 @@ func (m *Map[K, V]) Assign(e *xml.Element) error {
 		// This might be a custom type that implements xml.Assigner interface
 		if okAssigner && !isEmpty {
 			if values[i].Child == nil {
-				log.Printf("Map/Assign: no child at %s | Index: %d", e.XMLPath(), i)
+				printer.Debugf("Map/Assign: no child at %s | Index: %d", e.XMLPath(), i)
 			}
 			var (
 				subValue    = new(V)
 				subValueVal = reflect.ValueOf(subValue)
 			)
-			//log.Printf("! > %v & %T + '%v' & POSSIBLE? %v", subValue, subValue, subValueVal.Kind(), subValueVal.Elem().CanAddr())
+			//printer.Debugf("! > %v & %T + '%v' & POSSIBLE? %v", subValue, subValue, subValueVal.Kind(), subValueVal.Elem().CanAddr())
 			subValueVal = subValueVal.Elem()
 			if subValueVal.Kind() == reflect.Ptr {
 				// Initialize the pointer
@@ -214,7 +216,7 @@ func (m *Map[K, V]) Assign(e *xml.Element) error {
 				panic("Map/Assign: value must be a pointer") // TODO: Handle this case
 			}
 			m.m[castDataFromKind[K](kKind, key.Data)] = subValueVal.Interface().(V)
-			//log.Printf("!!=> %v > %v", castDataFromKind[K](kKind, key.last), m.m[castDataFromKind[K](kKind, key.last)])
+			//printer.Debugf("!!=> %v > %v", castDataFromKind[K](kKind, key.last), m.m[castDataFromKind[K](kKind, key.last)])
 		} else if values[i].Data == nil || isEmpty {
 			// There is a key with no data
 			m.m[castDataFromKind[K](kKind, key.Data)] = zero[V]()
@@ -225,7 +227,7 @@ func (m *Map[K, V]) Assign(e *xml.Element) error {
 		} else {
 			m.m[castDataFromKind[K](kKind, key.Data)] = castDataFromKind[V](vKind, values[i].Data)
 		}
-		//log.Printf("=> %v > %v", castDataFromKind[K](kKind, key.last), m.m[castDataFromKind[K](kKind, key.last)])
+		//printer.Debugf("=> %v > %v", castDataFromKind[K](kKind, key.last), m.m[castDataFromKind[K](kKind, key.last)])
 	}
 
 	v := reflect.ValueOf(m.m)

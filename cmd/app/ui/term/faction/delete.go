@@ -36,7 +36,7 @@ func (d *Delete) Handle(args []string) error {
 	wg.Add(3)
 
 	go func() {
-		printer.Printf("Deleting faction {{{-BOLD,F_RED}}}'%s'{{{-RESET}}} from the available factions", args[0])
+		printer.Debugf("Deleting faction {{{-BOLD,F_RED}}}'%s'{{{-RESET}}} from the available factions", args[0])
 		nbOfFac := d.sg.Game.World.FactionManager.AllFactions.Capacity()
 		for i := 0; i < nbOfFac; i++ {
 			if GetFactionID(d.sg.Game.World.FactionManager.AllFactions.At(i).LoadId) == args[0] {
@@ -45,13 +45,13 @@ func (d *Delete) Handle(args []string) error {
 			}
 		}
 		delete(d.reg, args[0])
-		printer.Printf("Faction {{{-BOLD,F_RED}}}'%s'{{{-RESET}}} deleted", args[0])
+		printer.Debugf("Faction {{{-BOLD,F_RED}}}'%s'{{{-RESET}}} deleted", args[0])
 		wg.Done()
 	}()
 
 	go func() {
 		count := 0
-		printer.Printf("Deleting things (animals, objects, etc.) that belong to {{{-BOLD,F_RED}}}'%s'{{{-RESET}}}", args[0])
+		printer.Debugf("Deleting things (animals, objects, etc.) that belong to {{{-BOLD,F_RED}}}'%s'{{{-RESET}}}", args[0])
 		for i, j := 0, d.sg.Game.Maps.Capacity(); i < j; i++ {
 			for k, l := 0, d.sg.Game.Maps.At(i).Things.Capacity(); k < l; k++ {
 				t := d.sg.Game.Maps.At(i).Things.At(k)
@@ -61,13 +61,13 @@ func (d *Delete) Handle(args []string) error {
 				}
 			}
 		}
-		printer.Printf("{{{-BOLD,F_BLUE}}}%d{{{-RESET}}} objects removed", count)
+		printer.Debugf("{{{-BOLD,F_BLUE}}}%d{{{-RESET}}} objects removed", count)
 		wg.Done()
 	}()
 
 	go func() {
 		count := 0
-		printer.Printf("Removing archives that are related to the faction {{{-BOLD,F_RED}}}'%s'{{{-RESET}}}", args[0])
+		printer.Debugf("Removing archives that are related to the faction {{{-BOLD,F_RED}}}'%s'{{{-RESET}}}", args[0])
 		for i, j := 0, d.sg.Game.History.Archive.Archivables.Capacity(); i < j; i++ {
 			a := d.sg.Game.History.Archive.Archivables.At(i)
 			if a.RelatedFaction == args[0] {
@@ -75,7 +75,7 @@ func (d *Delete) Handle(args []string) error {
 				count++
 			}
 		}
-		printer.Printf("{{{-BOLD,F_BLUE}}}%d{{{-RESET}}} archives removed", count)
+		printer.Debugf("{{{-BOLD,F_BLUE}}}%d{{{-RESET}}} archives removed", count)
 		wg.Done()
 	}()
 	wg.Wait()

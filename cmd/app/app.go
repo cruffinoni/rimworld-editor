@@ -70,7 +70,7 @@ func CreateApplication() *Application {
 			// app.ui = app.guiMode
 		}
 		structInit := &generated.GeneratedStructStarter0{}
-		log.Println("Unmarshalling XML...")
+		printer.Debugf("Unmarshalling XML...")
 		s.FinalMSG = "XML file unmarshalled successfully\n"
 		s.Start()
 		if err := unmarshal.Element(app.fileOpening.XML.Root, structInit); err != nil {
@@ -78,15 +78,15 @@ func CreateApplication() *Application {
 		}
 		s.Stop()
 		structInit.ValidateField("Savegame")
-		log.Println("Initializing UI...")
+		printer.Debugf("Initializing UI...")
 		app.ui.Init(&app.Options, structInit.Savegame)
-		log.Println("Running UI...")
+		printer.Debugf("Running UI...")
 		if err := app.ui.Execute(os.Args); err != nil {
 			printer.PrintError(err)
 			return
 		}
 		if app.Save {
-			printer.Print("End of execution, generating new file...")
+			printer.Debugf("End of execution, generating new file...")
 			if err := app.SaveGameFile(structInit.Savegame); err != nil {
 				printer.PrintError(err)
 			}
@@ -105,7 +105,7 @@ func (app *Application) SaveGameFile(sg *generated.Savegame) error {
 		return err
 	}
 	path := p + "/" + "Generated_" + strconv.FormatInt(time.Now().Unix(), 10) + ".rws"
-	log.Printf("Saving file to '%s'", path)
+	printer.Debugf("Saving file to '%s'", path)
 	if err := buffer.ToFile(path); err != nil {
 		return err
 	}
@@ -119,15 +119,15 @@ func (app *Application) beforeExecution() {
 		cli.Exit(1)
 	}
 	gameData := resources.NewGameData()
-	printer.Print("Discovering game data...")
+	printer.Debugf("Discovering game data...")
 	err := gameData.DiscoverGameData(app.OperatingSystem)
 	if err != nil {
 		log.Fatal(err)
 	}
 	// gameData.PrintThemes()
 	// e, err := gameData.FindElement("", "Scavenger22")
-	// log.Printf("E: %v & Err %v", e.XMLPath(), err)
-	printer.Print("Generating Go files from game data...")
+	// printer.Debugf("E: %v & Err %v", e.XMLPath(), err)
+	printer.Debugf("Generating Go files from game data...")
 	if err := gameData.GenerateGoFiles(); err != nil {
 		log.Fatal(err)
 	}
@@ -201,7 +201,7 @@ func (app *Application) ReadSaveGame() error {
 	if err != nil {
 		printer.PrintError(err)
 	} else {
-		printer.Printf("Savegame found at %v", savegame)
+		printer.Debugf("Savegame found at %v", savegame)
 	}
 	return err
 }

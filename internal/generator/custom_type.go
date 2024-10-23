@@ -4,6 +4,8 @@ import (
 	"log"
 	"reflect"
 
+	"github.com/cruffinoni/printer"
+
 	"github.com/cruffinoni/rimworld-editor/internal/helper"
 
 	"github.com/cruffinoni/rimworld-editor/internal/generator/paths"
@@ -85,7 +87,7 @@ func createXMLElementType() any {
 // Is it useful for empty tags.
 func determineTypeFromData(e *xml.Element, flag uint) any {
 	t := any(getTypeFromArrayOrSlice(e))
-	//log.Printf("Type of %v is %v", e.XMLPath(), t)
+	//printer.Debugf("Type of %v is %v", e.XMLPath(), t)
 	// We need to define this struct with of this all members
 	if t == reflect.Struct || t == reflect.Slice {
 		c := e.Child
@@ -107,7 +109,7 @@ func determineTypeFromData(e *xml.Element, flag uint) any {
 		}
 	} else {
 		if !e.Attr.Empty() {
-			//log.Println("primary.EmbeddedType: found attributes on path", e.XMLPath())
+			//printer.Debugf("primary.EmbeddedType: found attributes on path", e.XMLPath())
 			return &CustomType{
 				Name:       "Type",
 				Pkg:        "embedded",
@@ -124,7 +126,7 @@ func createCustomTypeForMap(e *xml.Element, flag uint) any {
 		log.Panic("generate.createCustomTypeForMap: missing child")
 	}
 
-	//log.Printf("Determining key type from %s", e.Child.XMLPath())
+	//printer.Debugf("Determining key type from %s", e.Child.XMLPath())
 	var (
 		c = e.Child
 		k = determineTypeFromData(c, flag|forceFullCheck)
@@ -137,11 +139,11 @@ func createCustomTypeForMap(e *xml.Element, flag uint) any {
 			k = reflect.String
 		}
 	}
-	//log.Printf("Key type: %T", k)
+	//printer.Debugf("Key type: %T", k)
 	c = c.Next
-	//log.Printf("Determining value type from '%v'", c.XMLPath())
+	//printer.Debugf("Determining value type from '%v'", c.XMLPath())
 	v = determineTypeFromData(c, flag|forceFullCheck)
-	//log.Printf("Val type: %T", v)
+	//printer.Debugf("Val type: %T", v)
 	// By default, maps are strings to strings
 	if k == reflect.Invalid || v == reflect.Invalid {
 		return &CustomType{
@@ -229,7 +231,7 @@ func getTypeFromArrayOrSlice(e *xml.Element) reflect.Kind {
 				// Float64 and Int64 can be interchangeable
 				!(kdk == reflect.Float64 && kt == reflect.Int64) &&
 				!(kdk == reflect.Int64 && kt == reflect.Float64) {
-				log.Printf("last: '%v' & kind %s", k.Data, k.Data.Kind())
+				printer.Debugf("last: '%v' & kind %s", k.Data, k.Data.Kind())
 				log.Panicf("getTypeFromArrayOrSlice: found type %v, expected %v on path %v ('%v')", kdk, kt, k.XMLPath(), k.Data.GetData())
 			}
 			// Float64 and Int64 can be interchangeable, but we prefer to keep Float64

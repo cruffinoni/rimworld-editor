@@ -2,9 +2,10 @@ package types
 
 import (
 	"fmt"
-	"log"
 	"reflect"
 	"strings"
+
+	"github.com/cruffinoni/printer"
 
 	"github.com/cruffinoni/rimworld-editor/internal/helper"
 
@@ -31,12 +32,12 @@ type sliceData[T any] struct {
 
 func (s *sliceData[T]) Assign(e *xml.Element) error {
 	var err error
-	//log.Printf("Assign on slicedata called: %v (%v) > %T", e.XMLPath(), e.Attr, s.data)
+	//printer.Debugf("Assign on slicedata called: %v (%v) > %T", e.XMLPath(), e.Attr, s.data)
 	s.kind = reflect.TypeOf(s.data).Kind()
 	if s.kind == reflect.Ptr {
 		err = unmarshal.Element(e, s.data)
 		s.hidden = reflect.ValueOf(s.data).IsZero()
-		//log.Printf("Kind is ptr. Is it hidden ? %v", s.hidden)
+		//printer.Debugf("Kind is ptr. Is it hidden ? %v", s.hidden)
 	} else if helper.IsReflectPrimaryType(s.kind) {
 		s.hidden = e.Data == nil
 		switch s.kind {
@@ -99,8 +100,8 @@ func (s *sliceData[T]) GetXMLTag() []byte {
 }
 
 func (s *sliceData[T]) TransformToXML(b *saver.Buffer) error {
-	//log.Printf("sliceData.TransformToXML => %v (? %T) [Hidden: %v | %v]", s.tag, s.data, s.hidden, s.attr)
-	//log.Printf("Is hidden: %v (%T)", s.hidden, s.data)
+	//printer.Debugf("sliceData.TransformToXML => %v (? %T) [Hidden: %v | %v]", s.tag, s.data, s.hidden, s.attr)
+	//printer.Debugf("Is hidden: %v (%T)", s.hidden, s.data)
 
 	_, okEmpty := any(s.data).(*primary.Empty)
 	elem, okElem := any(s.data).(*xml.Element)
@@ -136,10 +137,10 @@ type Slice[T any] struct {
 
 func (s *Slice[T]) TransformToXML(b *saver.Buffer) error {
 	//if s.repeatingTag == "" {
-	//	log.Print("Slice.TransformToXML: No repeating tag specified.")
+	//	printer.Debugf("Slice.TransformToXML: No repeating tag specified.")
 	//	return nil
 	//}
-	// log.Printf("Name: '%v' w/ cap %d w/ %s / %v", s.name, s.cap, s.repeatingTag, s.data)
+	// printer.Debugf("Name: '%v' w/ cap %d w/ %s / %v", s.name, s.cap, s.repeatingTag, s.data)
 	if s.cap == 0 {
 		return xmlFile.ErrEmptyValue
 	}
@@ -227,14 +228,14 @@ func (s *Slice[T]) Assign(e *xml.Element) error {
 	}
 	n := e
 	if n == nil {
-		log.Printf("n is nil")
+		printer.Debugf("n is nil")
 		return nil
 	}
 	if n.Parent != nil {
 		s.name = n.Parent.GetName()
-		//log.Printf("Slice.Assign: Parent is %s", n.Parent.GetName())
+		//printer.Debugf("Slice.Assign: Parent is %s", n.Parent.GetName())
 	} else {
-		log.Printf("Slice.Assign: Assigning to slice without parent")
+		printer.Debugf("Slice.Assign: Assigning to slice without parent")
 		s.name = "unknown"
 	}
 	s.repeatingTag = n.GetName()
@@ -243,14 +244,14 @@ func (s *Slice[T]) Assign(e *xml.Element) error {
 	//		n = n.Child
 	//	}
 	//}
-	//log.Printf("Assigning: %v / %v", e.XMLPath(), e.Attr)
+	//printer.Debugf("Assigning: %v / %v", e.XMLPath(), e.Attr)
 	for n != nil {
 		sd := sliceData[T]{
 			tag: n.GetName(),
 		}
 		// Set sd.data to zero depending on the type of T. Either a pointer or a
 		// value.
-		//log.Printf("Type: %v / %v", reflect.TypeOf(sd.data).Kind(), n.Child)
+		//printer.Debugf("Type: %v / %v", reflect.TypeOf(sd.data).Kind(), n.Child)
 		switch tType := reflect.TypeOf(sd.data).Kind(); tType {
 		case reflect.Ptr, reflect.Interface, reflect.Struct, reflect.Map, reflect.Slice:
 			sd.data = reflect.New(reflect.TypeOf(*new(T)).Elem()).Interface().(T)
@@ -258,7 +259,7 @@ func (s *Slice[T]) Assign(e *xml.Element) error {
 			sd.data = zero[T]()
 		}
 
-		//log.Printf("Child ? %v", n.Child != nil)
+		//printer.Debugf("Child ? %v", n.Child != nil)
 		if n.Child != nil {
 			if err := unmarshal.Element(n.Child, &sd); err != nil {
 				return err
@@ -268,16 +269,16 @@ func (s *Slice[T]) Assign(e *xml.Element) error {
 				return err
 			}
 		}
-		//log.Printf("Slice.Assign: %+v", sd.data)
+		//printer.Debugf("Slice.Assign: %+v", sd.data)
 		sd.SetAttributes(n.Attr)
 		s.data = append(s.data, sd)
 		n = n.Next
 	}
 	s.cap = len(s.data)
-	//log.Printf("Slice.Assign: end => %s", s)
+	//printer.Debugf("Slice.Assign: end => %s", s)
 
 	//for _, d := range s.data {
-	//	log.Printf("Slice.Assign: %v", d)
+	//	printer.Debugf("Slice.Assign: %v", d)
 	//}
 	return nil
 }

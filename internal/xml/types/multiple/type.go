@@ -21,7 +21,7 @@ type Type struct {
 }
 
 func (t *Type) Assign(e *xml.Element) error {
-	log.Printf("Assign called on multiple.Type: %v", e)
+	printer.Debugf("Assign called on multiple.Type: %v", e)
 	if t.last == nil {
 		t.last = &Data{
 			Element: e,
@@ -41,7 +41,7 @@ func (t *Type) GetPath() string {
 }
 
 func (t *Type) SetAttributes(_ attributes.Attributes) {
-	//log.Printf("SetAttributes called on multiple.Type: %v", attributes)
+	//printer.Debugf("SetAttributes called on multiple.Type: %v", attributes)
 }
 
 func (t *Type) GetAttributes() attributes.Attributes {
@@ -65,6 +65,6 @@ func (t *Type) TransformToXML(buffer *saver.Buffer) error {
 }
 
 func (t *Type) GetXMLTag() []byte {
-	log.Printf("GetXMLTag called on multiple.Type")
+	printer.Debugf("GetXMLTag called on multiple.Type")
 	return []byte("")
 }

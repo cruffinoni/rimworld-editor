@@ -8,6 +8,8 @@ import (
 	"strconv"
 	"strings"
 
+	"github.com/cruffinoni/printer"
+
 	"github.com/cruffinoni/rimworld-editor/internal/helper"
 
 	"github.com/cruffinoni/rimworld-editor/internal/xml"
@@ -75,11 +77,11 @@ func Save(val any, b *saver.Buffer, tag string) error {
 		return nil
 	}
 	//if valKind == reflect.Int64 {
-	//	log.Printf("Debug: => %v & %T", val, val)
+	//	printer.Debugf("Debug: => %v & %T", val, val)
 	//}
-	//log.Printf("Content: '%v' (%T)", val, val)
+	//printer.Debugf("Content: '%v' (%T)", val, val)
 	if helper.IsReflectPrimaryType(valKind) && (v.IsZero() || v.Kind() == reflect.String && val == "") && !(valKind == reflect.Int64 || valKind == reflect.Float64) {
-		log.Printf("Skipping: %v & %T", val, val)
+		printer.Debugf("Skipping: %v & %T", val, val)
 		return nil
 	}
 	_, isXMLElement := val.(*xml.Element)
@@ -87,7 +89,7 @@ func Save(val any, b *saver.Buffer, tag string) error {
 	if !isXMLElement {
 		b.OpenTag(tag, attr)
 	}
-	//log.Printf("Kind: %v & %T", valKind, val)
+	//printer.Debugf("Kind: %v & %T", valKind, val)
 	switch valKind {
 	case reflect.Array:
 		j := v.Len()
@@ -190,12 +192,12 @@ func Save(val any, b *saver.Buffer, tag string) error {
 				continue
 			}
 			//if !implValidator {
-			//	log.Printf("Validator implemented for %T (field %v): invalid field", v.Interface(), f.Name)
+			//	printer.Debugf("Validator implemented for %T (field %v): invalid field", v.Interface(), f.Name)
 			//} else {
-			//	log.Printf("Validator implemented for %T (field %v): > %v", v.Interface(), f.Name, validator.IsValidField(f.Name))
+			//	printer.Debugf("Validator implemented for %T (field %v): > %v", v.Interface(), f.Name, validator.IsValidField(f.Name))
 			//}
 			if implValidator && !validator.IsValidField(f.Name) {
-				//log.Printf("Ignoring field %v", f.Name)
+				//printer.Debugf("Ignoring field %v", f.Name)
 				continue
 			}
 			// The field might be a custom type that implements saver.Transformer.

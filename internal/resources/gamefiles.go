@@ -39,9 +39,9 @@ func NewGameData() *GameData {
 }
 
 func (g *GameData) PrintThemes() {
-	printer.Print("Game fileData themes:")
+	printer.Debugf("Game fileData themes:")
 	for theme, elements := range g.fileData {
-		printer.Printf("  %s: %d elements", theme, elements.cap)
+		printer.Debugf("  %s: %d elements", theme, elements.cap)
 	}
 }
 
@@ -50,7 +50,7 @@ func (g *GameData) DiscoverGameData(opeSystem string) error {
 	if err != nil {
 		return err
 	}
-	log.Println(gp)
+	printer.Debugf(gp)
 	err = filepath.Walk(gp, func(path string, info fs.FileInfo, err error) error {
 		if err != nil {
 			return fmt.Errorf("error walking %s: %w", path, err)
@@ -72,7 +72,7 @@ func (g *GameData) DiscoverGameData(opeSystem string) error {
 		// There is a case where we have "StoryTeller" and "Storyteller" for the same type of data
 		// So we set the directory name to lower before using ToCamel
 		dir := strcase.ToCamel(strings.ToLower(filepath.Base(filepath.Dir(path))))
-		//log.Printf("Full dir of %s: %s", dir, filepath.Dir(path))
+		//printer.Debugf("Full dir of %s: %s", dir, filepath.Dir(path))
 		if g.fileData[dir] == nil {
 			g.fileData[dir] = &GroupedThematic{elements: make(map[string]*xml.Element)}
 		}
@@ -114,7 +114,7 @@ func (g *GameData) generateRegisteredTypeFile() error {
 	header.WriteString("import (\n")
 	body.WriteString("var GlobalGameData = map[string]multiple {\n")
 	for p := range g.fileData {
-		//log.Printf("-> %v", p)
+		//printer.Debugf("-> %v", p)
 		header.WriteString("\t\"" + githubPath + p + "\"\n")
 		body.WriteString("\t\"" + p + "\": &" + strcase.ToSnake(p) + ".GeneratedStructStarter0{},\n")
 	}
@@ -125,7 +125,7 @@ func (g *GameData) generateRegisteredTypeFile() error {
 	fullFileContent.WriteString(body.String())
 	buffer, err = format.Source([]byte(fullFileContent.String()))
 	if err != nil {
-		log.Printf("Err: Format buffer:\n%s", fullFileContent.String())
+		printer.Debugf("Err: Format buffer:\n%s", fullFileContent.String())
 		return err
 	}
 	if _, err = f.Write(buffer); err != nil {
@@ -136,9 +136,9 @@ func (g *GameData) generateRegisteredTypeFile() error {
 
 func (g *GameData) displayMV(mv generator.MemberVersioning) {
 	for k, v := range mv {
-		log.Printf("Struct has %v -> %d", k, len(v))
+		printer.Debugf("Struct has %v -> %d", k, len(v))
 	}
-	log.Printf("Same type? %v", generator.IsSameType(mv["GeneratedStructStarter0"][0].Order[0], mv["GeneratedStructStarter0"][1].Order[0], 0))
+	printer.Debugf("Same type? %v", generator.IsSameType(mv["GeneratedStructStarter0"][0].Order[0], mv["GeneratedStructStarter0"][1].Order[0], 0))
 	for _, i := range mv["GeneratedStructStarter0"] {
 		i.PrintOrderedMembers()
 	}
@@ -219,15 +219,15 @@ func (g *GameData) GenerateGoFiles() error {
 	//os.Exit(0)
 
 	for p := range g.fileData {
-		printer.Printf("[%s] Processing {{{-BOLD,F_RED}}}%d{{{-RESET}}} thematics...", p, len(g.fileData[p].elements))
+		printer.Debugf("[%s] Processing {{{-BOLD,F_RED}}}%d{{{-RESET}}} thematics...", p, len(g.fileData[p].elements))
 		for _, element := range g.fileData[p].elements {
 			root := generator.GenerateGoFiles(element, false)
-			//log.Printf("Path: %v", p)
+			//printer.Debugf("Path: %v", p)
 			g.fileData[p].mergeMemberVersioning(generator.RegisteredMembers)
 			g.fileData[p].structInfos = append(g.fileData[p].structInfos, root)
 		}
 		//g.displayMV(g.fileData[p].mv)
-		//log.Printf("Gonna fix this")
+		//printer.Debugf("Gonna fix this")
 		generator.FixRegisteredMembers(g.fileData[p].mv)
 		for _, r := range g.fileData[p].structInfos {
 			gw := files.NewGoWriter(g.fileData[p].mv, false, strcase.ToSnake(p))
@@ -248,9 +248,9 @@ func DirectSafeCast[T any](s any) T {
 }
 
 func (g *GameData) ReadGameFiles() error {
-	printer.Printf("Reading game files from generated structure ({{{-BOLD,F_RED}}}%d{{{-RESET}}} thematics)...", len(g.fileData))
+	printer.Debugf("Reading game files from generated structure ({{{-BOLD,F_RED}}}%d{{{-RESET}}} thematics)...", len(g.fileData))
 	//for p, gt := range g.fileData {
-	//	printer.Printf("Thematic {{{F_RED}}}%s", p)
+	//	printer.Debugf("Thematic {{{F_RED}}}%s", p)
 	//	if s, ok := generated_resources.GlobalGameData[p]; !ok {
 	//		printer.PrintErrorSf("Path not registered: %v", p)
 	//		return nil

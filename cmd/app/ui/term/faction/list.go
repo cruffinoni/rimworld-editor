@@ -18,7 +18,7 @@ func NewList(sg *generated.Savegame, r Registerer) *List {
 
 func (l *List) ListAllFactions() {
 	allFac := map[string]*generated.AllFactions{}
-	printer.Print("Summary of all factions...")
+	printer.Debugf("Summary of all factions...")
 	ite := iterator.NewSliceIterator[*generated.AllFactions](l.sg.Game.World.FactionManager.AllFactions)
 	for i := ite; i.HasNext(); i = i.Next() {
 		v := i.Value()
@@ -26,7 +26,7 @@ func (l *List) ListAllFactions() {
 	}
 	for _, f := range allFac {
 		PrintFactionInformation(l.r, f, true)
-		printer.Print("")
+		printer.Debugf("")
 	}
 	return
 }

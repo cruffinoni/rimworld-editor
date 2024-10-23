@@ -84,14 +84,14 @@ var (
 )
 
 func (c *Command) PrintUsage() {
-	printer.Printf("%s's usage: %s", c.Name, c.Usage)
-	//printer.Printf("%s [%q]", c.Name, strings.Join(c.getChildCommandNames(), "|"))
+	printer.Debugf("%s's usage: %s", c.Name, c.Usage)
+	//printer.Debugf("%s [%q]", c.Name, strings.Join(c.getChildCommandNames(), "|"))
 }
 
 func (c *Command) PrintHelp() {
-	log.Printf("%+v & %d", c.childCmds, len(c.childCmds))
-	printer.Printf("%s's help: %s", c.Name, c.Description)
-	printer.Printf("%s [%q]", c.Name, strings.Join(c.getChildCommandNames(), "|"))
+	printer.Debugf("%+v & %d", c.childCmds, len(c.childCmds))
+	printer.Debugf("%s's help: %s", c.Name, c.Description)
+	printer.Debugf("%s [%q]", c.Name, strings.Join(c.getChildCommandNames(), "|"))
 }
 
 func (c *Command) findParam(name string) *Params {
@@ -151,7 +151,7 @@ func (c *Command) callHandler(args []string) error {
 	//copy(cpyArgs, args)
 	//if in > 0 {
 	//	if len(args) != in {
-	//		log.Printf("Size difference: %v & %v", len(args), in)
+	//		printer.Debugf("Size difference: %v & %v", len(args), in)
 	//	}
 	//	for i := 0; i < in; i++ {
 	//		arg := h.In(i)
@@ -176,7 +176,7 @@ func (c *Command) RunWithArgs(args []string) error {
 		names := n.getCommandNames(true)
 		for _, name := range names {
 			if name == args[0] {
-				printer.Printf("(cmd) Command '%s' found", name)
+				printer.Debugf("(cmd) Command '%s' found", name)
 				if len(n.childCmds) > 0 {
 					if len(args) == 1 {
 						n.PrintUsage()

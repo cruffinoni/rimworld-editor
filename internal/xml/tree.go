@@ -76,7 +76,7 @@ func (t *Tree) UnmarshalXML(decoder *_xml.Decoder, s _xml.StartElement) error {
 					depth = ctx.depth
 				}
 			} else if ctx.depth < depth {
-				//log.Printf("Depth decreased: %v", depth)
+				//printer.Debugf("Depth decreased: %v", depth)
 				// The depth is smaller than the last one, so we go back to the parent
 				if lastNode.Parent != nil {
 					// We don't detect the end of a XML element, so we have to
@@ -111,7 +111,7 @@ func (t *Tree) UnmarshalXML(decoder *_xml.Decoder, s _xml.StartElement) error {
 			} else {
 				// The depth is the same as the last one, so we create a new node
 				// which is basically a sibling of the current node
-				//log.Printf("Depth is the same: %v", depth)
+				//printer.Debugf("Depth is the same: %v", depth)
 				idx := InvalidIdx
 				if v, ok := ctx.index[ctx.depth]; ok {
 					idx = v
@@ -136,7 +136,7 @@ func (t *Tree) UnmarshalXML(decoder *_xml.Decoder, s _xml.StartElement) error {
 			s := string(bytes.TrimSpace(b))
 			if s != "" {
 				lastNode.Data = CreateDataType(s)
-				//log.Printf("Data: '%v' from %s", s, lastNode.XMLPath())
+				//printer.Debugf("Data: '%v' from %s", s, lastNode.XMLPath())
 			}
 		})
 }

@@ -6,6 +6,8 @@ import (
 	"strconv"
 	"time"
 
+	"github.com/cruffinoni/printer"
+
 	"github.com/cruffinoni/rimworld-editor/generated"
 	"github.com/cruffinoni/rimworld-editor/internal/file"
 	"github.com/cruffinoni/rimworld-editor/internal/xml/saver/xmlFile"
@@ -23,11 +25,11 @@ func main() {
 	flag.StringVar(&fileName, "fileName", "CUSTOM_FILE", "File name for the generated XML")
 	flag.Parse()
 	if path == "" {
-		log.Println("no path specified")
+		printer.Debugf("no path specified")
 		flag.Usage()
 		return
 	}
-	log.Printf("Opening and decoding XML file from %s", path)
+	printer.Debugf("Opening and decoding XML file from %s", path)
 	fo, err = file.Open(path)
 	if err != nil {
 		log.Fatal(err)
@@ -37,12 +39,12 @@ func main() {
 		fileName = "C_" + strconv.FormatInt(time.Now().Unix(), 10)
 	}
 	save := &generated.GeneratedStructStarter0{}
-	log.Println("Unmarshalling XML...")
+	printer.Debugf("Unmarshalling XML...")
 	if err = unmarshal.Element(fo.XML.Root, save); err != nil {
 		log.Fatal(err)
 	}
 	save.ValidateField("Savegame")
-	log.Print("Generating XML file to folder")
+	printer.Debugf("Generating XML file to folder")
 	buffer, err := xmlFile.SaveWithBuffer(save.Savegame)
 	if err != nil {
 		log.Panic(err)

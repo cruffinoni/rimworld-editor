@@ -98,7 +98,7 @@ func createStructure(e *xml.Element, flag uint) any {
 		// This case comes when the tag is an innerList of a list which can happen multiple times
 		// in the file, so we need to set it a random name
 
-		//log.Printf("generate.createStructure: '%s' & child name: %v & e %v & %v", name, e.Child.GetName(), lowerName, e.Parent.GetName())
+		//printer.Debugf("generate.createStructure: '%s' & child name: %v & e %v & %v", name, e.Child.GetName(), lowerName, e.Parent.GetName())
 		return createStructure(e.Parent, flag|forceRandomName)
 	}
 
@@ -114,7 +114,7 @@ func createStructure(e *xml.Element, flag uint) any {
 	}
 	// vals is a special case where it serves as a transversal tag
 	if (name == "vals" || name == "values" || strings.Contains(lowerName, "inner")) && e.Parent != nil {
-		//log.Printf("Special case for: %v = %v", name, e.Parent.GetName()+"_"+name)
+		//printer.Debugf("Special case for: %v = %v", name, e.Parent.GetName()+"_"+name)
 		depth := 0
 		parent := e.Parent
 		for parent != nil && depth < maxTransversalDepth {
@@ -174,7 +174,7 @@ func (s *StructInfo) addMember(name string, attr attributes.Attributes, t any) {
 	} else {
 		// Check if the existing Member and the new Member are of the same type
 		if !IsSameType(t, s.Members[name].T, 0) {
-			// log.Printf("Type mismatch: %v > %v | %v", name, s.Members[name].T, t)
+			// printer.Debugf("Type mismatch: %v > %v | %v", name, s.Members[name].T, t)
 			// If the types are different, fix the type mismatch
 			err := fixTypeMismatch(s.Members[name], &Member{
 				Name: name,
