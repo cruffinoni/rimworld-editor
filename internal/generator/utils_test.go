@@ -5,7 +5,7 @@ import (
 
 	"github.com/stretchr/testify/require"
 
-	"github.com/cruffinoni/rimworld-editor/file"
+	"github.com/cruffinoni/rimworld-editor/internal/file"
 	"github.com/cruffinoni/rimworld-editor/internal/xml"
 	"github.com/cruffinoni/rimworld-editor/internal/xml/attributes"
 )

@@ -6,7 +6,7 @@ import (
 	"reflect"
 	"strings"
 
-	"github.com/cruffinoni/rimworld-editor/helper"
+	"github.com/cruffinoni/rimworld-editor/internal/helper"
 
 	"github.com/cruffinoni/rimworld-editor/internal/xml/interface"
 	"github.com/cruffinoni/rimworld-editor/internal/xml/saver/xmlFile"

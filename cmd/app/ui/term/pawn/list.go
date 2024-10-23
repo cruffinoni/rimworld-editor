@@ -23,7 +23,7 @@ func NewList(sg *generated.Savegame, rp PawnsRegisterer, rf faction.Registerer) 
 
 func (l *List) ListAllPawns() {
 	for k, v := range l.rp {
-		printer.Printf("Pawn {-BOLD}%s{-RESET} registered", k)
+		printer.Printf("Pawn {{{-BOLD}}}%s{{{-RESET}}} registered", k)
 		if v.Name == nil {
 			printer.Printf("name is nil: %v", v.Name)
 			continue

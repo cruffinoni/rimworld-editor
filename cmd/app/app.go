@@ -13,12 +13,12 @@ import (
 
 	"github.com/cruffinoni/printer"
 
+	"github.com/cruffinoni/rimworld-editor/internal/file"
 	"github.com/cruffinoni/rimworld-editor/internal/resources"
 	"github.com/cruffinoni/rimworld-editor/internal/resources/discover"
 
 	"github.com/cruffinoni/rimworld-editor/cmd/app/ui"
 	"github.com/cruffinoni/rimworld-editor/cmd/app/ui/term"
-	"github.com/cruffinoni/rimworld-editor/file"
 	"github.com/cruffinoni/rimworld-editor/generated"
 	"github.com/cruffinoni/rimworld-editor/internal/generator"
 	"github.com/cruffinoni/rimworld-editor/internal/generator/files"

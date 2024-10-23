@@ -6,10 +6,9 @@ import (
 	"reflect"
 	"strings"
 
-	"github.com/cruffinoni/rimworld-editor/algorithm"
-
 	"github.com/cruffinoni/rimworld-editor/internal/generator"
 	"github.com/cruffinoni/rimworld-editor/internal/generator/paths"
+	"github.com/cruffinoni/rimworld-editor/internal/xml/algorithm"
 	"github.com/cruffinoni/rimworld-editor/internal/xml/interface"
 )
 

@@ -7,7 +7,7 @@ import (
 
 	"github.com/briandowns/spinner"
 
-	"github.com/cruffinoni/rimworld-editor/file"
+	"github.com/cruffinoni/rimworld-editor/internal/file"
 	"github.com/cruffinoni/rimworld-editor/internal/generator"
 	"github.com/cruffinoni/rimworld-editor/internal/generator/files"
 )

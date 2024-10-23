@@ -1,7 +1,7 @@
 package generator
 
 import (
-	"github.com/cruffinoni/rimworld-editor/helper"
+	"github.com/cruffinoni/rimworld-editor/internal/helper"
 
 	"github.com/cruffinoni/rimworld-editor/internal/generator/paths"
 

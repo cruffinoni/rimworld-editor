@@ -25,6 +25,6 @@ func (c *Console) growAllPlants(percent float64) {
 		t.Growth = growth
 		count++
 	}
-	printer.Printf("{-BOLD,GREEN}%d plants{-RESET} edited to %.2f%% growth percentage", count, growth*100.0)
+	printer.Printf("{{{-BOLD,GREEN}}}%d plants{{{-RESET}}} edited to %.2f%% growth percentage", count, growth*100.0)
 	return
 }

@@ -8,7 +8,7 @@ import (
 	"sort"
 	"unicode"
 
-	"github.com/cruffinoni/rimworld-editor/helper"
+	"github.com/cruffinoni/rimworld-editor/internal/helper"
 
 	"github.com/cruffinoni/rimworld-editor/internal/xml"
 	"github.com/cruffinoni/rimworld-editor/internal/xml/attributes"

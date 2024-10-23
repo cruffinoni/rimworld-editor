@@ -13,8 +13,8 @@ func getPawnFullNameColorFormatted(p *generated.Thing) string {
 	}
 	log.Printf("=> %+v", p.Name)
 	if p.Name.Nick != "" {
-		return fmt.Sprintf("{-F_GREEN}%s {-F_MAGENTA}%s {-F_CYAN}%s{-RESET}", p.Name.First, p.Name.Nick, p.Name.Last)
+		return fmt.Sprintf("{{{-F_GREEN}}}%s {{{-F_MAGENTA}}}%s {{{-F_CYAN}}}%s{{{-RESET}}}", p.Name.First, p.Name.Nick, p.Name.Last)
 	} else {
-		return fmt.Sprintf("{-F_GREEN}%s {-F_CYAN}%s{-RESET}", p.Name.First, p.Name.Last)
+		return fmt.Sprintf("{{{-F_GREEN}}}%s {{{-F_CYAN}}}%s{{{-RESET}}}", p.Name.First, p.Name.Last)
 	}
 }

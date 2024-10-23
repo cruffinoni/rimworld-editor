@@ -13,7 +13,7 @@ import (
 	"github.com/cruffinoni/printer"
 	"github.com/iancoleman/strcase"
 
-	"github.com/cruffinoni/rimworld-editor/file"
+	"github.com/cruffinoni/rimworld-editor/internal/file"
 	"github.com/cruffinoni/rimworld-editor/internal/generator"
 	"github.com/cruffinoni/rimworld-editor/internal/generator/files"
 	"github.com/cruffinoni/rimworld-editor/internal/resources/discover"
@@ -219,7 +219,7 @@ func (g *GameData) GenerateGoFiles() error {
 	//os.Exit(0)
 
 	for p := range g.fileData {
-		printer.Printf("[%s] Processing {-BOLD,F_RED}%d{-RESET} thematics...", p, len(g.fileData[p].elements))
+		printer.Printf("[%s] Processing {{{-BOLD,F_RED}}}%d{{{-RESET}}} thematics...", p, len(g.fileData[p].elements))
 		for _, element := range g.fileData[p].elements {
 			root := generator.GenerateGoFiles(element, false)
 			//log.Printf("Path: %v", p)
@@ -248,9 +248,9 @@ func DirectSafeCast[T any](s any) T {
 }
 
 func (g *GameData) ReadGameFiles() error {
-	printer.Printf("Reading game files from generated structure ({-BOLD,F_RED}%d{-RESET} thematics)...", len(g.fileData))
+	printer.Printf("Reading game files from generated structure ({{{-BOLD,F_RED}}}%d{{{-RESET}}} thematics)...", len(g.fileData))
 	//for p, gt := range g.fileData {
-	//	printer.Printf("Thematic {F_RED}%s", p)
+	//	printer.Printf("Thematic {{{F_RED}}}%s", p)
 	//	if s, ok := generated_resources.GlobalGameData[p]; !ok {
 	//		printer.PrintErrorSf("Path not registered: %v", p)
 	//		return nil

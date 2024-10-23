@@ -48,7 +48,7 @@ func GenerateGoFiles(root *xml.Element, withMVFix bool) *StructInfo {
 	if withMVFix {
 		printer.Print("Cleaning up the MemberVersioning pointers")
 		cleanUpMVPtrs(RegisteredMembers)
-		printer.Printf("{-BOLD}%d{-RESET} members registered. Fixing type mismatch.", len(RegisteredMembers))
+		printer.Printf("{{{-BOLD}}}%d{{{-RESET}}} members registered. Fixing type mismatch.", len(RegisteredMembers))
 		FixRegisteredMembers(RegisteredMembers)
 	}
 	return s
@@ -58,7 +58,7 @@ func FixRegisteredMembers(mv MemberVersioning) {
 	for i := range mv {
 		l := len(mv[i])
 		if l >= 1 {
-			printer.Printf("Fixing %s ({-BOLD,F_RED}%d{-RESET} fix to do)...", i, l)
+			printer.Printf("Fixing %s ({{{-BOLD,F_RED}}}%d{{{-RESET}}} fix to do)...", i, l)
 			for j := 1; j < l; j++ {
 				//log.Printf("Name: %v (0) & %v (%d)", mv[i][0].Name, mv[i][j].Name, j)
 				if mv[i][0] == mv[i][j] {

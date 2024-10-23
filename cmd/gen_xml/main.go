@@ -6,8 +6,8 @@ import (
 	"strconv"
 	"time"
 
-	"github.com/cruffinoni/rimworld-editor/file"
 	"github.com/cruffinoni/rimworld-editor/generated"
+	"github.com/cruffinoni/rimworld-editor/internal/file"
 	"github.com/cruffinoni/rimworld-editor/internal/xml/saver/xmlFile"
 	"github.com/cruffinoni/rimworld-editor/internal/xml/unmarshal"
 )
