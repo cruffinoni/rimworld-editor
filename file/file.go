@@ -7,7 +7,7 @@ import (
 
 	"golang.org/x/net/html/charset"
 
-	"github.com/cruffinoni/rimworld-editor/xml"
+	"github.com/cruffinoni/rimworld-editor/internal/xml"
 )
 
 type Opening struct {

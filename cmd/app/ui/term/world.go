@@ -1,9 +1,10 @@
 package term
 
 import (
-	"github.com/cruffinoni/rimworld-editor/cmd/app/ui/term/printer"
+	"github.com/cruffinoni/printer"
+
 	"github.com/cruffinoni/rimworld-editor/generated"
-	"github.com/cruffinoni/rimworld-editor/xml/types/iterator"
+	"github.com/cruffinoni/rimworld-editor/internal/xml/types/iterator"
 )
 
 func (c *Console) growAllPlants(percent float64) {

@@ -8,10 +8,11 @@ import (
 
 	cli "github.com/jawher/mow.cli"
 
+	"github.com/cruffinoni/printer"
+
 	"github.com/cruffinoni/rimworld-editor/cmd/app/ui"
 	"github.com/cruffinoni/rimworld-editor/cmd/app/ui/term/faction"
 	"github.com/cruffinoni/rimworld-editor/cmd/app/ui/term/pawn"
-	"github.com/cruffinoni/rimworld-editor/cmd/app/ui/term/printer"
 	"github.com/cruffinoni/rimworld-editor/generated"
 
 	"github.com/c-bata/go-prompt"

@@ -1,8 +1,9 @@
 package pawn
 
 import (
+	"github.com/cruffinoni/printer"
+
 	"github.com/cruffinoni/rimworld-editor/cmd/app/ui/term/faction"
-	"github.com/cruffinoni/rimworld-editor/cmd/app/ui/term/printer"
 	"github.com/cruffinoni/rimworld-editor/generated"
 )
 

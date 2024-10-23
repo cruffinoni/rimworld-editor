@@ -5,7 +5,7 @@ import (
 
 	"github.com/cruffinoni/rimworld-editor/cmd/app/ui/term/faction"
 	"github.com/cruffinoni/rimworld-editor/generated"
-	"github.com/cruffinoni/rimworld-editor/xml/types/iterator"
+	"github.com/cruffinoni/rimworld-editor/internal/xml/types/iterator"
 )
 
 type PawnsRegisterer map[string]*generated.Thing

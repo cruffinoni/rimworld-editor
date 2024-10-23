@@ -3,9 +3,10 @@ package faction
 import (
 	"strconv"
 
-	"github.com/cruffinoni/rimworld-editor/cmd/app/ui/term/printer"
+	"github.com/cruffinoni/printer"
+
 	"github.com/cruffinoni/rimworld-editor/generated"
-	"github.com/cruffinoni/rimworld-editor/xml/types/iterator"
+	"github.com/cruffinoni/rimworld-editor/internal/xml/types/iterator"
 )
 
 type Registerer map[string]*generated.AllFactions

@@ -8,8 +8,8 @@ import (
 	"github.com/briandowns/spinner"
 
 	"github.com/cruffinoni/rimworld-editor/file"
-	"github.com/cruffinoni/rimworld-editor/generator"
-	"github.com/cruffinoni/rimworld-editor/generator/files"
+	"github.com/cruffinoni/rimworld-editor/internal/generator"
+	"github.com/cruffinoni/rimworld-editor/internal/generator/files"
 )
 
 func main() {

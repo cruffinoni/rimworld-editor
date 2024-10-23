@@ -8,8 +8,8 @@ import (
 
 	"github.com/cruffinoni/rimworld-editor/file"
 	"github.com/cruffinoni/rimworld-editor/generated"
-	"github.com/cruffinoni/rimworld-editor/xml/saver/xmlFile"
-	"github.com/cruffinoni/rimworld-editor/xml/unmarshal"
+	"github.com/cruffinoni/rimworld-editor/internal/xml/saver/xmlFile"
+	"github.com/cruffinoni/rimworld-editor/internal/xml/unmarshal"
 )
 
 func main() {
@@ -36,14 +36,14 @@ func main() {
 	if fileName == "CUSTOM_FILE" {
 		fileName = "C_" + strconv.FormatInt(time.Now().Unix(), 10)
 	}
-	save := &generated.Savegame{}
+	save := &generated.GeneratedStructStarter0{}
 	log.Println("Unmarshalling XML...")
-	if err = unmarshal.Element(fo.XML.Root.Child, save); err != nil {
+	if err = unmarshal.Element(fo.XML.Root, save); err != nil {
 		log.Fatal(err)
 	}
 	save.ValidateField("Savegame")
 	log.Print("Generating XML file to folder")
-	buffer, err := xmlFile.SaveWithBuffer(save)
+	buffer, err := xmlFile.SaveWithBuffer(save.Savegame)
 	if err != nil {
 		log.Panic(err)
 	}

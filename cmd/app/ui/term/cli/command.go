@@ -7,7 +7,7 @@ import (
 	"strconv"
 	"strings"
 
-	"github.com/cruffinoni/rimworld-editor/cmd/app/ui/term/printer"
+	"github.com/cruffinoni/printer"
 )
 
 type Command struct {

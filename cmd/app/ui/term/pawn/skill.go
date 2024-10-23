@@ -1,11 +1,13 @@
 package pawn
 
 import (
-	"github.com/cruffinoni/rimworld-editor/algorithm"
 	"github.com/iancoleman/strcase"
 
+	"github.com/cruffinoni/rimworld-editor/algorithm"
+
+	"github.com/cruffinoni/printer"
+
 	"github.com/cruffinoni/rimworld-editor/cmd/app/ui/term/faction"
-	"github.com/cruffinoni/rimworld-editor/cmd/app/ui/term/printer"
 	"github.com/cruffinoni/rimworld-editor/generated"
 )
 
@@ -120,7 +122,7 @@ func (s *Skills) ForceGraduate(pawnID string) {
 
 func (s *Skills) printPawnSkill(fullName string, p *generated.Thing) {
 	printer.Printf("Pawn {-BOLD}%s's{-RESET} (%s) skills", fullName, getPawnFullNameColorFormatted(p))
-	algorithm.SliceForeach[*generated.SkillsSkillsLiPawnsAliveWorldPawnsWorldGameSavegameInner](p.Skills.Skills, func(skill *generated.SkillsSkillsLiPawnsAliveWorldPawnsWorldGameSavegameInner) {
+	algorithm.SliceForeach[*generated.SkillsSkillsLiPawnsMothballedWorldPawnsWorldGameSavegameInner](p.Skills.Skills, func(skill *generated.SkillsSkillsLiPawnsMothballedWorldPawnsWorldGameSavegameInner) {
 		var color string
 		if skill.Level <= 5 {
 			color = "F_RED"

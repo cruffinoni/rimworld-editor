@@ -11,17 +11,19 @@ import (
 	"github.com/jawher/mow.cli"
 	"github.com/tcnksm/go-input"
 
+	"github.com/cruffinoni/printer"
+
+	"github.com/cruffinoni/rimworld-editor/internal/resources"
+	"github.com/cruffinoni/rimworld-editor/internal/resources/discover"
+
 	"github.com/cruffinoni/rimworld-editor/cmd/app/ui"
 	"github.com/cruffinoni/rimworld-editor/cmd/app/ui/term"
-	"github.com/cruffinoni/rimworld-editor/cmd/app/ui/term/printer"
 	"github.com/cruffinoni/rimworld-editor/file"
 	"github.com/cruffinoni/rimworld-editor/generated"
-	"github.com/cruffinoni/rimworld-editor/generator"
-	"github.com/cruffinoni/rimworld-editor/generator/files"
-	"github.com/cruffinoni/rimworld-editor/resources"
-	"github.com/cruffinoni/rimworld-editor/resources/discover"
-	"github.com/cruffinoni/rimworld-editor/xml/saver/xmlFile"
-	"github.com/cruffinoni/rimworld-editor/xml/unmarshal"
+	"github.com/cruffinoni/rimworld-editor/internal/generator"
+	"github.com/cruffinoni/rimworld-editor/internal/generator/files"
+	"github.com/cruffinoni/rimworld-editor/internal/xml/saver/xmlFile"
+	"github.com/cruffinoni/rimworld-editor/internal/xml/unmarshal"
 )
 
 const (
@@ -67,17 +69,17 @@ func CreateApplication() *Application {
 			panic("not implemented")
 			// app.ui = app.guiMode
 		}
-		save := &generated.Savegame{}
+		structInit := &generated.GeneratedStructStarter0{}
 		log.Println("Unmarshalling XML...")
 		s.FinalMSG = "XML file unmarshalled successfully\n"
 		s.Start()
-		if err := unmarshal.Element(app.fileOpening.XML.Root.Child, save); err != nil {
+		if err := unmarshal.Element(app.fileOpening.XML.Root, structInit); err != nil {
 			log.Fatal(err)
 		}
 		s.Stop()
-		save.ValidateField("Savegame")
+		structInit.ValidateField("Savegame")
 		log.Println("Initializing UI...")
-		app.ui.Init(&app.Options, save)
+		app.ui.Init(&app.Options, structInit.Savegame)
 		log.Println("Running UI...")
 		if err := app.ui.Execute(os.Args); err != nil {
 			printer.PrintError(err)
@@ -85,7 +87,7 @@ func CreateApplication() *Application {
 		}
 		if app.Save {
 			printer.Print("End of execution, generating new file...")
-			if err := app.SaveGameFile(save); err != nil {
+			if err := app.SaveGameFile(structInit.Savegame); err != nil {
 				printer.PrintError(err)
 			}
 		}
@@ -129,10 +131,10 @@ func (app *Application) beforeExecution() {
 	if err := gameData.GenerateGoFiles(); err != nil {
 		log.Fatal(err)
 	}
-	if err := gameData.ReadGameFiles(); err != nil {
-		log.Fatal(err)
-	}
-	os.Exit(0)
+	//if err := gameData.ReadGameFiles(); err != nil {
+	//	log.Fatal(err)
+	//}
+	//os.Exit(0)
 	if err = app.ReadSaveGame(); err != nil {
 		log.Fatal(err)
 	}
