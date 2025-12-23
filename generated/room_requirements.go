@@ -12,13 +12,13 @@ type RoomRequirements struct {
 	Attr           attributes.Attributes
 	FieldValidated map[string]bool
 
-	LabelKey       string               `xml:"labelKey"`
-	Tags           *types.Slice[string] `xml:"tags"`
-	Impressiveness int64                `xml:"impressiveness"`
-	BuildingTags   *types.Slice[string] `xml:"buildingTags"`
 	ThingDef       string               `xml:"thingDef"`
 	Count          int64                `xml:"count"`
 	Area           int64                `xml:"area"`
+	LabelKey       string               `xml:"labelKey"`
+	BuildingTags   *types.Slice[string] `xml:"buildingTags"`
+	Impressiveness int64                `xml:"impressiveness"`
+	Tags           *types.Slice[string] `xml:"tags"`
 }
 
 func (r *RoomRequirements) Assign(*xml.Element) error {

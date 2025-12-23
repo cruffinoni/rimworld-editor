@@ -15,18 +15,18 @@ type ShipJob struct {
 	Def                    string         `xml:"def"`
 	LoadId                 int64          `xml:"loadID"`
 	TransportShip          string         `xml:"transportShip"`
-	SendAwayIfAllDespawned *primary.Empty `xml:"sendAwayIfAllDespawned"`
-	SendAwayIfAnyDespawned *primary.Empty `xml:"sendAwayIfAnyDespawned"`
-	StartTick              int64          `xml:"startTick"`
-	Duration               int64          `xml:"duration"`
+	DestinationTile        int64          `xml:"destinationTile"`
+	DropMode               string         `xml:"dropMode"`
+	ArrivalAction          *primary.Empty `xml:"arrivalAction"`
+	MapParent              string         `xml:"mapParent"`
 	MapOfPawn              string         `xml:"mapOfPawn"`
 	FactionForArrival      string         `xml:"factionForArrival"`
 	DroppedThings          *primary.Empty `xml:"droppedThings"`
-	ArrivalAction          *primary.Empty `xml:"arrivalAction"`
 	Cell                   string         `xml:"cell"`
-	DropMode               string         `xml:"dropMode"`
-	DestinationTile        int64          `xml:"destinationTile"`
-	MapParent              string         `xml:"mapParent"`
+	StartTick              int64          `xml:"startTick"`
+	Duration               int64          `xml:"duration"`
+	SendAwayIfAllDespawned *primary.Empty `xml:"sendAwayIfAllDespawned"`
+	SendAwayIfAnyDespawned *primary.Empty `xml:"sendAwayIfAnyDespawned"`
 }
 
 func (s *ShipJob) Assign(*xml.Element) error {

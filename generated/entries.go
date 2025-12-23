@@ -14,36 +14,36 @@ type Entries struct {
 
 	TicksAbs                int64                       `xml:"ticksAbs"`
 	LogId                   int64                       `xml:"logID"`
-	TransitionDef           string                      `xml:"transitionDef"`
-	SubjectPawn             string                      `xml:"subjectPawn"`
-	Initiator               string                      `xml:"initiator"`
-	CulpritHediffDef        string                      `xml:"culpritHediffDef"`
-	CulpritHediffTargetPart *CulpritHediffTargetPart    `xml:"culpritHediffTargetPart"`
 	DamagedParts            *types.Slice[*DamagedParts] `xml:"damagedParts"`
 	DamagedPartsDestroyed   *types.Slice[bool]          `xml:"damagedPartsDestroyed"`
 	InitiatorPawn           string                      `xml:"initiatorPawn"`
 	RecipientPawn           string                      `xml:"recipientPawn"`
+	RuleDef                 string                      `xml:"ruleDef"`
 	DamageDef               string                      `xml:"damageDef"`
-	CulpritTargetPart       *CulpritTargetPart          `xml:"culpritTargetPart"`
 	Deflected               bool                        `xml:"deflected"`
-	ToolLabel               string                      `xml:"toolLabel"`
 	OriginalTargetMobile    bool                        `xml:"originalTargetMobile"`
+	ProjectileDef           string                      `xml:"projectileDef"`
+	ImplementType           string                      `xml:"implementType"`
+	Initiator               string                      `xml:"initiator"`
+	CulpritHediffTargetPart *CulpritHediffTargetPart    `xml:"culpritHediffTargetPart"`
+	WeaponDef               string                      `xml:"weaponDef"`
+	AlwaysShowInCompact     bool                        `xml:"alwaysShowInCompact"`
+	Def                     string                      `xml:"def"`
+	TransitionDef           string                      `xml:"transitionDef"`
+	ToolLabel               string                      `xml:"toolLabel"`
+	EventDef                string                      `xml:"eventDef"`
+	CulpritTargetPart       *CulpritTargetPart          `xml:"culpritTargetPart"`
+	SubjectPawn             string                      `xml:"subjectPawn"`
+	CulpritHediffDef        string                      `xml:"culpritHediffDef"`
 	Burst                   bool                        `xml:"burst"`
 	OriginalTargetPawn      string                      `xml:"originalTargetPawn"`
-	EventDef                string                      `xml:"eventDef"`
-	ImplementType           string                      `xml:"implementType"`
-	WeaponDef               string                      `xml:"weaponDef"`
-	Def                     string                      `xml:"def"`
-	ProjectileDef           string                      `xml:"projectileDef"`
-	RuleDef                 string                      `xml:"ruleDef"`
-	AlwaysShowInCompact     bool                        `xml:"alwaysShowInCompact"`
 	CoverDef                string                      `xml:"coverDef"`
 	OwnerDef                string                      `xml:"ownerDef"`
 	RecipientThing          string                      `xml:"recipientThing"`
 	Recipient               string                      `xml:"recipient"`
-	Extras                  *types.Slice[string]        `xml:"extras"`
-	IntDef                  string                      `xml:"intDef"`
 	InitiatorFaction        string                      `xml:"initiatorFaction"`
+	IntDef                  string                      `xml:"intDef"`
+	Extras                  *types.Slice[string]        `xml:"extras"`
 	InitiatorIdeo           string                      `xml:"initiatorIdeo"`
 }
 

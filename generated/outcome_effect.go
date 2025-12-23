@@ -5,15 +5,14 @@ package generated
 import (
 	"github.com/cruffinoni/rimworld-editor/internal/xml"
 	"github.com/cruffinoni/rimworld-editor/internal/xml/attributes"
-	"github.com/cruffinoni/rimworld-editor/internal/xml/types"
 )
 
 type OutcomeEffect struct {
 	Attr           attributes.Attributes
 	FieldValidated map[string]bool
 
-	Def       string                   `xml:"def"`
-	CompDatas *types.Slice[*CompDatas] `xml:"compDatas"`
+	Def       string        `xml:"def"`
+	CompDatas [5]*CompDatas `xml:"compDatas"`
 }
 
 func (o *OutcomeEffect) Assign(*xml.Element) error {

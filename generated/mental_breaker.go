@@ -12,8 +12,8 @@ type MentalBreaker struct {
 	FieldValidated map[string]bool
 
 	TicksBelowMinor            int64 `xml:"ticksBelowMinor"`
-	TicksBelowMajor            int64 `xml:"ticksBelowMajor"`
 	TicksBelowExtreme          int64 `xml:"ticksBelowExtreme"`
+	TicksBelowMajor            int64 `xml:"ticksBelowMajor"`
 	TicksUntilCanDoMentalBreak int64 `xml:"ticksUntilCanDoMentalBreak"`
 }
 

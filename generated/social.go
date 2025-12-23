@@ -17,9 +17,9 @@ type Social struct {
 	RelativeInvolvedInRescueQuest string                            `xml:"relativeInvolvedInRescueQuest"`
 	PregnancyApproaches           types.Map[string, *primary.Empty] `xml:"pregnancyApproaches"`
 	RomanceEnableTick             int64                             `xml:"romanceEnableTick"`
-	EverSeenByPlayer              bool                              `xml:"everSeenByPlayer"`
 	CanGetRescuedThought          bool                              `xml:"canGetRescuedThought"`
 	NextMarriageNameChange        string                            `xml:"nextMarriageNameChange"`
+	EverSeenByPlayer              bool                              `xml:"everSeenByPlayer"`
 }
 
 func (s *Social) Assign(*xml.Element) error {

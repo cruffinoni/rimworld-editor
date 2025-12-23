@@ -14,14 +14,14 @@ type Drugs struct {
 
 	CurAssignedDrugs    string                         `xml:"curAssignedDrugs"`
 	DrugTakeRecords     *types.Slice[*DrugTakeRecords] `xml:"drugTakeRecords"`
-	TakeToInventory     int64                          `xml:"takeToInventory"`
-	AllowedForAddiction bool                           `xml:"allowedForAddiction"`
 	Drug                string                         `xml:"drug"`
-	OnlyIfMoodBelow     float64                        `xml:"onlyIfMoodBelow"`
-	OnlyIfJoyBelow      float64                        `xml:"onlyIfJoyBelow"`
+	AllowedForAddiction bool                           `xml:"allowedForAddiction"`
 	AllowedForJoy       bool                           `xml:"allowedForJoy"`
+	OnlyIfJoyBelow      float64                        `xml:"onlyIfJoyBelow"`
 	AllowScheduled      bool                           `xml:"allowScheduled"`
 	DaysFrequency       float64                        `xml:"daysFrequency"`
+	TakeToInventory     int64                          `xml:"takeToInventory"`
+	OnlyIfMoodBelow     float64                        `xml:"onlyIfMoodBelow"`
 }
 
 func (d *Drugs) Assign(*xml.Element) error {

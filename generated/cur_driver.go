@@ -15,11 +15,11 @@ type CurDriver struct {
 	TicksLeftThisToil         int64   `xml:"ticksLeftThisToil"`
 	StartTick                 int64   `xml:"startTick"`
 	LocomotionUrgencySameAs   string  `xml:"locomotionUrgencySameAs"`
-	WorkLeft                  float64 `xml:"workLeft"`
 	BillStartTick             int64   `xml:"billStartTick"`
-	TicksSpentDoingRecipeWork int64   `xml:"ticksSpentDoingRecipeWork"`
-	JobStartTick              int64   `xml:"jobStartTick"`
 	Asleep                    bool    `xml:"asleep"`
+	TicksSpentDoingRecipeWork int64   `xml:"ticksSpentDoingRecipeWork"`
+	WorkLeft                  float64 `xml:"workLeft"`
+	JobStartTick              int64   `xml:"jobStartTick"`
 }
 
 func (c *CurDriver) Assign(*xml.Element) error {

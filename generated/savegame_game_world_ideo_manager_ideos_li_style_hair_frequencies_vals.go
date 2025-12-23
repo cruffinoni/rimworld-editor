@@ -11,8 +11,8 @@ type SavegameGameWorldIdeoManagerIdeosLiStyleHairFrequenciesVals struct {
 	Attr           attributes.Attributes
 	FieldValidated map[string]bool
 
-	Gender    string `xml:"gender"`
 	Frequency string `xml:"frequency"`
+	Gender    string `xml:"gender"`
 }
 
 func (s *SavegameGameWorldIdeoManagerIdeosLiStyleHairFrequenciesVals) Assign(*xml.Element) error {

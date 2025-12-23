@@ -13,8 +13,8 @@ type SkillsSkillsLiPawnsMothballedWorldPawnsWorldGameSavegameInner struct {
 
 	Def              string  `xml:"def"`
 	Level            int64   `xml:"level"`
-	Passion          string  `xml:"passion"`
 	XpSinceLastLevel float64 `xml:"xpSinceLastLevel"`
+	Passion          string  `xml:"passion"`
 	XpSinceMidnight  float64 `xml:"xpSinceMidnight"`
 }
 

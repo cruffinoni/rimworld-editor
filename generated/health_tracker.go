@@ -11,12 +11,12 @@ type HealthTracker struct {
 	Attr           attributes.Attributes
 	FieldValidated map[string]bool
 
-	HealthState              string        `xml:"healthState"`
 	BeCarriedByCaravanIfSick bool          `xml:"beCarriedByCaravanIfSick"`
 	HediffSet                *HediffSet    `xml:"hediffSet"`
 	SurgeryBills             *SurgeryBills `xml:"surgeryBills"`
 	Immunity                 *Immunity     `xml:"immunity"`
 	KilledByRitual           bool          `xml:"killedByRitual"`
+	HealthState              string        `xml:"healthState"`
 }
 
 func (h *HealthTracker) Assign(*xml.Element) error {

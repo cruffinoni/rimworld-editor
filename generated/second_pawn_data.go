@@ -16,14 +16,14 @@ type SecondPawnData struct {
 	Kind                         string                     `xml:"kind"`
 	Faction                      string                     `xml:"faction"`
 	Gender                       string                     `xml:"gender"`
+	Age                          int64                      `xml:"age"`
+	ChronologicalAge             int64                      `xml:"chronologicalAge"`
 	RelationInfo                 string                     `xml:"relationInfo"`
 	EverBeenColonistOrTameAnimal bool                       `xml:"everBeenColonistOrTameAnimal"`
 	RoyalTitles                  *types.Slice[*RoyalTitles] `xml:"royalTitles"`
 	Name                         *Name                      `xml:"name"`
-	Age                          int64                      `xml:"age"`
 	Peq                          string                     `xml:"peq"`
 	App                          string                     `xml:"app"`
-	ChronologicalAge             int64                      `xml:"chronologicalAge"`
 	IsFactionLeader              bool                       `xml:"isFactionLeader"`
 }
 

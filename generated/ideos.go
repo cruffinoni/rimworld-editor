@@ -15,27 +15,27 @@ type Ideos struct {
 
 	PrimaryIdeo          string                              `xml:"primaryIdeo"`
 	IdeosMinor           *primary.Empty                      `xml:"ideosMinor"`
-	Name                 string                              `xml:"name"`
-	MemberName           string                              `xml:"memberName"`
-	Description          string                              `xml:"description"`
-	Style                *Style                              `xml:"style"`
-	InitialPlayerIdeo    bool                                `xml:"initialPlayerIdeo"`
-	Foundation           *Foundation                         `xml:"foundation"`
-	Adjective            string                              `xml:"adjective"`
-	LeaderTitleFemale    string                              `xml:"leaderTitleFemale"`
 	PrimaryFactionColor  string                              `xml:"primaryFactionColor"`
-	UsedSymbols          *types.Slice[string]                `xml:"usedSymbols"`
-	Id                   int64                               `xml:"id"`
-	Development          *primary.Empty                      `xml:"development"`
-	LeaderTitleMale      string                              `xml:"leaderTitleMale"`
+	Precepts             *types.Slice[*Precepts]             `xml:"precepts"`
+	Adjective            string                              `xml:"adjective"`
+	MemberName           string                              `xml:"memberName"`
+	LeaderTitleFemale    string                              `xml:"leaderTitleFemale"`
 	DescriptionTemplate  string                              `xml:"descriptionTemplate"`
 	IconDef              string                              `xml:"iconDef"`
+	UsedSymbols          *types.Slice[string]                `xml:"usedSymbols"`
+	Culture              string                              `xml:"culture"`
 	ColorDef             string                              `xml:"colorDef"`
 	Memes                *primary.Empty                      `xml:"memes"`
+	Foundation           *Foundation                         `xml:"foundation"`
+	Name                 string                              `xml:"name"`
+	LeaderTitleMale      string                              `xml:"leaderTitleMale"`
 	ThingStyleCategories *types.Slice[*ThingStyleCategories] `xml:"thingStyleCategories"`
+	Id                   int64                               `xml:"id"`
+	Development          *primary.Empty                      `xml:"development"`
+	Description          string                              `xml:"description"`
 	UsedSymbolPacks      *types.Slice[string]                `xml:"usedSymbolPacks"`
-	Culture              string                              `xml:"culture"`
-	Precepts             *types.Slice[*Precepts]             `xml:"precepts"`
+	Style                *Style                              `xml:"style"`
+	InitialPlayerIdeo    bool                                `xml:"initialPlayerIdeo"`
 }
 
 func (i *Ideos) Assign(*xml.Element) error {

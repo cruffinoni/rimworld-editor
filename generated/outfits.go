@@ -15,12 +15,12 @@ type Outfits struct {
 	CurOutfit                  string                        `xml:"curOutfit"`
 	OverrideHandler            *OverrideHandler              `xml:"overrideHandler"`
 	UniqueId                   int64                         `xml:"uniqueId"`
-	Label                      string                        `xml:"label"`
+	Filter                     *Filter                       `xml:"filter"`
 	TargetTemperatures         string                        `xml:"targetTemperatures"`
 	AutoTempOffset             int64                         `xml:"autoTempOffset"`
-	Filter                     *Filter                       `xml:"filter"`
-	StatPriorities             *types.Slice[*StatPriorities] `xml:"statPriorities"`
 	TargetTemperaturesOverride bool                          `xml:"targetTemperaturesOverride"`
+	Label                      string                        `xml:"label"`
+	StatPriorities             *types.Slice[*StatPriorities] `xml:"statPriorities"`
 	AutoTemp                   bool                          `xml:"AutoTemp"`
 }
 

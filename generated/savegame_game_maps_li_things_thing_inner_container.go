@@ -12,8 +12,8 @@ type SavegameGameMapsLiThingsThingInnerContainer struct {
 	Attr           attributes.Attributes
 	FieldValidated map[string]bool
 
-	InnerList        *types.Slice[*xml.Element] `xml:"innerList"`
 	MaxStacks        int64                      `xml:"maxStacks"`
+	InnerList        *types.Slice[*xml.Element] `xml:"innerList"`
 	ContentsLookMode string                     `xml:"contentsLookMode"`
 }
 

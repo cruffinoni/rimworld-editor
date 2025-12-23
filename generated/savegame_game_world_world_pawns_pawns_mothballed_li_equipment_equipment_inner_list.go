@@ -21,20 +21,20 @@ type SavegameGameWorldWorldPawnsPawnsMothballedLiEquipmentEquipmentInnerList str
 	VerbTracker              *VerbTracker         `xml:"verbTracker"`
 	SourcePrecept            string               `xml:"sourcePrecept"`
 	Quality                  string               `xml:"quality"`
-	Title                    string               `xml:"title"`
 	CodedPawn                string               `xml:"codedPawn"`
-	Biocoded                 bool                 `xml:"biocoded"`
-	BiocodedPawnLabel        string               `xml:"biocodedPawnLabel"`
-	Traits                   *types.Slice[string] `xml:"traits"`
-	TaleRef                  *TaleRef             `xml:"taleRef"`
 	CountdownTicksLeft       int64                `xml:"countdownTicksLeft"`
-	Pos                      string               `xml:"pos"`
 	EverSeenByPlayer         bool                 `xml:"everSeenByPlayer"`
-	LastKillTick             int64                `xml:"lastKillTick"`
-	Stuff                    string               `xml:"stuff"`
+	BiocodedPawnLabel        string               `xml:"biocodedPawnLabel"`
+	Pos                      string               `xml:"pos"`
+	TaleRef                  *TaleRef             `xml:"taleRef"`
+	Title                    string               `xml:"title"`
 	Name                     string               `xml:"name"`
+	Stuff                    string               `xml:"stuff"`
+	Biocoded                 bool                 `xml:"biocoded"`
 	Instigator               string               `xml:"instigator"`
 	ThingsIgnoredByExplosion *primary.Empty       `xml:"thingsIgnoredByExplosion"`
+	LastKillTick             int64                `xml:"lastKillTick"`
+	Traits                   *types.Slice[string] `xml:"traits"`
 }
 
 func (s *SavegameGameWorldWorldPawnsPawnsMothballedLiEquipmentEquipmentInnerList) Assign(*xml.Element) error {

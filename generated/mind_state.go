@@ -35,29 +35,29 @@ type MindState struct {
 	BabyCaravanBreastfeed           types.Map[string, *primary.Empty] `xml:"babyCaravanBreastfeed"`
 	ResurrectTarget                 *primary.Empty                    `xml:"resurrectTarget"`
 	LastCombatantTick               int64                             `xml:"lastCombatantTick"`
-	LastBedDefSleptIn               string                            `xml:"lastBedDefSleptIn"`
-	NextMoveOrderIsWait             bool                              `xml:"nextMoveOrderIsWait"`
-	NoAidRelationsGainUntilTick     int64                             `xml:"noAidRelationsGainUntilTick"`
-	LastRangedHarmTick              int64                             `xml:"lastRangedHarmTick"`
-	LastTakeRecreationalDrugTick    int64                             `xml:"lastTakeRecreationalDrugTick"`
-	LastJobTag                      string                            `xml:"lastJobTag"`
-	ApplyBedThoughtsOnLeave         bool                              `xml:"applyBedThoughtsOnLeave"`
 	LastAttackedTarget              string                            `xml:"lastAttackedTarget"`
 	LastHumanMeatIngestedTick       int64                             `xml:"lastHumanMeatIngestedTick"`
-	LastTakeCombatEnhancingDrugTick int64                             `xml:"lastTakeCombatEnhancingDrugTick"`
-	LastIngestTick                  int64                             `xml:"lastIngestTick"`
-	CanSleepTick                    int64                             `xml:"canSleepTick"`
-	LastHarmTick                    int64                             `xml:"lastHarmTick"`
-	LastDisturbanceTick             int64                             `xml:"lastDisturbanceTick"`
-	ApplyBedThoughtsTick            int64                             `xml:"applyBedThoughtsTick"`
-	CanLovinTick                    int64                             `xml:"canLovinTick"`
-	LastRotStinkTick                int64                             `xml:"lastRotStinkTick"`
-	NextApparelOptimizeTick         int64                             `xml:"nextApparelOptimizeTick"`
-	LastInventoryRawFoodUseTick     int64                             `xml:"lastInventoryRawFoodUseTick"`
+	LastJobTag                      string                            `xml:"lastJobTag"`
+	LastRangedHarmTick              int64                             `xml:"lastRangedHarmTick"`
+	LastTakeRecreationalDrugTick    int64                             `xml:"lastTakeRecreationalDrugTick"`
+	NextMoveOrderIsWait             bool                              `xml:"nextMoveOrderIsWait"`
+	ApplyBedThoughtsOnLeave         bool                              `xml:"applyBedThoughtsOnLeave"`
+	NoAidRelationsGainUntilTick     int64                             `xml:"noAidRelationsGainUntilTick"`
+	LastBedDefSleptIn               string                            `xml:"lastBedDefSleptIn"`
 	InteractionsToday               int64                             `xml:"interactionsToday"`
-	LastStartRoamCooldownTick       int64                             `xml:"lastStartRoamCooldownTick"`
+	LastRotStinkTick                int64                             `xml:"lastRotStinkTick"`
+	ApplyBedThoughtsTick            int64                             `xml:"applyBedThoughtsTick"`
+	NextApparelOptimizeTick         int64                             `xml:"nextApparelOptimizeTick"`
 	LastAssignedInteractTime        int64                             `xml:"lastAssignedInteractTime"`
+	LastInventoryRawFoodUseTick     int64                             `xml:"lastInventoryRawFoodUseTick"`
 	LastSlaveSuppressedTick         int64                             `xml:"lastSlaveSuppressedTick"`
+	LastHarmTick                    int64                             `xml:"lastHarmTick"`
+	CanSleepTick                    int64                             `xml:"canSleepTick"`
+	LastTakeCombatEnhancingDrugTick int64                             `xml:"lastTakeCombatEnhancingDrugTick"`
+	LastDisturbanceTick             int64                             `xml:"lastDisturbanceTick"`
+	CanLovinTick                    int64                             `xml:"canLovinTick"`
+	LastStartRoamCooldownTick       int64                             `xml:"lastStartRoamCooldownTick"`
+	LastIngestTick                  int64                             `xml:"lastIngestTick"`
 }
 
 func (m *MindState) Assign(*xml.Element) error {

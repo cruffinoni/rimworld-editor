@@ -11,7 +11,7 @@ type CarryTracker struct {
 	Attr           attributes.Attributes
 	FieldValidated map[string]bool
 
-	InnerContainer *SavegameGameMapsLiThingsThingInnerContainerInnerListLiCarryTrackerInnerContainer `xml:"innerContainer"`
+	InnerContainer *SavegameGameMapsLiThingsThingCarryTrackerInnerContainer `xml:"innerContainer"`
 }
 
 func (c *CarryTracker) Assign(*xml.Element) error {

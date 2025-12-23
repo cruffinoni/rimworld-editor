@@ -12,15 +12,15 @@ type Verbs struct {
 	FieldValidated map[string]bool
 
 	LoadId                  string `xml:"loadID"`
+	CurrentTarget           string `xml:"currentTarget"`
+	CurrentDestination      string `xml:"currentDestination"`
 	LastShotTick            int64  `xml:"lastShotTick"`
 	CanHitNonTargetPawnsNow bool   `xml:"canHitNonTargetPawnsNow"`
 	State                   string `xml:"state"`
-	CurrentTarget           string `xml:"currentTarget"`
-	CurrentDestination      string `xml:"currentDestination"`
 	SurpriseAttack          bool   `xml:"surpriseAttack"`
-	Ability                 string `xml:"ability"`
 	BurstShotsLeft          int64  `xml:"burstShotsLeft"`
 	TicksToNextBurstShot    int64  `xml:"ticksToNextBurstShot"`
+	Ability                 string `xml:"ability"`
 }
 
 func (v *Verbs) Assign(*xml.Element) error {

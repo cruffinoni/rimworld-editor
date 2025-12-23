@@ -12,7 +12,7 @@ type Memories struct {
 	Attr           attributes.Attributes
 	FieldValidated map[string]bool
 
-	Memories *types.Slice[*MemoriesMemoriesThoughtsLiNeedsNeedsThingThingsLiMapsGameSavegameInner] `xml:"memories"`
+	Memories *types.Slice[*MemoriesMemoriesThoughtsLiNeedsNeedsLiPawnsMothballedWorldPawnsWorldGameSavegameInner] `xml:"memories"`
 }
 
 func (m *Memories) Assign(*xml.Element) error {

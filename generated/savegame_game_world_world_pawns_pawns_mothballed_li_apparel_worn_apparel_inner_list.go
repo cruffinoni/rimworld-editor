@@ -18,26 +18,26 @@ type SavegameGameWorldWorldPawnsPawnsMothballedLiApparelWornApparelInnerList str
 	StackCount               int64          `xml:"stackCount"`
 	Stuff                    string         `xml:"stuff"`
 	QuestTags                *primary.Empty `xml:"questTags"`
-	Quality                  string         `xml:"quality"`
-	SourcePrecept            string         `xml:"sourcePrecept"`
 	Color                    string         `xml:"color"`
 	ColorActive              bool           `xml:"colorActive"`
-	EverSeenByPlayer         bool           `xml:"everSeenByPlayer"`
-	CodedPawn                string         `xml:"codedPawn"`
-	StyleDef                 string         `xml:"styleDef"`
+	Quality                  string         `xml:"quality"`
+	SourcePrecept            string         `xml:"sourcePrecept"`
 	RemainingCharges         int64          `xml:"remainingCharges"`
-	VerbTracker              *VerbTracker   `xml:"verbTracker"`
-	Energy                   float64        `xml:"energy"`
-	Pos                      string         `xml:"pos"`
-	BiocodedPawnLabel        string         `xml:"biocodedPawnLabel"`
-	CountdownTicksLeft       int64          `xml:"countdownTicksLeft"`
-	Instigator               string         `xml:"instigator"`
+	EverSeenByPlayer         bool           `xml:"everSeenByPlayer"`
+	StyleDef                 string         `xml:"styleDef"`
 	LastKeepDisplayTick      int64          `xml:"lastKeepDisplayTick"`
+	Instigator               string         `xml:"instigator"`
+	Energy                   float64        `xml:"energy"`
+	VerbTracker              *VerbTracker   `xml:"verbTracker"`
 	ThingsIgnoredByExplosion *primary.Empty `xml:"thingsIgnoredByExplosion"`
-	WornByCorpse             bool           `xml:"wornByCorpse"`
+	CountdownTicksLeft       int64          `xml:"countdownTicksLeft"`
+	CodedPawn                string         `xml:"codedPawn"`
+	BiocodedPawnLabel        string         `xml:"biocodedPawnLabel"`
+	Pos                      string         `xml:"pos"`
 	WickTicksLeft            int64          `xml:"wickTicksLeft"`
 	TicksToReset             int64          `xml:"ticksToReset"`
 	Biocoded                 bool           `xml:"biocoded"`
+	WornByCorpse             bool           `xml:"wornByCorpse"`
 }
 
 func (s *SavegameGameWorldWorldPawnsPawnsMothballedLiApparelWornApparelInnerList) Assign(*xml.Element) error {

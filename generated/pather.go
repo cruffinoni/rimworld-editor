@@ -11,14 +11,14 @@ type Pather struct {
 	Attr           attributes.Attributes
 	FieldValidated map[string]bool
 
+	Moving              bool    `xml:"moving"`
 	NextCell            string  `xml:"nextCell"`
-	NextCellCostLeft    float64 `xml:"nextCellCostLeft"`
 	NextCellCostInitial int64   `xml:"nextCellCostInitial"`
 	PeMode              string  `xml:"peMode"`
-	CellsUntilClamor    int64   `xml:"cellsUntilClamor"`
 	LastMovedTick       int64   `xml:"lastMovedTick"`
+	NextCellCostLeft    float64 `xml:"nextCellCostLeft"`
+	CellsUntilClamor    int64   `xml:"cellsUntilClamor"`
 	Destination         string  `xml:"destination"`
-	Moving              bool    `xml:"moving"`
 }
 
 func (p *Pather) Assign(*xml.Element) error {

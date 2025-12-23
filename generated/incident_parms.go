@@ -30,8 +30,8 @@ type IncidentParms struct {
 	AttackTargets             *primary.Empty `xml:"attackTargets"`
 	Gifts                     *primary.Empty `xml:"gifts"`
 	PawnKind                  string         `xml:"pawnKind"`
-	QuestTag                  string         `xml:"questTag"`
 	CustomLetterText          string         `xml:"customLetterText"`
+	QuestTag                  string         `xml:"questTag"`
 }
 
 func (i *IncidentParms) Assign(*xml.Element) error {

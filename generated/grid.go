@@ -26,8 +26,8 @@ type Grid struct {
 	TileRiverAdjacencyDeflate string `xml:"tileRiverAdjacencyDeflate"`
 	TileRiverDefDeflate       string `xml:"tileRiverDefDeflate"`
 	MapSizeX                  int64  `xml:"mapSizeX"`
-	ArrDeflate                string `xml:"arrDeflate"`
 	MapSizeZ                  int64  `xml:"mapSizeZ"`
+	ArrDeflate                string `xml:"arrDeflate"`
 }
 
 func (g *Grid) Assign(*xml.Element) error {

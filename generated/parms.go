@@ -11,26 +11,26 @@ type Parms struct {
 	Attr           attributes.Attributes
 	FieldValidated map[string]bool
 
-	ThreatPoints              float64               `xml:"threatPoints"`
 	Points                    float64               `xml:"points"`
 	Relic                     string                `xml:"relic"`
 	AncientComplexSketch      *AncientComplexSketch `xml:"ancientComplexSketch"`
-	RelicThing                string                `xml:"relicThing"`
-	AncientComplexRewardMaker string                `xml:"ancientComplexRewardMaker"`
-	MinThreatPoints           int64                 `xml:"minThreatPoints"`
-	OnDays                    int64                 `xml:"onDays"`
-	OffDays                   float64               `xml:"offDays"`
-	MinSpacingDays            float64               `xml:"minSpacingDays"`
-	CurrentThreatPointsFactor float64               `xml:"currentThreatPointsFactor"`
-	Faction                   string                `xml:"faction"`
-	AllowedThreats            string                `xml:"allowedThreats"`
-	NumIncidentsRange         string                `xml:"numIncidentsRange"`
-	RandomValue               int64                 `xml:"randomValue"`
-	LootMarketValue           float64               `xml:"lootMarketValue"`
 	TriggerSecuritySignal     string                `xml:"triggerSecuritySignal"`
-	ExteriorThreatPoints      int64                 `xml:"exteriorThreatPoints"`
+	RelicThing                string                `xml:"relicThing"`
 	RelicLostSignal           string                `xml:"relicLostSignal"`
 	InteriorThreatPoints      int64                 `xml:"interiorThreatPoints"`
+	ExteriorThreatPoints      int64                 `xml:"exteriorThreatPoints"`
+	ThreatPoints              float64               `xml:"threatPoints"`
+	AncientComplexRewardMaker string                `xml:"ancientComplexRewardMaker"`
+	OnDays                    int64                 `xml:"onDays"`
+	MinSpacingDays            float64               `xml:"minSpacingDays"`
+	OffDays                   float64               `xml:"offDays"`
+	AllowedThreats            string                `xml:"allowedThreats"`
+	NumIncidentsRange         string                `xml:"numIncidentsRange"`
+	CurrentThreatPointsFactor float64               `xml:"currentThreatPointsFactor"`
+	MinThreatPoints           int64                 `xml:"minThreatPoints"`
+	Faction                   string                `xml:"faction"`
+	LootMarketValue           float64               `xml:"lootMarketValue"`
+	RandomValue               int64                 `xml:"randomValue"`
 }
 
 func (p *Parms) Assign(*xml.Element) error {

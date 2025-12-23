@@ -19,22 +19,22 @@ type Bills struct {
 	Xenogerm               string            `xml:"xenogerm"`
 	IngredientFilter       *IngredientFilter `xml:"ingredientFilter"`
 	RepeatMode             string            `xml:"repeatMode"`
+	RepeatCount            int64             `xml:"repeatCount"`
 	StoreMode              string            `xml:"storeMode"`
 	StoreZone              string            `xml:"storeZone"`
 	TargetCount            int64             `xml:"targetCount"`
 	UnpauseWhenYouHave     int64             `xml:"unpauseWhenYouHave"`
 	IncludeFromZone        string            `xml:"includeFromZone"`
 	ProductFilter          *ProductFilter    `xml:"productFilter"`
-	BoundUft               string            `xml:"boundUft"`
+	CountAway              bool              `xml:"countAway"`
+	Suspended              bool              `xml:"suspended"`
 	IngredientSearchRadius float64           `xml:"ingredientSearchRadius"`
-	RepeatCount            int64             `xml:"repeatCount"`
+	IncludeEquipped        bool              `xml:"includeEquipped"`
+	BoundUft               string            `xml:"boundUft"`
+	PauseWhenSatisfied     bool              `xml:"pauseWhenSatisfied"`
+	Paused                 bool              `xml:"paused"`
 	HpRange                string            `xml:"hpRange"`
 	QualityRange           string            `xml:"qualityRange"`
-	CountAway              bool              `xml:"countAway"`
-	IncludeEquipped        bool              `xml:"includeEquipped"`
-	Suspended              bool              `xml:"suspended"`
-	Paused                 bool              `xml:"paused"`
-	PauseWhenSatisfied     bool              `xml:"pauseWhenSatisfied"`
 }
 
 func (b *Bills) Assign(*xml.Element) error {

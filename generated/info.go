@@ -14,14 +14,14 @@ type Info struct {
 
 	RealPlayTimeInteracting float64              `xml:"realPlayTimeInteracting"`
 	StartingTile            int64                `xml:"startingTile"`
-	OverallRainfall         string               `xml:"overallRainfall"`
-	OverallTemperature      string               `xml:"overallTemperature"`
-	Factions                *types.Slice[string] `xml:"factions"`
-	Name                    string               `xml:"name"`
 	PlanetCoverage          int64                `xml:"planetCoverage"`
-	InitialMapSize          string               `xml:"initialMapSize"`
 	SeedString              string               `xml:"seedString"`
+	OverallTemperature      string               `xml:"overallTemperature"`
+	InitialMapSize          string               `xml:"initialMapSize"`
+	Name                    string               `xml:"name"`
 	PersistentRandomValue   int64                `xml:"persistentRandomValue"`
+	OverallRainfall         string               `xml:"overallRainfall"`
+	Factions                *types.Slice[string] `xml:"factions"`
 }
 
 func (i *Info) Assign(*xml.Element) error {

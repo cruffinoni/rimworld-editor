@@ -22,8 +22,8 @@ type GameQuestManagerQuestsLiPartsLiWorldObjectPartsLiThingsInnerList struct {
 	Defence              int64                `xml:"defence"`
 	LasterUser           string               `xml:"lasterUser"`
 	HackingStartedSignal string               `xml:"hackingStartedSignal"`
-	Ingredients          *primary.Empty       `xml:"ingredients"`
 	StackCount           int64                `xml:"stackCount"`
+	Ingredients          *primary.Empty       `xml:"ingredients"`
 }
 
 func (g *GameQuestManagerQuestsLiPartsLiWorldObjectPartsLiThingsInnerList) Assign(*xml.Element) error {

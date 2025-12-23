@@ -15,15 +15,15 @@ type SavegameGameMapsLiThingsThingCarryTrackerInnerContainerInnerList struct {
 	Def                  string                                                                            `xml:"def"`
 	Id                   string                                                                            `xml:"id"`
 	Pos                  string                                                                            `xml:"pos"`
-	StackCount           int64                                                                             `xml:"stackCount"`
-	QuestTags            *primary.Empty                                                                    `xml:"questTags"`
-	Health               int64                                                                             `xml:"health"`
-	VerbTracker          *VerbTracker                                                                      `xml:"verbTracker"`
-	InnerContainer       *SavegameGameMapsLiThingsThingCarryTrackerInnerContainerInnerListLiInnerContainer `xml:"innerContainer"`
 	Rot                  int64                                                                             `xml:"rot"`
+	Health               int64                                                                             `xml:"health"`
+	QuestTags            *primary.Empty                                                                    `xml:"questTags"`
 	TimeOfDeath          int64                                                                             `xml:"timeOfDeath"`
 	VanishAfterTimestamp int64                                                                             `xml:"vanishAfterTimestamp"`
 	OperationsBillStack  *OperationsBillStack                                                              `xml:"operationsBillStack"`
+	InnerContainer       *SavegameGameMapsLiThingsThingCarryTrackerInnerContainerInnerListLiInnerContainer `xml:"innerContainer"`
+	VerbTracker          *VerbTracker                                                                      `xml:"verbTracker"`
+	StackCount           int64                                                                             `xml:"stackCount"`
 }
 
 func (s *SavegameGameMapsLiThingsThingCarryTrackerInnerContainerInnerList) Assign(*xml.Element) error {

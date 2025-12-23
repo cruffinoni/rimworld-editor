@@ -12,7 +12,7 @@ type Needs struct {
 	Attr           attributes.Attributes
 	FieldValidated map[string]bool
 
-	Needs *types.Slice[*NeedsNeedsLiPawnsMothballedWorldPawnsWorldGameSavegameInner] `xml:"needs"`
+	Needs *types.Slice[*NeedsNeedsThingThingsLiMapsGameSavegameInner] `xml:"needs"`
 }
 
 func (n *Needs) Assign(*xml.Element) error {

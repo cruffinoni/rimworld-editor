@@ -20,33 +20,33 @@ type CurJob struct {
 	Quest                       string                      `xml:"quest"`
 	Def                         string                      `xml:"def"`
 	LoadId                      int64                       `xml:"loadID"`
-	TargetA                     string                      `xml:"targetA"`
-	TargetB                     string                      `xml:"targetB"`
-	TargetC                     string                      `xml:"targetC"`
 	TargetQueueA                *primary.Empty              `xml:"targetQueueA"`
 	TargetQueueB                *primary.Empty              `xml:"targetQueueB"`
-	Count                       int64                       `xml:"count"`
 	CountQueue                  *primary.Empty              `xml:"countQueue"`
 	StartTick                   int64                       `xml:"startTick"`
+	ExpiryInterval              int64                       `xml:"expiryInterval"`
 	PlacedThings                *types.Slice[*PlacedThings] `xml:"placedThings"`
-	HaulMode                    string                      `xml:"haulMode"`
-	WorkGiverDef                string                      `xml:"workGiverDef"`
 	JobGiverThinkTree           string                      `xml:"jobGiverThinkTree"`
 	PsyfocusTargetLast          int64                       `xml:"psyfocusTargetLast"`
 	Ability                     string                      `xml:"ability"`
 	LastJobGiverKey             int64                       `xml:"lastJobGiverKey"`
-	LocomotionUrgency           string                      `xml:"locomotionUrgency"`
+	Count                       int64                       `xml:"count"`
+	WorkGiverDef                string                      `xml:"workGiverDef"`
 	CheckOverrideOnExpire       bool                        `xml:"checkOverrideOnExpire"`
-	ExpiryInterval              int64                       `xml:"expiryInterval"`
 	HaulOpportunisticDuplicates bool                        `xml:"haulOpportunisticDuplicates"`
+	HaulMode                    string                      `xml:"haulMode"`
+	TargetC                     string                      `xml:"targetC"`
+	TargetB                     string                      `xml:"targetB"`
+	LocomotionUrgency           string                      `xml:"locomotionUrgency"`
 	FollowRadius                int64                       `xml:"followRadius"`
+	TargetA                     string                      `xml:"targetA"`
 	CanBash                     bool                        `xml:"canBash"`
 	ExitMapOnArrival            bool                        `xml:"exitMapOnArrival"`
-	Duration                    int64                       `xml:"duration"`
-	TransportShip               string                      `xml:"transportShip"`
-	JobState                    string                      `xml:"jobState"`
-	SendAwayIfAnyDespawned      *primary.Empty              `xml:"sendAwayIfAnyDespawned"`
 	SendAwayIfAllDespawned      *types.Slice[string]        `xml:"sendAwayIfAllDespawned"`
+	SendAwayIfAnyDespawned      *primary.Empty              `xml:"sendAwayIfAnyDespawned"`
+	Duration                    int64                       `xml:"duration"`
+	JobState                    string                      `xml:"jobState"`
+	TransportShip               string                      `xml:"transportShip"`
 }
 
 func (c *CurJob) Assign(*xml.Element) error {

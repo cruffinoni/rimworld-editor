@@ -17,9 +17,9 @@ type AgeTracker struct {
 	NextGrowthCheckTick           string  `xml:"nextGrowthCheckTick"`
 	AgeReversalDemandedAtAgeTicks int64   `xml:"ageReversalDemandedAtAgeTicks"`
 	LifeStageChange               bool    `xml:"lifeStageChange"`
-	LastAgeReversalReason         string  `xml:"lastAgeReversalReason"`
 	ProgressToNextBiologicalTick  float64 `xml:"progressToNextBiologicalTick"`
 	InitializedAgeReversalDemand  bool    `xml:"initializedAgeReversalDemand"`
+	LastAgeReversalReason         string  `xml:"lastAgeReversalReason"`
 }
 
 func (a *AgeTracker) Assign(*xml.Element) error {

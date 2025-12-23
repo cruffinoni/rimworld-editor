@@ -22,8 +22,8 @@ type FirstPawnData struct {
 	EverBeenColonistOrTameAnimal bool                       `xml:"everBeenColonistOrTameAnimal"`
 	RoyalTitles                  *types.Slice[*RoyalTitles] `xml:"royalTitles"`
 	Name                         *Name                      `xml:"name"`
-	App                          string                     `xml:"app"`
 	Peq                          string                     `xml:"peq"`
+	App                          string                     `xml:"app"`
 	IsFactionLeader              bool                       `xml:"isFactionLeader"`
 }
 

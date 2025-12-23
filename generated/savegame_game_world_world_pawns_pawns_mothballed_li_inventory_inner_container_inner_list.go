@@ -20,15 +20,15 @@ type SavegameGameWorldWorldPawnsPawnsMothballedLiInventoryInnerContainerInnerLis
 	QuestTags        *primary.Empty                                                                                `xml:"questTags"`
 	RotProg          float64                                                                                       `xml:"rotProg"`
 	Ingredients      *types.Slice[string]                                                                          `xml:"ingredients"`
-	SourcePrecept    string                                                                                        `xml:"sourcePrecept"`
 	Color            string                                                                                        `xml:"color"`
-	Stuff            string                                                                                        `xml:"stuff"`
-	ColorActive      bool                                                                                          `xml:"colorActive"`
+	SourcePrecept    string                                                                                        `xml:"sourcePrecept"`
 	Pos              string                                                                                        `xml:"pos"`
-	Title            string                                                                                        `xml:"title"`
+	Stuff            string                                                                                        `xml:"stuff"`
 	VerbTracker      *VerbTracker                                                                                  `xml:"verbTracker"`
-	Quality          string                                                                                        `xml:"quality"`
 	TaleRef          *TaleRef                                                                                      `xml:"taleRef"`
+	ColorActive      bool                                                                                          `xml:"colorActive"`
+	Quality          string                                                                                        `xml:"quality"`
+	Title            string                                                                                        `xml:"title"`
 	EverSeenByPlayer bool                                                                                          `xml:"everSeenByPlayer"`
 	InnerContainer   *SavegameGameWorldWorldPawnsPawnsMothballedLiInventoryInnerContainerInnerListLiInnerContainer `xml:"innerContainer"`
 }

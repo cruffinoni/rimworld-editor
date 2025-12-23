@@ -15,10 +15,10 @@ type Style struct {
 	BeardDef                   string                                                                             `xml:"beardDef"`
 	FaceTattoo                 string                                                                             `xml:"faceTattoo"`
 	BodyTattoo                 string                                                                             `xml:"bodyTattoo"`
-	StyleForThingDef           types.Map[string, *SavegameGameWorldIdeoManagerIdeosLiStyleStyleForThingDefValues] `xml:"styleForThingDef"`
 	HairFrequencies            *HairFrequencies                                                                   `xml:"hairFrequencies"`
 	BeardFrequencies           *BeardFrequencies                                                                  `xml:"beardFrequencies"`
 	TattooFrequencies          *TattooFrequencies                                                                 `xml:"tattooFrequencies"`
+	StyleForThingDef           types.Map[string, *SavegameGameWorldIdeoManagerIdeosLiStyleStyleForThingDefValues] `xml:"styleForThingDef"`
 	NextStyleChangeAttemptTick int64                                                                              `xml:"nextStyleChangeAttemptTick"`
 }
 

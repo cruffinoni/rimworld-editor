@@ -13,12 +13,12 @@ type Surroundings struct {
 
 	Tile               int64   `xml:"tile"`
 	Temperature        float64 `xml:"temperature"`
+	SnowDepth          float64 `xml:"snowDepth"`
+	Weather            string  `xml:"weather"`
 	RoomRole           string  `xml:"roomRole"`
 	RoomImpressiveness float64 `xml:"roomImpressiveness"`
 	RoomBeauty         float64 `xml:"roomBeauty"`
 	RoomCleanliness    float64 `xml:"roomCleanliness"`
-	Weather            string  `xml:"weather"`
-	SnowDepth          float64 `xml:"snowDepth"`
 }
 
 func (s *Surroundings) Assign(*xml.Element) error {

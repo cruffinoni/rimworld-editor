@@ -11,12 +11,12 @@ type PlayerSettings struct {
 	Attr           attributes.Attributes
 	FieldValidated map[string]bool
 
-	JoinTick        int64  `xml:"joinTick"`
 	MedCare         string `xml:"medCare"`
 	AreaAllowed     string `xml:"areaAllowed"`
 	Master          string `xml:"master"`
-	DisplayOrder    int64  `xml:"displayOrder"`
 	SelfTend        bool   `xml:"selfTend"`
+	DisplayOrder    int64  `xml:"displayOrder"`
+	JoinTick        int64  `xml:"joinTick"`
 	FollowFieldwork bool   `xml:"followFieldwork"`
 	FollowDrafted   bool   `xml:"followDrafted"`
 }

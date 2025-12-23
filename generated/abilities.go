@@ -12,14 +12,14 @@ type Abilities struct {
 	Attr           attributes.Attributes
 	FieldValidated map[string]bool
 
-	Abilities             *types.Slice[*AbilitiesAbilitiesLiPawnsAliveWorldPawnsWorldGameSavegameInner] `xml:"abilities"`
-	CooldownTicks         int64                                                                         `xml:"cooldownTicks"`
-	Def                   string                                                                        `xml:"def"`
-	Id                    int64                                                                         `xml:"Id"`
-	SourcePrecept         string                                                                        `xml:"sourcePrecept"`
-	VerbTracker           *VerbTracker                                                                  `xml:"verbTracker"`
-	CooldownTicksDuration int64                                                                         `xml:"cooldownTicksDuration"`
-	LastCastTick          int64                                                                         `xml:"lastCastTick"`
+	Abilities             *types.Slice[*AbilitiesAbilitiesLiPawnsMothballedWorldPawnsWorldGameSavegameInner] `xml:"abilities"`
+	SourcePrecept         string                                                                             `xml:"sourcePrecept"`
+	VerbTracker           *VerbTracker                                                                       `xml:"verbTracker"`
+	Def                   string                                                                             `xml:"def"`
+	Id                    int64                                                                              `xml:"Id"`
+	LastCastTick          int64                                                                              `xml:"lastCastTick"`
+	CooldownTicks         int64                                                                              `xml:"cooldownTicks"`
+	CooldownTicksDuration int64                                                                              `xml:"cooldownTicksDuration"`
 }
 
 func (a *Abilities) Assign(*xml.Element) error {

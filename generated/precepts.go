@@ -33,31 +33,31 @@ type Precepts struct {
 	ActiveObligations                *primary.Empty                      `xml:"activeObligations"`
 	CompletedObligations             *types.Slice[*CompletedObligations] `xml:"completedObligations"`
 	LastFinishedTick                 int64                               `xml:"lastFinishedTick"`
-	ThingDef                         string                              `xml:"thingDef"`
-	DescOverride                     string                              `xml:"descOverride"`
-	ShortDescOverride                string                              `xml:"shortDescOverride"`
 	IconPathOverride                 string                              `xml:"iconPathOverride"`
 	PatternGroupTag                  string                              `xml:"patternGroupTag"`
 	IsAnytime                        bool                                `xml:"isAnytime"`
 	CanBeAnytime                     bool                                `xml:"canBeAnytime"`
 	AttachableOutcomeEffect          string                              `xml:"attachableOutcomeEffect"`
+	ThingDef                         string                              `xml:"thingDef"`
 	RitualExplanation                string                              `xml:"ritualExplanation"`
 	CanMergeGizmosFromDifferentIdeos bool                                `xml:"canMergeGizmosFromDifferentIdeos"`
 	Active                           bool                                `xml:"active"`
 	ApparelRequirements              *types.Slice[*ApparelRequirements]  `xml:"apparelRequirements"`
 	RestrictToSupremeGender          bool                                `xml:"restrictToSupremeGender"`
 	ChosenPawn                       *ChosenPawn                         `xml:"chosenPawn"`
-	ChosenPawns                      *primary.Empty                      `xml:"chosenPawns"`
-	ChosenPawnsCache                 *primary.Empty                      `xml:"chosenPawnsCache"`
 	PresenceDemand                   *PresenceDemand                     `xml:"presenceDemand"`
 	GeneratedRelic                   string                              `xml:"generatedRelic"`
-	Noble                            string                              `xml:"noble"`
 	Stuff                            string                              `xml:"stuff"`
-	Despised                         string                              `xml:"despised"`
-	MaxTechLevel                     string                              `xml:"maxTechLevel"`
+	ChosenPawns                      *primary.Empty                      `xml:"chosenPawns"`
+	ChosenPawnsCache                 *primary.Empty                      `xml:"chosenPawnsCache"`
 	ApparelDef                       string                              `xml:"apparelDef"`
-	EverGenerated                    bool                                `xml:"everGenerated"`
+	DescOverride                     string                              `xml:"descOverride"`
+	ShortDescOverride                string                              `xml:"shortDescOverride"`
+	MaxTechLevel                     string                              `xml:"maxTechLevel"`
+	Noble                            string                              `xml:"noble"`
+	Despised                         string                              `xml:"despised"`
 	AbilityOnCooldownUntilTick       int64                               `xml:"abilityOnCooldownUntilTick"`
+	EverGenerated                    bool                                `xml:"everGenerated"`
 }
 
 func (p *Precepts) Assign(*xml.Element) error {

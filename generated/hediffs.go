@@ -21,35 +21,35 @@ type Hediffs struct {
 	CombatLogEntry                      string         `xml:"combatLogEntry"`
 	InfectionChanceFactor               float64        `xml:"infectionChanceFactor"`
 	IsPermanent                         bool           `xml:"isPermanent"`
-	PainCategory                        string         `xml:"painCategory"`
-	SeverityPerDay                      float64        `xml:"severityPerDay"`
 	Level                               int64          `xml:"level"`
-	TendTicksLeft                       int64          `xml:"tendTicksLeft"`
-	TendQuality                         float64        `xml:"tendQuality"`
-	Source                              string         `xml:"source"`
 	LastInjury                          string         `xml:"lastInjury"`
-	IsFresh                             bool           `xml:"isFresh"`
-	SourceBodyPartGroup                 string         `xml:"sourceBodyPartGroup"`
-	TotalTendQuality                    float64        `xml:"totalTendQuality"`
-	CombatLogText                       string         `xml:"combatLogText"`
-	TicksToDisappear                    int64          `xml:"ticksToDisappear"`
 	SeverityPerDayNotImmuneRandomFactor float64        `xml:"severityPerDayNotImmuneRandomFactor"`
+	SeverityPerDayRemissionRandomFactor float64        `xml:"severityPerDayRemissionRandomFactor"`
+	SeverityPerDayGrowingRandomFactor   float64        `xml:"severityPerDayGrowingRandomFactor"`
+	TendTicksLeft                       int64          `xml:"tendTicksLeft"`
 	GrowthMode                          string         `xml:"growthMode"`
+	VerbTracker                         *VerbTracker   `xml:"verbTracker"`
+	CombatLogText                       string         `xml:"combatLogText"`
+	TendQuality                         float64        `xml:"tendQuality"`
+	PainCategory                        string         `xml:"painCategory"`
+	TotalTendQuality                    float64        `xml:"totalTendQuality"`
+	IsFresh                             bool           `xml:"isFresh"`
+	LastStage                           int64          `xml:"lastStage"`
+	TicksToDisappear                    int64          `xml:"ticksToDisappear"`
+	TicksUntilInfect                    int64          `xml:"ticksUntilInfect"`
+	Discovered                          bool           `xml:"discovered"`
+	Source                              string         `xml:"source"`
+	PermanentDamageThreshold            float64        `xml:"permanentDamageThreshold"`
+	Seed                                int64          `xml:"seed"`
+	GeneSet                             *primary.Empty `xml:"geneSet"`
+	Mother                              string         `xml:"mother"`
+	TicksUntilMessage                   int64          `xml:"ticksUntilMessage"`
 	Father                              string         `xml:"father"`
 	TicksSinceHeal                      int64          `xml:"ticksSinceHeal"`
-	GeneSet                             *primary.Empty `xml:"geneSet"`
-	LastStage                           int64          `xml:"lastStage"`
-	TicksUntilMessage                   int64          `xml:"ticksUntilMessage"`
-	VerbTracker                         *VerbTracker   `xml:"verbTracker"`
-	Mother                              string         `xml:"mother"`
-	Seed                                int64          `xml:"seed"`
+	SeverityPerDay                      float64        `xml:"severityPerDay"`
+	SourceBodyPartGroup                 string         `xml:"sourceBodyPartGroup"`
 	DisappearsAfterTicks                int64          `xml:"disappearsAfterTicks"`
 	CurrentInterval                     int64          `xml:"currentInterval"`
-	TicksUntilInfect                    int64          `xml:"ticksUntilInfect"`
-	SeverityPerDayGrowingRandomFactor   float64        `xml:"severityPerDayGrowingRandomFactor"`
-	SeverityPerDayRemissionRandomFactor float64        `xml:"severityPerDayRemissionRandomFactor"`
-	Discovered                          bool           `xml:"discovered"`
-	PermanentDamageThreshold            float64        `xml:"permanentDamageThreshold"`
 }
 
 func (h *Hediffs) Assign(*xml.Element) error {

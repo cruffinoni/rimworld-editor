@@ -13,16 +13,16 @@ type Rewards struct {
 	Attr           attributes.Attributes
 	FieldValidated map[string]bool
 
+	InnerList            *primary.Empty          `xml:"innerList"`
+	ItemDefs             *types.Slice[*ItemDefs] `xml:"itemDefs"`
+	LastTotalMarketValue float64                 `xml:"lastTotalMarketValue"`
 	UsedOrCleanedUp      bool                    `xml:"usedOrCleanedUp"`
 	Items                *types.Slice[string]    `xml:"items"`
-	ItemDefs             *types.Slice[*ItemDefs] `xml:"itemDefs"`
-	CurrentPart          int64                   `xml:"currentPart"`
-	Quest                string                  `xml:"quest"`
-	LastTotalMarketValue float64                 `xml:"lastTotalMarketValue"`
 	Relic                string                  `xml:"relic"`
+	Quest                string                  `xml:"quest"`
 	Amount               int64                   `xml:"amount"`
 	Faction              string                  `xml:"faction"`
-	InnerList            *primary.Empty          `xml:"innerList"`
+	CurrentPart          int64                   `xml:"currentPart"`
 }
 
 func (r *Rewards) Assign(*xml.Element) error {

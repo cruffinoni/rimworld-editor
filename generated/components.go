@@ -49,37 +49,37 @@ type Components struct {
 	CurrentPriority                              int64                                                                   `xml:"currentPriority"`
 	ForcedSongs                                  *primary.Empty                                                          `xml:"forcedSongs"`
 	PrioritySongs                                types.Map[string, *primary.Empty]                                       `xml:"prioritySongs"`
+	CycleIndex                                   int64                                                                   `xml:"cycleIndex"`
+	RoadNodes                                    *types.Slice[int64]                                                     `xml:"roadNodes"`
 	PartyHunt                                    *PartyHunt                                                              `xml:"partyHunt"`
+	WorktypePriorities                           *types.Slice[*WorktypePriorities]                                       `xml:"worktypePriorities"`
+	LinkedBillsSets                              *types.Slice[*LinkedBillsSets]                                          `xml:"linkedBillsSets"`
+	Pawns                                        *primary.Empty                                                          `xml:"pawns"`
+	IgnoredFactions                              *types.Slice[string]                                                    `xml:"ignoredFactions"`
+	StripMine                                    *primary.Empty                                                          `xml:"stripMine"`
 	Store                                        types.Map[string, *primary.Empty]                                       `xml:"store"`
+	Hireable                                     string                                                                  `xml:"hireable"`
+	Joblist                                      types.Map[string, *primary.Empty]                                       `xml:"joblist"`
 	Blueprints                                   *types.Slice[*Blueprints]                                               `xml:"Blueprints"`
 	TicksToNextAssault                           int64                                                                   `xml:"ticksToNextAssault"`
-	Hireable                                     string                                                                  `xml:"hireable"`
-	DeadCountKey                                 *primary.Empty                                                          `xml:"deadCountKey"`
-	Joblist                                      types.Map[string, *primary.Empty]                                       `xml:"joblist"`
 	MapsParent                                   types.Map[string, *primary.Empty]                                       `xml:"mapsParent"`
-	StripMine                                    *primary.Empty                                                          `xml:"stripMine"`
-	LinkedBillsSets                              *types.Slice[*LinkedBillsSets]                                          `xml:"linkedBillsSets"`
-	IgnoredFactions                              *types.Slice[string]                                                    `xml:"ignoredFactions"`
-	RoadNodes                                    *types.Slice[int64]                                                     `xml:"roadNodes"`
-	Pawns                                        *primary.Empty                                                          `xml:"pawns"`
-	CycleIndex                                   int64                                                                   `xml:"cycleIndex"`
-	WorktypePriorities                           *types.Slice[*WorktypePriorities]                                       `xml:"worktypePriorities"`
-	LauncherTargets                              types.Map[string, *primary.Empty]                                       `xml:"launcherTargets"`
-	GrowZoneRegistry                             types.Map[int64, *SavegameGameMapsLiComponentsLiGrowZoneRegistryValues] `xml:"growZoneRegistry"`
-	MarkedForRefillStockpile                     *primary.Empty                                                          `xml:"markedForRefillStockpile"`
-	AwaitingPickup                               *primary.Empty                                                          `xml:"awaitingPickup"`
-	NotForAnimals                                *primary.Empty                                                          `xml:"notForAnimals"`
-	RoadEdgeTiles                                *primary.Empty                                                          `xml:"roadEdgeTiles"`
-	NotForColonists                              *primary.Empty                                                          `xml:"notForColonists"`
-	HarvestForbidden                             *primary.Empty                                                          `xml:"harvestForbidden"`
+	DeadCountKey                                 *primary.Empty                                                          `xml:"deadCountKey"`
 	BestConstructorOverride                      string                                                                  `xml:"bestConstructorOverride"`
+	RoadEdgeTiles                                *primary.Empty                                                          `xml:"roadEdgeTiles"`
+	MarkedForRefillStockpile                     *primary.Empty                                                          `xml:"markedForRefillStockpile"`
+	Terrains                                     types.Map[string, *primary.Empty]                                       `xml:"terrains"`
+	GrowZoneRegistry                             types.Map[int64, *SavegameGameMapsLiComponentsLiGrowZoneRegistryValues] `xml:"growZoneRegistry"`
+	AwaitingPickup                               *primary.Empty                                                          `xml:"awaitingPickup"`
 	AwaitingIngredients                          *primary.Empty                                                          `xml:"awaitingIngredients"`
-	DestroyedBuildings                           types.Map[string, *primary.Empty]                                       `xml:"destroyedBuildings"`
+	UniqueIdsManager                             *primary.Empty                                                          `xml:"uniqueIDsManager"`
+	MarkedForRefillBuilding                      *primary.Empty                                                          `xml:"markedForRefillBuilding"`
+	NotForAnimals                                *primary.Empty                                                          `xml:"notForAnimals"`
+	HarvestForbidden                             *primary.Empty                                                          `xml:"harvestForbidden"`
+	LauncherTargets                              types.Map[string, *primary.Empty]                                       `xml:"launcherTargets"`
 	AreaIndex                                    types.Map[int64, int64]                                                 `xml:"areaIndex"`
 	QbUseMapSettings                             bool                                                                    `xml:"qbUseMapSettings"`
-	UniqueIdsManager                             *primary.Empty                                                          `xml:"uniqueIDsManager"`
-	Terrains                                     types.Map[string, *primary.Empty]                                       `xml:"terrains"`
-	MarkedForRefillBuilding                      *primary.Empty                                                          `xml:"markedForRefillBuilding"`
+	NotForColonists                              *primary.Empty                                                          `xml:"notForColonists"`
+	DestroyedBuildings                           types.Map[string, *primary.Empty]                                       `xml:"destroyedBuildings"`
 }
 
 func (c *Components) Assign(*xml.Element) error {

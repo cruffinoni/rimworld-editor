@@ -20,18 +20,18 @@ type Guest struct {
 	SpotToWaitInsteadOfEscaping    string                          `xml:"spotToWaitInsteadOfEscaping"`
 	LastPrisonBreakTicks           int64                           `xml:"lastPrisonBreakTicks"`
 	IdeoForConversion              string                          `xml:"ideoForConversion"`
-	Recruitable                    bool                            `xml:"recruitable"`
 	LastResistanceInteractionData  *primary.Empty                  `xml:"lastResistanceInteractionData"`
 	FinalResistanceInteractionData *FinalResistanceInteractionData `xml:"finalResistanceInteractionData"`
-	Will                           float64                         `xml:"will"`
+	Recruitable                    bool                            `xml:"recruitable"`
 	Resistance                     float64                         `xml:"resistance"`
-	LastRecruiterOpinion           int64                           `xml:"lastRecruiterOpinion"`
-	TicksWhenAllowedToEscapeAgain  int64                           `xml:"ticksWhenAllowedToEscapeAgain"`
+	Will                           float64                         `xml:"will"`
 	EverParticipatedInPrisonBreak  bool                            `xml:"everParticipatedInPrisonBreak"`
-	GuestStatus                    string                          `xml:"guestStatus"`
 	HasOpinionOfLastRecruiter      bool                            `xml:"hasOpinionOfLastRecruiter"`
+	TicksWhenAllowedToEscapeAgain  int64                           `xml:"ticksWhenAllowedToEscapeAgain"`
 	EverEnslaved                   bool                            `xml:"everEnslaved"`
+	LastRecruiterOpinion           int64                           `xml:"lastRecruiterOpinion"`
 	LastRecruiterName              string                          `xml:"lastRecruiterName"`
+	GuestStatus                    string                          `xml:"guestStatus"`
 }
 
 func (g *Guest) Assign(*xml.Element) error {
