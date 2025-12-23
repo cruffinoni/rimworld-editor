@@ -72,7 +72,7 @@ func (c *Console) Init(options *ui.Options, save *generated.Savegame) {
 		cmd.Command("list", "List all factions", cli.ActionCommand(fl.ListAllFactions))
 	})
 
-	c.cli.Command("world", "Interact with the world of Rimeworld", func(cmd *cli.Cmd) {
+	c.cli.Command("world", "Interact with the world of Rimworld", func(cmd *cli.Cmd) {
 		cmd.Command("growth-plants", "Make all plant to grow at a percentage", func(cmd *cli.Cmd) {
 			percent := cmd.Float64Arg("PERCENTAGE", 100.0, "Percent of growth to attribute to plants")
 			cmd.Action = func() {
