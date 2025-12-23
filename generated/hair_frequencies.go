@@ -3,7 +3,7 @@
 package generated
 
 import (
-	"github.com/cruffinoni/rimworld-editor/internal/xml"
+	"github.com/cruffinoni/rimworld-editor/internal/xml/domain"
 	"github.com/cruffinoni/rimworld-editor/internal/xml/attributes"
 )
 
@@ -14,7 +14,7 @@ type HairFrequencies struct {
 	Vals [62]*SavegameGameWorldIdeoManagerIdeosLiStyleHairFrequenciesVals `xml:"vals"`
 }
 
-func (h *HairFrequencies) Assign(*xml.Element) error {
+func (h *HairFrequencies) Assign(*domain.Element) error {
 	return nil
 }
 

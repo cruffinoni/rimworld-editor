@@ -3,23 +3,23 @@
 package generated
 
 import (
-	"github.com/cruffinoni/rimworld-editor/internal/xml"
+	"github.com/cruffinoni/rimworld-editor/internal/xml/domain"
 	"github.com/cruffinoni/rimworld-editor/internal/xml/attributes"
-	"github.com/cruffinoni/rimworld-editor/internal/xml/types"
-	"github.com/cruffinoni/rimworld-editor/internal/xml/types/primary"
+	"github.com/cruffinoni/rimworld-editor/internal/xml/collection"
+	"github.com/cruffinoni/rimworld-editor/internal/xml/scalar"
 )
 
 type AutoCutFilter struct {
 	Attr           attributes.Attributes
 	FieldValidated map[string]bool
 
-	DisallowedSpecialFilters *primary.Empty       `xml:"disallowedSpecialFilters"`
-	AllowedDefs              *types.Slice[string] `xml:"allowedDefs"`
+	DisallowedSpecialFilters *scalar.Empty       `xml:"disallowedSpecialFilters"`
+	AllowedDefs              *collection.Slice[string] `xml:"allowedDefs"`
 	AllowedHitPointsPercents string               `xml:"allowedHitPointsPercents"`
 	AllowedQualityLevels     string               `xml:"allowedQualityLevels"`
 }
 
-func (a *AutoCutFilter) Assign(*xml.Element) error {
+func (a *AutoCutFilter) Assign(*domain.Element) error {
 	return nil
 }
 

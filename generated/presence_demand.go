@@ -3,9 +3,9 @@
 package generated
 
 import (
-	"github.com/cruffinoni/rimworld-editor/internal/xml"
+	"github.com/cruffinoni/rimworld-editor/internal/xml/domain"
 	"github.com/cruffinoni/rimworld-editor/internal/xml/attributes"
-	"github.com/cruffinoni/rimworld-editor/internal/xml/types"
+	"github.com/cruffinoni/rimworld-editor/internal/xml/collection"
 )
 
 type PresenceDemand struct {
@@ -14,10 +14,10 @@ type PresenceDemand struct {
 
 	ID               int64                           `xml:"ID"`
 	MinExpectation   string                          `xml:"minExpectation"`
-	RoomRequirements *types.Slice[*RoomRequirements] `xml:"roomRequirements"`
+	RoomRequirements *collection.Slice[*RoomRequirements] `xml:"roomRequirements"`
 }
 
-func (p *PresenceDemand) Assign(*xml.Element) error {
+func (p *PresenceDemand) Assign(*domain.Element) error {
 	return nil
 }
 

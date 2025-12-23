@@ -3,7 +3,7 @@
 package generated
 
 import (
-	"github.com/cruffinoni/rimworld-editor/internal/xml"
+	"github.com/cruffinoni/rimworld-editor/internal/xml/domain"
 	"github.com/cruffinoni/rimworld-editor/internal/xml/attributes"
 )
 
@@ -17,7 +17,7 @@ type Areas struct {
 	Color     string                                         `xml:"color"`
 }
 
-func (a *Areas) Assign(*xml.Element) error {
+func (a *Areas) Assign(*domain.Element) error {
 	return nil
 }
 

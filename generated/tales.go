@@ -3,7 +3,7 @@
 package generated
 
 import (
-	"github.com/cruffinoni/rimworld-editor/internal/xml"
+	"github.com/cruffinoni/rimworld-editor/internal/xml/domain"
 	"github.com/cruffinoni/rimworld-editor/internal/xml/attributes"
 )
 
@@ -24,7 +24,7 @@ type Tales struct {
 	ThingData      *ThingData      `xml:"thingData"`
 }
 
-func (t *Tales) Assign(*xml.Element) error {
+func (t *Tales) Assign(*domain.Element) error {
 	return nil
 }
 

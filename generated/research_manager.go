@@ -3,21 +3,21 @@
 package generated
 
 import (
-	"github.com/cruffinoni/rimworld-editor/internal/xml"
+	"github.com/cruffinoni/rimworld-editor/internal/xml/domain"
 	"github.com/cruffinoni/rimworld-editor/internal/xml/attributes"
-	"github.com/cruffinoni/rimworld-editor/internal/xml/types"
-	"github.com/cruffinoni/rimworld-editor/internal/xml/types/primary"
+	"github.com/cruffinoni/rimworld-editor/internal/xml/collection"
+	"github.com/cruffinoni/rimworld-editor/internal/xml/scalar"
 )
 
 type ResearchManager struct {
 	Attr           attributes.Attributes
 	FieldValidated map[string]bool
 
-	Progress   types.Map[string, float64]        `xml:"progress"`
-	Techprints types.Map[string, *primary.Empty] `xml:"techprints"`
+	Progress   collection.Map[string, float64]        `xml:"progress"`
+	Techprints collection.Map[string, *scalar.Empty] `xml:"techprints"`
 }
 
-func (r *ResearchManager) Assign(*xml.Element) error {
+func (r *ResearchManager) Assign(*domain.Element) error {
 	return nil
 }
 

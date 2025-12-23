@@ -3,7 +3,7 @@
 package generated
 
 import (
-	"github.com/cruffinoni/rimworld-editor/internal/xml"
+	"github.com/cruffinoni/rimworld-editor/internal/xml/domain"
 	"github.com/cruffinoni/rimworld-editor/internal/xml/attributes"
 )
 
@@ -14,7 +14,7 @@ type Gc struct {
 	LastSuccessfulGctick int64 `xml:"lastSuccessfulGCTick"`
 }
 
-func (g *Gc) Assign(*xml.Element) error {
+func (g *Gc) Assign(*domain.Element) error {
 	return nil
 }
 

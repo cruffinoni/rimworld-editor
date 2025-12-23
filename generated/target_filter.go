@@ -3,7 +3,7 @@
 package generated
 
 import (
-	"github.com/cruffinoni/rimworld-editor/internal/xml"
+	"github.com/cruffinoni/rimworld-editor/internal/xml/domain"
 	"github.com/cruffinoni/rimworld-editor/internal/xml/attributes"
 )
 
@@ -14,7 +14,7 @@ type TargetFilter struct {
 	Def string `xml:"def"`
 }
 
-func (t *TargetFilter) Assign(*xml.Element) error {
+func (t *TargetFilter) Assign(*domain.Element) error {
 	return nil
 }
 

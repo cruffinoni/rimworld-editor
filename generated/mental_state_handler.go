@@ -3,7 +3,7 @@
 package generated
 
 import (
-	"github.com/cruffinoni/rimworld-editor/internal/xml"
+	"github.com/cruffinoni/rimworld-editor/internal/xml/domain"
 	"github.com/cruffinoni/rimworld-editor/internal/xml/attributes"
 )
 
@@ -14,7 +14,7 @@ type MentalStateHandler struct {
 	CurState *CurState `xml:"curState"`
 }
 
-func (m *MentalStateHandler) Assign(*xml.Element) error {
+func (m *MentalStateHandler) Assign(*domain.Element) error {
 	return nil
 }
 

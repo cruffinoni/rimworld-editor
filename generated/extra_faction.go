@@ -3,7 +3,7 @@
 package generated
 
 import (
-	"github.com/cruffinoni/rimworld-editor/internal/xml"
+	"github.com/cruffinoni/rimworld-editor/internal/xml/domain"
 	"github.com/cruffinoni/rimworld-editor/internal/xml/attributes"
 )
 
@@ -15,7 +15,7 @@ type ExtraFaction struct {
 	FactionType string `xml:"factionType"`
 }
 
-func (e *ExtraFaction) Assign(*xml.Element) error {
+func (e *ExtraFaction) Assign(*domain.Element) error {
 	return nil
 }
 

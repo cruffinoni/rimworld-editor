@@ -3,7 +3,7 @@
 package generated
 
 import (
-	"github.com/cruffinoni/rimworld-editor/internal/xml"
+	"github.com/cruffinoni/rimworld-editor/internal/xml/domain"
 	"github.com/cruffinoni/rimworld-editor/internal/xml/attributes"
 )
 
@@ -15,7 +15,7 @@ type RecentMemory struct {
 	LastOutdoorTick int64 `xml:"lastOutdoorTick"`
 }
 
-func (r *RecentMemory) Assign(*xml.Element) error {
+func (r *RecentMemory) Assign(*domain.Element) error {
 	return nil
 }
 

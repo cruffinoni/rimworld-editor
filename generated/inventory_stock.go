@@ -3,19 +3,19 @@
 package generated
 
 import (
-	"github.com/cruffinoni/rimworld-editor/internal/xml"
+	"github.com/cruffinoni/rimworld-editor/internal/xml/domain"
 	"github.com/cruffinoni/rimworld-editor/internal/xml/attributes"
-	"github.com/cruffinoni/rimworld-editor/internal/xml/types"
+	"github.com/cruffinoni/rimworld-editor/internal/xml/collection"
 )
 
 type InventoryStock struct {
 	Attr           attributes.Attributes
 	FieldValidated map[string]bool
 
-	StockEntries types.Map[string, *SavegameGameWorldWorldPawnsPawnsMothballedLiInventoryStockStockEntriesValues] `xml:"stockEntries"`
+	StockEntries collection.Map[string, *SavegameGameWorldWorldPawnsPawnsMothballedLiInventoryStockStockEntriesValues] `xml:"stockEntries"`
 }
 
-func (i *InventoryStock) Assign(*xml.Element) error {
+func (i *InventoryStock) Assign(*domain.Element) error {
 	return nil
 }
 

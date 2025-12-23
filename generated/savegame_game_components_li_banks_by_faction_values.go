@@ -3,10 +3,10 @@
 package generated
 
 import (
-	"github.com/cruffinoni/rimworld-editor/internal/xml"
+	"github.com/cruffinoni/rimworld-editor/internal/xml/domain"
 	"github.com/cruffinoni/rimworld-editor/internal/xml/attributes"
-	"github.com/cruffinoni/rimworld-editor/internal/xml/types"
-	"github.com/cruffinoni/rimworld-editor/internal/xml/types/primary"
+	"github.com/cruffinoni/rimworld-editor/internal/xml/collection"
+	"github.com/cruffinoni/rimworld-editor/internal/xml/scalar"
 )
 
 type SavegameGameComponentsLiBanksByFactionValues struct {
@@ -14,12 +14,12 @@ type SavegameGameComponentsLiBanksByFactionValues struct {
 	FieldValidated map[string]bool
 
 	ParentFaction     string                            `xml:"parentFaction"`
-	Loans             *primary.Empty                    `xml:"loans"`
-	LoanLastTimeTaken types.Map[string, *primary.Empty] `xml:"loanLastTimeTaken"`
+	Loans             *scalar.Empty                    `xml:"loans"`
+	LoanLastTimeTaken collection.Map[string, *scalar.Empty] `xml:"loanLastTimeTaken"`
 	DepositAmount     int64                             `xml:"depositAmount"`
 }
 
-func (s *SavegameGameComponentsLiBanksByFactionValues) Assign(*xml.Element) error {
+func (s *SavegameGameComponentsLiBanksByFactionValues) Assign(*domain.Element) error {
 	return nil
 }
 

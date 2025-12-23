@@ -3,7 +3,7 @@
 package generated
 
 import (
-	"github.com/cruffinoni/rimworld-editor/internal/xml"
+	"github.com/cruffinoni/rimworld-editor/internal/xml/domain"
 	"github.com/cruffinoni/rimworld-editor/internal/xml/attributes"
 )
 
@@ -14,7 +14,7 @@ type PollutionGrid struct {
 	Grid *Grid `xml:"grid"`
 }
 
-func (p *PollutionGrid) Assign(*xml.Element) error {
+func (p *PollutionGrid) Assign(*domain.Element) error {
 	return nil
 }
 

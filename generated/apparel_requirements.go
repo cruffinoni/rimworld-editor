@@ -3,23 +3,23 @@
 package generated
 
 import (
-	"github.com/cruffinoni/rimworld-editor/internal/xml"
+	"github.com/cruffinoni/rimworld-editor/internal/xml/domain"
 	"github.com/cruffinoni/rimworld-editor/internal/xml/attributes"
-	"github.com/cruffinoni/rimworld-editor/internal/xml/types"
-	"github.com/cruffinoni/rimworld-editor/internal/xml/types/primary"
+	"github.com/cruffinoni/rimworld-editor/internal/xml/collection"
+	"github.com/cruffinoni/rimworld-editor/internal/xml/scalar"
 )
 
 type ApparelRequirements struct {
 	Attr           attributes.Attributes
 	FieldValidated map[string]bool
 
-	AllowedFactionCategoryTags    *types.Slice[string] `xml:"allowedFactionCategoryTags"`
-	DisallowedFactionCategoryTags *types.Slice[string] `xml:"disallowedFactionCategoryTags"`
-	AnyMemeRequired               *primary.Empty       `xml:"anyMemeRequired"`
+	AllowedFactionCategoryTags    *collection.Slice[string] `xml:"allowedFactionCategoryTags"`
+	DisallowedFactionCategoryTags *collection.Slice[string] `xml:"disallowedFactionCategoryTags"`
+	AnyMemeRequired               *scalar.Empty       `xml:"anyMemeRequired"`
 	Requirement                   *Requirement         `xml:"requirement"`
 }
 
-func (a *ApparelRequirements) Assign(*xml.Element) error {
+func (a *ApparelRequirements) Assign(*domain.Element) error {
 	return nil
 }
 

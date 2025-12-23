@@ -3,7 +3,7 @@
 package generated
 
 import (
-	"github.com/cruffinoni/rimworld-editor/internal/xml"
+	"github.com/cruffinoni/rimworld-editor/internal/xml/domain"
 	"github.com/cruffinoni/rimworld-editor/internal/xml/attributes"
 )
 
@@ -16,7 +16,7 @@ type GasGrid struct {
 	CycleIndexDissipation int64  `xml:"cycleIndexDissipation"`
 }
 
-func (g *GasGrid) Assign(*xml.Element) error {
+func (g *GasGrid) Assign(*domain.Element) error {
 	return nil
 }
 

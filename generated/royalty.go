@@ -3,26 +3,26 @@
 package generated
 
 import (
-	"github.com/cruffinoni/rimworld-editor/internal/xml"
+	"github.com/cruffinoni/rimworld-editor/internal/xml/domain"
 	"github.com/cruffinoni/rimworld-editor/internal/xml/attributes"
-	"github.com/cruffinoni/rimworld-editor/internal/xml/types"
-	"github.com/cruffinoni/rimworld-editor/internal/xml/types/primary"
+	"github.com/cruffinoni/rimworld-editor/internal/xml/collection"
+	"github.com/cruffinoni/rimworld-editor/internal/xml/scalar"
 )
 
 type Royalty struct {
 	Attr           attributes.Attributes
 	FieldValidated map[string]bool
 
-	Titles                *types.Slice[*Titles]             `xml:"titles"`
-	Favor                 types.Map[string, *primary.Empty] `xml:"favor"`
-	HighestTitles         types.Map[string, *primary.Empty] `xml:"highestTitles"`
-	Heirs                 types.Map[string, *primary.Empty] `xml:"heirs"`
-	Permits               *types.Slice[*Permits]            `xml:"permits"`
-	Abilities             *types.Slice[*Abilities]          `xml:"abilities"`
+	Titles                *collection.Slice[*Titles]             `xml:"titles"`
+	Favor                 collection.Map[string, *scalar.Empty] `xml:"favor"`
+	HighestTitles         collection.Map[string, *scalar.Empty] `xml:"highestTitles"`
+	Heirs                 collection.Map[string, *scalar.Empty] `xml:"heirs"`
+	Permits               *collection.Slice[*Permits]            `xml:"permits"`
+	Abilities             *collection.Slice[*Abilities]          `xml:"abilities"`
 	AllowRoomRequirements bool                              `xml:"allowRoomRequirements"`
 }
 
-func (r *Royalty) Assign(*xml.Element) error {
+func (r *Royalty) Assign(*domain.Element) error {
 	return nil
 }
 

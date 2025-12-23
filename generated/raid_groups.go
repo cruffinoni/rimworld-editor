@@ -3,21 +3,21 @@
 package generated
 
 import (
-	"github.com/cruffinoni/rimworld-editor/internal/xml"
+	"github.com/cruffinoni/rimworld-editor/internal/xml/domain"
 	"github.com/cruffinoni/rimworld-editor/internal/xml/attributes"
-	"github.com/cruffinoni/rimworld-editor/internal/xml/types"
+	"github.com/cruffinoni/rimworld-editor/internal/xml/collection"
 )
 
 type RaidGroups struct {
 	Attr           attributes.Attributes
 	FieldValidated map[string]bool
 
-	Pawns   *types.Slice[string] `xml:"pawns"`
-	Lords   *types.Slice[string] `xml:"lords"`
+	Pawns   *collection.Slice[string] `xml:"pawns"`
+	Lords   *collection.Slice[string] `xml:"lords"`
 	Faction string               `xml:"faction"`
 }
 
-func (r *RaidGroups) Assign(*xml.Element) error {
+func (r *RaidGroups) Assign(*domain.Element) error {
 	return nil
 }
 

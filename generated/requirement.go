@@ -3,23 +3,23 @@
 package generated
 
 import (
-	"github.com/cruffinoni/rimworld-editor/internal/xml"
+	"github.com/cruffinoni/rimworld-editor/internal/xml/domain"
 	"github.com/cruffinoni/rimworld-editor/internal/xml/attributes"
-	"github.com/cruffinoni/rimworld-editor/internal/xml/types"
-	"github.com/cruffinoni/rimworld-editor/internal/xml/types/primary"
+	"github.com/cruffinoni/rimworld-editor/internal/xml/collection"
+	"github.com/cruffinoni/rimworld-editor/internal/xml/scalar"
 )
 
 type Requirement struct {
 	Attr           attributes.Attributes
 	FieldValidated map[string]bool
 
-	BodyPartGroupsMatchAny *types.Slice[string] `xml:"bodyPartGroupsMatchAny"`
-	RequiredDefs           *types.Slice[string] `xml:"requiredDefs"`
-	RequiredTags           *types.Slice[string] `xml:"requiredTags"`
-	AllowedTags            *primary.Empty       `xml:"allowedTags"`
+	BodyPartGroupsMatchAny *collection.Slice[string] `xml:"bodyPartGroupsMatchAny"`
+	RequiredDefs           *collection.Slice[string] `xml:"requiredDefs"`
+	RequiredTags           *collection.Slice[string] `xml:"requiredTags"`
+	AllowedTags            *scalar.Empty       `xml:"allowedTags"`
 }
 
-func (r *Requirement) Assign(*xml.Element) error {
+func (r *Requirement) Assign(*domain.Element) error {
 	return nil
 }
 

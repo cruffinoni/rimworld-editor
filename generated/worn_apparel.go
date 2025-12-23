@@ -3,19 +3,19 @@
 package generated
 
 import (
-	"github.com/cruffinoni/rimworld-editor/internal/xml"
+	"github.com/cruffinoni/rimworld-editor/internal/xml/domain"
 	"github.com/cruffinoni/rimworld-editor/internal/xml/attributes"
-	"github.com/cruffinoni/rimworld-editor/internal/xml/types"
+	"github.com/cruffinoni/rimworld-editor/internal/xml/collection"
 )
 
 type WornApparel struct {
 	Attr           attributes.Attributes
 	FieldValidated map[string]bool
 
-	InnerList *types.Slice[*SavegameGameWorldWorldPawnsPawnsMothballedLiApparelWornApparelInnerList] `xml:"innerList"`
+	InnerList *collection.Slice[*SavegameGameWorldWorldPawnsPawnsMothballedLiApparelWornApparelInnerList] `xml:"innerList"`
 }
 
-func (w *WornApparel) Assign(*xml.Element) error {
+func (w *WornApparel) Assign(*domain.Element) error {
 	return nil
 }
 

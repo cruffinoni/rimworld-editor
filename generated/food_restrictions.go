@@ -3,7 +3,7 @@
 package generated
 
 import (
-	"github.com/cruffinoni/rimworld-editor/internal/xml"
+	"github.com/cruffinoni/rimworld-editor/internal/xml/domain"
 	"github.com/cruffinoni/rimworld-editor/internal/xml/attributes"
 )
 
@@ -16,7 +16,7 @@ type FoodRestrictions struct {
 	Filter *Filter `xml:"filter"`
 }
 
-func (f *FoodRestrictions) Assign(*xml.Element) error {
+func (f *FoodRestrictions) Assign(*domain.Element) error {
 	return nil
 }
 

@@ -1,7 +1,7 @@
 package algorithm
 
 import (
-	"github.com/cruffinoni/rimworld-editor/internal/xml/types/iterator"
+	"github.com/cruffinoni/rimworld-editor/internal/xml/iterator"
 )
 
 func FindInSliceIf[T any](arr iterator.SliceIndexer[T], pred func(T) bool) (T, bool) {

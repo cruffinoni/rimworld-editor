@@ -3,7 +3,7 @@
 package generated
 
 import (
-	"github.com/cruffinoni/rimworld-editor/internal/xml"
+	"github.com/cruffinoni/rimworld-editor/internal/xml/domain"
 	"github.com/cruffinoni/rimworld-editor/internal/xml/attributes"
 )
 
@@ -14,7 +14,7 @@ type MentalFitGenerator struct {
 	TicksUntilCanDoMentalFit int64 `xml:"ticksUntilCanDoMentalFit"`
 }
 
-func (m *MentalFitGenerator) Assign(*xml.Element) error {
+func (m *MentalFitGenerator) Assign(*domain.Element) error {
 	return nil
 }
 

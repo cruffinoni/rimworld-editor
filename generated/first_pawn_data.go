@@ -3,9 +3,9 @@
 package generated
 
 import (
-	"github.com/cruffinoni/rimworld-editor/internal/xml"
+	"github.com/cruffinoni/rimworld-editor/internal/xml/domain"
 	"github.com/cruffinoni/rimworld-editor/internal/xml/attributes"
-	"github.com/cruffinoni/rimworld-editor/internal/xml/types"
+	"github.com/cruffinoni/rimworld-editor/internal/xml/collection"
 )
 
 type FirstPawnData struct {
@@ -20,14 +20,14 @@ type FirstPawnData struct {
 	ChronologicalAge             int64                      `xml:"chronologicalAge"`
 	RelationInfo                 string                     `xml:"relationInfo"`
 	EverBeenColonistOrTameAnimal bool                       `xml:"everBeenColonistOrTameAnimal"`
-	RoyalTitles                  *types.Slice[*RoyalTitles] `xml:"royalTitles"`
+	RoyalTitles                  *collection.Slice[*RoyalTitles] `xml:"royalTitles"`
 	Name                         *Name                      `xml:"name"`
 	Peq                          string                     `xml:"peq"`
 	App                          string                     `xml:"app"`
 	IsFactionLeader              bool                       `xml:"isFactionLeader"`
 }
 
-func (f *FirstPawnData) Assign(*xml.Element) error {
+func (f *FirstPawnData) Assign(*domain.Element) error {
 	return nil
 }
 

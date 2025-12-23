@@ -3,7 +3,7 @@
 package generated
 
 import (
-	"github.com/cruffinoni/rimworld-editor/internal/xml"
+	"github.com/cruffinoni/rimworld-editor/internal/xml/domain"
 	"github.com/cruffinoni/rimworld-editor/internal/xml/attributes"
 )
 
@@ -18,7 +18,7 @@ type Name struct {
 	Numerical bool   `xml:"numerical"`
 }
 
-func (n *Name) Assign(*xml.Element) error {
+func (n *Name) Assign(*domain.Element) error {
 	return nil
 }
 

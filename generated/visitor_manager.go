@@ -3,19 +3,19 @@
 package generated
 
 import (
-	"github.com/cruffinoni/rimworld-editor/internal/xml"
+	"github.com/cruffinoni/rimworld-editor/internal/xml/domain"
 	"github.com/cruffinoni/rimworld-editor/internal/xml/attributes"
-	"github.com/cruffinoni/rimworld-editor/internal/xml/types/primary"
+	"github.com/cruffinoni/rimworld-editor/internal/xml/scalar"
 )
 
 type VisitorManager struct {
 	Attr           attributes.Attributes
 	FieldValidated map[string]bool
 
-	PassingShips *primary.Empty `xml:"passingShips"`
+	PassingShips *scalar.Empty `xml:"passingShips"`
 }
 
-func (v *VisitorManager) Assign(*xml.Element) error {
+func (v *VisitorManager) Assign(*domain.Element) error {
 	return nil
 }
 

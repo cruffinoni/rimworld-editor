@@ -3,9 +3,9 @@
 package generated
 
 import (
-	"github.com/cruffinoni/rimworld-editor/internal/xml"
+	"github.com/cruffinoni/rimworld-editor/internal/xml/domain"
 	"github.com/cruffinoni/rimworld-editor/internal/xml/attributes"
-	"github.com/cruffinoni/rimworld-editor/internal/xml/types"
+	"github.com/cruffinoni/rimworld-editor/internal/xml/collection"
 )
 
 type RoomRequirements struct {
@@ -16,12 +16,12 @@ type RoomRequirements struct {
 	Count          int64                `xml:"count"`
 	Area           int64                `xml:"area"`
 	LabelKey       string               `xml:"labelKey"`
-	BuildingTags   *types.Slice[string] `xml:"buildingTags"`
+	BuildingTags   *collection.Slice[string] `xml:"buildingTags"`
 	Impressiveness int64                `xml:"impressiveness"`
-	Tags           *types.Slice[string] `xml:"tags"`
+	Tags           *collection.Slice[string] `xml:"tags"`
 }
 
-func (r *RoomRequirements) Assign(*xml.Element) error {
+func (r *RoomRequirements) Assign(*domain.Element) error {
 	return nil
 }
 

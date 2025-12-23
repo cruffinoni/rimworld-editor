@@ -3,9 +3,9 @@
 package generated
 
 import (
-	"github.com/cruffinoni/rimworld-editor/internal/xml"
+	"github.com/cruffinoni/rimworld-editor/internal/xml/domain"
 	"github.com/cruffinoni/rimworld-editor/internal/xml/attributes"
-	"github.com/cruffinoni/rimworld-editor/internal/xml/types/primary"
+	"github.com/cruffinoni/rimworld-editor/internal/xml/scalar"
 )
 
 type Roping struct {
@@ -13,10 +13,10 @@ type Roping struct {
 	FieldValidated map[string]bool
 
 	HitchingPostInt string         `xml:"hitchingPostInt"`
-	Ropees          *primary.Empty `xml:"ropees"`
+	Ropees          *scalar.Empty `xml:"ropees"`
 }
 
-func (r *Roping) Assign(*xml.Element) error {
+func (r *Roping) Assign(*domain.Element) error {
 	return nil
 }
 

@@ -3,7 +3,7 @@
 package generated
 
 import (
-	"github.com/cruffinoni/rimworld-editor/internal/xml"
+	"github.com/cruffinoni/rimworld-editor/internal/xml/domain"
 	"github.com/cruffinoni/rimworld-editor/internal/xml/attributes"
 )
 
@@ -19,7 +19,7 @@ type HealthTracker struct {
 	HealthState              string        `xml:"healthState"`
 }
 
-func (h *HealthTracker) Assign(*xml.Element) error {
+func (h *HealthTracker) Assign(*domain.Element) error {
 	return nil
 }
 

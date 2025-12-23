@@ -3,10 +3,10 @@
 package generated
 
 import (
-	"github.com/cruffinoni/rimworld-editor/internal/xml"
+	"github.com/cruffinoni/rimworld-editor/internal/xml/domain"
 	"github.com/cruffinoni/rimworld-editor/internal/xml/attributes"
-	"github.com/cruffinoni/rimworld-editor/internal/xml/types"
-	"github.com/cruffinoni/rimworld-editor/internal/xml/types/primary"
+	"github.com/cruffinoni/rimworld-editor/internal/xml/collection"
+	"github.com/cruffinoni/rimworld-editor/internal/xml/scalar"
 )
 
 type Ideo struct {
@@ -14,13 +14,13 @@ type Ideo struct {
 	FieldValidated map[string]bool
 
 	Ideo             string               `xml:"ideo"`
-	PreviousIdeos    *types.Slice[string] `xml:"previousIdeos"`
+	PreviousIdeos    *collection.Slice[string] `xml:"previousIdeos"`
 	Certainty        float64              `xml:"certainty"`
 	JoinTick         int64                `xml:"joinTick"`
-	BabyIdeoExposure *primary.Empty       `xml:"babyIdeoExposure"`
+	BabyIdeoExposure *scalar.Empty       `xml:"babyIdeoExposure"`
 }
 
-func (i *Ideo) Assign(*xml.Element) error {
+func (i *Ideo) Assign(*domain.Element) error {
 	return nil
 }
 

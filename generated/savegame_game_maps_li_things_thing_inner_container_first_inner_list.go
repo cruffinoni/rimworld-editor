@@ -3,9 +3,9 @@
 package generated
 
 import (
-	"github.com/cruffinoni/rimworld-editor/internal/xml"
+	"github.com/cruffinoni/rimworld-editor/internal/xml/domain"
 	"github.com/cruffinoni/rimworld-editor/internal/xml/attributes"
-	"github.com/cruffinoni/rimworld-editor/internal/xml/types/primary"
+	"github.com/cruffinoni/rimworld-editor/internal/xml/scalar"
 )
 
 type SavegameGameMapsLiThingsThingInnerContainerFirstInnerList struct {
@@ -16,11 +16,11 @@ type SavegameGameMapsLiThingsThingInnerContainerFirstInnerList struct {
 	Id         string         `xml:"id"`
 	Health     int64          `xml:"health"`
 	StackCount int64          `xml:"stackCount"`
-	QuestTags  *primary.Empty `xml:"questTags"`
+	QuestTags  *scalar.Empty `xml:"questTags"`
 	RotProg    float64        `xml:"rotProg"`
 }
 
-func (s *SavegameGameMapsLiThingsThingInnerContainerFirstInnerList) Assign(*xml.Element) error {
+func (s *SavegameGameMapsLiThingsThingInnerContainerFirstInnerList) Assign(*domain.Element) error {
 	return nil
 }
 

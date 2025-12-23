@@ -3,19 +3,19 @@
 package generated
 
 import (
-	"github.com/cruffinoni/rimworld-editor/internal/xml"
+	"github.com/cruffinoni/rimworld-editor/internal/xml/domain"
 	"github.com/cruffinoni/rimworld-editor/internal/xml/attributes"
-	"github.com/cruffinoni/rimworld-editor/internal/xml/types"
+	"github.com/cruffinoni/rimworld-editor/internal/xml/collection"
 )
 
 type PhysicalInteractionReservationManager struct {
 	Attr           attributes.Attributes
 	FieldValidated map[string]bool
 
-	Reservations *types.Slice[*Reservations] `xml:"reservations"`
+	Reservations *collection.Slice[*Reservations] `xml:"reservations"`
 }
 
-func (p *PhysicalInteractionReservationManager) Assign(*xml.Element) error {
+func (p *PhysicalInteractionReservationManager) Assign(*domain.Element) error {
 	return nil
 }
 

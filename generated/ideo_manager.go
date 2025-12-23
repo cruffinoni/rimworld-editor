@@ -3,22 +3,22 @@
 package generated
 
 import (
-	"github.com/cruffinoni/rimworld-editor/internal/xml"
+	"github.com/cruffinoni/rimworld-editor/internal/xml/domain"
 	"github.com/cruffinoni/rimworld-editor/internal/xml/attributes"
-	"github.com/cruffinoni/rimworld-editor/internal/xml/types"
-	"github.com/cruffinoni/rimworld-editor/internal/xml/types/primary"
+	"github.com/cruffinoni/rimworld-editor/internal/xml/collection"
+	"github.com/cruffinoni/rimworld-editor/internal/xml/scalar"
 )
 
 type IdeoManager struct {
 	Attr           attributes.Attributes
 	FieldValidated map[string]bool
 
-	Ideos                   *types.Slice[*Ideos] `xml:"ideos"`
-	ToRemove                *primary.Empty       `xml:"toRemove"`
-	SelectedStyleCategories *primary.Empty       `xml:"selectedStyleCategories"`
+	Ideos                   *collection.Slice[*Ideos] `xml:"ideos"`
+	ToRemove                *scalar.Empty       `xml:"toRemove"`
+	SelectedStyleCategories *scalar.Empty       `xml:"selectedStyleCategories"`
 }
 
-func (i *IdeoManager) Assign(*xml.Element) error {
+func (i *IdeoManager) Assign(*domain.Element) error {
 	return nil
 }
 

@@ -3,7 +3,7 @@
 package generated
 
 import (
-	"github.com/cruffinoni/rimworld-editor/internal/xml"
+	"github.com/cruffinoni/rimworld-editor/internal/xml/domain"
 	"github.com/cruffinoni/rimworld-editor/internal/xml/attributes"
 )
 
@@ -18,7 +18,7 @@ type FinalResistanceInteractionData struct {
 	RecruiterOpinionFactor            float64 `xml:"recruiterOpinionFactor"`
 }
 
-func (f *FinalResistanceInteractionData) Assign(*xml.Element) error {
+func (f *FinalResistanceInteractionData) Assign(*domain.Element) error {
 	return nil
 }
 

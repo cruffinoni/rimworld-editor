@@ -3,7 +3,7 @@
 package generated
 
 import (
-	"github.com/cruffinoni/rimworld-editor/internal/xml"
+	"github.com/cruffinoni/rimworld-editor/internal/xml/domain"
 	"github.com/cruffinoni/rimworld-editor/internal/xml/attributes"
 )
 
@@ -17,7 +17,7 @@ type WeatherManager struct {
 	GrowthSeasonMemory *GrowthSeasonMemory `xml:"growthSeasonMemory"`
 }
 
-func (w *WeatherManager) Assign(*xml.Element) error {
+func (w *WeatherManager) Assign(*domain.Element) error {
 	return nil
 }
 

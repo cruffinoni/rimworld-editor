@@ -3,9 +3,9 @@
 package generated
 
 import (
-	"github.com/cruffinoni/rimworld-editor/internal/xml"
+	"github.com/cruffinoni/rimworld-editor/internal/xml/domain"
 	"github.com/cruffinoni/rimworld-editor/internal/xml/attributes"
-	"github.com/cruffinoni/rimworld-editor/internal/xml/types"
+	"github.com/cruffinoni/rimworld-editor/internal/xml/collection"
 )
 
 type AutoRecorderGroups struct {
@@ -13,10 +13,10 @@ type AutoRecorderGroups struct {
 	FieldValidated map[string]bool
 
 	Def       string                   `xml:"def"`
-	Recorders *types.Slice[*Recorders] `xml:"recorders"`
+	Recorders *collection.Slice[*Recorders] `xml:"recorders"`
 }
 
-func (a *AutoRecorderGroups) Assign(*xml.Element) error {
+func (a *AutoRecorderGroups) Assign(*domain.Element) error {
 	return nil
 }
 

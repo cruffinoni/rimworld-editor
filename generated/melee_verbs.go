@@ -3,7 +3,7 @@
 package generated
 
 import (
-	"github.com/cruffinoni/rimworld-editor/internal/xml"
+	"github.com/cruffinoni/rimworld-editor/internal/xml/domain"
 	"github.com/cruffinoni/rimworld-editor/internal/xml/attributes"
 )
 
@@ -17,7 +17,7 @@ type MeleeVerbs struct {
 	LastTerrainBasedVerbUseTick int64         `xml:"lastTerrainBasedVerbUseTick"`
 }
 
-func (m *MeleeVerbs) Assign(*xml.Element) error {
+func (m *MeleeVerbs) Assign(*domain.Element) error {
 	return nil
 }
 

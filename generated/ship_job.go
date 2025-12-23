@@ -3,9 +3,9 @@
 package generated
 
 import (
-	"github.com/cruffinoni/rimworld-editor/internal/xml"
+	"github.com/cruffinoni/rimworld-editor/internal/xml/domain"
 	"github.com/cruffinoni/rimworld-editor/internal/xml/attributes"
-	"github.com/cruffinoni/rimworld-editor/internal/xml/types/primary"
+	"github.com/cruffinoni/rimworld-editor/internal/xml/scalar"
 )
 
 type ShipJob struct {
@@ -17,19 +17,19 @@ type ShipJob struct {
 	TransportShip          string         `xml:"transportShip"`
 	DestinationTile        int64          `xml:"destinationTile"`
 	DropMode               string         `xml:"dropMode"`
-	ArrivalAction          *primary.Empty `xml:"arrivalAction"`
+	ArrivalAction          *scalar.Empty `xml:"arrivalAction"`
 	MapParent              string         `xml:"mapParent"`
 	MapOfPawn              string         `xml:"mapOfPawn"`
 	FactionForArrival      string         `xml:"factionForArrival"`
-	DroppedThings          *primary.Empty `xml:"droppedThings"`
+	DroppedThings          *scalar.Empty `xml:"droppedThings"`
 	Cell                   string         `xml:"cell"`
 	StartTick              int64          `xml:"startTick"`
 	Duration               int64          `xml:"duration"`
-	SendAwayIfAllDespawned *primary.Empty `xml:"sendAwayIfAllDespawned"`
-	SendAwayIfAnyDespawned *primary.Empty `xml:"sendAwayIfAnyDespawned"`
+	SendAwayIfAllDespawned *scalar.Empty `xml:"sendAwayIfAllDespawned"`
+	SendAwayIfAnyDespawned *scalar.Empty `xml:"sendAwayIfAnyDespawned"`
 }
 
-func (s *ShipJob) Assign(*xml.Element) error {
+func (s *ShipJob) Assign(*domain.Element) error {
 	return nil
 }
 

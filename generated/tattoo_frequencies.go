@@ -3,19 +3,19 @@
 package generated
 
 import (
-	"github.com/cruffinoni/rimworld-editor/internal/xml"
+	"github.com/cruffinoni/rimworld-editor/internal/xml/domain"
 	"github.com/cruffinoni/rimworld-editor/internal/xml/attributes"
-	"github.com/cruffinoni/rimworld-editor/internal/xml/types"
+	"github.com/cruffinoni/rimworld-editor/internal/xml/collection"
 )
 
 type TattooFrequencies struct {
 	Attr           attributes.Attributes
 	FieldValidated map[string]bool
 
-	Vals *types.Slice[*SavegameGameWorldIdeoManagerIdeosLiStyleTattooFrequenciesVals] `xml:"vals"`
+	Vals *collection.Slice[*SavegameGameWorldIdeoManagerIdeosLiStyleTattooFrequenciesVals] `xml:"vals"`
 }
 
-func (t *TattooFrequencies) Assign(*xml.Element) error {
+func (t *TattooFrequencies) Assign(*domain.Element) error {
 	return nil
 }
 

@@ -3,7 +3,7 @@
 package generated
 
 import (
-	"github.com/cruffinoni/rimworld-editor/internal/xml"
+	"github.com/cruffinoni/rimworld-editor/internal/xml/domain"
 	"github.com/cruffinoni/rimworld-editor/internal/xml/attributes"
 )
 
@@ -14,7 +14,7 @@ type SharesHeldByPlayer struct {
 	ValueBought float64 `xml:"valueBought"`
 }
 
-func (s *SharesHeldByPlayer) Assign(*xml.Element) error {
+func (s *SharesHeldByPlayer) Assign(*domain.Element) error {
 	return nil
 }
 

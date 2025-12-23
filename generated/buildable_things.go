@@ -3,7 +3,7 @@
 package generated
 
 import (
-	"github.com/cruffinoni/rimworld-editor/internal/xml"
+	"github.com/cruffinoni/rimworld-editor/internal/xml/domain"
 	"github.com/cruffinoni/rimworld-editor/internal/xml/attributes"
 )
 
@@ -17,7 +17,7 @@ type BuildableThings struct {
 	Rotation int64  `xml:"Rotation"`
 }
 
-func (b *BuildableThings) Assign(*xml.Element) error {
+func (b *BuildableThings) Assign(*domain.Element) error {
 	return nil
 }
 

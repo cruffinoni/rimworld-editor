@@ -3,10 +3,10 @@
 package generated
 
 import (
-	"github.com/cruffinoni/rimworld-editor/internal/xml"
+	"github.com/cruffinoni/rimworld-editor/internal/xml/domain"
 	"github.com/cruffinoni/rimworld-editor/internal/xml/attributes"
-	"github.com/cruffinoni/rimworld-editor/internal/xml/types"
-	"github.com/cruffinoni/rimworld-editor/internal/xml/types/primary"
+	"github.com/cruffinoni/rimworld-editor/internal/xml/collection"
+	"github.com/cruffinoni/rimworld-editor/internal/xml/scalar"
 )
 
 type WorldObjectsWorldObjectsWorldGameSavegameInner struct {
@@ -17,9 +17,9 @@ type WorldObjectsWorldObjectsWorldGameSavegameInner struct {
 	ID                             int64                `xml:"ID"`
 	Tile                           int64                `xml:"tile"`
 	Faction                        string               `xml:"faction"`
-	QuestTags                      *types.Slice[string] `xml:"questTags"`
+	QuestTags                      *collection.Slice[string] `xml:"questTags"`
 	Expiration                     int64                `xml:"expiration"`
-	PreviouslyGeneratedInhabitants *primary.Empty       `xml:"previouslyGeneratedInhabitants"`
+	PreviouslyGeneratedInhabitants *scalar.Empty       `xml:"previouslyGeneratedInhabitants"`
 	Trader                         *Trader              `xml:"trader"`
 	NameInt                        string               `xml:"nameInt"`
 	NamedByPlayer                  bool                 `xml:"namedByPlayer"`
@@ -31,13 +31,13 @@ type WorldObjectsWorldObjectsWorldGameSavegameInner struct {
 	Refugee                        *Refugee             `xml:"refugee"`
 	Prisoner                       *Prisoner            `xml:"prisoner"`
 	CustomLabel                    string               `xml:"customLabel"`
-	Core                           *primary.Empty       `xml:"core"`
-	Parts                          *types.Slice[*Parts] `xml:"parts"`
+	Core                           *scalar.Empty       `xml:"core"`
+	Parts                          *collection.Slice[*Parts] `xml:"parts"`
 	FactionMustRemainHostile       bool                 `xml:"factionMustRemainHostile"`
 	DesiredThreatPoints            float64              `xml:"desiredThreatPoints"`
 }
 
-func (w *WorldObjectsWorldObjectsWorldGameSavegameInner) Assign(*xml.Element) error {
+func (w *WorldObjectsWorldObjectsWorldGameSavegameInner) Assign(*domain.Element) error {
 	return nil
 }
 

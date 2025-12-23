@@ -3,10 +3,10 @@
 package generated
 
 import (
-	"github.com/cruffinoni/rimworld-editor/internal/xml"
+	"github.com/cruffinoni/rimworld-editor/internal/xml/domain"
 	"github.com/cruffinoni/rimworld-editor/internal/xml/attributes"
-	"github.com/cruffinoni/rimworld-editor/internal/xml/types"
-	"github.com/cruffinoni/rimworld-editor/internal/xml/types/primary"
+	"github.com/cruffinoni/rimworld-editor/internal/xml/collection"
+	"github.com/cruffinoni/rimworld-editor/internal/xml/scalar"
 )
 
 type PawnsAlive struct {
@@ -16,16 +16,16 @@ type PawnsAlive struct {
 	Def                     string               `xml:"def"`
 	Id                      string               `xml:"id"`
 	Pos                     string               `xml:"pos"`
-	QuestTags               *types.Slice[string] `xml:"questTags"`
-	ThingsHauledToInventory *primary.Empty       `xml:"ThingsHauledToInventory"`
+	QuestTags               *collection.Slice[string] `xml:"questTags"`
+	ThingsHauledToInventory *scalar.Empty       `xml:"ThingsHauledToInventory"`
 	AnimalTabHandlerPawn    string               `xml:"animalTab.handler.pawn"`
 	AnimalTabHandlerMode    string               `xml:"animalTab.handler.mode"`
 	AnimalTabHandlerLevel   string               `xml:"animalTab.handler.level"`
 	TicksToReset            int64                `xml:"ticksToReset"`
 	LastKeepDisplayTick     int64                `xml:"lastKeepDisplayTick"`
-	LearnedAbilities        *primary.Empty       `xml:"learnedAbilities"`
+	LearnedAbilities        *scalar.Empty       `xml:"learnedAbilities"`
 	CurrentlyCasting        string               `xml:"currentlyCasting"`
-	CurrentlyCastingTargets *primary.Empty       `xml:"currentlyCastingTargets"`
+	CurrentlyCastingTargets *scalar.Empty       `xml:"currentlyCastingTargets"`
 	KindDef                 string               `xml:"kindDef"`
 	Gender                  string               `xml:"gender"`
 	BecameWorldPawnTickAbs  int64                `xml:"becameWorldPawnTickAbs"`
@@ -34,29 +34,29 @@ type PawnsAlive struct {
 	Jobs                    *Jobs                `xml:"jobs"`
 	Stances                 *Stances             `xml:"stances"`
 	VerbTracker             *VerbTracker         `xml:"verbTracker"`
-	Natives                 *primary.Empty       `xml:"natives"`
+	Natives                 *scalar.Empty       `xml:"natives"`
 	MeleeVerbs              *MeleeVerbs          `xml:"meleeVerbs"`
-	RotationTracker         *primary.Empty       `xml:"rotationTracker"`
-	Pather                  *primary.Empty       `xml:"pather"`
+	RotationTracker         *scalar.Empty       `xml:"rotationTracker"`
+	Pather                  *scalar.Empty       `xml:"pather"`
 	CarryTracker            *CarryTracker        `xml:"carryTracker"`
 	Apparel                 *Apparel             `xml:"apparel"`
 	Story                   *Story               `xml:"story"`
 	Equipment               *Equipment           `xml:"equipment"`
-	Drafter                 *primary.Empty       `xml:"drafter"`
+	Drafter                 *scalar.Empty       `xml:"drafter"`
 	AgeTracker              *AgeTracker          `xml:"ageTracker"`
 	HealthTracker           *HealthTracker       `xml:"healthTracker"`
 	Records                 *Records             `xml:"records"`
 	Inventory               *Inventory           `xml:"inventory"`
-	Filth                   *primary.Empty       `xml:"filth"`
-	Roping                  *primary.Empty       `xml:"roping"`
+	Filth                   *scalar.Empty       `xml:"filth"`
+	Roping                  *scalar.Empty       `xml:"roping"`
 	Needs                   *Needs               `xml:"needs"`
 	Guest                   *Guest               `xml:"guest"`
-	Guilt                   *primary.Empty       `xml:"guilt"`
+	Guilt                   *scalar.Empty       `xml:"guilt"`
 	Royalty                 *Royalty             `xml:"royalty"`
 	Social                  *Social              `xml:"social"`
 	PsychicEntropy          *PsychicEntropy      `xml:"psychicEntropy"`
 	Ownership               *Ownership           `xml:"ownership"`
-	Interactions            *primary.Empty       `xml:"interactions"`
+	Interactions            *scalar.Empty       `xml:"interactions"`
 	Skills                  *Skills              `xml:"skills"`
 	Abilities               *Abilities           `xml:"abilities"`
 	Ideo                    *Ideo                `xml:"ideo"`
@@ -67,21 +67,21 @@ type PawnsAlive struct {
 	FoodRestriction         *FoodRestriction     `xml:"foodRestriction"`
 	Timetable               *Timetable           `xml:"timetable"`
 	PlayerSettings          *PlayerSettings      `xml:"playerSettings"`
-	Training                *primary.Empty       `xml:"training"`
+	Training                *scalar.Empty       `xml:"training"`
 	Style                   *Style               `xml:"style"`
-	StyleObserver           *primary.Empty       `xml:"styleObserver"`
+	StyleObserver           *scalar.Empty       `xml:"styleObserver"`
 	Connections             *Connections         `xml:"connections"`
 	InventoryStock          *InventoryStock      `xml:"inventoryStock"`
 	TreeSightings           *TreeSightings       `xml:"treeSightings"`
-	Thinker                 *primary.Empty       `xml:"thinker"`
-	Mechanitor              *primary.Empty       `xml:"mechanitor"`
+	Thinker                 *scalar.Empty       `xml:"thinker"`
+	Mechanitor              *scalar.Empty       `xml:"mechanitor"`
 	Genes                   *Genes               `xml:"genes"`
-	Learning                *primary.Empty       `xml:"learning"`
+	Learning                *scalar.Empty       `xml:"learning"`
 	Rot                     int64                `xml:"rot"`
 	Faction                 string               `xml:"faction"`
 }
 
-func (p *PawnsAlive) Assign(*xml.Element) error {
+func (p *PawnsAlive) Assign(*domain.Element) error {
 	return nil
 }
 

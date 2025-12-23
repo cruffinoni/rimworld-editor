@@ -3,7 +3,7 @@
 package generated
 
 import (
-	"github.com/cruffinoni/rimworld-editor/internal/xml"
+	"github.com/cruffinoni/rimworld-editor/internal/xml/domain"
 	"github.com/cruffinoni/rimworld-editor/internal/xml/attributes"
 )
 
@@ -17,7 +17,7 @@ type Deities struct {
 	IconPath string `xml:"iconPath"`
 }
 
-func (d *Deities) Assign(*xml.Element) error {
+func (d *Deities) Assign(*domain.Element) error {
 	return nil
 }
 

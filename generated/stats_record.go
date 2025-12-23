@@ -3,7 +3,7 @@
 package generated
 
 import (
-	"github.com/cruffinoni/rimworld-editor/internal/xml"
+	"github.com/cruffinoni/rimworld-editor/internal/xml/domain"
 	"github.com/cruffinoni/rimworld-editor/internal/xml/attributes"
 )
 
@@ -17,7 +17,7 @@ type StatsRecord struct {
 	GreatestPopulation int64 `xml:"greatestPopulation"`
 }
 
-func (s *StatsRecord) Assign(*xml.Element) error {
+func (s *StatsRecord) Assign(*domain.Element) error {
 	return nil
 }
 

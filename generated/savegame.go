@@ -3,7 +3,7 @@
 package generated
 
 import (
-	"github.com/cruffinoni/rimworld-editor/internal/xml"
+	"github.com/cruffinoni/rimworld-editor/internal/xml/domain"
 	"github.com/cruffinoni/rimworld-editor/internal/xml/attributes"
 )
 
@@ -15,7 +15,7 @@ type Savegame struct {
 	Game *Game `xml:"game"`
 }
 
-func (s *Savegame) Assign(*xml.Element) error {
+func (s *Savegame) Assign(*domain.Element) error {
 	return nil
 }
 

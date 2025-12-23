@@ -3,9 +3,9 @@
 package generated
 
 import (
-	"github.com/cruffinoni/rimworld-editor/internal/xml"
+	"github.com/cruffinoni/rimworld-editor/internal/xml/domain"
 	"github.com/cruffinoni/rimworld-editor/internal/xml/attributes"
-	"github.com/cruffinoni/rimworld-editor/internal/xml/types"
+	"github.com/cruffinoni/rimworld-editor/internal/xml/collection"
 )
 
 type SavegameGameMapsLiThingsThingCarryTrackerInnerContainerInnerListLiInnerContainer struct {
@@ -14,10 +14,10 @@ type SavegameGameMapsLiThingsThingCarryTrackerInnerContainerInnerListLiInnerCont
 
 	MaxStacks        int64                `xml:"maxStacks"`
 	ContentsLookMode string               `xml:"contentsLookMode"`
-	InnerList        *types.Slice[string] `xml:"innerList"`
+	InnerList        *collection.Slice[string] `xml:"innerList"`
 }
 
-func (s *SavegameGameMapsLiThingsThingCarryTrackerInnerContainerInnerListLiInnerContainer) Assign(*xml.Element) error {
+func (s *SavegameGameMapsLiThingsThingCarryTrackerInnerContainerInnerListLiInnerContainer) Assign(*domain.Element) error {
 	return nil
 }
 

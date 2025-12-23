@@ -3,20 +3,20 @@
 package generated
 
 import (
-	"github.com/cruffinoni/rimworld-editor/internal/xml"
+	"github.com/cruffinoni/rimworld-editor/internal/xml/domain"
 	"github.com/cruffinoni/rimworld-editor/internal/xml/attributes"
-	"github.com/cruffinoni/rimworld-editor/internal/xml/types"
+	"github.com/cruffinoni/rimworld-editor/internal/xml/collection"
 )
 
 type Skills struct {
 	Attr           attributes.Attributes
 	FieldValidated map[string]bool
 
-	Skills                            *types.Slice[*SkillsSkillsLiPawnsMothballedWorldPawnsWorldGameSavegameInner] `xml:"skills"`
+	Skills                            *collection.Slice[*SkillsSkillsLiPawnsMothballedWorldPawnsWorldGameSavegameInner] `xml:"skills"`
 	LastXpSinceMidnightResetTimestamp int64                                                                        `xml:"lastXpSinceMidnightResetTimestamp"`
 }
 
-func (s *Skills) Assign(*xml.Element) error {
+func (s *Skills) Assign(*domain.Element) error {
 	return nil
 }
 

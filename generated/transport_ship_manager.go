@@ -3,19 +3,19 @@
 package generated
 
 import (
-	"github.com/cruffinoni/rimworld-editor/internal/xml"
+	"github.com/cruffinoni/rimworld-editor/internal/xml/domain"
 	"github.com/cruffinoni/rimworld-editor/internal/xml/attributes"
-	"github.com/cruffinoni/rimworld-editor/internal/xml/types"
+	"github.com/cruffinoni/rimworld-editor/internal/xml/collection"
 )
 
 type TransportShipManager struct {
 	Attr           attributes.Attributes
 	FieldValidated map[string]bool
 
-	Ships *types.Slice[*Ships] `xml:"ships"`
+	Ships *collection.Slice[*Ships] `xml:"ships"`
 }
 
-func (t *TransportShipManager) Assign(*xml.Element) error {
+func (t *TransportShipManager) Assign(*domain.Element) error {
 	return nil
 }
 

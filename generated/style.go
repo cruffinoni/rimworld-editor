@@ -3,9 +3,9 @@
 package generated
 
 import (
-	"github.com/cruffinoni/rimworld-editor/internal/xml"
+	"github.com/cruffinoni/rimworld-editor/internal/xml/domain"
 	"github.com/cruffinoni/rimworld-editor/internal/xml/attributes"
-	"github.com/cruffinoni/rimworld-editor/internal/xml/types"
+	"github.com/cruffinoni/rimworld-editor/internal/xml/collection"
 )
 
 type Style struct {
@@ -18,11 +18,11 @@ type Style struct {
 	HairFrequencies            *HairFrequencies                                                                   `xml:"hairFrequencies"`
 	BeardFrequencies           *BeardFrequencies                                                                  `xml:"beardFrequencies"`
 	TattooFrequencies          *TattooFrequencies                                                                 `xml:"tattooFrequencies"`
-	StyleForThingDef           types.Map[string, *SavegameGameWorldIdeoManagerIdeosLiStyleStyleForThingDefValues] `xml:"styleForThingDef"`
+	StyleForThingDef           collection.Map[string, *SavegameGameWorldIdeoManagerIdeosLiStyleStyleForThingDefValues] `xml:"styleForThingDef"`
 	NextStyleChangeAttemptTick int64                                                                              `xml:"nextStyleChangeAttemptTick"`
 }
 
-func (s *Style) Assign(*xml.Element) error {
+func (s *Style) Assign(*domain.Element) error {
 	return nil
 }
 

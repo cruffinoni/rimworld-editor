@@ -3,7 +3,7 @@
 package generated
 
 import (
-	"github.com/cruffinoni/rimworld-editor/internal/xml"
+	"github.com/cruffinoni/rimworld-editor/internal/xml/domain"
 	"github.com/cruffinoni/rimworld-editor/internal/xml/attributes"
 )
 
@@ -19,7 +19,7 @@ type AllNews struct {
 	NewsContext          *NewsContext `xml:"newsContext"`
 }
 
-func (a *AllNews) Assign(*xml.Element) error {
+func (a *AllNews) Assign(*domain.Element) error {
 	return nil
 }
 

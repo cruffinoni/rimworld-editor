@@ -3,20 +3,20 @@
 package generated
 
 import (
-	"github.com/cruffinoni/rimworld-editor/internal/xml"
+	"github.com/cruffinoni/rimworld-editor/internal/xml/domain"
 	"github.com/cruffinoni/rimworld-editor/internal/xml/attributes"
-	"github.com/cruffinoni/rimworld-editor/internal/xml/types"
+	"github.com/cruffinoni/rimworld-editor/internal/xml/collection"
 )
 
 type SavegameGameHistoryHistoryEventsManagerColonistEventsVals struct {
 	Attr           attributes.Attributes
 	FieldValidated map[string]bool
 
-	TicksGame      *types.Slice[int64] `xml:"ticksGame"`
-	CustomGoodwill *types.Slice[int64] `xml:"customGoodwill"`
+	TicksGame      *collection.Slice[int64] `xml:"ticksGame"`
+	CustomGoodwill *collection.Slice[int64] `xml:"customGoodwill"`
 }
 
-func (s *SavegameGameHistoryHistoryEventsManagerColonistEventsVals) Assign(*xml.Element) error {
+func (s *SavegameGameHistoryHistoryEventsManagerColonistEventsVals) Assign(*domain.Element) error {
 	return nil
 }
 

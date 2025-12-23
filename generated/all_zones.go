@@ -3,9 +3,9 @@
 package generated
 
 import (
-	"github.com/cruffinoni/rimworld-editor/internal/xml"
+	"github.com/cruffinoni/rimworld-editor/internal/xml/domain"
 	"github.com/cruffinoni/rimworld-editor/internal/xml/attributes"
-	"github.com/cruffinoni/rimworld-editor/internal/xml/types"
+	"github.com/cruffinoni/rimworld-editor/internal/xml/collection"
 )
 
 type AllZones struct {
@@ -16,13 +16,13 @@ type AllZones struct {
 	Label          string               `xml:"label"`
 	BaseLabel      string               `xml:"baseLabel"`
 	Color          string               `xml:"color"`
-	Cells          *types.Slice[string] `xml:"cells"`
+	Cells          *collection.Slice[string] `xml:"cells"`
 	Settings       *Settings            `xml:"settings"`
 	PlantDefToGrow string               `xml:"plantDefToGrow"`
 	AllowSow       bool                 `xml:"allowSow"`
 }
 
-func (a *AllZones) Assign(*xml.Element) error {
+func (a *AllZones) Assign(*domain.Element) error {
 	return nil
 }
 

@@ -3,7 +3,7 @@
 package generated
 
 import (
-	"github.com/cruffinoni/rimworld-editor/internal/xml"
+	"github.com/cruffinoni/rimworld-editor/internal/xml/domain"
 	"github.com/cruffinoni/rimworld-editor/internal/xml/attributes"
 )
 
@@ -15,7 +15,7 @@ type RememberedCameraPos struct {
 	RootSize float64 `xml:"rootSize"`
 }
 
-func (r *RememberedCameraPos) Assign(*xml.Element) error {
+func (r *RememberedCameraPos) Assign(*domain.Element) error {
 	return nil
 }
 

@@ -3,7 +3,7 @@
 package generated
 
 import (
-	"github.com/cruffinoni/rimworld-editor/internal/xml"
+	"github.com/cruffinoni/rimworld-editor/internal/xml/domain"
 	"github.com/cruffinoni/rimworld-editor/internal/xml/attributes"
 )
 
@@ -14,7 +14,7 @@ type Guilt struct {
 	GuiltyTicksLeft int64 `xml:"guiltyTicksLeft"`
 }
 
-func (g *Guilt) Assign(*xml.Element) error {
+func (g *Guilt) Assign(*domain.Element) error {
 	return nil
 }
 

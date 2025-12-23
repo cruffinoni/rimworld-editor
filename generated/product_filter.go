@@ -3,22 +3,22 @@
 package generated
 
 import (
-	"github.com/cruffinoni/rimworld-editor/internal/xml"
+	"github.com/cruffinoni/rimworld-editor/internal/xml/domain"
 	"github.com/cruffinoni/rimworld-editor/internal/xml/attributes"
-	"github.com/cruffinoni/rimworld-editor/internal/xml/types/primary"
+	"github.com/cruffinoni/rimworld-editor/internal/xml/scalar"
 )
 
 type ProductFilter struct {
 	Attr           attributes.Attributes
 	FieldValidated map[string]bool
 
-	DisallowedSpecialFilters *primary.Empty `xml:"disallowedSpecialFilters"`
-	AllowedDefs              *primary.Empty `xml:"allowedDefs"`
+	DisallowedSpecialFilters *scalar.Empty `xml:"disallowedSpecialFilters"`
+	AllowedDefs              *scalar.Empty `xml:"allowedDefs"`
 	AllowedHitPointsPercents string         `xml:"allowedHitPointsPercents"`
 	AllowedQualityLevels     string         `xml:"allowedQualityLevels"`
 }
 
-func (p *ProductFilter) Assign(*xml.Element) error {
+func (p *ProductFilter) Assign(*domain.Element) error {
 	return nil
 }
 

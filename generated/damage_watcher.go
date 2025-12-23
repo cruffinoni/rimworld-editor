@@ -3,7 +3,7 @@
 package generated
 
 import (
-	"github.com/cruffinoni/rimworld-editor/internal/xml"
+	"github.com/cruffinoni/rimworld-editor/internal/xml/domain"
 	"github.com/cruffinoni/rimworld-editor/internal/xml/attributes"
 )
 
@@ -14,7 +14,7 @@ type DamageWatcher struct {
 	EverDamage float64 `xml:"everDamage"`
 }
 
-func (d *DamageWatcher) Assign(*xml.Element) error {
+func (d *DamageWatcher) Assign(*domain.Element) error {
 	return nil
 }
 

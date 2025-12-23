@@ -3,19 +3,19 @@
 package generated
 
 import (
-	"github.com/cruffinoni/rimworld-editor/internal/xml"
+	"github.com/cruffinoni/rimworld-editor/internal/xml/domain"
 	"github.com/cruffinoni/rimworld-editor/internal/xml/attributes"
-	"github.com/cruffinoni/rimworld-editor/internal/xml/types"
+	"github.com/cruffinoni/rimworld-editor/internal/xml/collection"
 )
 
 type Needs struct {
 	Attr           attributes.Attributes
 	FieldValidated map[string]bool
 
-	Needs *types.Slice[*NeedsNeedsThingThingsLiMapsGameSavegameInner] `xml:"needs"`
+	Needs *collection.Slice[*NeedsNeedsThingThingsLiMapsGameSavegameInner] `xml:"needs"`
 }
 
-func (n *Needs) Assign(*xml.Element) error {
+func (n *Needs) Assign(*domain.Element) error {
 	return nil
 }
 

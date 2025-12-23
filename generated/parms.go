@@ -3,7 +3,7 @@
 package generated
 
 import (
-	"github.com/cruffinoni/rimworld-editor/internal/xml"
+	"github.com/cruffinoni/rimworld-editor/internal/xml/domain"
 	"github.com/cruffinoni/rimworld-editor/internal/xml/attributes"
 )
 
@@ -33,7 +33,7 @@ type Parms struct {
 	RandomValue               int64                 `xml:"randomValue"`
 }
 
-func (p *Parms) Assign(*xml.Element) error {
+func (p *Parms) Assign(*domain.Element) error {
 	return nil
 }
 

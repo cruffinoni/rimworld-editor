@@ -3,7 +3,7 @@
 package generated
 
 import (
-	"github.com/cruffinoni/rimworld-editor/internal/xml"
+	"github.com/cruffinoni/rimworld-editor/internal/xml/domain"
 	"github.com/cruffinoni/rimworld-editor/internal/xml/attributes"
 )
 
@@ -16,7 +16,7 @@ type Tutor struct {
 	TutorialState   *TutorialState   `xml:"tutorialState"`
 }
 
-func (t *Tutor) Assign(*xml.Element) error {
+func (t *Tutor) Assign(*domain.Element) error {
 	return nil
 }
 

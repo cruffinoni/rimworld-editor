@@ -3,9 +3,9 @@
 package generated
 
 import (
-	"github.com/cruffinoni/rimworld-editor/internal/xml"
+	"github.com/cruffinoni/rimworld-editor/internal/xml/domain"
 	"github.com/cruffinoni/rimworld-editor/internal/xml/attributes"
-	"github.com/cruffinoni/rimworld-editor/internal/xml/types"
+	"github.com/cruffinoni/rimworld-editor/internal/xml/collection"
 )
 
 type Ships struct {
@@ -15,14 +15,14 @@ type Ships struct {
 	LoadId           int64                   `xml:"loadID"`
 	Def              string                  `xml:"def"`
 	CurJob           *CurJob                 `xml:"curJob"`
-	ShipJobs         *types.Slice[*ShipJobs] `xml:"shipJobs"`
-	QuestTags        *types.Slice[string]    `xml:"questTags"`
+	ShipJobs         *collection.Slice[*ShipJobs] `xml:"shipJobs"`
+	QuestTags        *collection.Slice[string]    `xml:"questTags"`
 	ShipThing5       string                  `xml:"shipThing5"`
 	Started          bool                    `xml:"started"`
 	ShipThingSpawned bool                    `xml:"shipThingSpawned"`
 }
 
-func (s *Ships) Assign(*xml.Element) error {
+func (s *Ships) Assign(*domain.Element) error {
 	return nil
 }
 

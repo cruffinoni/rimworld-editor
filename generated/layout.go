@@ -3,9 +3,9 @@
 package generated
 
 import (
-	"github.com/cruffinoni/rimworld-editor/internal/xml"
+	"github.com/cruffinoni/rimworld-editor/internal/xml/domain"
 	"github.com/cruffinoni/rimworld-editor/internal/xml/attributes"
-	"github.com/cruffinoni/rimworld-editor/internal/xml/types"
+	"github.com/cruffinoni/rimworld-editor/internal/xml/collection"
 )
 
 type Layout struct {
@@ -13,10 +13,10 @@ type Layout struct {
 	FieldValidated map[string]bool
 
 	Container string               `xml:"container"`
-	Rooms     *types.Slice[*Rooms] `xml:"rooms"`
+	Rooms     *collection.Slice[*Rooms] `xml:"rooms"`
 }
 
-func (l *Layout) Assign(*xml.Element) error {
+func (l *Layout) Assign(*domain.Element) error {
 	return nil
 }
 

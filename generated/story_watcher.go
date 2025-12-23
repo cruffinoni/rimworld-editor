@@ -3,7 +3,7 @@
 package generated
 
 import (
-	"github.com/cruffinoni/rimworld-editor/internal/xml"
+	"github.com/cruffinoni/rimworld-editor/internal/xml/domain"
 	"github.com/cruffinoni/rimworld-editor/internal/xml/attributes"
 )
 
@@ -16,7 +16,7 @@ type StoryWatcher struct {
 	WatcherPopAdaptation *WatcherPopAdaptation `xml:"watcherPopAdaptation"`
 }
 
-func (s *StoryWatcher) Assign(*xml.Element) error {
+func (s *StoryWatcher) Assign(*domain.Element) error {
 	return nil
 }
 

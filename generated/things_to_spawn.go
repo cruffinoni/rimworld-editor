@@ -3,9 +3,9 @@
 package generated
 
 import (
-	"github.com/cruffinoni/rimworld-editor/internal/xml"
+	"github.com/cruffinoni/rimworld-editor/internal/xml/domain"
 	"github.com/cruffinoni/rimworld-editor/internal/xml/attributes"
-	"github.com/cruffinoni/rimworld-editor/internal/xml/types"
+	"github.com/cruffinoni/rimworld-editor/internal/xml/collection"
 )
 
 type ThingsToSpawn struct {
@@ -15,14 +15,14 @@ type ThingsToSpawn struct {
 	Def           string               `xml:"def"`
 	Id            string               `xml:"id"`
 	Health        int64                `xml:"health"`
-	QuestTags     *types.Slice[string] `xml:"questTags"`
+	QuestTags     *collection.Slice[string] `xml:"questTags"`
 	LastUserSpeed int64                `xml:"lastUserSpeed"`
 	LastHackTick  int64                `xml:"lastHackTick"`
 	Defence       int64                `xml:"defence"`
 	LasterUser    string               `xml:"lasterUser"`
 }
 
-func (t *ThingsToSpawn) Assign(*xml.Element) error {
+func (t *ThingsToSpawn) Assign(*domain.Element) error {
 	return nil
 }
 

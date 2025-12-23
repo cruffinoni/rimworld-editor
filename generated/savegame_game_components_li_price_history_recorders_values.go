@@ -3,7 +3,7 @@
 package generated
 
 import (
-	"github.com/cruffinoni/rimworld-editor/internal/xml"
+	"github.com/cruffinoni/rimworld-editor/internal/xml/domain"
 	"github.com/cruffinoni/rimworld-editor/internal/xml/attributes"
 )
 
@@ -15,7 +15,7 @@ type SavegameGameComponentsLiPriceHistoryRecordersValues struct {
 	ThingDef       string `xml:"thingDef"`
 }
 
-func (s *SavegameGameComponentsLiPriceHistoryRecordersValues) Assign(*xml.Element) error {
+func (s *SavegameGameComponentsLiPriceHistoryRecordersValues) Assign(*domain.Element) error {
 	return nil
 }
 

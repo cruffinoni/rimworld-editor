@@ -3,7 +3,7 @@
 package generated
 
 import (
-	"github.com/cruffinoni/rimworld-editor/internal/xml"
+	"github.com/cruffinoni/rimworld-editor/internal/xml/domain"
 	"github.com/cruffinoni/rimworld-editor/internal/xml/attributes"
 )
 
@@ -18,7 +18,7 @@ type Reservations struct {
 	StackCount int64  `xml:"stackCount"`
 }
 
-func (r *Reservations) Assign(*xml.Element) error {
+func (r *Reservations) Assign(*domain.Element) error {
 	return nil
 }
 

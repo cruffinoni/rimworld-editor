@@ -3,10 +3,10 @@
 package generated
 
 import (
-	"github.com/cruffinoni/rimworld-editor/internal/xml"
+	"github.com/cruffinoni/rimworld-editor/internal/xml/domain"
 	"github.com/cruffinoni/rimworld-editor/internal/xml/attributes"
-	"github.com/cruffinoni/rimworld-editor/internal/xml/types"
-	"github.com/cruffinoni/rimworld-editor/internal/xml/types/primary"
+	"github.com/cruffinoni/rimworld-editor/internal/xml/collection"
+	"github.com/cruffinoni/rimworld-editor/internal/xml/scalar"
 )
 
 type SavegameGameWorldWorldPawnsPawnsMothballedLiInventoryInnerContainerInnerList struct {
@@ -17,9 +17,9 @@ type SavegameGameWorldWorldPawnsPawnsMothballedLiInventoryInnerContainerInnerLis
 	Id               string                                                                                        `xml:"id"`
 	Health           int64                                                                                         `xml:"health"`
 	StackCount       int64                                                                                         `xml:"stackCount"`
-	QuestTags        *primary.Empty                                                                                `xml:"questTags"`
+	QuestTags        *scalar.Empty                                                                                `xml:"questTags"`
 	RotProg          float64                                                                                       `xml:"rotProg"`
-	Ingredients      *types.Slice[string]                                                                          `xml:"ingredients"`
+	Ingredients      *collection.Slice[string]                                                                          `xml:"ingredients"`
 	Color            string                                                                                        `xml:"color"`
 	SourcePrecept    string                                                                                        `xml:"sourcePrecept"`
 	Pos              string                                                                                        `xml:"pos"`
@@ -33,7 +33,7 @@ type SavegameGameWorldWorldPawnsPawnsMothballedLiInventoryInnerContainerInnerLis
 	InnerContainer   *SavegameGameWorldWorldPawnsPawnsMothballedLiInventoryInnerContainerInnerListLiInnerContainer `xml:"innerContainer"`
 }
 
-func (s *SavegameGameWorldWorldPawnsPawnsMothballedLiInventoryInnerContainerInnerList) Assign(*xml.Element) error {
+func (s *SavegameGameWorldWorldPawnsPawnsMothballedLiInventoryInnerContainerInnerList) Assign(*domain.Element) error {
 	return nil
 }
 

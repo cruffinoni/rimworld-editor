@@ -1,6 +1,7 @@
 package main
 
 import (
+	"github.com/cruffinoni/rimworld-editor/internal/application"
 	"github.com/cruffinoni/rimworld-editor/internal/config"
 	"github.com/cruffinoni/rimworld-editor/pkg/logging"
 )
@@ -19,7 +20,7 @@ func main() {
 		logger.WithError(err).Fatal("Failed to load config")
 	}
 	logger := logging.NewLogger("app", &cfg.Logging)
-	app := CreateApplication(logger)
+	app := application.CreateApplication(logger)
 	if err := app.Run(); err != nil {
 		logger.WithError(err).Fatal("Application failed")
 	}

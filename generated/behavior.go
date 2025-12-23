@@ -3,7 +3,7 @@
 package generated
 
 import (
-	"github.com/cruffinoni/rimworld-editor/internal/xml"
+	"github.com/cruffinoni/rimworld-editor/internal/xml/domain"
 	"github.com/cruffinoni/rimworld-editor/internal/xml/attributes"
 )
 
@@ -14,7 +14,7 @@ type Behavior struct {
 	Def string `xml:"def"`
 }
 
-func (b *Behavior) Assign(*xml.Element) error {
+func (b *Behavior) Assign(*domain.Element) error {
 	return nil
 }
 

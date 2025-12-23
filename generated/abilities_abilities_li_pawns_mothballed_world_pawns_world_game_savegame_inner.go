@@ -3,7 +3,7 @@
 package generated
 
 import (
-	"github.com/cruffinoni/rimworld-editor/internal/xml"
+	"github.com/cruffinoni/rimworld-editor/internal/xml/domain"
 	"github.com/cruffinoni/rimworld-editor/internal/xml/attributes"
 )
 
@@ -17,7 +17,7 @@ type AbilitiesAbilitiesLiPawnsMothballedWorldPawnsWorldGameSavegameInner struct 
 	VerbTracker   *VerbTracker `xml:"verbTracker"`
 }
 
-func (a *AbilitiesAbilitiesLiPawnsMothballedWorldPawnsWorldGameSavegameInner) Assign(*xml.Element) error {
+func (a *AbilitiesAbilitiesLiPawnsMothballedWorldPawnsWorldGameSavegameInner) Assign(*domain.Element) error {
 	return nil
 }
 

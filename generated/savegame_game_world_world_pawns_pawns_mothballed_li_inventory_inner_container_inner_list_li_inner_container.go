@@ -3,9 +3,9 @@
 package generated
 
 import (
-	"github.com/cruffinoni/rimworld-editor/internal/xml"
+	"github.com/cruffinoni/rimworld-editor/internal/xml/domain"
 	"github.com/cruffinoni/rimworld-editor/internal/xml/attributes"
-	"github.com/cruffinoni/rimworld-editor/internal/xml/types"
+	"github.com/cruffinoni/rimworld-editor/internal/xml/collection"
 )
 
 type SavegameGameWorldWorldPawnsPawnsMothballedLiInventoryInnerContainerInnerListLiInnerContainer struct {
@@ -13,10 +13,10 @@ type SavegameGameWorldWorldPawnsPawnsMothballedLiInventoryInnerContainerInnerLis
 	FieldValidated map[string]bool
 
 	MaxStacks int64                                                                                                        `xml:"maxStacks"`
-	InnerList *types.Slice[*GameWorldWorldPawnsPawnsMothballedLiInventoryInnerContainerInnerListLiInnerContainerInnerList] `xml:"innerList"`
+	InnerList *collection.Slice[*GameWorldWorldPawnsPawnsMothballedLiInventoryInnerContainerInnerListLiInnerContainerInnerList] `xml:"innerList"`
 }
 
-func (s *SavegameGameWorldWorldPawnsPawnsMothballedLiInventoryInnerContainerInnerListLiInnerContainer) Assign(*xml.Element) error {
+func (s *SavegameGameWorldWorldPawnsPawnsMothballedLiInventoryInnerContainerInnerListLiInnerContainer) Assign(*domain.Element) error {
 	return nil
 }
 

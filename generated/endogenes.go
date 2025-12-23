@@ -3,7 +3,7 @@
 package generated
 
 import (
-	"github.com/cruffinoni/rimworld-editor/internal/xml"
+	"github.com/cruffinoni/rimworld-editor/internal/xml/domain"
 	"github.com/cruffinoni/rimworld-editor/internal/xml/attributes"
 )
 
@@ -17,7 +17,7 @@ type Endogenes struct {
 	LoadId           int64  `xml:"loadID"`
 }
 
-func (e *Endogenes) Assign(*xml.Element) error {
+func (e *Endogenes) Assign(*domain.Element) error {
 	return nil
 }
 

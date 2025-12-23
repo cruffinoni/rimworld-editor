@@ -6,10 +6,10 @@ import (
 
 	"github.com/briandowns/spinner"
 
+	"github.com/cruffinoni/rimworld-editor/internal/codegen"
+	"github.com/cruffinoni/rimworld-editor/internal/codegen/writer"
 	"github.com/cruffinoni/rimworld-editor/internal/config"
-	"github.com/cruffinoni/rimworld-editor/internal/file"
-	"github.com/cruffinoni/rimworld-editor/internal/generator"
-	"github.com/cruffinoni/rimworld-editor/internal/generator/files"
+	"github.com/cruffinoni/rimworld-editor/internal/xml/loader"
 	"github.com/cruffinoni/rimworld-editor/pkg/logging"
 )
 
@@ -28,7 +28,7 @@ func main() {
 	}
 	logger := logging.NewLogger("gen_go", &cfg.Logging)
 	var (
-		fo   *file.Opening
+		fo   *loader.Opening
 		path string
 	)
 	flag.StringVar(&path, "path", "", "Path to the save game file")
@@ -42,7 +42,7 @@ func main() {
 	logger.WithField("path", path).Debug("Opening and decoding XML file")
 	s.FinalMSG = "XML file decoded successfully\n"
 	s.Start()
-	fo, err = file.Open(path)
+	fo, err = loader.Open(path)
 	if err != nil {
 		logger.WithError(err).Fatal("Failed to open file")
 		return
@@ -51,8 +51,8 @@ func main() {
 	// s.Prefix = "Generating go files to './generated'... "
 	s.FinalMSG = "Go files successfully generated\n"
 	// s.Start()
-	root := generator.GenerateGoFiles(logger, fo.XML.Root, true)
-	gw := files.NewGoWriter(logger, nil, true, "")
+	root := codegen.GenerateGoFiles(logger, fo.XML.Root, true)
+	gw := writer.NewGoWriter(logger, nil, true, "")
 	if err = gw.WriteGoFile("./generated", root); err != nil {
 		logger.WithError(err).Fatal("Failed to write Go files")
 	}

@@ -3,9 +3,9 @@
 package generated
 
 import (
-	"github.com/cruffinoni/rimworld-editor/internal/xml"
+	"github.com/cruffinoni/rimworld-editor/internal/xml/domain"
 	"github.com/cruffinoni/rimworld-editor/internal/xml/attributes"
-	"github.com/cruffinoni/rimworld-editor/internal/xml/types"
+	"github.com/cruffinoni/rimworld-editor/internal/xml/collection"
 )
 
 type Policies struct {
@@ -14,11 +14,11 @@ type Policies struct {
 
 	UniqueId  int64                `xml:"uniqueId"`
 	Label     string               `xml:"label"`
-	Drugs     *types.Slice[*Drugs] `xml:"drugs"`
+	Drugs     *collection.Slice[*Drugs] `xml:"drugs"`
 	SourceDef string               `xml:"sourceDef"`
 }
 
-func (p *Policies) Assign(*xml.Element) error {
+func (p *Policies) Assign(*domain.Element) error {
 	return nil
 }
 

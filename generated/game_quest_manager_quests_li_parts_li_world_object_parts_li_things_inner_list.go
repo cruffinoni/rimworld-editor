@@ -3,10 +3,10 @@
 package generated
 
 import (
-	"github.com/cruffinoni/rimworld-editor/internal/xml"
+	"github.com/cruffinoni/rimworld-editor/internal/xml/domain"
 	"github.com/cruffinoni/rimworld-editor/internal/xml/attributes"
-	"github.com/cruffinoni/rimworld-editor/internal/xml/types"
-	"github.com/cruffinoni/rimworld-editor/internal/xml/types/primary"
+	"github.com/cruffinoni/rimworld-editor/internal/xml/collection"
+	"github.com/cruffinoni/rimworld-editor/internal/xml/scalar"
 )
 
 type GameQuestManagerQuestsLiPartsLiWorldObjectPartsLiThingsInnerList struct {
@@ -16,17 +16,17 @@ type GameQuestManagerQuestsLiPartsLiWorldObjectPartsLiThingsInnerList struct {
 	Def                  string               `xml:"def"`
 	Id                   string               `xml:"id"`
 	Health               int64                `xml:"health"`
-	QuestTags            *types.Slice[string] `xml:"questTags"`
+	QuestTags            *collection.Slice[string] `xml:"questTags"`
 	LastUserSpeed        int64                `xml:"lastUserSpeed"`
 	LastHackTick         int64                `xml:"lastHackTick"`
 	Defence              int64                `xml:"defence"`
 	LasterUser           string               `xml:"lasterUser"`
 	HackingStartedSignal string               `xml:"hackingStartedSignal"`
 	StackCount           int64                `xml:"stackCount"`
-	Ingredients          *primary.Empty       `xml:"ingredients"`
+	Ingredients          *scalar.Empty       `xml:"ingredients"`
 }
 
-func (g *GameQuestManagerQuestsLiPartsLiWorldObjectPartsLiThingsInnerList) Assign(*xml.Element) error {
+func (g *GameQuestManagerQuestsLiPartsLiWorldObjectPartsLiThingsInnerList) Assign(*domain.Element) error {
 	return nil
 }
 

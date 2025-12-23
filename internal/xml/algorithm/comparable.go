@@ -1,6 +1,6 @@
 package algorithm
 
-import "github.com/cruffinoni/rimworld-editor/internal/xml/types/iterator"
+import "github.com/cruffinoni/rimworld-editor/internal/xml/iterator"
 
 type Comparable[T any] interface {
 	Less(rhs T) bool

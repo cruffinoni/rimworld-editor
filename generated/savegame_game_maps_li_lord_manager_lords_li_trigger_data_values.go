@@ -3,7 +3,7 @@
 package generated
 
 import (
-	"github.com/cruffinoni/rimworld-editor/internal/xml"
+	"github.com/cruffinoni/rimworld-editor/internal/xml/domain"
 	"github.com/cruffinoni/rimworld-editor/internal/xml/attributes"
 )
 
@@ -16,7 +16,7 @@ type SavegameGameMapsLiLordManagerLordsLiTriggerDataValues struct {
 	PawnCycleInd      int64   `xml:"pawnCycleInd"`
 }
 
-func (s *SavegameGameMapsLiLordManagerLordsLiTriggerDataValues) Assign(*xml.Element) error {
+func (s *SavegameGameMapsLiLordManagerLordsLiTriggerDataValues) Assign(*domain.Element) error {
 	return nil
 }
 

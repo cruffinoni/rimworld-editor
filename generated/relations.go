@@ -3,7 +3,7 @@
 package generated
 
 import (
-	"github.com/cruffinoni/rimworld-editor/internal/xml"
+	"github.com/cruffinoni/rimworld-editor/internal/xml/domain"
 	"github.com/cruffinoni/rimworld-editor/internal/xml/attributes"
 )
 
@@ -16,7 +16,7 @@ type Relations struct {
 	Goodwill int64  `xml:"goodwill"`
 }
 
-func (r *Relations) Assign(*xml.Element) error {
+func (r *Relations) Assign(*domain.Element) error {
 	return nil
 }
 

@@ -3,19 +3,19 @@
 package generated
 
 import (
-	"github.com/cruffinoni/rimworld-editor/internal/xml"
+	"github.com/cruffinoni/rimworld-editor/internal/xml/domain"
 	"github.com/cruffinoni/rimworld-editor/internal/xml/attributes"
-	"github.com/cruffinoni/rimworld-editor/internal/xml/types/primary"
+	"github.com/cruffinoni/rimworld-editor/internal/xml/scalar"
 )
 
 type IncidentQueue struct {
 	Attr           attributes.Attributes
 	FieldValidated map[string]bool
 
-	QueuedIncidents *primary.Empty `xml:"queuedIncidents"`
+	QueuedIncidents *scalar.Empty `xml:"queuedIncidents"`
 }
 
-func (i *IncidentQueue) Assign(*xml.Element) error {
+func (i *IncidentQueue) Assign(*domain.Element) error {
 	return nil
 }
 

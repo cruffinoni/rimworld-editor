@@ -3,9 +3,9 @@
 package generated
 
 import (
-	"github.com/cruffinoni/rimworld-editor/internal/xml"
+	"github.com/cruffinoni/rimworld-editor/internal/xml/domain"
 	"github.com/cruffinoni/rimworld-editor/internal/xml/attributes"
-	"github.com/cruffinoni/rimworld-editor/internal/xml/types/primary"
+	"github.com/cruffinoni/rimworld-editor/internal/xml/scalar"
 )
 
 type SavegameGameMapsLiThingsThingCarryTrackerInnerContainerInnerList struct {
@@ -17,7 +17,7 @@ type SavegameGameMapsLiThingsThingCarryTrackerInnerContainerInnerList struct {
 	Pos                  string                                                                            `xml:"pos"`
 	Rot                  int64                                                                             `xml:"rot"`
 	Health               int64                                                                             `xml:"health"`
-	QuestTags            *primary.Empty                                                                    `xml:"questTags"`
+	QuestTags            *scalar.Empty                                                                    `xml:"questTags"`
 	TimeOfDeath          int64                                                                             `xml:"timeOfDeath"`
 	VanishAfterTimestamp int64                                                                             `xml:"vanishAfterTimestamp"`
 	OperationsBillStack  *OperationsBillStack                                                              `xml:"operationsBillStack"`
@@ -26,7 +26,7 @@ type SavegameGameMapsLiThingsThingCarryTrackerInnerContainerInnerList struct {
 	StackCount           int64                                                                             `xml:"stackCount"`
 }
 
-func (s *SavegameGameMapsLiThingsThingCarryTrackerInnerContainerInnerList) Assign(*xml.Element) error {
+func (s *SavegameGameMapsLiThingsThingCarryTrackerInnerContainerInnerList) Assign(*domain.Element) error {
 	return nil
 }
 

@@ -3,7 +3,7 @@
 package generated
 
 import (
-	"github.com/cruffinoni/rimworld-editor/internal/xml"
+	"github.com/cruffinoni/rimworld-editor/internal/xml/domain"
 	"github.com/cruffinoni/rimworld-editor/internal/xml/attributes"
 )
 
@@ -46,7 +46,7 @@ type UniqueIdsManager struct {
 	NextStorageGroupId                  int64 `xml:"nextStorageGroupID"`
 }
 
-func (u *UniqueIdsManager) Assign(*xml.Element) error {
+func (u *UniqueIdsManager) Assign(*domain.Element) error {
 	return nil
 }
 

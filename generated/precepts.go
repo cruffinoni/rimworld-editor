@@ -3,10 +3,10 @@
 package generated
 
 import (
-	"github.com/cruffinoni/rimworld-editor/internal/xml"
+	"github.com/cruffinoni/rimworld-editor/internal/xml/domain"
 	"github.com/cruffinoni/rimworld-editor/internal/xml/attributes"
-	"github.com/cruffinoni/rimworld-editor/internal/xml/types"
-	"github.com/cruffinoni/rimworld-editor/internal/xml/types/primary"
+	"github.com/cruffinoni/rimworld-editor/internal/xml/collection"
+	"github.com/cruffinoni/rimworld-editor/internal/xml/scalar"
 )
 
 type Precepts struct {
@@ -28,10 +28,10 @@ type Precepts struct {
 	ObligationTargetFilter           *ObligationTargetFilter             `xml:"obligationTargetFilter"`
 	TargetFilter                     *TargetFilter                       `xml:"targetFilter"`
 	Behavior                         *Behavior                           `xml:"behavior"`
-	Triggers                         *types.Slice[*Triggers]             `xml:"triggers"`
+	Triggers                         *collection.Slice[*Triggers]             `xml:"triggers"`
 	OutcomeEffect                    *OutcomeEffect                      `xml:"outcomeEffect"`
-	ActiveObligations                *primary.Empty                      `xml:"activeObligations"`
-	CompletedObligations             *types.Slice[*CompletedObligations] `xml:"completedObligations"`
+	ActiveObligations                *scalar.Empty                      `xml:"activeObligations"`
+	CompletedObligations             *collection.Slice[*CompletedObligations] `xml:"completedObligations"`
 	LastFinishedTick                 int64                               `xml:"lastFinishedTick"`
 	IconPathOverride                 string                              `xml:"iconPathOverride"`
 	PatternGroupTag                  string                              `xml:"patternGroupTag"`
@@ -42,14 +42,14 @@ type Precepts struct {
 	RitualExplanation                string                              `xml:"ritualExplanation"`
 	CanMergeGizmosFromDifferentIdeos bool                                `xml:"canMergeGizmosFromDifferentIdeos"`
 	Active                           bool                                `xml:"active"`
-	ApparelRequirements              *types.Slice[*ApparelRequirements]  `xml:"apparelRequirements"`
+	ApparelRequirements              *collection.Slice[*ApparelRequirements]  `xml:"apparelRequirements"`
 	RestrictToSupremeGender          bool                                `xml:"restrictToSupremeGender"`
 	ChosenPawn                       *ChosenPawn                         `xml:"chosenPawn"`
 	PresenceDemand                   *PresenceDemand                     `xml:"presenceDemand"`
 	GeneratedRelic                   string                              `xml:"generatedRelic"`
 	Stuff                            string                              `xml:"stuff"`
-	ChosenPawns                      *primary.Empty                      `xml:"chosenPawns"`
-	ChosenPawnsCache                 *primary.Empty                      `xml:"chosenPawnsCache"`
+	ChosenPawns                      *scalar.Empty                      `xml:"chosenPawns"`
+	ChosenPawnsCache                 *scalar.Empty                      `xml:"chosenPawnsCache"`
 	ApparelDef                       string                              `xml:"apparelDef"`
 	DescOverride                     string                              `xml:"descOverride"`
 	ShortDescOverride                string                              `xml:"shortDescOverride"`
@@ -60,7 +60,7 @@ type Precepts struct {
 	EverGenerated                    bool                                `xml:"everGenerated"`
 }
 
-func (p *Precepts) Assign(*xml.Element) error {
+func (p *Precepts) Assign(*domain.Element) error {
 	return nil
 }
 

@@ -3,10 +3,10 @@
 package generated
 
 import (
-	"github.com/cruffinoni/rimworld-editor/internal/xml"
+	"github.com/cruffinoni/rimworld-editor/internal/xml/domain"
 	"github.com/cruffinoni/rimworld-editor/internal/xml/attributes"
-	"github.com/cruffinoni/rimworld-editor/internal/xml/types"
-	"github.com/cruffinoni/rimworld-editor/internal/xml/types/primary"
+	"github.com/cruffinoni/rimworld-editor/internal/xml/collection"
+	"github.com/cruffinoni/rimworld-editor/internal/xml/scalar"
 )
 
 type CurJob struct {
@@ -20,12 +20,12 @@ type CurJob struct {
 	Quest                       string                      `xml:"quest"`
 	Def                         string                      `xml:"def"`
 	LoadId                      int64                       `xml:"loadID"`
-	TargetQueueA                *primary.Empty              `xml:"targetQueueA"`
-	TargetQueueB                *primary.Empty              `xml:"targetQueueB"`
-	CountQueue                  *primary.Empty              `xml:"countQueue"`
+	TargetQueueA                *scalar.Empty              `xml:"targetQueueA"`
+	TargetQueueB                *scalar.Empty              `xml:"targetQueueB"`
+	CountQueue                  *scalar.Empty              `xml:"countQueue"`
 	StartTick                   int64                       `xml:"startTick"`
 	ExpiryInterval              int64                       `xml:"expiryInterval"`
-	PlacedThings                *types.Slice[*PlacedThings] `xml:"placedThings"`
+	PlacedThings                *collection.Slice[*PlacedThings] `xml:"placedThings"`
 	JobGiverThinkTree           string                      `xml:"jobGiverThinkTree"`
 	PsyfocusTargetLast          int64                       `xml:"psyfocusTargetLast"`
 	Ability                     string                      `xml:"ability"`
@@ -42,14 +42,14 @@ type CurJob struct {
 	TargetA                     string                      `xml:"targetA"`
 	CanBash                     bool                        `xml:"canBash"`
 	ExitMapOnArrival            bool                        `xml:"exitMapOnArrival"`
-	SendAwayIfAllDespawned      *types.Slice[string]        `xml:"sendAwayIfAllDespawned"`
-	SendAwayIfAnyDespawned      *primary.Empty              `xml:"sendAwayIfAnyDespawned"`
+	SendAwayIfAllDespawned      *collection.Slice[string]        `xml:"sendAwayIfAllDespawned"`
+	SendAwayIfAnyDespawned      *scalar.Empty              `xml:"sendAwayIfAnyDespawned"`
 	Duration                    int64                       `xml:"duration"`
 	JobState                    string                      `xml:"jobState"`
 	TransportShip               string                      `xml:"transportShip"`
 }
 
-func (c *CurJob) Assign(*xml.Element) error {
+func (c *CurJob) Assign(*domain.Element) error {
 	return nil
 }
 

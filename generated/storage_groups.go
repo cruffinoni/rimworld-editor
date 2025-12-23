@@ -3,20 +3,20 @@
 package generated
 
 import (
-	"github.com/cruffinoni/rimworld-editor/internal/xml"
+	"github.com/cruffinoni/rimworld-editor/internal/xml/domain"
 	"github.com/cruffinoni/rimworld-editor/internal/xml/attributes"
-	"github.com/cruffinoni/rimworld-editor/internal/xml/types"
+	"github.com/cruffinoni/rimworld-editor/internal/xml/collection"
 )
 
 type StorageGroups struct {
 	Attr           attributes.Attributes
 	FieldValidated map[string]bool
 
-	Groups *types.Slice[*Groups] `xml:"groups"`
+	Groups *collection.Slice[*Groups] `xml:"groups"`
 	Map    string                `xml:"map"`
 }
 
-func (s *StorageGroups) Assign(*xml.Element) error {
+func (s *StorageGroups) Assign(*domain.Element) error {
 	return nil
 }
 

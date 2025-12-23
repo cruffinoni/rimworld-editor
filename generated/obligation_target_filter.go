@@ -3,7 +3,7 @@
 package generated
 
 import (
-	"github.com/cruffinoni/rimworld-editor/internal/xml"
+	"github.com/cruffinoni/rimworld-editor/internal/xml/domain"
 	"github.com/cruffinoni/rimworld-editor/internal/xml/attributes"
 )
 
@@ -15,7 +15,7 @@ type ObligationTargetFilter struct {
 	Parent string `xml:"parent"`
 }
 
-func (o *ObligationTargetFilter) Assign(*xml.Element) error {
+func (o *ObligationTargetFilter) Assign(*domain.Element) error {
 	return nil
 }
 

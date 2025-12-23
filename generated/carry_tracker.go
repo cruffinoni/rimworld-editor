@@ -3,7 +3,7 @@
 package generated
 
 import (
-	"github.com/cruffinoni/rimworld-editor/internal/xml"
+	"github.com/cruffinoni/rimworld-editor/internal/xml/domain"
 	"github.com/cruffinoni/rimworld-editor/internal/xml/attributes"
 )
 
@@ -14,7 +14,7 @@ type CarryTracker struct {
 	InnerContainer *SavegameGameMapsLiThingsThingCarryTrackerInnerContainer `xml:"innerContainer"`
 }
 
-func (c *CarryTracker) Assign(*xml.Element) error {
+func (c *CarryTracker) Assign(*domain.Element) error {
 	return nil
 }
 

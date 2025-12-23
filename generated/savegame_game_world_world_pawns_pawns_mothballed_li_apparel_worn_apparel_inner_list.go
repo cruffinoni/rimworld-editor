@@ -3,9 +3,9 @@
 package generated
 
 import (
-	"github.com/cruffinoni/rimworld-editor/internal/xml"
+	"github.com/cruffinoni/rimworld-editor/internal/xml/domain"
 	"github.com/cruffinoni/rimworld-editor/internal/xml/attributes"
-	"github.com/cruffinoni/rimworld-editor/internal/xml/types/primary"
+	"github.com/cruffinoni/rimworld-editor/internal/xml/scalar"
 )
 
 type SavegameGameWorldWorldPawnsPawnsMothballedLiApparelWornApparelInnerList struct {
@@ -17,7 +17,7 @@ type SavegameGameWorldWorldPawnsPawnsMothballedLiApparelWornApparelInnerList str
 	Health                   int64          `xml:"health"`
 	StackCount               int64          `xml:"stackCount"`
 	Stuff                    string         `xml:"stuff"`
-	QuestTags                *primary.Empty `xml:"questTags"`
+	QuestTags                *scalar.Empty `xml:"questTags"`
 	Color                    string         `xml:"color"`
 	ColorActive              bool           `xml:"colorActive"`
 	Quality                  string         `xml:"quality"`
@@ -29,7 +29,7 @@ type SavegameGameWorldWorldPawnsPawnsMothballedLiApparelWornApparelInnerList str
 	Instigator               string         `xml:"instigator"`
 	Energy                   float64        `xml:"energy"`
 	VerbTracker              *VerbTracker   `xml:"verbTracker"`
-	ThingsIgnoredByExplosion *primary.Empty `xml:"thingsIgnoredByExplosion"`
+	ThingsIgnoredByExplosion *scalar.Empty `xml:"thingsIgnoredByExplosion"`
 	CountdownTicksLeft       int64          `xml:"countdownTicksLeft"`
 	CodedPawn                string         `xml:"codedPawn"`
 	BiocodedPawnLabel        string         `xml:"biocodedPawnLabel"`
@@ -40,7 +40,7 @@ type SavegameGameWorldWorldPawnsPawnsMothballedLiApparelWornApparelInnerList str
 	WornByCorpse             bool           `xml:"wornByCorpse"`
 }
 
-func (s *SavegameGameWorldWorldPawnsPawnsMothballedLiApparelWornApparelInnerList) Assign(*xml.Element) error {
+func (s *SavegameGameWorldWorldPawnsPawnsMothballedLiApparelWornApparelInnerList) Assign(*domain.Element) error {
 	return nil
 }
 

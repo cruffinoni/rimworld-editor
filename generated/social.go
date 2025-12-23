@@ -3,26 +3,26 @@
 package generated
 
 import (
-	"github.com/cruffinoni/rimworld-editor/internal/xml"
+	"github.com/cruffinoni/rimworld-editor/internal/xml/domain"
 	"github.com/cruffinoni/rimworld-editor/internal/xml/attributes"
-	"github.com/cruffinoni/rimworld-editor/internal/xml/types"
-	"github.com/cruffinoni/rimworld-editor/internal/xml/types/primary"
+	"github.com/cruffinoni/rimworld-editor/internal/xml/collection"
+	"github.com/cruffinoni/rimworld-editor/internal/xml/scalar"
 )
 
 type Social struct {
 	Attr           attributes.Attributes
 	FieldValidated map[string]bool
 
-	DirectRelations               *types.Slice[*DirectRelations]    `xml:"directRelations"`
+	DirectRelations               *collection.Slice[*DirectRelations]    `xml:"directRelations"`
 	RelativeInvolvedInRescueQuest string                            `xml:"relativeInvolvedInRescueQuest"`
-	PregnancyApproaches           types.Map[string, *primary.Empty] `xml:"pregnancyApproaches"`
+	PregnancyApproaches           collection.Map[string, *scalar.Empty] `xml:"pregnancyApproaches"`
 	RomanceEnableTick             int64                             `xml:"romanceEnableTick"`
 	CanGetRescuedThought          bool                              `xml:"canGetRescuedThought"`
 	NextMarriageNameChange        string                            `xml:"nextMarriageNameChange"`
 	EverSeenByPlayer              bool                              `xml:"everSeenByPlayer"`
 }
 
-func (s *Social) Assign(*xml.Element) error {
+func (s *Social) Assign(*domain.Element) error {
 	return nil
 }
 

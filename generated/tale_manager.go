@@ -3,19 +3,19 @@
 package generated
 
 import (
-	"github.com/cruffinoni/rimworld-editor/internal/xml"
+	"github.com/cruffinoni/rimworld-editor/internal/xml/domain"
 	"github.com/cruffinoni/rimworld-editor/internal/xml/attributes"
-	"github.com/cruffinoni/rimworld-editor/internal/xml/types"
+	"github.com/cruffinoni/rimworld-editor/internal/xml/collection"
 )
 
 type TaleManager struct {
 	Attr           attributes.Attributes
 	FieldValidated map[string]bool
 
-	Tales *types.Slice[*Tales] `xml:"tales"`
+	Tales *collection.Slice[*Tales] `xml:"tales"`
 }
 
-func (t *TaleManager) Assign(*xml.Element) error {
+func (t *TaleManager) Assign(*domain.Element) error {
 	return nil
 }
 

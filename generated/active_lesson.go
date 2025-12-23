@@ -3,19 +3,19 @@
 package generated
 
 import (
-	"github.com/cruffinoni/rimworld-editor/internal/xml"
+	"github.com/cruffinoni/rimworld-editor/internal/xml/domain"
 	"github.com/cruffinoni/rimworld-editor/internal/xml/attributes"
-	"github.com/cruffinoni/rimworld-editor/internal/xml/types/primary"
+	"github.com/cruffinoni/rimworld-editor/internal/xml/scalar"
 )
 
 type ActiveLesson struct {
 	Attr           attributes.Attributes
 	FieldValidated map[string]bool
 
-	ActiveLesson *primary.Empty `xml:"activeLesson"`
+	ActiveLesson *scalar.Empty `xml:"activeLesson"`
 }
 
-func (a *ActiveLesson) Assign(*xml.Element) error {
+func (a *ActiveLesson) Assign(*domain.Element) error {
 	return nil
 }
 

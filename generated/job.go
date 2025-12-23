@@ -3,9 +3,9 @@
 package generated
 
 import (
-	"github.com/cruffinoni/rimworld-editor/internal/xml"
+	"github.com/cruffinoni/rimworld-editor/internal/xml/domain"
 	"github.com/cruffinoni/rimworld-editor/internal/xml/attributes"
-	"github.com/cruffinoni/rimworld-editor/internal/xml/types/primary"
+	"github.com/cruffinoni/rimworld-editor/internal/xml/scalar"
 )
 
 type Job struct {
@@ -20,19 +20,19 @@ type Job struct {
 	Def                string         `xml:"def"`
 	LoadId             int64          `xml:"loadID"`
 	TargetA            string         `xml:"targetA"`
-	TargetQueueA       *primary.Empty `xml:"targetQueueA"`
-	TargetQueueB       *primary.Empty `xml:"targetQueueB"`
+	TargetQueueA       *scalar.Empty `xml:"targetQueueA"`
+	TargetQueueB       *scalar.Empty `xml:"targetQueueB"`
 	Count              int64          `xml:"count"`
-	CountQueue         *primary.Empty `xml:"countQueue"`
+	CountQueue         *scalar.Empty `xml:"countQueue"`
 	StartTick          int64          `xml:"startTick"`
-	PlacedThings       *primary.Empty `xml:"placedThings"`
+	PlacedThings       *scalar.Empty `xml:"placedThings"`
 	JobGiverThinkTree  string         `xml:"jobGiverThinkTree"`
 	PsyfocusTargetLast int64          `xml:"psyfocusTargetLast"`
 	Ability            string         `xml:"ability"`
 	LastJobGiverKey    int64          `xml:"lastJobGiverKey"`
 }
 
-func (j *Job) Assign(*xml.Element) error {
+func (j *Job) Assign(*domain.Element) error {
 	return nil
 }
 

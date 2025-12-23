@@ -3,9 +3,9 @@
 package generated
 
 import (
-	"github.com/cruffinoni/rimworld-editor/internal/xml"
+	"github.com/cruffinoni/rimworld-editor/internal/xml/domain"
 	"github.com/cruffinoni/rimworld-editor/internal/xml/attributes"
-	"github.com/cruffinoni/rimworld-editor/internal/xml/types"
+	"github.com/cruffinoni/rimworld-editor/internal/xml/collection"
 )
 
 type History struct {
@@ -13,14 +13,14 @@ type History struct {
 	FieldValidated map[string]bool
 
 	Archive                       *Archive                          `xml:"archive"`
-	AutoRecorderGroups            *types.Slice[*AutoRecorderGroups] `xml:"autoRecorderGroups"`
+	AutoRecorderGroups            *collection.Slice[*AutoRecorderGroups] `xml:"autoRecorderGroups"`
 	LastPsylinkAvailable          int64                             `xml:"lastPsylinkAvailable"`
 	LastTickPlayerRaidedSomeone   int64                             `xml:"lastTickPlayerRaidedSomeone"`
 	HistoryEventsManager          *HistoryEventsManager             `xml:"historyEventsManager"`
 	EverCapturedUnrecruitablePawn bool                              `xml:"everCapturedUnrecruitablePawn"`
 }
 
-func (h *History) Assign(*xml.Element) error {
+func (h *History) Assign(*domain.Element) error {
 	return nil
 }
 

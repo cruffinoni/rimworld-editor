@@ -3,7 +3,7 @@
 package generated
 
 import (
-	"github.com/cruffinoni/rimworld-editor/internal/xml"
+	"github.com/cruffinoni/rimworld-editor/internal/xml/domain"
 	"github.com/cruffinoni/rimworld-editor/internal/xml/attributes"
 )
 
@@ -17,7 +17,7 @@ type AllTraits struct {
 	Degree       int64  `xml:"degree"`
 }
 
-func (a *AllTraits) Assign(*xml.Element) error {
+func (a *AllTraits) Assign(*domain.Element) error {
 	return nil
 }
 

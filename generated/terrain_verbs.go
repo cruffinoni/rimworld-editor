@@ -3,7 +3,7 @@
 package generated
 
 import (
-	"github.com/cruffinoni/rimworld-editor/internal/xml"
+	"github.com/cruffinoni/rimworld-editor/internal/xml/domain"
 	"github.com/cruffinoni/rimworld-editor/internal/xml/attributes"
 )
 
@@ -15,7 +15,7 @@ type TerrainVerbs struct {
 	Tracker *Tracker `xml:"tracker"`
 }
 
-func (t *TerrainVerbs) Assign(*xml.Element) error {
+func (t *TerrainVerbs) Assign(*domain.Element) error {
 	return nil
 }
 

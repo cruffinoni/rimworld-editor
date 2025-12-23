@@ -3,19 +3,19 @@
 package generated
 
 import (
-	"github.com/cruffinoni/rimworld-editor/internal/xml"
+	"github.com/cruffinoni/rimworld-editor/internal/xml/domain"
 	"github.com/cruffinoni/rimworld-editor/internal/xml/attributes"
-	"github.com/cruffinoni/rimworld-editor/internal/xml/types/primary"
+	"github.com/cruffinoni/rimworld-editor/internal/xml/scalar"
 )
 
 type AttackTargetReservationManager struct {
 	Attr           attributes.Attributes
 	FieldValidated map[string]bool
 
-	Reservations *primary.Empty `xml:"reservations"`
+	Reservations *scalar.Empty `xml:"reservations"`
 }
 
-func (a *AttackTargetReservationManager) Assign(*xml.Element) error {
+func (a *AttackTargetReservationManager) Assign(*domain.Element) error {
 	return nil
 }
 

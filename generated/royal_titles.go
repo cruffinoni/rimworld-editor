@@ -3,7 +3,7 @@
 package generated
 
 import (
-	"github.com/cruffinoni/rimworld-editor/internal/xml"
+	"github.com/cruffinoni/rimworld-editor/internal/xml/domain"
 	"github.com/cruffinoni/rimworld-editor/internal/xml/attributes"
 )
 
@@ -16,7 +16,7 @@ type RoyalTitles struct {
 	ReceivedTick int64  `xml:"receivedTick"`
 }
 
-func (r *RoyalTitles) Assign(*xml.Element) error {
+func (r *RoyalTitles) Assign(*domain.Element) error {
 	return nil
 }
 

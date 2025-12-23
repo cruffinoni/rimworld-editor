@@ -3,7 +3,7 @@
 package generated
 
 import (
-	"github.com/cruffinoni/rimworld-editor/internal/xml"
+	"github.com/cruffinoni/rimworld-editor/internal/xml/domain"
 	"github.com/cruffinoni/rimworld-editor/internal/xml/attributes"
 )
 
@@ -37,7 +37,7 @@ type Bills struct {
 	QualityRange           string            `xml:"qualityRange"`
 }
 
-func (b *Bills) Assign(*xml.Element) error {
+func (b *Bills) Assign(*domain.Element) error {
 	return nil
 }
 

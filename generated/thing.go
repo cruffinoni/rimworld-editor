@@ -3,10 +3,10 @@
 package generated
 
 import (
-	"github.com/cruffinoni/rimworld-editor/internal/xml"
+	"github.com/cruffinoni/rimworld-editor/internal/xml/domain"
 	"github.com/cruffinoni/rimworld-editor/internal/xml/attributes"
-	"github.com/cruffinoni/rimworld-editor/internal/xml/types"
-	"github.com/cruffinoni/rimworld-editor/internal/xml/types/primary"
+	"github.com/cruffinoni/rimworld-editor/internal/xml/collection"
+	"github.com/cruffinoni/rimworld-editor/internal/xml/scalar"
 )
 
 type Thing struct {
@@ -24,11 +24,11 @@ type Thing struct {
 	AuthorName                         string                                             `xml:"authorName"`
 	RuinedPercent                      int64                                              `xml:"ruinedPercent"`
 	Id                                 string                                             `xml:"id"`
-	Trader                             *primary.Empty                                     `xml:"trader"`
+	Trader                             *scalar.Empty                                     `xml:"trader"`
 	PlayerSettings                     *PlayerSettings                                    `xml:"playerSettings"`
 	Color                              string                                             `xml:"color"`
 	StorageGroup                       string                                             `xml:"storageGroup"`
-	IsRepairRequestCosts               types.Map[string, int64]                           `xml:"isRepairRequestCosts"`
+	IsRepairRequestCosts               collection.Map[string, int64]                           `xml:"isRepairRequestCosts"`
 	NormalQualityAgeDaysThreshold      int64                                              `xml:"normalQualityAgeDaysThreshold"`
 	IsAutoEnabled                      bool                                               `xml:"isAutoEnabled"`
 	Age                                int64                                              `xml:"age"`
@@ -44,14 +44,14 @@ type Thing struct {
 	TicksUntilClose                    int64                                              `xml:"ticksUntilClose"`
 	GroupId                            int64                                              `xml:"groupID"`
 	QualityRequested                   string                                             `xml:"qualityRequested"`
-	RequiredItems                      *primary.Empty                                     `xml:"requiredItems"`
+	RequiredItems                      *scalar.Empty                                     `xml:"requiredItems"`
 	AutoCut                            bool                                               `xml:"autoCut"`
 	Rot                                int64                                              `xml:"rot"`
 	StuffToUse                         string                                             `xml:"stuffToUse"`
 	Biocoded                           bool                                               `xml:"biocoded"`
 	Open                               bool                                               `xml:"open"`
 	DesiredMinQuality                  string                                             `xml:"desiredMinQuality"`
-	Container                          *primary.Empty                                     `xml:"container"`
+	Container                          *scalar.Empty                                     `xml:"container"`
 	CurrentPlayer                      string                                             `xml:"currentPlayer"`
 	QualityNow                         string                                             `xml:"qualityNow"`
 	Drafter                            *Drafter                                           `xml:"drafter"`
@@ -61,7 +61,7 @@ type Thing struct {
 	ProcessorStage                     string                                             `xml:"processorStage"`
 	ExcellentQualityAgeDaysThreshold   int64                                              `xml:"excellentQualityAgeDaysThreshold"`
 	LastUsedTick                       int64                                              `xml:"lastUsedTick"`
-	PawnsToIgnoreIfDownedOfNotOnTheMap *primary.Empty                                     `xml:"pawnsToIgnoreIfDownedOfNotOnTheMap"`
+	PawnsToIgnoreIfDownedOfNotOnTheMap *scalar.Empty                                     `xml:"pawnsToIgnoreIfDownedOfNotOnTheMap"`
 	TimeOfDeath                        int64                                              `xml:"timeOfDeath"`
 	DesiredMinQualityReaced            bool                                               `xml:"desiredMinQualityReaced"`
 	MassCapacityOverride               int64                                              `xml:"massCapacityOverride"`
@@ -71,7 +71,7 @@ type Thing struct {
 	InventoryStock                     *InventoryStock                                    `xml:"inventoryStock"`
 	TaleRef                            *TaleRef                                           `xml:"taleRef"`
 	CachedPowerOutput                  float64                                            `xml:"cachedPowerOutput"`
-	Subplants                          *primary.Empty                                     `xml:"subplants"`
+	Subplants                          *scalar.Empty                                     `xml:"subplants"`
 	Genes                              *Genes                                             `xml:"genes"`
 	DisappearAfterTicks                int64                                              `xml:"disappearAfterTicks"`
 	ParentThing                        string                                             `xml:"parentThing"`
@@ -80,18 +80,18 @@ type Thing struct {
 	UpdateCounter                      int64                                              `xml:"updateCounter"`
 	CodedPawn                          string                                             `xml:"codedPawn"`
 	Map                                int64                                              `xml:"map"`
-	Sources                            *types.Slice[string]                               `xml:"sources"`
+	Sources                            *collection.Slice[string]                               `xml:"sources"`
 	LastUser                           string                                             `xml:"lastUser"`
 	WoolGrowth                         float64                                            `xml:"woolGrowth"`
-	Ingredients                        *types.Slice[*xml.Element]                         `xml:"ingredients"`
+	Ingredients                        *collection.Slice[*domain.Element]                         `xml:"ingredients"`
 	TargetTemperature                  int64                                              `xml:"targetTemperature"`
-	Testees                            *primary.Empty                                     `xml:"testees"`
+	Testees                            *scalar.Empty                                     `xml:"testees"`
 	ForOwnerType                       string                                             `xml:"forOwnerType"`
-	QuestTags                          *types.Slice[string]                               `xml:"questTags"`
+	QuestTags                          *collection.Slice[string]                               `xml:"questTags"`
 	InnerContainer                     *SavegameGameMapsLiThingsThingInnerContainer       `xml:"innerContainer"`
 	TicksToReset                       int64                                              `xml:"ticksToReset"`
 	WorkSettings                       *WorkSettings                                      `xml:"workSettings"`
-	Thinker                            *primary.Empty                                     `xml:"thinker"`
+	Thinker                            *scalar.Empty                                     `xml:"thinker"`
 	GrowTick                           int64                                              `xml:"growTick"`
 	Fuel                               float64                                            `xml:"fuel"`
 	Medical                            bool                                               `xml:"medical"`
@@ -109,40 +109,40 @@ type Thing struct {
 	VanishAfterTimestamp               int64                                              `xml:"vanishAfterTimestamp"`
 	InnerContainerSecond               *SavegameGameMapsLiThingsThingInnerContainerSecond `xml:"innerContainerSecond"`
 	InnerContainerFourth               *SavegameGameMapsLiThingsThingInnerContainerFourth `xml:"innerContainerFourth"`
-	RequiredPawns                      *types.Slice[string]                               `xml:"requiredPawns"`
+	RequiredPawns                      *collection.Slice[string]                               `xml:"requiredPawns"`
 	Health                             int64                                              `xml:"health"`
 	FoodRestriction                    *FoodRestriction                                   `xml:"foodRestriction"`
-	StyleObserver                      *primary.Empty                                     `xml:"styleObserver"`
+	StyleObserver                      *scalar.Empty                                     `xml:"styleObserver"`
 	StyleDef                           string                                             `xml:"styleDef"`
 	ActivePawns                        int64                                              `xml:"activePawns"`
-	ForceDisplayedAnimalDefs           *types.Slice[string]                               `xml:"forceDisplayedAnimalDefs"`
+	ForceDisplayedAnimalDefs           *collection.Slice[string]                               `xml:"forceDisplayedAnimalDefs"`
 	ExpectedAmountFirstIngredient      int64                                              `xml:"ExpectedAmountFirstIngredient"`
 	FirstIngredientComplete            bool                                               `xml:"firstIngredientComplete"`
 	Name                               *Name                                              `xml:"name"`
 	MilkFullness                       float64                                            `xml:"milkFullness"`
 	GlowColor                          string                                             `xml:"glowColor"`
-	UninstalledAssignedPawns           *primary.Empty                                     `xml:"uninstalledAssignedPawns"`
+	UninstalledAssignedPawns           *scalar.Empty                                     `xml:"uninstalledAssignedPawns"`
 	TicksSinceLastEmitted              int64                                              `xml:"ticksSinceLastEmitted"`
-	ProductsToTurnInto                 *primary.Empty                                     `xml:"productsToTurnInto"`
+	ProductsToTurnInto                 *scalar.Empty                                     `xml:"productsToTurnInto"`
 	AgeTracker                         *AgeTracker                                        `xml:"ageTracker"`
 	BabyNamingDeadline                 int64                                              `xml:"babyNamingDeadline"`
 	Recipe                             string                                             `xml:"recipe"`
 	ContentsKnown                      bool                                               `xml:"contentsKnown"`
 	FirstItem                          string                                             `xml:"firstItem"`
 	PoorQualityAgeDaysThreshold        int64                                              `xml:"poorQualityAgeDaysThreshold"`
-	TmpSavedPawns                      *primary.Empty                                     `xml:"tmpSavedPawns"`
+	TmpSavedPawns                      *scalar.Empty                                     `xml:"tmpSavedPawns"`
 	Target                             string                                             `xml:"target"`
 	Drugs                              *Drugs                                             `xml:"drugs"`
 	Style                              *Style                                             `xml:"style"`
 	RemoveAfterAwful                   bool                                               `xml:"removeAfterAwful"`
 	ShipParent                         string                                             `xml:"shipParent"`
-	PawnsThatCanPsylinkLastGrassGrow   *primary.Empty                                     `xml:"pawnsThatCanPsylinkLastGrassGrow"`
+	PawnsThatCanPsylinkLastGrassGrow   *scalar.Empty                                     `xml:"pawnsThatCanPsylinkLastGrassGrow"`
 	Equipment                          *Equipment                                         `xml:"equipment"`
 	Amount                             int64                                              `xml:"amount"`
 	ResourceContainer                  *ResourceContainer                                 `xml:"resourceContainer"`
 	MadeLeaflessTick                   int64                                              `xml:"madeLeaflessTick"`
 	HealthTracker                      *HealthTracker                                     `xml:"healthTracker"`
-	Mechanitor                         *primary.Empty                                     `xml:"mechanitor"`
+	Mechanitor                         *scalar.Empty                                     `xml:"mechanitor"`
 	WorkLeft                           float64                                            `xml:"workLeft"`
 	LastCheckedAutoCutTick             int64                                              `xml:"lastCheckedAutoCutTick"`
 	InnerContainerFirst                *SavegameGameMapsLiThingsThingInnerContainerFirst  `xml:"innerContainerFirst"`
@@ -153,17 +153,17 @@ type Thing struct {
 	AnimalTabHandlerMode               string                                             `xml:"animalTab.handler.mode"`
 	UnlitTicks                         int64                                              `xml:"unlitTicks"`
 	Creator                            string                                             `xml:"creator"`
-	CurrentlyCastingTargets            *primary.Empty                                     `xml:"currentlyCastingTargets"`
+	CurrentlyCastingTargets            *scalar.Empty                                     `xml:"currentlyCastingTargets"`
 	Abilities                          *Abilities                                         `xml:"abilities"`
-	ThingsIgnoredByExplosion           *primary.Empty                                     `xml:"thingsIgnoredByExplosion"`
+	ThingsIgnoredByExplosion           *scalar.Empty                                     `xml:"thingsIgnoredByExplosion"`
 	InnerContainerThird                *SavegameGameMapsLiThingsThingInnerContainerThird  `xml:"innerContainerThird"`
 	EverSeenByPlayer                   bool                                               `xml:"everSeenByPlayer"`
 	Timetable                          *Timetable                                         `xml:"timetable"`
 	AllowAutoRefuel                    bool                                               `xml:"allowAutoRefuel"`
 	Active                             bool                                               `xml:"active"`
 	LegendaryQualityAgeDaysThreshold   int64                                              `xml:"legendaryQualityAgeDaysThreshold"`
-	LeftToLoad                         *primary.Empty                                     `xml:"leftToLoad"`
-	LearnedAbilities                   *primary.Empty                                     `xml:"learnedAbilities"`
+	LeftToLoad                         *scalar.Empty                                     `xml:"leftToLoad"`
+	LearnedAbilities                   *scalar.Empty                                     `xml:"learnedAbilities"`
 	KindDef                            string                                             `xml:"kindDef"`
 	MindState                          *MindState                                         `xml:"mindState"`
 	Natives                            *Natives                                           `xml:"natives"`
@@ -187,28 +187,28 @@ type Thing struct {
 	Faction                            string                                             `xml:"faction"`
 	AnimalTabHandlerPawn               string                                             `xml:"animalTab.handler.pawn"`
 	Ownership                          *Ownership                                         `xml:"ownership"`
-	Learning                           *primary.Empty                                     `xml:"learning"`
+	Learning                           *scalar.Empty                                     `xml:"learning"`
 	CountdownTicksLeft                 int64                                              `xml:"countdownTicksLeft"`
 	ApproachingPawn                    string                                             `xml:"approachingPawn"`
-	RopedPawns                         *primary.Empty                                     `xml:"ropedPawns"`
+	RopedPawns                         *scalar.Empty                                     `xml:"ropedPawns"`
 	Settings                           *Settings                                          `xml:"settings"`
 	LastFriendlyTouchTick              int64                                              `xml:"lastFriendlyTouchTick"`
 	MasterworkQualityAgeDaysThreshold  int64                                              `xml:"masterworkQualityAgeDaysThreshold"`
 	StackCount                         int64                                              `xml:"stackCount"`
-	ThingsHauledToInventory            *primary.Empty                                     `xml:"ThingsHauledToInventory"`
+	ThingsHauledToInventory            *scalar.Empty                                     `xml:"ThingsHauledToInventory"`
 	LastKeepDisplayTick                int64                                              `xml:"lastKeepDisplayTick"`
 	Roping                             *Roping                                            `xml:"roping"`
 	RotProg                            float64                                            `xml:"rotProg"`
 	Sown                               bool                                               `xml:"sown"`
 	StartedGrowingAtTick               int64                                              `xml:"startedGrowingAtTick"`
-	AssignedPawns                      *types.Slice[string]                               `xml:"assignedPawns"`
+	AssignedPawns                      *collection.Slice[string]                               `xml:"assignedPawns"`
 	SourcePrecept                      string                                             `xml:"sourcePrecept"`
 	MeleeVerbs                         *MeleeVerbs                                        `xml:"meleeVerbs"`
 	CarryTracker                       *CarryTracker                                      `xml:"carryTracker"`
 	Guest                              *Guest                                             `xml:"guest"`
 	BiocodedPawnLabel                  string                                             `xml:"biocodedPawnLabel"`
 	IsRechargeActive                   bool                                               `xml:"isRechargeActive"`
-	RotationTracker                    *primary.Empty                                     `xml:"rotationTracker"`
+	RotationTracker                    *scalar.Empty                                     `xml:"rotationTracker"`
 	Inventory                          *Inventory                                         `xml:"inventory"`
 	Filth                              *Filth                                             `xml:"filth"`
 	Outfits                            *Outfits                                           `xml:"outfits"`
@@ -218,7 +218,7 @@ type Thing struct {
 	AnimalFilter                       *AnimalFilter                                      `xml:"animalFilter"`
 }
 
-func (t *Thing) Assign(*xml.Element) error {
+func (t *Thing) Assign(*domain.Element) error {
 	return nil
 }
 

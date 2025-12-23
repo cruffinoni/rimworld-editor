@@ -3,7 +3,7 @@
 package generated
 
 import (
-	"github.com/cruffinoni/rimworld-editor/internal/xml"
+	"github.com/cruffinoni/rimworld-editor/internal/xml/domain"
 	"github.com/cruffinoni/rimworld-editor/internal/xml/attributes"
 )
 
@@ -15,7 +15,7 @@ type SavegameGameWorldWorldPawnsPawnsMothballedLiInventoryStockStockEntriesValue
 	Count    int64  `xml:"count"`
 }
 
-func (s *SavegameGameWorldWorldPawnsPawnsMothballedLiInventoryStockStockEntriesValues) Assign(*xml.Element) error {
+func (s *SavegameGameWorldWorldPawnsPawnsMothballedLiInventoryStockStockEntriesValues) Assign(*domain.Element) error {
 	return nil
 }
 

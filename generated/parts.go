@@ -3,22 +3,22 @@
 package generated
 
 import (
-	"github.com/cruffinoni/rimworld-editor/internal/xml"
+	"github.com/cruffinoni/rimworld-editor/internal/xml/domain"
 	"github.com/cruffinoni/rimworld-editor/internal/xml/attributes"
-	"github.com/cruffinoni/rimworld-editor/internal/xml/types"
-	"github.com/cruffinoni/rimworld-editor/internal/xml/types/primary"
+	"github.com/cruffinoni/rimworld-editor/internal/xml/collection"
+	"github.com/cruffinoni/rimworld-editor/internal/xml/scalar"
 )
 
 type Parts struct {
 	Attr           attributes.Attributes
 	FieldValidated map[string]bool
 
-	ThingDefs                          *primary.Empty            `xml:"thingDefs"`
-	Pawns                              *types.Slice[string]      `xml:"pawns"`
-	Factions                           *types.Slice[string]      `xml:"factions"`
+	ThingDefs                          *scalar.Empty            `xml:"thingDefs"`
+	Pawns                              *collection.Slice[string]      `xml:"pawns"`
+	Factions                           *collection.Slice[string]      `xml:"factions"`
 	ExtraFaction                       *ExtraFaction             `xml:"extraFaction"`
-	AffectedPawns                      *types.Slice[string]      `xml:"affectedPawns"`
-	PartsToAffect                      *primary.Empty            `xml:"partsToAffect"`
+	AffectedPawns                      *collection.Slice[string]      `xml:"affectedPawns"`
+	PartsToAffect                      *scalar.Empty            `xml:"partsToAffect"`
 	InSignal                           string                    `xml:"inSignal"`
 	HediffDef                          string                    `xml:"hediffDef"`
 	AddToHyperlinks                    bool                      `xml:"addToHyperlinks"`
@@ -28,14 +28,14 @@ type Parts struct {
 	MapParent                          string                    `xml:"mapParent"`
 	MakePrisoners                      bool                      `xml:"makePrisoners"`
 	TransportShip                      string                    `xml:"transportShip"`
-	Items                              *types.Slice[*Items]      `xml:"items"`
+	Items                              *collection.Slice[*Items]      `xml:"items"`
 	ShipJobStartMode                   string                    `xml:"shipJobStartMode"`
 	ShipJob                            *ShipJob                  `xml:"shipJob"`
 	UnsatisfiedDropMode                string                    `xml:"unsatisfiedDropMode"`
 	Letter                             *Letter                   `xml:"letter"`
 	UseColonistsOnMap                  string                    `xml:"useColonistsOnMap"`
-	ColonistsFromSignal                *primary.Empty            `xml:"colonistsFromSignal"`
-	Visitors                           *primary.Empty            `xml:"visitors"`
+	ColonistsFromSignal                *scalar.Empty            `xml:"colonistsFromSignal"`
+	Visitors                           *scalar.Empty            `xml:"visitors"`
 	HistoryEvent                       string                    `xml:"historyEvent"`
 	Change                             int64                     `xml:"change"`
 	Faction                            string                    `xml:"faction"`
@@ -44,28 +44,28 @@ type Parts struct {
 	OutSignal                          string                    `xml:"outSignal"`
 	InSignalEnable                     string                    `xml:"inSignalEnable"`
 	EnableTick                         int64                     `xml:"enableTick"`
-	Targets                            *types.Slice[string]      `xml:"targets"`
+	Targets                            *collection.Slice[string]      `xml:"targets"`
 	InspectString                      string                    `xml:"inspectString"`
 	ResolvedInspectString              string                    `xml:"resolvedInspectString"`
-	OutSignalsCompleted                *types.Slice[string]      `xml:"outSignalsCompleted"`
+	OutSignalsCompleted                *collection.Slice[string]      `xml:"outSignalsCompleted"`
 	DelayTicks                         int64                     `xml:"delayTicks"`
 	ExpiryInfoPart                     string                    `xml:"expiryInfoPart"`
 	ExpiryInfoPartTip                  string                    `xml:"expiryInfoPartTip"`
-	InspectStringTargets               *types.Slice[string]      `xml:"inspectStringTargets"`
-	AlertCulprits                      *types.Slice[string]      `xml:"alertCulprits"`
-	Lodgers                            *types.Slice[string]      `xml:"lodgers"`
-	InSignals                          *types.Slice[string]      `xml:"inSignals"`
+	InspectStringTargets               *collection.Slice[string]      `xml:"inspectStringTargets"`
+	AlertCulprits                      *collection.Slice[string]      `xml:"alertCulprits"`
+	Lodgers                            *collection.Slice[string]      `xml:"lodgers"`
+	InSignals                          *collection.Slice[string]      `xml:"inSignals"`
 	SignalListenMode                   string                    `xml:"signalListenMode"`
 	InSignalChoiceUsed                 string                    `xml:"inSignalChoiceUsed"`
-	Choices                            *types.Slice[*Choices]    `xml:"choices"`
+	Choices                            *collection.Slice[*Choices]    `xml:"choices"`
 	SendLetter                         bool                      `xml:"sendLetter"`
 	OutSignalElse                      string                    `xml:"outSignalElse"`
-	PawnsInContainers                  *primary.Empty            `xml:"pawnsInContainers"`
+	PawnsInContainers                  *scalar.Empty            `xml:"pawnsInContainers"`
 	OutSignalResult                    string                    `xml:"outSignalResult"`
 	WorldObject                        string                    `xml:"worldObject"`
 	Parms                              *Parms                    `xml:"parms"`
 	Incident                           string                    `xml:"incident"`
-	DefsToExcludeFromHyperlinks        *primary.Empty            `xml:"defsToExcludeFromHyperlinks"`
+	DefsToExcludeFromHyperlinks        *scalar.Empty            `xml:"defsToExcludeFromHyperlinks"`
 	Threshold                          float64                   `xml:"threshold"`
 	CivilOutlander                     string                    `xml:"civilOutlander"`
 	GetRaidersFromMapParent            string                    `xml:"getRaidersFromMapParent"`
@@ -77,9 +77,9 @@ type Parts struct {
 	JoinPlayer                         bool                      `xml:"joinPlayer"`
 	OutSignalCompleted                 string                    `xml:"outSignalCompleted"`
 	Shuttle                            string                    `xml:"shuttle"`
-	SendAwayIfAllDespawned             *types.Slice[string]      `xml:"sendAwayIfAllDespawned"`
+	SendAwayIfAllDespawned             *collection.Slice[string]      `xml:"sendAwayIfAllDespawned"`
 	RelationKind                       string                    `xml:"relationKind"`
-	TargetPawns                        *types.Slice[string]      `xml:"targetPawns"`
+	TargetPawns                        *collection.Slice[string]      `xml:"targetPawns"`
 	AcceptIfDefeated                   bool                      `xml:"acceptIfDefeated"`
 	Parent                             string                    `xml:"parent"`
 	AlertExplanation                   string                    `xml:"alertExplanation"`
@@ -106,9 +106,9 @@ type Parts struct {
 	MapOfPawn                          string                    `xml:"mapOfPawn"`
 	Title                              string                    `xml:"title"`
 	Spawned                            bool                      `xml:"spawned"`
-	SubquestDefs                       *types.Slice[string]      `xml:"subquestDefs"`
-	SignalsReceived                    *primary.Empty            `xml:"signalsReceived"`
-	Options                            *types.Slice[*Options]    `xml:"options"`
+	SubquestDefs                       *collection.Slice[string]      `xml:"subquestDefs"`
+	SignalsReceived                    *scalar.Empty            `xml:"signalsReceived"`
+	Options                            *collection.Slice[*Options]    `xml:"options"`
 	GetRaidersFromMap                  string                    `xml:"getRaidersFromMap"`
 	Copy                               string                    `xml:"copy"`
 	ExpiryInfoPartKey                  string                    `xml:"expiryInfoPartKey"`
@@ -117,24 +117,24 @@ type Parts struct {
 	DropSpot                           string                    `xml:"dropSpot"`
 	UseTradeDropSpot                   bool                      `xml:"useTradeDropSpot"`
 	PlayerWealth                       int64                     `xml:"playerWealth"`
-	InSignalsDisable                   *types.Slice[string]      `xml:"inSignalsDisable"`
+	InSignalsDisable                   *collection.Slice[string]      `xml:"inSignalsDisable"`
 	OutSignalCancelled                 string                    `xml:"outSignalCancelled"`
 	Cell                               string                    `xml:"cell"`
 	WorldObjecctDef                    string                    `xml:"worldObjecctDef"`
 	RelicSlateName                     string                    `xml:"relicSlateName"`
 	ResolvedDescriptionPart            string                    `xml:"resolvedDescriptionPart"`
 	AlertLabel                         string                    `xml:"alertLabel"`
-	OutSignals                         *types.Slice[string]      `xml:"outSignals"`
+	OutSignals                         *collection.Slice[string]      `xml:"outSignals"`
 	MaxSuccessfulSubquests             int64                     `xml:"maxSuccessfulSubquests"`
-	ArrivalAction                      *primary.Empty            `xml:"arrivalAction"`
+	ArrivalAction                      *scalar.Empty            `xml:"arrivalAction"`
 	LeaveImmediatelyWhenSatisfied      bool                      `xml:"leaveImmediatelyWhenSatisfied"`
-	ThingsToExcludeFromHyperlinks      *types.Slice[string]      `xml:"thingsToExcludeFromHyperlinks"`
+	ThingsToExcludeFromHyperlinks      *collection.Slice[string]      `xml:"thingsToExcludeFromHyperlinks"`
 	Relic                              string                    `xml:"relic"`
 	CountDormantPawnsAsHostile         bool                      `xml:"countDormantPawnsAsHostile"`
 	ShipJobDef                         string                    `xml:"shipJobDef"`
 	DescriptionPart                    string                    `xml:"descriptionPart"`
 	InSignalDisable                    string                    `xml:"inSignalDisable"`
-	MoodBelowThresholdTicks            *primary.Empty            `xml:"moodBelowThresholdTicks"`
+	MoodBelowThresholdTicks            *scalar.Empty            `xml:"moodBelowThresholdTicks"`
 	IntroText                          string                    `xml:"introText"`
 	ImportantLookTarget                string                    `xml:"importantLookTarget"`
 	RoughOutlander                     string                    `xml:"roughOutlander"`
@@ -145,20 +145,20 @@ type Parts struct {
 	TicksLeftAlertCritical             int64                     `xml:"ticksLeftAlertCritical"`
 	MessageType                        string                    `xml:"messageType"`
 	SettlementFaction                  string                    `xml:"settlementFaction"`
-	SendAwayIfAnyDespawnedDownedOrDead *primary.Empty            `xml:"sendAwayIfAnyDespawnedDownedOrDead"`
+	SendAwayIfAnyDespawnedDownedOrDead *scalar.Empty            `xml:"sendAwayIfAnyDespawnedDownedOrDead"`
 	Lodger                             string                    `xml:"lodger"`
 	MinimumTitle                       string                    `xml:"minimumTitle"`
 	TicksInterval                      string                    `xml:"ticksInterval"`
 	Interval                           string                    `xml:"interval"`
-	QuestQueue                         *types.Slice[string]      `xml:"questQueue"`
+	QuestQueue                         *collection.Slice[string]      `xml:"questQueue"`
 	EndingText                         string                    `xml:"endingText"`
 	RoughTribe                         string                    `xml:"roughTribe"`
 	RevertOngoingQuestAfterLoad        bool                      `xml:"revertOngoingQuestAfterLoad"`
 	DelayRangeHours                    string                    `xml:"delayRangeHours"`
 	ExpectedEnemyCount                 int64                     `xml:"expectedEnemyCount"`
 	Def                                string                    `xml:"def"`
-	LootThings                         *types.Slice[*LootThings] `xml:"lootThings"`
-	ConditionCauser                    *primary.Empty            `xml:"conditionCauser"`
+	LootThings                         *collection.Slice[*LootThings] `xml:"lootThings"`
+	ConditionCauser                    *scalar.Empty            `xml:"conditionCauser"`
 	RelicThing                         *RelicThing               `xml:"relicThing"`
 	ArrivalMode                        string                    `xml:"arrivalMode"`
 	InnerSkyfallerThing                string                    `xml:"innerSkyfallerThing"`
@@ -166,7 +166,7 @@ type Parts struct {
 	Duration                           int64                     `xml:"duration"`
 	TryLandNearThing                   string                    `xml:"tryLandNearThing"`
 	CustomLetterLabel                  string                    `xml:"customLetterLabel"`
-	InSignalsShuttleSent               *types.Slice[string]      `xml:"inSignalsShuttleSent"`
+	InSignalsShuttleSent               *collection.Slice[string]      `xml:"inSignalsShuttleSent"`
 	InSignalShuttleDestroyed           string                    `xml:"inSignalShuttleDestroyed"`
 	Alert                              bool                      `xml:"alert"`
 	Tag                                string                    `xml:"tag"`
@@ -198,7 +198,7 @@ type Parts struct {
 	CloseSound                         string                    `xml:"closeSound"`
 }
 
-func (p *Parts) Assign(*xml.Element) error {
+func (p *Parts) Assign(*domain.Element) error {
 	return nil
 }
 

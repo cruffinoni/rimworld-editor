@@ -3,19 +3,19 @@
 package generated
 
 import (
-	"github.com/cruffinoni/rimworld-editor/internal/xml"
+	"github.com/cruffinoni/rimworld-editor/internal/xml/domain"
 	"github.com/cruffinoni/rimworld-editor/internal/xml/attributes"
-	"github.com/cruffinoni/rimworld-editor/internal/xml/types/primary"
+	"github.com/cruffinoni/rimworld-editor/internal/xml/scalar"
 )
 
 type TutorialState struct {
 	Attr           attributes.Attributes
 	FieldValidated map[string]bool
 
-	StartingItems *primary.Empty `xml:"startingItems"`
+	StartingItems *scalar.Empty `xml:"startingItems"`
 }
 
-func (t *TutorialState) Assign(*xml.Element) error {
+func (t *TutorialState) Assign(*domain.Element) error {
 	return nil
 }
 

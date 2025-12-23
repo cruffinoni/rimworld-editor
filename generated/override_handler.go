@@ -3,19 +3,19 @@
 package generated
 
 import (
-	"github.com/cruffinoni/rimworld-editor/internal/xml"
+	"github.com/cruffinoni/rimworld-editor/internal/xml/domain"
 	"github.com/cruffinoni/rimworld-editor/internal/xml/attributes"
-	"github.com/cruffinoni/rimworld-editor/internal/xml/types"
+	"github.com/cruffinoni/rimworld-editor/internal/xml/collection"
 )
 
 type OverrideHandler struct {
 	Attr           attributes.Attributes
 	FieldValidated map[string]bool
 
-	ForcedAps *types.Slice[string] `xml:"forcedAps"`
+	ForcedAps *collection.Slice[string] `xml:"forcedAps"`
 }
 
-func (o *OverrideHandler) Assign(*xml.Element) error {
+func (o *OverrideHandler) Assign(*domain.Element) error {
 	return nil
 }
 

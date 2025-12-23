@@ -3,22 +3,22 @@
 package generated
 
 import (
-	"github.com/cruffinoni/rimworld-editor/internal/xml"
+	"github.com/cruffinoni/rimworld-editor/internal/xml/domain"
 	"github.com/cruffinoni/rimworld-editor/internal/xml/attributes"
-	"github.com/cruffinoni/rimworld-editor/internal/xml/types"
-	"github.com/cruffinoni/rimworld-editor/internal/xml/types/primary"
+	"github.com/cruffinoni/rimworld-editor/internal/xml/collection"
+	"github.com/cruffinoni/rimworld-editor/internal/xml/scalar"
 )
 
 type Inventory struct {
 	Attr           attributes.Attributes
 	FieldValidated map[string]bool
 
-	ItemsNotForSale      *types.Slice[string]                                                 `xml:"itemsNotForSale"`
-	UnpackedCaravanItems *primary.Empty                                                       `xml:"unpackedCaravanItems"`
+	ItemsNotForSale      *collection.Slice[string]                                                 `xml:"itemsNotForSale"`
+	UnpackedCaravanItems *scalar.Empty                                                       `xml:"unpackedCaravanItems"`
 	InnerContainer       *SavegameGameWorldWorldPawnsPawnsMothballedLiInventoryInnerContainer `xml:"innerContainer"`
 }
 
-func (i *Inventory) Assign(*xml.Element) error {
+func (i *Inventory) Assign(*domain.Element) error {
 	return nil
 }
 

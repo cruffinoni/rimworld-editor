@@ -3,21 +3,21 @@
 package generated
 
 import (
-	"github.com/cruffinoni/rimworld-editor/internal/xml"
+	"github.com/cruffinoni/rimworld-editor/internal/xml/domain"
 	"github.com/cruffinoni/rimworld-editor/internal/xml/attributes"
-	"github.com/cruffinoni/rimworld-editor/internal/xml/types"
-	"github.com/cruffinoni/rimworld-editor/internal/xml/types/primary"
+	"github.com/cruffinoni/rimworld-editor/internal/xml/collection"
+	"github.com/cruffinoni/rimworld-editor/internal/xml/scalar"
 )
 
 type LordManager struct {
 	Attr           attributes.Attributes
 	FieldValidated map[string]bool
 
-	Lords          *types.Slice[*Lords] `xml:"lords"`
-	StencilDrawers *primary.Empty       `xml:"stencilDrawers"`
+	Lords          *collection.Slice[*Lords] `xml:"lords"`
+	StencilDrawers *scalar.Empty       `xml:"stencilDrawers"`
 }
 
-func (l *LordManager) Assign(*xml.Element) error {
+func (l *LordManager) Assign(*domain.Element) error {
 	return nil
 }
 

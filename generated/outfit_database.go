@@ -3,19 +3,19 @@
 package generated
 
 import (
-	"github.com/cruffinoni/rimworld-editor/internal/xml"
+	"github.com/cruffinoni/rimworld-editor/internal/xml/domain"
 	"github.com/cruffinoni/rimworld-editor/internal/xml/attributes"
-	"github.com/cruffinoni/rimworld-editor/internal/xml/types"
+	"github.com/cruffinoni/rimworld-editor/internal/xml/collection"
 )
 
 type OutfitDatabase struct {
 	Attr           attributes.Attributes
 	FieldValidated map[string]bool
 
-	Outfits *types.Slice[*Outfits] `xml:"outfits"`
+	Outfits *collection.Slice[*Outfits] `xml:"outfits"`
 }
 
-func (o *OutfitDatabase) Assign(*xml.Element) error {
+func (o *OutfitDatabase) Assign(*domain.Element) error {
 	return nil
 }
 

@@ -3,9 +3,9 @@
 package generated
 
 import (
-	"github.com/cruffinoni/rimworld-editor/internal/xml"
+	"github.com/cruffinoni/rimworld-editor/internal/xml/domain"
 	"github.com/cruffinoni/rimworld-editor/internal/xml/attributes"
-	"github.com/cruffinoni/rimworld-editor/internal/xml/types"
+	"github.com/cruffinoni/rimworld-editor/internal/xml/collection"
 )
 
 type Apparel struct {
@@ -13,11 +13,11 @@ type Apparel struct {
 	FieldValidated map[string]bool
 
 	WornApparel            *WornApparel         `xml:"wornApparel"`
-	LockedApparel          *types.Slice[string] `xml:"lockedApparel"`
+	LockedApparel          *collection.Slice[string] `xml:"lockedApparel"`
 	LastApparelWearoutTick int64                `xml:"lastApparelWearoutTick"`
 }
 
-func (a *Apparel) Assign(*xml.Element) error {
+func (a *Apparel) Assign(*domain.Element) error {
 	return nil
 }
 

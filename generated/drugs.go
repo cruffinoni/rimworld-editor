@@ -3,9 +3,9 @@
 package generated
 
 import (
-	"github.com/cruffinoni/rimworld-editor/internal/xml"
+	"github.com/cruffinoni/rimworld-editor/internal/xml/domain"
 	"github.com/cruffinoni/rimworld-editor/internal/xml/attributes"
-	"github.com/cruffinoni/rimworld-editor/internal/xml/types"
+	"github.com/cruffinoni/rimworld-editor/internal/xml/collection"
 )
 
 type Drugs struct {
@@ -13,7 +13,7 @@ type Drugs struct {
 	FieldValidated map[string]bool
 
 	CurAssignedDrugs    string                         `xml:"curAssignedDrugs"`
-	DrugTakeRecords     *types.Slice[*DrugTakeRecords] `xml:"drugTakeRecords"`
+	DrugTakeRecords     *collection.Slice[*DrugTakeRecords] `xml:"drugTakeRecords"`
 	Drug                string                         `xml:"drug"`
 	AllowedForAddiction bool                           `xml:"allowedForAddiction"`
 	AllowedForJoy       bool                           `xml:"allowedForJoy"`
@@ -24,7 +24,7 @@ type Drugs struct {
 	OnlyIfMoodBelow     float64                        `xml:"onlyIfMoodBelow"`
 }
 
-func (d *Drugs) Assign(*xml.Element) error {
+func (d *Drugs) Assign(*domain.Element) error {
 	return nil
 }
 

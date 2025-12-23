@@ -3,9 +3,9 @@
 package generated
 
 import (
-	"github.com/cruffinoni/rimworld-editor/internal/xml"
+	"github.com/cruffinoni/rimworld-editor/internal/xml/domain"
 	"github.com/cruffinoni/rimworld-editor/internal/xml/attributes"
-	"github.com/cruffinoni/rimworld-editor/internal/xml/types"
+	"github.com/cruffinoni/rimworld-editor/internal/xml/collection"
 )
 
 type Battles struct {
@@ -14,12 +14,12 @@ type Battles struct {
 
 	LoadId            int64                  `xml:"loadID"`
 	CreationTimestamp int64                  `xml:"creationTimestamp"`
-	Entries           *types.Slice[*Entries] `xml:"entries"`
+	Entries           *collection.Slice[*Entries] `xml:"entries"`
 	AbsorbedBy        string                 `xml:"absorbedBy"`
 	BattleName        string                 `xml:"battleName"`
 }
 
-func (b *Battles) Assign(*xml.Element) error {
+func (b *Battles) Assign(*domain.Element) error {
 	return nil
 }
 

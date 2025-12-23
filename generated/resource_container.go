@@ -3,19 +3,19 @@
 package generated
 
 import (
-	"github.com/cruffinoni/rimworld-editor/internal/xml"
+	"github.com/cruffinoni/rimworld-editor/internal/xml/domain"
 	"github.com/cruffinoni/rimworld-editor/internal/xml/attributes"
-	"github.com/cruffinoni/rimworld-editor/internal/xml/types"
+	"github.com/cruffinoni/rimworld-editor/internal/xml/collection"
 )
 
 type ResourceContainer struct {
 	Attr           attributes.Attributes
 	FieldValidated map[string]bool
 
-	InnerList *types.Slice[*SavegameGameMapsLiThingsThingResourceContainerInnerList] `xml:"innerList"`
+	InnerList *collection.Slice[*SavegameGameMapsLiThingsThingResourceContainerInnerList] `xml:"innerList"`
 }
 
-func (r *ResourceContainer) Assign(*xml.Element) error {
+func (r *ResourceContainer) Assign(*domain.Element) error {
 	return nil
 }
 

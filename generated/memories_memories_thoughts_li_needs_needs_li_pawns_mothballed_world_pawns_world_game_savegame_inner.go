@@ -3,7 +3,7 @@
 package generated
 
 import (
-	"github.com/cruffinoni/rimworld-editor/internal/xml"
+	"github.com/cruffinoni/rimworld-editor/internal/xml/domain"
 	"github.com/cruffinoni/rimworld-editor/internal/xml/attributes"
 )
 
@@ -22,7 +22,7 @@ type MemoriesMemoriesThoughtsLiNeedsNeedsLiPawnsMothballedWorldPawnsWorldGameSav
 	TargetThingId          int64   `xml:"targetThingID"`
 }
 
-func (m *MemoriesMemoriesThoughtsLiNeedsNeedsLiPawnsMothballedWorldPawnsWorldGameSavegameInner) Assign(*xml.Element) error {
+func (m *MemoriesMemoriesThoughtsLiNeedsNeedsLiPawnsMothballedWorldPawnsWorldGameSavegameInner) Assign(*domain.Element) error {
 	return nil
 }
 

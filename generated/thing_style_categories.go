@@ -3,7 +3,7 @@
 package generated
 
 import (
-	"github.com/cruffinoni/rimworld-editor/internal/xml"
+	"github.com/cruffinoni/rimworld-editor/internal/xml/domain"
 	"github.com/cruffinoni/rimworld-editor/internal/xml/attributes"
 )
 
@@ -15,7 +15,7 @@ type ThingStyleCategories struct {
 	Priority int64  `xml:"priority"`
 }
 
-func (t *ThingStyleCategories) Assign(*xml.Element) error {
+func (t *ThingStyleCategories) Assign(*domain.Element) error {
 	return nil
 }
 

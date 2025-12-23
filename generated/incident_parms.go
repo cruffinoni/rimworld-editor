@@ -3,9 +3,9 @@
 package generated
 
 import (
-	"github.com/cruffinoni/rimworld-editor/internal/xml"
+	"github.com/cruffinoni/rimworld-editor/internal/xml/domain"
 	"github.com/cruffinoni/rimworld-editor/internal/xml/attributes"
-	"github.com/cruffinoni/rimworld-editor/internal/xml/types/primary"
+	"github.com/cruffinoni/rimworld-editor/internal/xml/scalar"
 )
 
 type IncidentParms struct {
@@ -16,25 +16,25 @@ type IncidentParms struct {
 	ThreatPoints              float64        `xml:"threatPoints"`
 	Faction                   string         `xml:"faction"`
 	Forced                    bool           `xml:"forced"`
-	LetterHyperlinkThingDefs  *primary.Empty `xml:"letterHyperlinkThingDefs"`
-	LetterHyperlinkHediffDefs *primary.Empty `xml:"letterHyperlinkHediffDefs"`
+	LetterHyperlinkThingDefs  *scalar.Empty `xml:"letterHyperlinkThingDefs"`
+	LetterHyperlinkHediffDefs *scalar.Empty `xml:"letterHyperlinkHediffDefs"`
 	SpawnCenter               string         `xml:"spawnCenter"`
 	SpawnRotation             int64          `xml:"spawnRotation"`
 	RaidStrategy              string         `xml:"raidStrategy"`
 	RaidArrivalMode           string         `xml:"raidArrivalMode"`
-	PawnGroups                *primary.Empty `xml:"pawnGroups"`
+	PawnGroups                *scalar.Empty `xml:"pawnGroups"`
 	PawnGroupMakerSeed        int64          `xml:"pawnGroupMakerSeed"`
 	ControllerPawn            string         `xml:"controllerPawn"`
 	PawnIdeo                  string         `xml:"pawnIdeo"`
 	Quest                     string         `xml:"quest"`
-	AttackTargets             *primary.Empty `xml:"attackTargets"`
-	Gifts                     *primary.Empty `xml:"gifts"`
+	AttackTargets             *scalar.Empty `xml:"attackTargets"`
+	Gifts                     *scalar.Empty `xml:"gifts"`
 	PawnKind                  string         `xml:"pawnKind"`
 	CustomLetterText          string         `xml:"customLetterText"`
 	QuestTag                  string         `xml:"questTag"`
 }
 
-func (i *IncidentParms) Assign(*xml.Element) error {
+func (i *IncidentParms) Assign(*domain.Element) error {
 	return nil
 }
 

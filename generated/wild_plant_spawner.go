@@ -3,7 +3,7 @@
 package generated
 
 import (
-	"github.com/cruffinoni/rimworld-editor/internal/xml"
+	"github.com/cruffinoni/rimworld-editor/internal/xml/domain"
 	"github.com/cruffinoni/rimworld-editor/internal/xml/attributes"
 )
 
@@ -18,7 +18,7 @@ type WildPlantSpawner struct {
 	CalculatedWholeMapNumNonZeroFertilityCellsTmp int64   `xml:"calculatedWholeMapNumNonZeroFertilityCellsTmp"`
 }
 
-func (w *WildPlantSpawner) Assign(*xml.Element) error {
+func (w *WildPlantSpawner) Assign(*domain.Element) error {
 	return nil
 }
 

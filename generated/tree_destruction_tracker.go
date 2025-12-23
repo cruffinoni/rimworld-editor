@@ -3,19 +3,19 @@
 package generated
 
 import (
-	"github.com/cruffinoni/rimworld-editor/internal/xml"
+	"github.com/cruffinoni/rimworld-editor/internal/xml/domain"
 	"github.com/cruffinoni/rimworld-editor/internal/xml/attributes"
-	"github.com/cruffinoni/rimworld-editor/internal/xml/types"
+	"github.com/cruffinoni/rimworld-editor/internal/xml/collection"
 )
 
 type TreeDestructionTracker struct {
 	Attr           attributes.Attributes
 	FieldValidated map[string]bool
 
-	PlayerTreeDestructionTicks *types.Slice[int64] `xml:"playerTreeDestructionTicks"`
+	PlayerTreeDestructionTicks *collection.Slice[int64] `xml:"playerTreeDestructionTicks"`
 }
 
-func (t *TreeDestructionTracker) Assign(*xml.Element) error {
+func (t *TreeDestructionTracker) Assign(*domain.Element) error {
 	return nil
 }
 

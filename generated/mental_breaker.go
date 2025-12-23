@@ -3,7 +3,7 @@
 package generated
 
 import (
-	"github.com/cruffinoni/rimworld-editor/internal/xml"
+	"github.com/cruffinoni/rimworld-editor/internal/xml/domain"
 	"github.com/cruffinoni/rimworld-editor/internal/xml/attributes"
 )
 
@@ -17,7 +17,7 @@ type MentalBreaker struct {
 	TicksUntilCanDoMentalBreak int64 `xml:"ticksUntilCanDoMentalBreak"`
 }
 
-func (m *MentalBreaker) Assign(*xml.Element) error {
+func (m *MentalBreaker) Assign(*domain.Element) error {
 	return nil
 }
 

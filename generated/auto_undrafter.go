@@ -3,7 +3,7 @@
 package generated
 
 import (
-	"github.com/cruffinoni/rimworld-editor/internal/xml"
+	"github.com/cruffinoni/rimworld-editor/internal/xml/domain"
 	"github.com/cruffinoni/rimworld-editor/internal/xml/attributes"
 )
 
@@ -14,7 +14,7 @@ type AutoUndrafter struct {
 	LastNonWaitingTick int64 `xml:"lastNonWaitingTick"`
 }
 
-func (a *AutoUndrafter) Assign(*xml.Element) error {
+func (a *AutoUndrafter) Assign(*domain.Element) error {
 	return nil
 }
 

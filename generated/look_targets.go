@@ -3,19 +3,19 @@
 package generated
 
 import (
-	"github.com/cruffinoni/rimworld-editor/internal/xml"
+	"github.com/cruffinoni/rimworld-editor/internal/xml/domain"
 	"github.com/cruffinoni/rimworld-editor/internal/xml/attributes"
-	"github.com/cruffinoni/rimworld-editor/internal/xml/types"
+	"github.com/cruffinoni/rimworld-editor/internal/xml/collection"
 )
 
 type LookTargets struct {
 	Attr           attributes.Attributes
 	FieldValidated map[string]bool
 
-	Targets *types.Slice[string] `xml:"targets"`
+	Targets *collection.Slice[string] `xml:"targets"`
 }
 
-func (l *LookTargets) Assign(*xml.Element) error {
+func (l *LookTargets) Assign(*domain.Element) error {
 	return nil
 }
 

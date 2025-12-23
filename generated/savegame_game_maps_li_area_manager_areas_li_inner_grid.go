@@ -3,7 +3,7 @@
 package generated
 
 import (
-	"github.com/cruffinoni/rimworld-editor/internal/xml"
+	"github.com/cruffinoni/rimworld-editor/internal/xml/domain"
 	"github.com/cruffinoni/rimworld-editor/internal/xml/attributes"
 )
 
@@ -17,7 +17,7 @@ type SavegameGameMapsLiAreaManagerAreasLiInnerGrid struct {
 	ArrDeflate string `xml:"arrDeflate"`
 }
 
-func (s *SavegameGameMapsLiAreaManagerAreasLiInnerGrid) Assign(*xml.Element) error {
+func (s *SavegameGameMapsLiAreaManagerAreasLiInnerGrid) Assign(*domain.Element) error {
 	return nil
 }
 

@@ -3,9 +3,9 @@
 package generated
 
 import (
-	"github.com/cruffinoni/rimworld-editor/internal/xml"
+	"github.com/cruffinoni/rimworld-editor/internal/xml/domain"
 	"github.com/cruffinoni/rimworld-editor/internal/xml/attributes"
-	"github.com/cruffinoni/rimworld-editor/internal/xml/types"
+	"github.com/cruffinoni/rimworld-editor/internal/xml/collection"
 )
 
 type CompletedObligations struct {
@@ -18,11 +18,11 @@ type CompletedObligations struct {
 	TargetA       string               `xml:"targetA"`
 	TargetB       string               `xml:"targetB"`
 	TargetC       string               `xml:"targetC"`
-	OnlyForPawns  *types.Slice[string] `xml:"onlyForPawns"`
+	OnlyForPawns  *collection.Slice[string] `xml:"onlyForPawns"`
 	ID            int64                `xml:"ID"`
 }
 
-func (c *CompletedObligations) Assign(*xml.Element) error {
+func (c *CompletedObligations) Assign(*domain.Element) error {
 	return nil
 }
 

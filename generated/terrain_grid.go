@@ -3,7 +3,7 @@
 package generated
 
 import (
-	"github.com/cruffinoni/rimworld-editor/internal/xml"
+	"github.com/cruffinoni/rimworld-editor/internal/xml/domain"
 	"github.com/cruffinoni/rimworld-editor/internal/xml/attributes"
 )
 
@@ -16,7 +16,7 @@ type TerrainGrid struct {
 	ColorGridDeflate string `xml:"colorGridDeflate"`
 }
 
-func (t *TerrainGrid) Assign(*xml.Element) error {
+func (t *TerrainGrid) Assign(*domain.Element) error {
 	return nil
 }
 

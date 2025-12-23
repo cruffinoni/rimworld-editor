@@ -3,19 +3,19 @@
 package generated
 
 import (
-	"github.com/cruffinoni/rimworld-editor/internal/xml"
+	"github.com/cruffinoni/rimworld-editor/internal/xml/domain"
 	"github.com/cruffinoni/rimworld-editor/internal/xml/attributes"
-	"github.com/cruffinoni/rimworld-editor/internal/xml/types"
+	"github.com/cruffinoni/rimworld-editor/internal/xml/collection"
 )
 
 type Immunity struct {
 	Attr           attributes.Attributes
 	FieldValidated map[string]bool
 
-	ImList *types.Slice[*ImList] `xml:"imList"`
+	ImList *collection.Slice[*ImList] `xml:"imList"`
 }
 
-func (i *Immunity) Assign(*xml.Element) error {
+func (i *Immunity) Assign(*domain.Element) error {
 	return nil
 }
 

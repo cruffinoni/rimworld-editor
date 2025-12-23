@@ -3,20 +3,20 @@
 package generated
 
 import (
-	"github.com/cruffinoni/rimworld-editor/internal/xml"
+	"github.com/cruffinoni/rimworld-editor/internal/xml/domain"
 	"github.com/cruffinoni/rimworld-editor/internal/xml/attributes"
-	"github.com/cruffinoni/rimworld-editor/internal/xml/types"
-	"github.com/cruffinoni/rimworld-editor/internal/xml/types/primary"
+	"github.com/cruffinoni/rimworld-editor/internal/xml/collection"
+	"github.com/cruffinoni/rimworld-editor/internal/xml/scalar"
 )
 
 type StudyManager struct {
 	Attr           attributes.Attributes
 	FieldValidated map[string]bool
 
-	StudyProgress types.Map[string, *primary.Empty] `xml:"studyProgress"`
+	StudyProgress collection.Map[string, *scalar.Empty] `xml:"studyProgress"`
 }
 
-func (s *StudyManager) Assign(*xml.Element) error {
+func (s *StudyManager) Assign(*domain.Element) error {
 	return nil
 }
 

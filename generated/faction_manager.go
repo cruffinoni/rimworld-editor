@@ -3,21 +3,21 @@
 package generated
 
 import (
-	"github.com/cruffinoni/rimworld-editor/internal/xml"
+	"github.com/cruffinoni/rimworld-editor/internal/xml/domain"
 	"github.com/cruffinoni/rimworld-editor/internal/xml/attributes"
-	"github.com/cruffinoni/rimworld-editor/internal/xml/types"
-	"github.com/cruffinoni/rimworld-editor/internal/xml/types/primary"
+	"github.com/cruffinoni/rimworld-editor/internal/xml/collection"
+	"github.com/cruffinoni/rimworld-editor/internal/xml/scalar"
 )
 
 type FactionManager struct {
 	Attr           attributes.Attributes
 	FieldValidated map[string]bool
 
-	AllFactions *types.Slice[*AllFactions] `xml:"allFactions"`
-	ToRemove    *primary.Empty             `xml:"toRemove"`
+	AllFactions *collection.Slice[*AllFactions] `xml:"allFactions"`
+	ToRemove    *scalar.Empty             `xml:"toRemove"`
 }
 
-func (f *FactionManager) Assign(*xml.Element) error {
+func (f *FactionManager) Assign(*domain.Element) error {
 	return nil
 }
 

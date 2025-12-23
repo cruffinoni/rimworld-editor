@@ -3,23 +3,23 @@
 package generated
 
 import (
-	"github.com/cruffinoni/rimworld-editor/internal/xml"
+	"github.com/cruffinoni/rimworld-editor/internal/xml/domain"
 	"github.com/cruffinoni/rimworld-editor/internal/xml/attributes"
-	"github.com/cruffinoni/rimworld-editor/internal/xml/types"
+	"github.com/cruffinoni/rimworld-editor/internal/xml/collection"
 )
 
 type WorldPawns struct {
 	Attr           attributes.Attributes
 	FieldValidated map[string]bool
 
-	PawnsForcefullyKeptAsWorldPawns *types.Slice[string]           `xml:"pawnsForcefullyKeptAsWorldPawns"`
-	PawnsAlive                      *types.Slice[*PawnsAlive]      `xml:"pawnsAlive"`
-	PawnsMothballed                 *types.Slice[*PawnsMothballed] `xml:"pawnsMothballed"`
-	PawnsDead                       *types.Slice[*PawnsDead]       `xml:"pawnsDead"`
+	PawnsForcefullyKeptAsWorldPawns *collection.Slice[string]           `xml:"pawnsForcefullyKeptAsWorldPawns"`
+	PawnsAlive                      *collection.Slice[*PawnsAlive]      `xml:"pawnsAlive"`
+	PawnsMothballed                 *collection.Slice[*PawnsMothballed] `xml:"pawnsMothballed"`
+	PawnsDead                       *collection.Slice[*PawnsDead]       `xml:"pawnsDead"`
 	Gc                              *Gc                            `xml:"gc"`
 }
 
-func (w *WorldPawns) Assign(*xml.Element) error {
+func (w *WorldPawns) Assign(*domain.Element) error {
 	return nil
 }
 

@@ -3,7 +3,7 @@
 package generated
 
 import (
-	"github.com/cruffinoni/rimworld-editor/internal/xml"
+	"github.com/cruffinoni/rimworld-editor/internal/xml/domain"
 	"github.com/cruffinoni/rimworld-editor/internal/xml/attributes"
 )
 
@@ -15,7 +15,7 @@ type CameraMap struct {
 	DesiredSize float64 `xml:"desiredSize"`
 }
 
-func (c *CameraMap) Assign(*xml.Element) error {
+func (c *CameraMap) Assign(*domain.Element) error {
 	return nil
 }
 

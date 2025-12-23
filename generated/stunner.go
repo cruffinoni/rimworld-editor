@@ -3,7 +3,7 @@
 package generated
 
 import (
-	"github.com/cruffinoni/rimworld-editor/internal/xml"
+	"github.com/cruffinoni/rimworld-editor/internal/xml/domain"
 	"github.com/cruffinoni/rimworld-editor/internal/xml/attributes"
 )
 
@@ -14,7 +14,7 @@ type Stunner struct {
 	ShowStunMote bool `xml:"showStunMote"`
 }
 
-func (s *Stunner) Assign(*xml.Element) error {
+func (s *Stunner) Assign(*domain.Element) error {
 	return nil
 }
 

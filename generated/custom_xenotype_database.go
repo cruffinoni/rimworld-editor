@@ -3,19 +3,19 @@
 package generated
 
 import (
-	"github.com/cruffinoni/rimworld-editor/internal/xml"
+	"github.com/cruffinoni/rimworld-editor/internal/xml/domain"
 	"github.com/cruffinoni/rimworld-editor/internal/xml/attributes"
-	"github.com/cruffinoni/rimworld-editor/internal/xml/types/primary"
+	"github.com/cruffinoni/rimworld-editor/internal/xml/scalar"
 )
 
 type CustomXenotypeDatabase struct {
 	Attr           attributes.Attributes
 	FieldValidated map[string]bool
 
-	CustomXenotypes *primary.Empty `xml:"customXenotypes"`
+	CustomXenotypes *scalar.Empty `xml:"customXenotypes"`
 }
 
-func (c *CustomXenotypeDatabase) Assign(*xml.Element) error {
+func (c *CustomXenotypeDatabase) Assign(*domain.Element) error {
 	return nil
 }
 

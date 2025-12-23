@@ -3,7 +3,7 @@
 package generated
 
 import (
-	"github.com/cruffinoni/rimworld-editor/internal/xml"
+	"github.com/cruffinoni/rimworld-editor/internal/xml/domain"
 	"github.com/cruffinoni/rimworld-editor/internal/xml/attributes"
 )
 
@@ -16,7 +16,7 @@ type StatPriorities struct {
 	Default int64  `xml:"Default"`
 }
 
-func (s *StatPriorities) Assign(*xml.Element) error {
+func (s *StatPriorities) Assign(*domain.Element) error {
 	return nil
 }
 

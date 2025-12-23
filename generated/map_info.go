@@ -3,7 +3,7 @@
 package generated
 
 import (
-	"github.com/cruffinoni/rimworld-editor/internal/xml"
+	"github.com/cruffinoni/rimworld-editor/internal/xml/domain"
 	"github.com/cruffinoni/rimworld-editor/internal/xml/attributes"
 )
 
@@ -15,7 +15,7 @@ type MapInfo struct {
 	Parent string `xml:"parent"`
 }
 
-func (m *MapInfo) Assign(*xml.Element) error {
+func (m *MapInfo) Assign(*domain.Element) error {
 	return nil
 }
 

@@ -3,9 +3,9 @@
 package generated
 
 import (
-	"github.com/cruffinoni/rimworld-editor/internal/xml"
+	"github.com/cruffinoni/rimworld-editor/internal/xml/domain"
 	"github.com/cruffinoni/rimworld-editor/internal/xml/attributes"
-	"github.com/cruffinoni/rimworld-editor/internal/xml/types/primary"
+	"github.com/cruffinoni/rimworld-editor/internal/xml/scalar"
 )
 
 type Letter struct {
@@ -19,11 +19,11 @@ type Letter struct {
 	RelatedFaction      string         `xml:"relatedFaction"`
 	Text                string         `xml:"text"`
 	Quest               string         `xml:"quest"`
-	HyperlinkThingDefs  *primary.Empty `xml:"hyperlinkThingDefs"`
-	HyperlinkHediffDefs *primary.Empty `xml:"hyperlinkHediffDefs"`
+	HyperlinkThingDefs  *scalar.Empty `xml:"hyperlinkThingDefs"`
+	HyperlinkHediffDefs *scalar.Empty `xml:"hyperlinkHediffDefs"`
 }
 
-func (l *Letter) Assign(*xml.Element) error {
+func (l *Letter) Assign(*domain.Element) error {
 	return nil
 }
 

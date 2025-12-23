@@ -3,7 +3,7 @@
 package generated
 
 import (
-	"github.com/cruffinoni/rimworld-editor/internal/xml"
+	"github.com/cruffinoni/rimworld-editor/internal/xml/domain"
 	"github.com/cruffinoni/rimworld-editor/internal/xml/attributes"
 )
 
@@ -14,7 +14,7 @@ type WorkSettings struct {
 	Priorities *Priorities `xml:"priorities"`
 }
 
-func (w *WorkSettings) Assign(*xml.Element) error {
+func (w *WorkSettings) Assign(*domain.Element) error {
 	return nil
 }
 

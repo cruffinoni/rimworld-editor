@@ -3,19 +3,19 @@
 package generated
 
 import (
-	"github.com/cruffinoni/rimworld-editor/internal/xml"
+	"github.com/cruffinoni/rimworld-editor/internal/xml/domain"
 	"github.com/cruffinoni/rimworld-editor/internal/xml/attributes"
-	"github.com/cruffinoni/rimworld-editor/internal/xml/types/primary"
+	"github.com/cruffinoni/rimworld-editor/internal/xml/scalar"
 )
 
 type TemporaryThingDrawer struct {
 	Attr           attributes.Attributes
 	FieldValidated map[string]bool
 
-	Drawables *primary.Empty `xml:"drawables"`
+	Drawables *scalar.Empty `xml:"drawables"`
 }
 
-func (t *TemporaryThingDrawer) Assign(*xml.Element) error {
+func (t *TemporaryThingDrawer) Assign(*domain.Element) error {
 	return nil
 }
 

@@ -3,7 +3,7 @@
 package generated
 
 import (
-	"github.com/cruffinoni/rimworld-editor/internal/xml"
+	"github.com/cruffinoni/rimworld-editor/internal/xml/domain"
 	"github.com/cruffinoni/rimworld-editor/internal/xml/attributes"
 )
 
@@ -16,7 +16,7 @@ type DirectRelations struct {
 	StartTicks int64  `xml:"startTicks"`
 }
 
-func (d *DirectRelations) Assign(*xml.Element) error {
+func (d *DirectRelations) Assign(*domain.Element) error {
 	return nil
 }
 

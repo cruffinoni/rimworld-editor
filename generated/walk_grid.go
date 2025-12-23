@@ -3,7 +3,7 @@
 package generated
 
 import (
-	"github.com/cruffinoni/rimworld-editor/internal/xml"
+	"github.com/cruffinoni/rimworld-editor/internal/xml/domain"
 	"github.com/cruffinoni/rimworld-editor/internal/xml/attributes"
 )
 
@@ -17,7 +17,7 @@ type WalkGrid struct {
 	ArrDeflate string `xml:"arrDeflate"`
 }
 
-func (w *WalkGrid) Assign(*xml.Element) error {
+func (w *WalkGrid) Assign(*domain.Element) error {
 	return nil
 }
 

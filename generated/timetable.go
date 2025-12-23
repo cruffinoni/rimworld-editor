@@ -3,19 +3,19 @@
 package generated
 
 import (
-	"github.com/cruffinoni/rimworld-editor/internal/xml"
+	"github.com/cruffinoni/rimworld-editor/internal/xml/domain"
 	"github.com/cruffinoni/rimworld-editor/internal/xml/attributes"
-	"github.com/cruffinoni/rimworld-editor/internal/xml/types"
+	"github.com/cruffinoni/rimworld-editor/internal/xml/collection"
 )
 
 type Timetable struct {
 	Attr           attributes.Attributes
 	FieldValidated map[string]bool
 
-	Times *types.Slice[string] `xml:"times"`
+	Times *collection.Slice[string] `xml:"times"`
 }
 
-func (t *Timetable) Assign(*xml.Element) error {
+func (t *Timetable) Assign(*domain.Element) error {
 	return nil
 }
 

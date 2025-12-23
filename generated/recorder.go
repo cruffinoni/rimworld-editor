@@ -3,7 +3,7 @@
 package generated
 
 import (
-	"github.com/cruffinoni/rimworld-editor/internal/xml"
+	"github.com/cruffinoni/rimworld-editor/internal/xml/domain"
 	"github.com/cruffinoni/rimworld-editor/internal/xml/attributes"
 )
 
@@ -15,7 +15,7 @@ type Recorder struct {
 	ThingDef       string `xml:"thingDef"`
 }
 
-func (r *Recorder) Assign(*xml.Element) error {
+func (r *Recorder) Assign(*domain.Element) error {
 	return nil
 }
 

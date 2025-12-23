@@ -3,20 +3,20 @@
 package generated
 
 import (
-	"github.com/cruffinoni/rimworld-editor/internal/xml"
+	"github.com/cruffinoni/rimworld-editor/internal/xml/domain"
 	"github.com/cruffinoni/rimworld-editor/internal/xml/attributes"
-	"github.com/cruffinoni/rimworld-editor/internal/xml/types"
+	"github.com/cruffinoni/rimworld-editor/internal/xml/collection"
 )
 
 type Choices struct {
 	Attr           attributes.Attributes
 	FieldValidated map[string]bool
 
-	QuestParts *types.Slice[string]   `xml:"questParts"`
-	Rewards    *types.Slice[*Rewards] `xml:"rewards"`
+	QuestParts *collection.Slice[string]   `xml:"questParts"`
+	Rewards    *collection.Slice[*Rewards] `xml:"rewards"`
 }
 
-func (c *Choices) Assign(*xml.Element) error {
+func (c *Choices) Assign(*domain.Element) error {
 	return nil
 }
 

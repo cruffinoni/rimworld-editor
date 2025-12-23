@@ -3,9 +3,9 @@
 package generated
 
 import (
-	"github.com/cruffinoni/rimworld-editor/internal/xml"
+	"github.com/cruffinoni/rimworld-editor/internal/xml/domain"
 	"github.com/cruffinoni/rimworld-editor/internal/xml/attributes"
-	"github.com/cruffinoni/rimworld-editor/internal/xml/types"
+	"github.com/cruffinoni/rimworld-editor/internal/xml/collection"
 )
 
 type Outfits struct {
@@ -20,11 +20,11 @@ type Outfits struct {
 	AutoTempOffset             int64                         `xml:"autoTempOffset"`
 	TargetTemperaturesOverride bool                          `xml:"targetTemperaturesOverride"`
 	Label                      string                        `xml:"label"`
-	StatPriorities             *types.Slice[*StatPriorities] `xml:"statPriorities"`
+	StatPriorities             *collection.Slice[*StatPriorities] `xml:"statPriorities"`
 	AutoTemp                   bool                          `xml:"AutoTemp"`
 }
 
-func (o *Outfits) Assign(*xml.Element) error {
+func (o *Outfits) Assign(*domain.Element) error {
 	return nil
 }
 

@@ -3,9 +3,9 @@
 package generated
 
 import (
-	"github.com/cruffinoni/rimworld-editor/internal/xml"
+	"github.com/cruffinoni/rimworld-editor/internal/xml/domain"
 	"github.com/cruffinoni/rimworld-editor/internal/xml/attributes"
-	"github.com/cruffinoni/rimworld-editor/internal/xml/types"
+	"github.com/cruffinoni/rimworld-editor/internal/xml/collection"
 )
 
 type RelicThing struct {
@@ -16,7 +16,7 @@ type RelicThing struct {
 	Id            string               `xml:"id"`
 	Health        int64                `xml:"health"`
 	StackCount    int64                `xml:"stackCount"`
-	QuestTags     *types.Slice[string] `xml:"questTags"`
+	QuestTags     *collection.Slice[string] `xml:"questTags"`
 	VerbTracker   *VerbTracker         `xml:"verbTracker"`
 	SourcePrecept string               `xml:"sourcePrecept"`
 	Title         string               `xml:"title"`
@@ -25,7 +25,7 @@ type RelicThing struct {
 	CodedPawn     string               `xml:"codedPawn"`
 }
 
-func (r *RelicThing) Assign(*xml.Element) error {
+func (r *RelicThing) Assign(*domain.Element) error {
 	return nil
 }
 

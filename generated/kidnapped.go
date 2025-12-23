@@ -3,19 +3,19 @@
 package generated
 
 import (
-	"github.com/cruffinoni/rimworld-editor/internal/xml"
+	"github.com/cruffinoni/rimworld-editor/internal/xml/domain"
 	"github.com/cruffinoni/rimworld-editor/internal/xml/attributes"
-	"github.com/cruffinoni/rimworld-editor/internal/xml/types/primary"
+	"github.com/cruffinoni/rimworld-editor/internal/xml/scalar"
 )
 
 type Kidnapped struct {
 	Attr           attributes.Attributes
 	FieldValidated map[string]bool
 
-	KidnappedPawns *primary.Empty `xml:"kidnappedPawns"`
+	KidnappedPawns *scalar.Empty `xml:"kidnappedPawns"`
 }
 
-func (k *Kidnapped) Assign(*xml.Element) error {
+func (k *Kidnapped) Assign(*domain.Element) error {
 	return nil
 }
 

@@ -3,10 +3,10 @@
 package generated
 
 import (
-	"github.com/cruffinoni/rimworld-editor/internal/xml"
+	"github.com/cruffinoni/rimworld-editor/internal/xml/domain"
 	"github.com/cruffinoni/rimworld-editor/internal/xml/attributes"
-	"github.com/cruffinoni/rimworld-editor/internal/xml/types"
-	"github.com/cruffinoni/rimworld-editor/internal/xml/types/primary"
+	"github.com/cruffinoni/rimworld-editor/internal/xml/collection"
+	"github.com/cruffinoni/rimworld-editor/internal/xml/scalar"
 )
 
 type Lords struct {
@@ -15,22 +15,22 @@ type Lords struct {
 
 	LoadId                   int64                                                                     `xml:"loadID"`
 	Faction                  string                                                                    `xml:"faction"`
-	ExtraForbiddenThings     *primary.Empty                                                            `xml:"extraForbiddenThings"`
-	OwnedPawns               *types.Slice[string]                                                      `xml:"ownedPawns"`
-	OwnedBuildings           *primary.Empty                                                            `xml:"ownedBuildings"`
+	ExtraForbiddenThings     *scalar.Empty                                                            `xml:"extraForbiddenThings"`
+	OwnedPawns               *collection.Slice[string]                                                      `xml:"ownedPawns"`
+	OwnedBuildings           *scalar.Empty                                                            `xml:"ownedBuildings"`
 	LordJob                  *LordJob                                                                  `xml:"lordJob"`
 	TicksInToil              int64                                                                     `xml:"ticksInToil"`
 	NumPawnsEverGained       int64                                                                     `xml:"numPawnsEverGained"`
 	NumPawnsLostViolently    int64                                                                     `xml:"numPawnsLostViolently"`
 	InitialColonyHealthTotal int64                                                                     `xml:"initialColonyHealthTotal"`
 	LastPawnHarmTick         int64                                                                     `xml:"lastPawnHarmTick"`
-	QuestTags                *primary.Empty                                                            `xml:"questTags"`
-	LordToilData             types.Map[int64, *SavegameGameMapsLiLordManagerLordsLiLordToilDataValues] `xml:"lordToilData"`
-	TriggerData              types.Map[int64, *SavegameGameMapsLiLordManagerLordsLiTriggerDataValues]  `xml:"triggerData"`
+	QuestTags                *scalar.Empty                                                            `xml:"questTags"`
+	LordToilData             collection.Map[int64, *SavegameGameMapsLiLordManagerLordsLiLordToilDataValues] `xml:"lordToilData"`
+	TriggerData              collection.Map[int64, *SavegameGameMapsLiLordManagerLordsLiTriggerDataValues]  `xml:"triggerData"`
 	CurLordToilIdx           int64                                                                     `xml:"curLordToilIdx"`
 }
 
-func (l *Lords) Assign(*xml.Element) error {
+func (l *Lords) Assign(*domain.Element) error {
 	return nil
 }
 

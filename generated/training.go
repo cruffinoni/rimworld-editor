@@ -3,7 +3,7 @@
 package generated
 
 import (
-	"github.com/cruffinoni/rimworld-editor/internal/xml"
+	"github.com/cruffinoni/rimworld-editor/internal/xml/domain"
 	"github.com/cruffinoni/rimworld-editor/internal/xml/attributes"
 )
 
@@ -17,7 +17,7 @@ type Training struct {
 	CountDecayFrom   int64             `xml:"countDecayFrom"`
 }
 
-func (t *Training) Assign(*xml.Element) error {
+func (t *Training) Assign(*domain.Element) error {
 	return nil
 }
 

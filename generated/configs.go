@@ -3,7 +3,7 @@
 package generated
 
 import (
-	"github.com/cruffinoni/rimworld-editor/internal/xml"
+	"github.com/cruffinoni/rimworld-editor/internal/xml/domain"
 	"github.com/cruffinoni/rimworld-editor/internal/xml/attributes"
 )
 
@@ -14,7 +14,7 @@ type Configs struct {
 	Animal string `xml:"animal"`
 }
 
-func (c *Configs) Assign(*xml.Element) error {
+func (c *Configs) Assign(*domain.Element) error {
 	return nil
 }
 

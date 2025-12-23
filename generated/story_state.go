@@ -3,10 +3,10 @@
 package generated
 
 import (
-	"github.com/cruffinoni/rimworld-editor/internal/xml"
+	"github.com/cruffinoni/rimworld-editor/internal/xml/domain"
 	"github.com/cruffinoni/rimworld-editor/internal/xml/attributes"
-	"github.com/cruffinoni/rimworld-editor/internal/xml/types"
-	"github.com/cruffinoni/rimworld-editor/internal/xml/types/primary"
+	"github.com/cruffinoni/rimworld-editor/internal/xml/collection"
+	"github.com/cruffinoni/rimworld-editor/internal/xml/scalar"
 )
 
 type StoryState struct {
@@ -14,15 +14,15 @@ type StoryState struct {
 	FieldValidated map[string]bool
 
 	LastThreatBigTick       int64                    `xml:"lastThreatBigTick"`
-	LastFireTicks           types.Map[string, int64] `xml:"lastFireTicks"`
+	LastFireTicks           collection.Map[string, int64] `xml:"lastFireTicks"`
 	LastRaidFaction         string                   `xml:"lastRaidFaction"`
-	RecentRandomQuests      *types.Slice[string]     `xml:"recentRandomQuests"`
-	RecentRandomDecrees     *primary.Empty           `xml:"recentRandomDecrees"`
-	ColonistCountTicks      types.Map[int64, int64]  `xml:"colonistCountTicks"`
+	RecentRandomQuests      *collection.Slice[string]     `xml:"recentRandomQuests"`
+	RecentRandomDecrees     *scalar.Empty           `xml:"recentRandomDecrees"`
+	ColonistCountTicks      collection.Map[int64, int64]  `xml:"colonistCountTicks"`
 	LastRoyalFavorQuestTick int64                    `xml:"lastRoyalFavorQuestTick"`
 }
 
-func (s *StoryState) Assign(*xml.Element) error {
+func (s *StoryState) Assign(*domain.Element) error {
 	return nil
 }
 

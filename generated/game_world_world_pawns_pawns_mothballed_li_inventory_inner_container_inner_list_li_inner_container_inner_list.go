@@ -3,9 +3,9 @@
 package generated
 
 import (
-	"github.com/cruffinoni/rimworld-editor/internal/xml"
+	"github.com/cruffinoni/rimworld-editor/internal/xml/domain"
 	"github.com/cruffinoni/rimworld-editor/internal/xml/attributes"
-	"github.com/cruffinoni/rimworld-editor/internal/xml/types/primary"
+	"github.com/cruffinoni/rimworld-editor/internal/xml/scalar"
 )
 
 type GameWorldWorldPawnsPawnsMothballedLiInventoryInnerContainerInnerListLiInnerContainerInnerList struct {
@@ -19,14 +19,14 @@ type GameWorldWorldPawnsPawnsMothballedLiInventoryInnerContainerInnerListLiInner
 	Health                   int64          `xml:"health"`
 	Stuff                    string         `xml:"stuff"`
 	Faction                  string         `xml:"faction"`
-	QuestTags                *primary.Empty `xml:"questTags"`
-	AssignedPawns            *primary.Empty `xml:"assignedPawns"`
-	UninstalledAssignedPawns *primary.Empty `xml:"uninstalledAssignedPawns"`
+	QuestTags                *scalar.Empty `xml:"questTags"`
+	AssignedPawns            *scalar.Empty `xml:"assignedPawns"`
+	UninstalledAssignedPawns *scalar.Empty `xml:"uninstalledAssignedPawns"`
 	Quality                  string         `xml:"quality"`
 	DesiredMinQuality        string         `xml:"desiredMinQuality"`
 }
 
-func (g *GameWorldWorldPawnsPawnsMothballedLiInventoryInnerContainerInnerListLiInnerContainerInnerList) Assign(*xml.Element) error {
+func (g *GameWorldWorldPawnsPawnsMothballedLiInventoryInnerContainerInnerListLiInnerContainerInnerList) Assign(*domain.Element) error {
 	return nil
 }
 

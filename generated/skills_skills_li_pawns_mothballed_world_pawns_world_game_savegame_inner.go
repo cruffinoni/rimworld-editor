@@ -3,7 +3,7 @@
 package generated
 
 import (
-	"github.com/cruffinoni/rimworld-editor/internal/xml"
+	"github.com/cruffinoni/rimworld-editor/internal/xml/domain"
 	"github.com/cruffinoni/rimworld-editor/internal/xml/attributes"
 )
 
@@ -18,7 +18,7 @@ type SkillsSkillsLiPawnsMothballedWorldPawnsWorldGameSavegameInner struct {
 	XpSinceMidnight  float64 `xml:"xpSinceMidnight"`
 }
 
-func (s *SkillsSkillsLiPawnsMothballedWorldPawnsWorldGameSavegameInner) Assign(*xml.Element) error {
+func (s *SkillsSkillsLiPawnsMothballedWorldPawnsWorldGameSavegameInner) Assign(*domain.Element) error {
 	return nil
 }
 

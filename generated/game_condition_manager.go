@@ -3,19 +3,19 @@
 package generated
 
 import (
-	"github.com/cruffinoni/rimworld-editor/internal/xml"
+	"github.com/cruffinoni/rimworld-editor/internal/xml/domain"
 	"github.com/cruffinoni/rimworld-editor/internal/xml/attributes"
-	"github.com/cruffinoni/rimworld-editor/internal/xml/types/primary"
+	"github.com/cruffinoni/rimworld-editor/internal/xml/scalar"
 )
 
 type GameConditionManager struct {
 	Attr           attributes.Attributes
 	FieldValidated map[string]bool
 
-	ActiveConditions *primary.Empty `xml:"activeConditions"`
+	ActiveConditions *scalar.Empty `xml:"activeConditions"`
 }
 
-func (g *GameConditionManager) Assign(*xml.Element) error {
+func (g *GameConditionManager) Assign(*domain.Element) error {
 	return nil
 }
 

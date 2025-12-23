@@ -3,9 +3,9 @@
 package generated
 
 import (
-	"github.com/cruffinoni/rimworld-editor/internal/xml"
+	"github.com/cruffinoni/rimworld-editor/internal/xml/domain"
 	"github.com/cruffinoni/rimworld-editor/internal/xml/attributes"
-	"github.com/cruffinoni/rimworld-editor/internal/xml/types/primary"
+	"github.com/cruffinoni/rimworld-editor/internal/xml/scalar"
 )
 
 type Stances struct {
@@ -14,10 +14,10 @@ type Stances struct {
 
 	Stunner   *Stunner       `xml:"stunner"`
 	Stagger   *Stagger       `xml:"stagger"`
-	CurStance *primary.Empty `xml:"curStance"`
+	CurStance *scalar.Empty `xml:"curStance"`
 }
 
-func (s *Stances) Assign(*xml.Element) error {
+func (s *Stances) Assign(*domain.Element) error {
 	return nil
 }
 

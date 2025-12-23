@@ -3,10 +3,10 @@
 package generated
 
 import (
-	"github.com/cruffinoni/rimworld-editor/internal/xml"
+	"github.com/cruffinoni/rimworld-editor/internal/xml/domain"
 	"github.com/cruffinoni/rimworld-editor/internal/xml/attributes"
-	"github.com/cruffinoni/rimworld-editor/internal/xml/types"
-	"github.com/cruffinoni/rimworld-editor/internal/xml/types/primary"
+	"github.com/cruffinoni/rimworld-editor/internal/xml/collection"
+	"github.com/cruffinoni/rimworld-editor/internal/xml/scalar"
 )
 
 type MindState struct {
@@ -18,7 +18,7 @@ type MindState struct {
 	KnownExploder                   string                            `xml:"knownExploder"`
 	LastMannedThing                 string                            `xml:"lastMannedThing"`
 	DroppedWeapon                   string                            `xml:"droppedWeapon"`
-	ThinkData                       types.Map[int64, *primary.Empty]  `xml:"thinkData"`
+	ThinkData                       collection.Map[int64, *scalar.Empty]  `xml:"thinkData"`
 	LastEngageTargetTick            int64                             `xml:"lastEngageTargetTick"`
 	LastAttackTargetTick            int64                             `xml:"lastAttackTargetTick"`
 	CanFleeIndividual               bool                              `xml:"canFleeIndividual"`
@@ -31,9 +31,9 @@ type MindState struct {
 	PriorityWork                    *PriorityWork                     `xml:"priorityWork"`
 	LastSelfTendTick                int64                             `xml:"lastSelfTendTick"`
 	BreachingTarget                 *BreachingTarget                  `xml:"breachingTarget"`
-	BabyAutoBreastfeedMoms          types.Map[string, *primary.Empty] `xml:"babyAutoBreastfeedMoms"`
-	BabyCaravanBreastfeed           types.Map[string, *primary.Empty] `xml:"babyCaravanBreastfeed"`
-	ResurrectTarget                 *primary.Empty                    `xml:"resurrectTarget"`
+	BabyAutoBreastfeedMoms          collection.Map[string, *scalar.Empty] `xml:"babyAutoBreastfeedMoms"`
+	BabyCaravanBreastfeed           collection.Map[string, *scalar.Empty] `xml:"babyCaravanBreastfeed"`
+	ResurrectTarget                 *scalar.Empty                    `xml:"resurrectTarget"`
 	LastCombatantTick               int64                             `xml:"lastCombatantTick"`
 	LastAttackedTarget              string                            `xml:"lastAttackedTarget"`
 	LastHumanMeatIngestedTick       int64                             `xml:"lastHumanMeatIngestedTick"`
@@ -60,7 +60,7 @@ type MindState struct {
 	LastIngestTick                  int64                             `xml:"lastIngestTick"`
 }
 
-func (m *MindState) Assign(*xml.Element) error {
+func (m *MindState) Assign(*domain.Element) error {
 	return nil
 }
 

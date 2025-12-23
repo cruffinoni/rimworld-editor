@@ -3,10 +3,10 @@
 package generated
 
 import (
-	"github.com/cruffinoni/rimworld-editor/internal/xml"
+	"github.com/cruffinoni/rimworld-editor/internal/xml/domain"
 	"github.com/cruffinoni/rimworld-editor/internal/xml/attributes"
-	"github.com/cruffinoni/rimworld-editor/internal/xml/types"
-	"github.com/cruffinoni/rimworld-editor/internal/xml/types/primary"
+	"github.com/cruffinoni/rimworld-editor/internal/xml/collection"
+	"github.com/cruffinoni/rimworld-editor/internal/xml/scalar"
 )
 
 type CarriedFilth struct {
@@ -15,13 +15,13 @@ type CarriedFilth struct {
 
 	Def       string               `xml:"def"`
 	Id        string               `xml:"id"`
-	QuestTags *primary.Empty       `xml:"questTags"`
+	QuestTags *scalar.Empty       `xml:"questTags"`
 	Thickness int64                `xml:"thickness"`
 	GrowTick  int64                `xml:"growTick"`
-	Sources   *types.Slice[string] `xml:"sources"`
+	Sources   *collection.Slice[string] `xml:"sources"`
 }
 
-func (c *CarriedFilth) Assign(*xml.Element) error {
+func (c *CarriedFilth) Assign(*domain.Element) error {
 	return nil
 }
 

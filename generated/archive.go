@@ -3,21 +3,21 @@
 package generated
 
 import (
-	"github.com/cruffinoni/rimworld-editor/internal/xml"
+	"github.com/cruffinoni/rimworld-editor/internal/xml/domain"
 	"github.com/cruffinoni/rimworld-editor/internal/xml/attributes"
-	"github.com/cruffinoni/rimworld-editor/internal/xml/types"
-	"github.com/cruffinoni/rimworld-editor/internal/xml/types/primary"
+	"github.com/cruffinoni/rimworld-editor/internal/xml/collection"
+	"github.com/cruffinoni/rimworld-editor/internal/xml/scalar"
 )
 
 type Archive struct {
 	Attr           attributes.Attributes
 	FieldValidated map[string]bool
 
-	Archivables       *types.Slice[*Archivables] `xml:"archivables"`
-	PinnedArchivables *primary.Empty             `xml:"pinnedArchivables"`
+	Archivables       *collection.Slice[*Archivables] `xml:"archivables"`
+	PinnedArchivables *scalar.Empty             `xml:"pinnedArchivables"`
 }
 
-func (a *Archive) Assign(*xml.Element) error {
+func (a *Archive) Assign(*domain.Element) error {
 	return nil
 }
 

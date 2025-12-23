@@ -3,7 +3,7 @@
 package generated
 
 import (
-	"github.com/cruffinoni/rimworld-editor/internal/xml"
+	"github.com/cruffinoni/rimworld-editor/internal/xml/domain"
 	"github.com/cruffinoni/rimworld-editor/internal/xml/attributes"
 )
 
@@ -17,7 +17,7 @@ type DrugTakeRecords struct {
 	ThisDay           int64  `xml:"thisDay"`
 }
 
-func (d *DrugTakeRecords) Assign(*xml.Element) error {
+func (d *DrugTakeRecords) Assign(*domain.Element) error {
 	return nil
 }
 

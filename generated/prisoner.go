@@ -3,9 +3,9 @@
 package generated
 
 import (
-	"github.com/cruffinoni/rimworld-editor/internal/xml"
+	"github.com/cruffinoni/rimworld-editor/internal/xml/domain"
 	"github.com/cruffinoni/rimworld-editor/internal/xml/attributes"
-	"github.com/cruffinoni/rimworld-editor/internal/xml/types/primary"
+	"github.com/cruffinoni/rimworld-editor/internal/xml/scalar"
 )
 
 type Prisoner struct {
@@ -13,10 +13,10 @@ type Prisoner struct {
 	FieldValidated map[string]bool
 
 	MaxStacks int64          `xml:"maxStacks"`
-	InnerList *primary.Empty `xml:"innerList"`
+	InnerList *scalar.Empty `xml:"innerList"`
 }
 
-func (p *Prisoner) Assign(*xml.Element) error {
+func (p *Prisoner) Assign(*domain.Element) error {
 	return nil
 }
 

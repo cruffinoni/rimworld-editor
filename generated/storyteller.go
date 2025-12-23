@@ -3,7 +3,7 @@
 package generated
 
 import (
-	"github.com/cruffinoni/rimworld-editor/internal/xml"
+	"github.com/cruffinoni/rimworld-editor/internal/xml/domain"
 	"github.com/cruffinoni/rimworld-editor/internal/xml/attributes"
 )
 
@@ -16,7 +16,7 @@ type Storyteller struct {
 	IncidentQueue *IncidentQueue `xml:"incidentQueue"`
 }
 
-func (s *Storyteller) Assign(*xml.Element) error {
+func (s *Storyteller) Assign(*domain.Element) error {
 	return nil
 }
 

@@ -3,7 +3,7 @@
 package generated
 
 import (
-	"github.com/cruffinoni/rimworld-editor/internal/xml"
+	"github.com/cruffinoni/rimworld-editor/internal/xml/domain"
 	"github.com/cruffinoni/rimworld-editor/internal/xml/attributes"
 )
 
@@ -19,7 +19,7 @@ type PlayerSubmittedContracts struct {
 	MapToTakeItems string  `xml:"mapToTakeItems"`
 }
 
-func (p *PlayerSubmittedContracts) Assign(*xml.Element) error {
+func (p *PlayerSubmittedContracts) Assign(*domain.Element) error {
 	return nil
 }
 

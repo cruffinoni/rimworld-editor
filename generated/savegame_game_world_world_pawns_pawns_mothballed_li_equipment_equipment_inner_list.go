@@ -3,10 +3,10 @@
 package generated
 
 import (
-	"github.com/cruffinoni/rimworld-editor/internal/xml"
+	"github.com/cruffinoni/rimworld-editor/internal/xml/domain"
 	"github.com/cruffinoni/rimworld-editor/internal/xml/attributes"
-	"github.com/cruffinoni/rimworld-editor/internal/xml/types"
-	"github.com/cruffinoni/rimworld-editor/internal/xml/types/primary"
+	"github.com/cruffinoni/rimworld-editor/internal/xml/collection"
+	"github.com/cruffinoni/rimworld-editor/internal/xml/scalar"
 )
 
 type SavegameGameWorldWorldPawnsPawnsMothballedLiEquipmentEquipmentInnerList struct {
@@ -17,7 +17,7 @@ type SavegameGameWorldWorldPawnsPawnsMothballedLiEquipmentEquipmentInnerList str
 	Id                       string               `xml:"id"`
 	Health                   int64                `xml:"health"`
 	StackCount               int64                `xml:"stackCount"`
-	QuestTags                *primary.Empty       `xml:"questTags"`
+	QuestTags                *scalar.Empty       `xml:"questTags"`
 	VerbTracker              *VerbTracker         `xml:"verbTracker"`
 	SourcePrecept            string               `xml:"sourcePrecept"`
 	Quality                  string               `xml:"quality"`
@@ -32,12 +32,12 @@ type SavegameGameWorldWorldPawnsPawnsMothballedLiEquipmentEquipmentInnerList str
 	Stuff                    string               `xml:"stuff"`
 	Biocoded                 bool                 `xml:"biocoded"`
 	Instigator               string               `xml:"instigator"`
-	ThingsIgnoredByExplosion *primary.Empty       `xml:"thingsIgnoredByExplosion"`
+	ThingsIgnoredByExplosion *scalar.Empty       `xml:"thingsIgnoredByExplosion"`
 	LastKillTick             int64                `xml:"lastKillTick"`
-	Traits                   *types.Slice[string] `xml:"traits"`
+	Traits                   *collection.Slice[string] `xml:"traits"`
 }
 
-func (s *SavegameGameWorldWorldPawnsPawnsMothballedLiEquipmentEquipmentInnerList) Assign(*xml.Element) error {
+func (s *SavegameGameWorldWorldPawnsPawnsMothballedLiEquipmentEquipmentInnerList) Assign(*domain.Element) error {
 	return nil
 }
 

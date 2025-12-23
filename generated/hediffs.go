@@ -3,9 +3,9 @@
 package generated
 
 import (
-	"github.com/cruffinoni/rimworld-editor/internal/xml"
+	"github.com/cruffinoni/rimworld-editor/internal/xml/domain"
 	"github.com/cruffinoni/rimworld-editor/internal/xml/attributes"
-	"github.com/cruffinoni/rimworld-editor/internal/xml/types/primary"
+	"github.com/cruffinoni/rimworld-editor/internal/xml/scalar"
 )
 
 type Hediffs struct {
@@ -41,7 +41,7 @@ type Hediffs struct {
 	Source                              string         `xml:"source"`
 	PermanentDamageThreshold            float64        `xml:"permanentDamageThreshold"`
 	Seed                                int64          `xml:"seed"`
-	GeneSet                             *primary.Empty `xml:"geneSet"`
+	GeneSet                             *scalar.Empty `xml:"geneSet"`
 	Mother                              string         `xml:"mother"`
 	TicksUntilMessage                   int64          `xml:"ticksUntilMessage"`
 	Father                              string         `xml:"father"`
@@ -52,7 +52,7 @@ type Hediffs struct {
 	CurrentInterval                     int64          `xml:"currentInterval"`
 }
 
-func (h *Hediffs) Assign(*xml.Element) error {
+func (h *Hediffs) Assign(*domain.Element) error {
 	return nil
 }
 

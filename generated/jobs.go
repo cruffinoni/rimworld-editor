@@ -3,7 +3,7 @@
 package generated
 
 import (
-	"github.com/cruffinoni/rimworld-editor/internal/xml"
+	"github.com/cruffinoni/rimworld-editor/internal/xml/domain"
 	"github.com/cruffinoni/rimworld-editor/internal/xml/attributes"
 )
 
@@ -19,7 +19,7 @@ type Jobs struct {
 	Job                *Job       `xml:"job"`
 }
 
-func (j *Jobs) Assign(*xml.Element) error {
+func (j *Jobs) Assign(*domain.Element) error {
 	return nil
 }
 

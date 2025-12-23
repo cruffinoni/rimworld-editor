@@ -3,7 +3,7 @@
 package generated
 
 import (
-	"github.com/cruffinoni/rimworld-editor/internal/xml"
+	"github.com/cruffinoni/rimworld-editor/internal/xml/domain"
 	"github.com/cruffinoni/rimworld-editor/internal/xml/attributes"
 )
 
@@ -16,7 +16,7 @@ type ItemDefs struct {
 	Label      string `xml:"label"`
 }
 
-func (i *ItemDefs) Assign(*xml.Element) error {
+func (i *ItemDefs) Assign(*domain.Element) error {
 	return nil
 }
 

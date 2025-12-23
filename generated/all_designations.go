@@ -3,7 +3,7 @@
 package generated
 
 import (
-	"github.com/cruffinoni/rimworld-editor/internal/xml"
+	"github.com/cruffinoni/rimworld-editor/internal/xml/domain"
 	"github.com/cruffinoni/rimworld-editor/internal/xml/attributes"
 )
 
@@ -16,7 +16,7 @@ type AllDesignations struct {
 	Color  int64  `xml:"Color"`
 }
 
-func (a *AllDesignations) Assign(*xml.Element) error {
+func (a *AllDesignations) Assign(*domain.Element) error {
 	return nil
 }
 

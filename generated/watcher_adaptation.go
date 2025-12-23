@@ -3,7 +3,7 @@
 package generated
 
 import (
-	"github.com/cruffinoni/rimworld-editor/internal/xml"
+	"github.com/cruffinoni/rimworld-editor/internal/xml/domain"
 	"github.com/cruffinoni/rimworld-editor/internal/xml/attributes"
 )
 
@@ -14,7 +14,7 @@ type WatcherAdaptation struct {
 	AdaptDays float64 `xml:"adaptDays"`
 }
 
-func (w *WatcherAdaptation) Assign(*xml.Element) error {
+func (w *WatcherAdaptation) Assign(*domain.Element) error {
 	return nil
 }
 

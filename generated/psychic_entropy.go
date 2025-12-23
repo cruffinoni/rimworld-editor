@@ -3,7 +3,7 @@
 package generated
 
 import (
-	"github.com/cruffinoni/rimworld-editor/internal/xml"
+	"github.com/cruffinoni/rimworld-editor/internal/xml/domain"
 	"github.com/cruffinoni/rimworld-editor/internal/xml/attributes"
 )
 
@@ -16,7 +16,7 @@ type PsychicEntropy struct {
 	LastMeditationTick int64   `xml:"lastMeditationTick"`
 }
 
-func (p *PsychicEntropy) Assign(*xml.Element) error {
+func (p *PsychicEntropy) Assign(*domain.Element) error {
 	return nil
 }
 

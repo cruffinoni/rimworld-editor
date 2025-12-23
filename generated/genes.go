@@ -3,21 +3,21 @@
 package generated
 
 import (
-	"github.com/cruffinoni/rimworld-editor/internal/xml"
+	"github.com/cruffinoni/rimworld-editor/internal/xml/domain"
 	"github.com/cruffinoni/rimworld-editor/internal/xml/attributes"
-	"github.com/cruffinoni/rimworld-editor/internal/xml/types"
-	"github.com/cruffinoni/rimworld-editor/internal/xml/types/primary"
+	"github.com/cruffinoni/rimworld-editor/internal/xml/collection"
+	"github.com/cruffinoni/rimworld-editor/internal/xml/scalar"
 )
 
 type Genes struct {
 	Attr           attributes.Attributes
 	FieldValidated map[string]bool
 
-	Xenogenes *primary.Empty           `xml:"xenogenes"`
-	Endogenes *types.Slice[*Endogenes] `xml:"endogenes"`
+	Xenogenes *scalar.Empty           `xml:"xenogenes"`
+	Endogenes *collection.Slice[*Endogenes] `xml:"endogenes"`
 }
 
-func (g *Genes) Assign(*xml.Element) error {
+func (g *Genes) Assign(*domain.Element) error {
 	return nil
 }
 

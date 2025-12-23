@@ -3,9 +3,9 @@
 package generated
 
 import (
-	"github.com/cruffinoni/rimworld-editor/internal/xml"
+	"github.com/cruffinoni/rimworld-editor/internal/xml/domain"
 	"github.com/cruffinoni/rimworld-editor/internal/xml/attributes"
-	"github.com/cruffinoni/rimworld-editor/internal/xml/types"
+	"github.com/cruffinoni/rimworld-editor/internal/xml/collection"
 )
 
 type AncientComplexSketch struct {
@@ -14,12 +14,12 @@ type AncientComplexSketch struct {
 
 	Structure              *Structure                   `xml:"structure"`
 	Layout                 *Layout                      `xml:"layout"`
-	ThingsToSpawn          *types.Slice[*ThingsToSpawn] `xml:"thingsToSpawn"`
+	ThingsToSpawn          *collection.Slice[*ThingsToSpawn] `xml:"thingsToSpawn"`
 	ComplexDef             string                       `xml:"complexDef"`
 	ThingDiscoveredMessage string                       `xml:"thingDiscoveredMessage"`
 }
 
-func (a *AncientComplexSketch) Assign(*xml.Element) error {
+func (a *AncientComplexSketch) Assign(*domain.Element) error {
 	return nil
 }
 

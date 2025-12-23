@@ -3,9 +3,9 @@
 package generated
 
 import (
-	"github.com/cruffinoni/rimworld-editor/internal/xml"
+	"github.com/cruffinoni/rimworld-editor/internal/xml/domain"
 	"github.com/cruffinoni/rimworld-editor/internal/xml/attributes"
-	"github.com/cruffinoni/rimworld-editor/internal/xml/types"
+	"github.com/cruffinoni/rimworld-editor/internal/xml/collection"
 )
 
 type HistoryEventsManager struct {
@@ -13,10 +13,10 @@ type HistoryEventsManager struct {
 	FieldValidated map[string]bool
 
 	ColonistEvents         *ColonistEvents                                                                         `xml:"colonistEvents"`
-	EventsAffectingFaction types.Map[string, *SavegameGameHistoryHistoryEventsManagerEventsAffectingFactionValues] `xml:"eventsAffectingFaction"`
+	EventsAffectingFaction collection.Map[string, *SavegameGameHistoryHistoryEventsManagerEventsAffectingFactionValues] `xml:"eventsAffectingFaction"`
 }
 
-func (h *HistoryEventsManager) Assign(*xml.Element) error {
+func (h *HistoryEventsManager) Assign(*domain.Element) error {
 	return nil
 }
 

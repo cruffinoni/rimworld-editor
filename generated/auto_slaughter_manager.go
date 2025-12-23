@@ -3,19 +3,19 @@
 package generated
 
 import (
-	"github.com/cruffinoni/rimworld-editor/internal/xml"
+	"github.com/cruffinoni/rimworld-editor/internal/xml/domain"
 	"github.com/cruffinoni/rimworld-editor/internal/xml/attributes"
-	"github.com/cruffinoni/rimworld-editor/internal/xml/types"
+	"github.com/cruffinoni/rimworld-editor/internal/xml/collection"
 )
 
 type AutoSlaughterManager struct {
 	Attr           attributes.Attributes
 	FieldValidated map[string]bool
 
-	Configs *types.Slice[*Configs] `xml:"configs"`
+	Configs *collection.Slice[*Configs] `xml:"configs"`
 }
 
-func (a *AutoSlaughterManager) Assign(*xml.Element) error {
+func (a *AutoSlaughterManager) Assign(*domain.Element) error {
 	return nil
 }
 

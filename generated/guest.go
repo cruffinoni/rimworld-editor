@@ -3,9 +3,9 @@
 package generated
 
 import (
-	"github.com/cruffinoni/rimworld-editor/internal/xml"
+	"github.com/cruffinoni/rimworld-editor/internal/xml/domain"
 	"github.com/cruffinoni/rimworld-editor/internal/xml/attributes"
-	"github.com/cruffinoni/rimworld-editor/internal/xml/types/primary"
+	"github.com/cruffinoni/rimworld-editor/internal/xml/scalar"
 )
 
 type Guest struct {
@@ -20,7 +20,7 @@ type Guest struct {
 	SpotToWaitInsteadOfEscaping    string                          `xml:"spotToWaitInsteadOfEscaping"`
 	LastPrisonBreakTicks           int64                           `xml:"lastPrisonBreakTicks"`
 	IdeoForConversion              string                          `xml:"ideoForConversion"`
-	LastResistanceInteractionData  *primary.Empty                  `xml:"lastResistanceInteractionData"`
+	LastResistanceInteractionData  *scalar.Empty                  `xml:"lastResistanceInteractionData"`
 	FinalResistanceInteractionData *FinalResistanceInteractionData `xml:"finalResistanceInteractionData"`
 	Recruitable                    bool                            `xml:"recruitable"`
 	Resistance                     float64                         `xml:"resistance"`
@@ -34,7 +34,7 @@ type Guest struct {
 	GuestStatus                    string                          `xml:"guestStatus"`
 }
 
-func (g *Guest) Assign(*xml.Element) error {
+func (g *Guest) Assign(*domain.Element) error {
 	return nil
 }
 

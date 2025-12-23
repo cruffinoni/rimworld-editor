@@ -3,7 +3,7 @@
 package generated
 
 import (
-	"github.com/cruffinoni/rimworld-editor/internal/xml"
+	"github.com/cruffinoni/rimworld-editor/internal/xml/domain"
 	"github.com/cruffinoni/rimworld-editor/internal/xml/attributes"
 )
 
@@ -30,7 +30,7 @@ type Grid struct {
 	ArrDeflate                string `xml:"arrDeflate"`
 }
 
-func (g *Grid) Assign(*xml.Element) error {
+func (g *Grid) Assign(*domain.Element) error {
 	return nil
 }
 

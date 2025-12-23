@@ -3,7 +3,7 @@
 package generated
 
 import (
-	"github.com/cruffinoni/rimworld-editor/internal/xml"
+	"github.com/cruffinoni/rimworld-editor/internal/xml/domain"
 	"github.com/cruffinoni/rimworld-editor/internal/xml/attributes"
 )
 
@@ -14,7 +14,7 @@ type DateNotifier struct {
 	LastSeason string `xml:"lastSeason"`
 }
 
-func (d *DateNotifier) Assign(*xml.Element) error {
+func (d *DateNotifier) Assign(*domain.Element) error {
 	return nil
 }
 

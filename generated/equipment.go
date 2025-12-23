@@ -3,7 +3,7 @@
 package generated
 
 import (
-	"github.com/cruffinoni/rimworld-editor/internal/xml"
+	"github.com/cruffinoni/rimworld-editor/internal/xml/domain"
 	"github.com/cruffinoni/rimworld-editor/internal/xml/attributes"
 )
 
@@ -15,7 +15,7 @@ type Equipment struct {
 	BondedWeapon string                                                               `xml:"bondedWeapon"`
 }
 
-func (e *Equipment) Assign(*xml.Element) error {
+func (e *Equipment) Assign(*domain.Element) error {
 	return nil
 }
 

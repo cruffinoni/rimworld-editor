@@ -3,9 +3,9 @@
 package generated
 
 import (
-	"github.com/cruffinoni/rimworld-editor/internal/xml"
+	"github.com/cruffinoni/rimworld-editor/internal/xml/domain"
 	"github.com/cruffinoni/rimworld-editor/internal/xml/attributes"
-	"github.com/cruffinoni/rimworld-editor/internal/xml/types/primary"
+	"github.com/cruffinoni/rimworld-editor/internal/xml/scalar"
 )
 
 type Items struct {
@@ -16,18 +16,18 @@ type Items struct {
 	Id                       string         `xml:"id"`
 	Health                   int64          `xml:"health"`
 	StackCount               int64          `xml:"stackCount"`
-	QuestTags                *primary.Empty `xml:"questTags"`
+	QuestTags                *scalar.Empty `xml:"questTags"`
 	Ability                  string         `xml:"ability"`
 	VerbTracker              *VerbTracker   `xml:"verbTracker"`
 	SourcePrecept            string         `xml:"sourcePrecept"`
-	TaleRef                  *primary.Empty `xml:"taleRef"`
+	TaleRef                  *scalar.Empty `xml:"taleRef"`
 	Instigator               string         `xml:"instigator"`
-	ThingsIgnoredByExplosion *primary.Empty `xml:"thingsIgnoredByExplosion"`
+	ThingsIgnoredByExplosion *scalar.Empty `xml:"thingsIgnoredByExplosion"`
 	CountdownTicksLeft       int64          `xml:"countdownTicksLeft"`
 	CodedPawn                string         `xml:"codedPawn"`
 }
 
-func (i *Items) Assign(*xml.Element) error {
+func (i *Items) Assign(*domain.Element) error {
 	return nil
 }
 

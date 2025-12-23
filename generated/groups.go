@@ -3,9 +3,9 @@
 package generated
 
 import (
-	"github.com/cruffinoni/rimworld-editor/internal/xml"
+	"github.com/cruffinoni/rimworld-editor/internal/xml/domain"
 	"github.com/cruffinoni/rimworld-editor/internal/xml/attributes"
-	"github.com/cruffinoni/rimworld-editor/internal/xml/types"
+	"github.com/cruffinoni/rimworld-editor/internal/xml/collection"
 )
 
 type Groups struct {
@@ -14,11 +14,11 @@ type Groups struct {
 
 	LoadId   int64                `xml:"loadID"`
 	Map      string               `xml:"map"`
-	Members  *types.Slice[string] `xml:"members"`
+	Members  *collection.Slice[string] `xml:"members"`
 	Settings *Settings            `xml:"settings"`
 }
 
-func (g *Groups) Assign(*xml.Element) error {
+func (g *Groups) Assign(*domain.Element) error {
 	return nil
 }
 

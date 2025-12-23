@@ -3,7 +3,7 @@
 package generated
 
 import (
-	"github.com/cruffinoni/rimworld-editor/internal/xml"
+	"github.com/cruffinoni/rimworld-editor/internal/xml/domain"
 	"github.com/cruffinoni/rimworld-editor/internal/xml/attributes"
 )
 
@@ -21,7 +21,7 @@ type Surroundings struct {
 	RoomCleanliness    float64 `xml:"roomCleanliness"`
 }
 
-func (s *Surroundings) Assign(*xml.Element) error {
+func (s *Surroundings) Assign(*domain.Element) error {
 	return nil
 }
 

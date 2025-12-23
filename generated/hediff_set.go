@@ -3,19 +3,19 @@
 package generated
 
 import (
-	"github.com/cruffinoni/rimworld-editor/internal/xml"
+	"github.com/cruffinoni/rimworld-editor/internal/xml/domain"
 	"github.com/cruffinoni/rimworld-editor/internal/xml/attributes"
-	"github.com/cruffinoni/rimworld-editor/internal/xml/types"
+	"github.com/cruffinoni/rimworld-editor/internal/xml/collection"
 )
 
 type HediffSet struct {
 	Attr           attributes.Attributes
 	FieldValidated map[string]bool
 
-	Hediffs *types.Slice[*Hediffs] `xml:"hediffs"`
+	Hediffs *collection.Slice[*Hediffs] `xml:"hediffs"`
 }
 
-func (h *HediffSet) Assign(*xml.Element) error {
+func (h *HediffSet) Assign(*domain.Element) error {
 	return nil
 }
 

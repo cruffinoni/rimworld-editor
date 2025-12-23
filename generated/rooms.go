@@ -3,20 +3,20 @@
 package generated
 
 import (
-	"github.com/cruffinoni/rimworld-editor/internal/xml"
+	"github.com/cruffinoni/rimworld-editor/internal/xml/domain"
 	"github.com/cruffinoni/rimworld-editor/internal/xml/attributes"
-	"github.com/cruffinoni/rimworld-editor/internal/xml/types"
+	"github.com/cruffinoni/rimworld-editor/internal/xml/collection"
 )
 
 type Rooms struct {
 	Attr           attributes.Attributes
 	FieldValidated map[string]bool
 
-	Rects *types.Slice[string] `xml:"rects"`
+	Rects *collection.Slice[string] `xml:"rects"`
 	Def   string               `xml:"def"`
 }
 
-func (r *Rooms) Assign(*xml.Element) error {
+func (r *Rooms) Assign(*domain.Element) error {
 	return nil
 }
 

@@ -3,21 +3,21 @@
 package generated
 
 import (
-	"github.com/cruffinoni/rimworld-editor/internal/xml"
+	"github.com/cruffinoni/rimworld-editor/internal/xml/domain"
 	"github.com/cruffinoni/rimworld-editor/internal/xml/attributes"
-	"github.com/cruffinoni/rimworld-editor/internal/xml/types/primary"
+	"github.com/cruffinoni/rimworld-editor/internal/xml/scalar"
 )
 
 type TreeSightings struct {
 	Attr           attributes.Attributes
 	FieldValidated map[string]bool
 
-	MiniTreeSightings  *primary.Empty `xml:"miniTreeSightings"`
-	FullTreeSightings  *primary.Empty `xml:"fullTreeSightings"`
-	SuperTreeSightings *primary.Empty `xml:"superTreeSightings"`
+	MiniTreeSightings  *scalar.Empty `xml:"miniTreeSightings"`
+	FullTreeSightings  *scalar.Empty `xml:"fullTreeSightings"`
+	SuperTreeSightings *scalar.Empty `xml:"superTreeSightings"`
 }
 
-func (t *TreeSightings) Assign(*xml.Element) error {
+func (t *TreeSightings) Assign(*domain.Element) error {
 	return nil
 }
 

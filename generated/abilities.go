@@ -3,16 +3,16 @@
 package generated
 
 import (
-	"github.com/cruffinoni/rimworld-editor/internal/xml"
+	"github.com/cruffinoni/rimworld-editor/internal/xml/domain"
 	"github.com/cruffinoni/rimworld-editor/internal/xml/attributes"
-	"github.com/cruffinoni/rimworld-editor/internal/xml/types"
+	"github.com/cruffinoni/rimworld-editor/internal/xml/collection"
 )
 
 type Abilities struct {
 	Attr           attributes.Attributes
 	FieldValidated map[string]bool
 
-	Abilities             *types.Slice[*AbilitiesAbilitiesLiPawnsMothballedWorldPawnsWorldGameSavegameInner] `xml:"abilities"`
+	Abilities             *collection.Slice[*AbilitiesAbilitiesLiPawnsMothballedWorldPawnsWorldGameSavegameInner] `xml:"abilities"`
 	SourcePrecept         string                                                                             `xml:"sourcePrecept"`
 	VerbTracker           *VerbTracker                                                                       `xml:"verbTracker"`
 	Def                   string                                                                             `xml:"def"`
@@ -22,7 +22,7 @@ type Abilities struct {
 	CooldownTicksDuration int64                                                                              `xml:"cooldownTicksDuration"`
 }
 
-func (a *Abilities) Assign(*xml.Element) error {
+func (a *Abilities) Assign(*domain.Element) error {
 	return nil
 }
 

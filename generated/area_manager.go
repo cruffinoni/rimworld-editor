@@ -3,19 +3,19 @@
 package generated
 
 import (
-	"github.com/cruffinoni/rimworld-editor/internal/xml"
+	"github.com/cruffinoni/rimworld-editor/internal/xml/domain"
 	"github.com/cruffinoni/rimworld-editor/internal/xml/attributes"
-	"github.com/cruffinoni/rimworld-editor/internal/xml/types"
+	"github.com/cruffinoni/rimworld-editor/internal/xml/collection"
 )
 
 type AreaManager struct {
 	Attr           attributes.Attributes
 	FieldValidated map[string]bool
 
-	Areas *types.Slice[*Areas] `xml:"areas"`
+	Areas *collection.Slice[*Areas] `xml:"areas"`
 }
 
-func (a *AreaManager) Assign(*xml.Element) error {
+func (a *AreaManager) Assign(*domain.Element) error {
 	return nil
 }
 

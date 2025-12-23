@@ -3,10 +3,10 @@
 package generated
 
 import (
-	"github.com/cruffinoni/rimworld-editor/internal/xml"
+	"github.com/cruffinoni/rimworld-editor/internal/xml/domain"
 	"github.com/cruffinoni/rimworld-editor/internal/xml/attributes"
-	"github.com/cruffinoni/rimworld-editor/internal/xml/types"
-	"github.com/cruffinoni/rimworld-editor/internal/xml/types/primary"
+	"github.com/cruffinoni/rimworld-editor/internal/xml/collection"
+	"github.com/cruffinoni/rimworld-editor/internal/xml/scalar"
 )
 
 type Ideos struct {
@@ -14,31 +14,31 @@ type Ideos struct {
 	FieldValidated map[string]bool
 
 	PrimaryIdeo          string                              `xml:"primaryIdeo"`
-	IdeosMinor           *primary.Empty                      `xml:"ideosMinor"`
+	IdeosMinor           *scalar.Empty                      `xml:"ideosMinor"`
 	PrimaryFactionColor  string                              `xml:"primaryFactionColor"`
-	Precepts             *types.Slice[*Precepts]             `xml:"precepts"`
+	Precepts             *collection.Slice[*Precepts]             `xml:"precepts"`
 	Adjective            string                              `xml:"adjective"`
 	MemberName           string                              `xml:"memberName"`
 	LeaderTitleFemale    string                              `xml:"leaderTitleFemale"`
 	DescriptionTemplate  string                              `xml:"descriptionTemplate"`
 	IconDef              string                              `xml:"iconDef"`
-	UsedSymbols          *types.Slice[string]                `xml:"usedSymbols"`
+	UsedSymbols          *collection.Slice[string]                `xml:"usedSymbols"`
 	Culture              string                              `xml:"culture"`
 	ColorDef             string                              `xml:"colorDef"`
-	Memes                *primary.Empty                      `xml:"memes"`
+	Memes                *scalar.Empty                      `xml:"memes"`
 	Foundation           *Foundation                         `xml:"foundation"`
 	Name                 string                              `xml:"name"`
 	LeaderTitleMale      string                              `xml:"leaderTitleMale"`
-	ThingStyleCategories *types.Slice[*ThingStyleCategories] `xml:"thingStyleCategories"`
+	ThingStyleCategories *collection.Slice[*ThingStyleCategories] `xml:"thingStyleCategories"`
 	Id                   int64                               `xml:"id"`
-	Development          *primary.Empty                      `xml:"development"`
+	Development          *scalar.Empty                      `xml:"development"`
 	Description          string                              `xml:"description"`
-	UsedSymbolPacks      *types.Slice[string]                `xml:"usedSymbolPacks"`
+	UsedSymbolPacks      *collection.Slice[string]                `xml:"usedSymbolPacks"`
 	Style                *Style                              `xml:"style"`
 	InitialPlayerIdeo    bool                                `xml:"initialPlayerIdeo"`
 }
 
-func (i *Ideos) Assign(*xml.Element) error {
+func (i *Ideos) Assign(*domain.Element) error {
 	return nil
 }
 

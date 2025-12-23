@@ -3,7 +3,7 @@
 package generated
 
 import (
-	"github.com/cruffinoni/rimworld-editor/internal/xml"
+	"github.com/cruffinoni/rimworld-editor/internal/xml/domain"
 	"github.com/cruffinoni/rimworld-editor/internal/xml/attributes"
 )
 
@@ -20,7 +20,7 @@ type NeedsNeedsThingThingsLiMapsGameSavegameInner struct {
 	Bored               *Bored        `xml:"bored"`
 }
 
-func (n *NeedsNeedsThingThingsLiMapsGameSavegameInner) Assign(*xml.Element) error {
+func (n *NeedsNeedsThingThingsLiMapsGameSavegameInner) Assign(*domain.Element) error {
 	return nil
 }
 

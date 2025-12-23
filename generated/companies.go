@@ -3,9 +3,9 @@
 package generated
 
 import (
-	"github.com/cruffinoni/rimworld-editor/internal/xml"
+	"github.com/cruffinoni/rimworld-editor/internal/xml/domain"
 	"github.com/cruffinoni/rimworld-editor/internal/xml/attributes"
-	"github.com/cruffinoni/rimworld-editor/internal/xml/types"
+	"github.com/cruffinoni/rimworld-editor/internal/xml/collection"
 )
 
 type Companies struct {
@@ -16,13 +16,13 @@ type Companies struct {
 	TraderKind         string                            `xml:"traderKind"`
 	Faction            string                            `xml:"faction"`
 	CurrentValue       float64                           `xml:"currentValue"`
-	SharesHeldByPlayer *types.Slice[*SharesHeldByPlayer] `xml:"sharesHeldByPlayer"`
+	SharesHeldByPlayer *collection.Slice[*SharesHeldByPlayer] `xml:"sharesHeldByPlayer"`
 	Recorder           *Recorder                         `xml:"recorder"`
 	LoadId             int64                             `xml:"loadID"`
 	PlayerFollowsNews  bool                              `xml:"playerFollowsNews"`
 }
 
-func (c *Companies) Assign(*xml.Element) error {
+func (c *Companies) Assign(*domain.Element) error {
 	return nil
 }
 

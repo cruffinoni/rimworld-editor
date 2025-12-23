@@ -3,7 +3,7 @@
 package generated
 
 import (
-	"github.com/cruffinoni/rimworld-editor/internal/xml"
+	"github.com/cruffinoni/rimworld-editor/internal/xml/domain"
 	"github.com/cruffinoni/rimworld-editor/internal/xml/attributes"
 )
 
@@ -15,7 +15,7 @@ type OutcomeEffect struct {
 	CompDatas [5]*CompDatas `xml:"compDatas"`
 }
 
-func (o *OutcomeEffect) Assign(*xml.Element) error {
+func (o *OutcomeEffect) Assign(*domain.Element) error {
 	return nil
 }
 

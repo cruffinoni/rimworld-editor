@@ -3,19 +3,19 @@
 package generated
 
 import (
-	"github.com/cruffinoni/rimworld-editor/internal/xml"
+	"github.com/cruffinoni/rimworld-editor/internal/xml/domain"
 	"github.com/cruffinoni/rimworld-editor/internal/xml/attributes"
-	"github.com/cruffinoni/rimworld-editor/internal/xml/types"
+	"github.com/cruffinoni/rimworld-editor/internal/xml/collection"
 )
 
 type Steps struct {
 	Attr           attributes.Attributes
 	FieldValidated map[string]bool
 
-	Vals *types.Slice[int64] `xml:"vals"`
+	Vals *collection.Slice[int64] `xml:"vals"`
 }
 
-func (s *Steps) Assign(*xml.Element) error {
+func (s *Steps) Assign(*domain.Element) error {
 	return nil
 }
 

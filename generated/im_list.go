@@ -3,7 +3,7 @@
 package generated
 
 import (
-	"github.com/cruffinoni/rimworld-editor/internal/xml"
+	"github.com/cruffinoni/rimworld-editor/internal/xml/domain"
 	"github.com/cruffinoni/rimworld-editor/internal/xml/attributes"
 )
 
@@ -16,7 +16,7 @@ type ImList struct {
 	Immunity  float64 `xml:"immunity"`
 }
 
-func (i *ImList) Assign(*xml.Element) error {
+func (i *ImList) Assign(*domain.Element) error {
 	return nil
 }
 

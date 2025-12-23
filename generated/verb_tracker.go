@@ -3,19 +3,19 @@
 package generated
 
 import (
-	"github.com/cruffinoni/rimworld-editor/internal/xml"
+	"github.com/cruffinoni/rimworld-editor/internal/xml/domain"
 	"github.com/cruffinoni/rimworld-editor/internal/xml/attributes"
-	"github.com/cruffinoni/rimworld-editor/internal/xml/types"
+	"github.com/cruffinoni/rimworld-editor/internal/xml/collection"
 )
 
 type VerbTracker struct {
 	Attr           attributes.Attributes
 	FieldValidated map[string]bool
 
-	Verbs *types.Slice[*Verbs] `xml:"verbs"`
+	Verbs *collection.Slice[*Verbs] `xml:"verbs"`
 }
 
-func (v *VerbTracker) Assign(*xml.Element) error {
+func (v *VerbTracker) Assign(*domain.Element) error {
 	return nil
 }
 

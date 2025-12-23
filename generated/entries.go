@@ -3,9 +3,9 @@
 package generated
 
 import (
-	"github.com/cruffinoni/rimworld-editor/internal/xml"
+	"github.com/cruffinoni/rimworld-editor/internal/xml/domain"
 	"github.com/cruffinoni/rimworld-editor/internal/xml/attributes"
-	"github.com/cruffinoni/rimworld-editor/internal/xml/types"
+	"github.com/cruffinoni/rimworld-editor/internal/xml/collection"
 )
 
 type Entries struct {
@@ -14,8 +14,8 @@ type Entries struct {
 
 	TicksAbs                int64                       `xml:"ticksAbs"`
 	LogId                   int64                       `xml:"logID"`
-	DamagedParts            *types.Slice[*DamagedParts] `xml:"damagedParts"`
-	DamagedPartsDestroyed   *types.Slice[bool]          `xml:"damagedPartsDestroyed"`
+	DamagedParts            *collection.Slice[*DamagedParts] `xml:"damagedParts"`
+	DamagedPartsDestroyed   *collection.Slice[bool]          `xml:"damagedPartsDestroyed"`
 	InitiatorPawn           string                      `xml:"initiatorPawn"`
 	RecipientPawn           string                      `xml:"recipientPawn"`
 	RuleDef                 string                      `xml:"ruleDef"`
@@ -43,11 +43,11 @@ type Entries struct {
 	Recipient               string                      `xml:"recipient"`
 	InitiatorFaction        string                      `xml:"initiatorFaction"`
 	IntDef                  string                      `xml:"intDef"`
-	Extras                  *types.Slice[string]        `xml:"extras"`
+	Extras                  *collection.Slice[string]        `xml:"extras"`
 	InitiatorIdeo           string                      `xml:"initiatorIdeo"`
 }
 
-func (e *Entries) Assign(*xml.Element) error {
+func (e *Entries) Assign(*domain.Element) error {
 	return nil
 }
 

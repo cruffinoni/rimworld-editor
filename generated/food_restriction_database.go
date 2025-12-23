@@ -3,19 +3,19 @@
 package generated
 
 import (
-	"github.com/cruffinoni/rimworld-editor/internal/xml"
+	"github.com/cruffinoni/rimworld-editor/internal/xml/domain"
 	"github.com/cruffinoni/rimworld-editor/internal/xml/attributes"
-	"github.com/cruffinoni/rimworld-editor/internal/xml/types"
+	"github.com/cruffinoni/rimworld-editor/internal/xml/collection"
 )
 
 type FoodRestrictionDatabase struct {
 	Attr           attributes.Attributes
 	FieldValidated map[string]bool
 
-	FoodRestrictions *types.Slice[*FoodRestrictions] `xml:"foodRestrictions"`
+	FoodRestrictions *collection.Slice[*FoodRestrictions] `xml:"foodRestrictions"`
 }
 
-func (f *FoodRestrictionDatabase) Assign(*xml.Element) error {
+func (f *FoodRestrictionDatabase) Assign(*domain.Element) error {
 	return nil
 }
 

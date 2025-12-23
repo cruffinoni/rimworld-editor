@@ -3,9 +3,9 @@
 package generated
 
 import (
-	"github.com/cruffinoni/rimworld-editor/internal/xml"
+	"github.com/cruffinoni/rimworld-editor/internal/xml/domain"
 	"github.com/cruffinoni/rimworld-editor/internal/xml/attributes"
-	"github.com/cruffinoni/rimworld-editor/internal/xml/types/primary"
+	"github.com/cruffinoni/rimworld-editor/internal/xml/scalar"
 )
 
 type FoodRestriction struct {
@@ -13,10 +13,10 @@ type FoodRestriction struct {
 	FieldValidated map[string]bool
 
 	CurRestriction       string         `xml:"curRestriction"`
-	AllowedBabyFoodTypes *primary.Empty `xml:"allowedBabyFoodTypes"`
+	AllowedBabyFoodTypes *scalar.Empty `xml:"allowedBabyFoodTypes"`
 }
 
-func (f *FoodRestriction) Assign(*xml.Element) error {
+func (f *FoodRestriction) Assign(*domain.Element) error {
 	return nil
 }
 

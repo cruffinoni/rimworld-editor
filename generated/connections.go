@@ -3,19 +3,19 @@
 package generated
 
 import (
-	"github.com/cruffinoni/rimworld-editor/internal/xml"
+	"github.com/cruffinoni/rimworld-editor/internal/xml/domain"
 	"github.com/cruffinoni/rimworld-editor/internal/xml/attributes"
-	"github.com/cruffinoni/rimworld-editor/internal/xml/types/primary"
+	"github.com/cruffinoni/rimworld-editor/internal/xml/scalar"
 )
 
 type Connections struct {
 	Attr           attributes.Attributes
 	FieldValidated map[string]bool
 
-	ConnectedThings *primary.Empty `xml:"connectedThings"`
+	ConnectedThings *scalar.Empty `xml:"connectedThings"`
 }
 
-func (c *Connections) Assign(*xml.Element) error {
+func (c *Connections) Assign(*domain.Element) error {
 	return nil
 }
 

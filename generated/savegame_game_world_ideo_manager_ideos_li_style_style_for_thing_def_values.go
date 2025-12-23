@@ -3,7 +3,7 @@
 package generated
 
 import (
-	"github.com/cruffinoni/rimworld-editor/internal/xml"
+	"github.com/cruffinoni/rimworld-editor/internal/xml/domain"
 	"github.com/cruffinoni/rimworld-editor/internal/xml/attributes"
 )
 
@@ -15,7 +15,7 @@ type SavegameGameWorldIdeoManagerIdeosLiStyleStyleForThingDefValues struct {
 	StyleDef string `xml:"styleDef"`
 }
 
-func (s *SavegameGameWorldIdeoManagerIdeosLiStyleStyleForThingDefValues) Assign(*xml.Element) error {
+func (s *SavegameGameWorldIdeoManagerIdeosLiStyleStyleForThingDefValues) Assign(*domain.Element) error {
 	return nil
 }
 

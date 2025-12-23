@@ -3,19 +3,19 @@
 package generated
 
 import (
-	"github.com/cruffinoni/rimworld-editor/internal/xml"
+	"github.com/cruffinoni/rimworld-editor/internal/xml/domain"
 	"github.com/cruffinoni/rimworld-editor/internal/xml/attributes"
-	"github.com/cruffinoni/rimworld-editor/internal/xml/types"
+	"github.com/cruffinoni/rimworld-editor/internal/xml/collection"
 )
 
 type Memories struct {
 	Attr           attributes.Attributes
 	FieldValidated map[string]bool
 
-	Memories *types.Slice[*MemoriesMemoriesThoughtsLiNeedsNeedsLiPawnsMothballedWorldPawnsWorldGameSavegameInner] `xml:"memories"`
+	Memories *collection.Slice[*MemoriesMemoriesThoughtsLiNeedsNeedsLiPawnsMothballedWorldPawnsWorldGameSavegameInner] `xml:"memories"`
 }
 
-func (m *Memories) Assign(*xml.Element) error {
+func (m *Memories) Assign(*domain.Element) error {
 	return nil
 }
 

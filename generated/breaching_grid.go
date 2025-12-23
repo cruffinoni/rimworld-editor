@@ -3,7 +3,7 @@
 package generated
 
 import (
-	"github.com/cruffinoni/rimworld-editor/internal/xml"
+	"github.com/cruffinoni/rimworld-editor/internal/xml/domain"
 	"github.com/cruffinoni/rimworld-editor/internal/xml/attributes"
 )
 
@@ -20,7 +20,7 @@ type BreachingGrid struct {
 	Lord         string      `xml:"lord"`
 }
 
-func (b *BreachingGrid) Assign(*xml.Element) error {
+func (b *BreachingGrid) Assign(*domain.Element) error {
 	return nil
 }
 

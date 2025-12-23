@@ -3,9 +3,9 @@
 package generated
 
 import (
-	"github.com/cruffinoni/rimworld-editor/internal/xml"
+	"github.com/cruffinoni/rimworld-editor/internal/xml/domain"
 	"github.com/cruffinoni/rimworld-editor/internal/xml/attributes"
-	"github.com/cruffinoni/rimworld-editor/internal/xml/types"
+	"github.com/cruffinoni/rimworld-editor/internal/xml/collection"
 )
 
 type Scenario struct {
@@ -16,10 +16,10 @@ type Scenario struct {
 	Summary       string               `xml:"summary"`
 	Description   string               `xml:"description"`
 	PlayerFaction *PlayerFaction       `xml:"playerFaction"`
-	Parts         *types.Slice[*Parts] `xml:"parts"`
+	Parts         *collection.Slice[*Parts] `xml:"parts"`
 }
 
-func (s *Scenario) Assign(*xml.Element) error {
+func (s *Scenario) Assign(*domain.Element) error {
 	return nil
 }
 

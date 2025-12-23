@@ -3,9 +3,9 @@
 package generated
 
 import (
-	"github.com/cruffinoni/rimworld-editor/internal/xml"
+	"github.com/cruffinoni/rimworld-editor/internal/xml/domain"
 	"github.com/cruffinoni/rimworld-editor/internal/xml/attributes"
-	"github.com/cruffinoni/rimworld-editor/internal/xml/types"
+	"github.com/cruffinoni/rimworld-editor/internal/xml/collection"
 )
 
 type ChosenPawn struct {
@@ -13,10 +13,10 @@ type ChosenPawn struct {
 	FieldValidated map[string]bool
 
 	Pawn      string                   `xml:"pawn"`
-	Abilities *types.Slice[*Abilities] `xml:"abilities"`
+	Abilities *collection.Slice[*Abilities] `xml:"abilities"`
 }
 
-func (c *ChosenPawn) Assign(*xml.Element) error {
+func (c *ChosenPawn) Assign(*domain.Element) error {
 	return nil
 }
 

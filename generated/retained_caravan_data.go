@@ -3,9 +3,9 @@
 package generated
 
 import (
-	"github.com/cruffinoni/rimworld-editor/internal/xml"
+	"github.com/cruffinoni/rimworld-editor/internal/xml/domain"
 	"github.com/cruffinoni/rimworld-editor/internal/xml/attributes"
-	"github.com/cruffinoni/rimworld-editor/internal/xml/types/primary"
+	"github.com/cruffinoni/rimworld-editor/internal/xml/scalar"
 )
 
 type RetainedCaravanData struct {
@@ -14,10 +14,10 @@ type RetainedCaravanData struct {
 
 	NextTileCostLeftPct int64          `xml:"nextTileCostLeftPct"`
 	DestinationTile     int64          `xml:"destinationTile"`
-	ArrivalAction       *primary.Empty `xml:"arrivalAction"`
+	ArrivalAction       *scalar.Empty `xml:"arrivalAction"`
 }
 
-func (r *RetainedCaravanData) Assign(*xml.Element) error {
+func (r *RetainedCaravanData) Assign(*domain.Element) error {
 	return nil
 }
 

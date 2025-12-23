@@ -3,9 +3,9 @@
 package generated
 
 import (
-	"github.com/cruffinoni/rimworld-editor/internal/xml"
+	"github.com/cruffinoni/rimworld-editor/internal/xml/domain"
 	"github.com/cruffinoni/rimworld-editor/internal/xml/attributes"
-	"github.com/cruffinoni/rimworld-editor/internal/xml/types"
+	"github.com/cruffinoni/rimworld-editor/internal/xml/collection"
 )
 
 type Filth struct {
@@ -13,10 +13,10 @@ type Filth struct {
 	FieldValidated map[string]bool
 
 	LastTerrainFilthDef string                      `xml:"lastTerrainFilthDef"`
-	CarriedFilth        *types.Slice[*CarriedFilth] `xml:"carriedFilth"`
+	CarriedFilth        *collection.Slice[*CarriedFilth] `xml:"carriedFilth"`
 }
 
-func (f *Filth) Assign(*xml.Element) error {
+func (f *Filth) Assign(*domain.Element) error {
 	return nil
 }
 

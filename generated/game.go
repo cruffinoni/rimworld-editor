@@ -3,10 +3,10 @@
 package generated
 
 import (
-	"github.com/cruffinoni/rimworld-editor/internal/xml"
+	"github.com/cruffinoni/rimworld-editor/internal/xml/domain"
 	"github.com/cruffinoni/rimworld-editor/internal/xml/attributes"
-	"github.com/cruffinoni/rimworld-editor/internal/xml/types"
-	"github.com/cruffinoni/rimworld-editor/internal/xml/types/primary"
+	"github.com/cruffinoni/rimworld-editor/internal/xml/collection"
+	"github.com/cruffinoni/rimworld-editor/internal/xml/scalar"
 )
 
 type Game struct {
@@ -20,7 +20,7 @@ type Game struct {
 	TickManager             *TickManager             `xml:"tickManager"`
 	PlaySettings            *PlaySettings            `xml:"playSettings"`
 	StoryWatcher            *StoryWatcher            `xml:"storyWatcher"`
-	GameEnder               *primary.Empty           `xml:"gameEnder"`
+	GameEnder               *scalar.Empty           `xml:"gameEnder"`
 	LetterStack             *LetterStack             `xml:"letterStack"`
 	ResearchManager         *ResearchManager         `xml:"researchManager"`
 	Storyteller             *Storyteller             `xml:"storyteller"`
@@ -41,11 +41,11 @@ type Game struct {
 	CustomXenotypeDatabase  *CustomXenotypeDatabase  `xml:"customXenotypeDatabase"`
 	Components              [16]*Components          `xml:"components"`
 	World                   *World                   `xml:"world"`
-	Maps                    *types.Slice[*Maps]      `xml:"maps"`
+	Maps                    *collection.Slice[*Maps]      `xml:"maps"`
 	CameraMap               *CameraMap               `xml:"cameraMap"`
 }
 
-func (g *Game) Assign(*xml.Element) error {
+func (g *Game) Assign(*domain.Element) error {
 	return nil
 }
 

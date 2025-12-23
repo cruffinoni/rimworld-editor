@@ -3,9 +3,9 @@
 package generated
 
 import (
-	"github.com/cruffinoni/rimworld-editor/internal/xml"
+	"github.com/cruffinoni/rimworld-editor/internal/xml/domain"
 	"github.com/cruffinoni/rimworld-editor/internal/xml/attributes"
-	"github.com/cruffinoni/rimworld-editor/internal/xml/types"
+	"github.com/cruffinoni/rimworld-editor/internal/xml/collection"
 )
 
 type SavegameGameMapsLiThingsThingInnerContainer struct {
@@ -13,11 +13,11 @@ type SavegameGameMapsLiThingsThingInnerContainer struct {
 	FieldValidated map[string]bool
 
 	MaxStacks        int64                      `xml:"maxStacks"`
-	InnerList        *types.Slice[*xml.Element] `xml:"innerList"`
+	InnerList        *collection.Slice[*domain.Element] `xml:"innerList"`
 	ContentsLookMode string                     `xml:"contentsLookMode"`
 }
 
-func (s *SavegameGameMapsLiThingsThingInnerContainer) Assign(*xml.Element) error {
+func (s *SavegameGameMapsLiThingsThingInnerContainer) Assign(*domain.Element) error {
 	return nil
 }
 

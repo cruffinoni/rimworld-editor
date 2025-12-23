@@ -3,23 +3,23 @@
 package generated
 
 import (
-	"github.com/cruffinoni/rimworld-editor/internal/xml"
+	"github.com/cruffinoni/rimworld-editor/internal/xml/domain"
 	"github.com/cruffinoni/rimworld-editor/internal/xml/attributes"
-	"github.com/cruffinoni/rimworld-editor/internal/xml/types/primary"
+	"github.com/cruffinoni/rimworld-editor/internal/xml/scalar"
 )
 
 type Trader struct {
 	Attr           attributes.Attributes
 	FieldValidated map[string]bool
 
-	TmpSavedPawns            *primary.Empty `xml:"tmpSavedPawns"`
-	Stock                    *primary.Empty `xml:"stock"`
+	TmpSavedPawns            *scalar.Empty `xml:"tmpSavedPawns"`
+	Stock                    *scalar.Empty `xml:"stock"`
 	LastStockGenerationTicks int64          `xml:"lastStockGenerationTicks"`
 	TraderKind               string         `xml:"traderKind"`
-	SoldPrisoners            *primary.Empty `xml:"soldPrisoners"`
+	SoldPrisoners            *scalar.Empty `xml:"soldPrisoners"`
 }
 
-func (t *Trader) Assign(*xml.Element) error {
+func (t *Trader) Assign(*domain.Element) error {
 	return nil
 }
 

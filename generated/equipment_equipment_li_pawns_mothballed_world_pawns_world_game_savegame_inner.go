@@ -3,19 +3,19 @@
 package generated
 
 import (
-	"github.com/cruffinoni/rimworld-editor/internal/xml"
+	"github.com/cruffinoni/rimworld-editor/internal/xml/domain"
 	"github.com/cruffinoni/rimworld-editor/internal/xml/attributes"
-	"github.com/cruffinoni/rimworld-editor/internal/xml/types"
+	"github.com/cruffinoni/rimworld-editor/internal/xml/collection"
 )
 
 type EquipmentEquipmentLiPawnsMothballedWorldPawnsWorldGameSavegameInner struct {
 	Attr           attributes.Attributes
 	FieldValidated map[string]bool
 
-	InnerList *types.Slice[*SavegameGameWorldWorldPawnsPawnsMothballedLiEquipmentEquipmentInnerList] `xml:"innerList"`
+	InnerList *collection.Slice[*SavegameGameWorldWorldPawnsPawnsMothballedLiEquipmentEquipmentInnerList] `xml:"innerList"`
 }
 
-func (e *EquipmentEquipmentLiPawnsMothballedWorldPawnsWorldGameSavegameInner) Assign(*xml.Element) error {
+func (e *EquipmentEquipmentLiPawnsMothballedWorldPawnsWorldGameSavegameInner) Assign(*domain.Element) error {
 	return nil
 }
 

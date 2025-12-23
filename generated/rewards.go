@@ -3,21 +3,21 @@
 package generated
 
 import (
-	"github.com/cruffinoni/rimworld-editor/internal/xml"
+	"github.com/cruffinoni/rimworld-editor/internal/xml/domain"
 	"github.com/cruffinoni/rimworld-editor/internal/xml/attributes"
-	"github.com/cruffinoni/rimworld-editor/internal/xml/types"
-	"github.com/cruffinoni/rimworld-editor/internal/xml/types/primary"
+	"github.com/cruffinoni/rimworld-editor/internal/xml/collection"
+	"github.com/cruffinoni/rimworld-editor/internal/xml/scalar"
 )
 
 type Rewards struct {
 	Attr           attributes.Attributes
 	FieldValidated map[string]bool
 
-	InnerList            *primary.Empty          `xml:"innerList"`
-	ItemDefs             *types.Slice[*ItemDefs] `xml:"itemDefs"`
+	InnerList            *scalar.Empty          `xml:"innerList"`
+	ItemDefs             *collection.Slice[*ItemDefs] `xml:"itemDefs"`
 	LastTotalMarketValue float64                 `xml:"lastTotalMarketValue"`
 	UsedOrCleanedUp      bool                    `xml:"usedOrCleanedUp"`
-	Items                *types.Slice[string]    `xml:"items"`
+	Items                *collection.Slice[string]    `xml:"items"`
 	Relic                string                  `xml:"relic"`
 	Quest                string                  `xml:"quest"`
 	Amount               int64                   `xml:"amount"`
@@ -25,7 +25,7 @@ type Rewards struct {
 	CurrentPart          int64                   `xml:"currentPart"`
 }
 
-func (r *Rewards) Assign(*xml.Element) error {
+func (r *Rewards) Assign(*domain.Element) error {
 	return nil
 }
 

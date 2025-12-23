@@ -3,10 +3,10 @@
 package generated
 
 import (
-	"github.com/cruffinoni/rimworld-editor/internal/xml"
+	"github.com/cruffinoni/rimworld-editor/internal/xml/domain"
 	"github.com/cruffinoni/rimworld-editor/internal/xml/attributes"
-	"github.com/cruffinoni/rimworld-editor/internal/xml/types"
-	"github.com/cruffinoni/rimworld-editor/internal/xml/types/primary"
+	"github.com/cruffinoni/rimworld-editor/internal/xml/collection"
+	"github.com/cruffinoni/rimworld-editor/internal/xml/scalar"
 )
 
 type AllFactions struct {
@@ -19,11 +19,11 @@ type AllFactions struct {
 	LoadId                       int64                    `xml:"loadID"`
 	RandomKey                    int64                    `xml:"randomKey"`
 	ColorFromSpectrum            float64                  `xml:"colorFromSpectrum"`
-	Relations                    *types.Slice[*Relations] `xml:"relations"`
+	Relations                    *collection.Slice[*Relations] `xml:"relations"`
 	Kidnapped                    *Kidnapped               `xml:"kidnapped"`
 	Ideos                        *Ideos                   `xml:"ideos"`
-	PredatorThreats              *primary.Empty           `xml:"predatorThreats"`
-	QuestTags                    *types.Slice[string]     `xml:"questTags"`
+	PredatorThreats              *scalar.Empty           `xml:"predatorThreats"`
+	QuestTags                    *collection.Slice[string]     `xml:"questTags"`
 	NaturalGoodwillTimer         int64                    `xml:"naturalGoodwillTimer"`
 	AllowRoyalFavorRewards       bool                     `xml:"allowRoyalFavorRewards"`
 	LastExecutionTick            int64                    `xml:"lastExecutionTick"`
@@ -34,7 +34,7 @@ type AllFactions struct {
 	NeverFlee                    bool                     `xml:"neverFlee"`
 }
 
-func (a *AllFactions) Assign(*xml.Element) error {
+func (a *AllFactions) Assign(*domain.Element) error {
 	return nil
 }
 

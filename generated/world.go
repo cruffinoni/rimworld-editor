@@ -3,7 +3,7 @@
 package generated
 
 import (
-	"github.com/cruffinoni/rimworld-editor/internal/xml"
+	"github.com/cruffinoni/rimworld-editor/internal/xml/domain"
 	"github.com/cruffinoni/rimworld-editor/internal/xml/attributes"
 )
 
@@ -23,7 +23,7 @@ type World struct {
 	Components           [15]*Components       `xml:"components"`
 }
 
-func (w *World) Assign(*xml.Element) error {
+func (w *World) Assign(*domain.Element) error {
 	return nil
 }
 

@@ -3,10 +3,10 @@
 package generated
 
 import (
-	"github.com/cruffinoni/rimworld-editor/internal/xml"
+	"github.com/cruffinoni/rimworld-editor/internal/xml/domain"
 	"github.com/cruffinoni/rimworld-editor/internal/xml/attributes"
-	"github.com/cruffinoni/rimworld-editor/internal/xml/types"
-	"github.com/cruffinoni/rimworld-editor/internal/xml/types/primary"
+	"github.com/cruffinoni/rimworld-editor/internal/xml/collection"
+	"github.com/cruffinoni/rimworld-editor/internal/xml/scalar"
 )
 
 type Components struct {
@@ -14,22 +14,22 @@ type Components struct {
 	FieldValidated map[string]bool
 
 	SendAicoreRequestReminder                    bool                                                                    `xml:"sendAICoreRequestReminder"`
-	KilledBosses                                 *primary.Empty                                                          `xml:"killedBosses"`
-	TimesCalledBossgroups                        types.Map[string, *primary.Empty]                                       `xml:"timesCalledBossgroups"`
-	PriceModifiers                               types.Map[string, float64]                                              `xml:"priceModifiers"`
-	PlayerTransactionsBySoldPurchasedMarketValue types.Map[string, *primary.Empty]                                       `xml:"playerTransactionsBySoldPurchasedMarketValue"`
-	ItemsToBeCrashedByTicks                      types.Map[string, *primary.Empty]                                       `xml:"itemsToBeCrashedByTicks"`
-	ItemsToBeSqueezeByTicks                      types.Map[string, *primary.Empty]                                       `xml:"itemsToBeSqueezeByTicks"`
-	BanksByFaction                               types.Map[string, *SavegameGameComponentsLiBanksByFactionValues]        `xml:"banksByFaction"`
-	AllNews                                      *types.Slice[*AllNews]                                                  `xml:"allNews"`
-	UnProcessedNews                              *primary.Empty                                                          `xml:"unProcessedNews"`
-	PriceHistoryRecorders                        types.Map[string, *SavegameGameComponentsLiPriceHistoryRecordersValues] `xml:"priceHistoryRecorders"`
-	Companies                                    *types.Slice[*Companies]                                                `xml:"companies"`
-	PlayerSubmittedContracts                     *types.Slice[*PlayerSubmittedContracts]                                 `xml:"playerSubmittedContracts"`
-	NpcSubmittedContracts                        *types.Slice[*NpcSubmittedContracts]                                    `xml:"npcSubmittedContracts"`
-	NpcContractsToBeCompleted                    *primary.Empty                                                          `xml:"npcContractsToBeCompleted"`
-	CurrentCaravanLordsWithContracts             types.Map[string, *primary.Empty]                                       `xml:"currentCaravanLordsWithContracts"`
-	PawnQuotas                                   *types.Slice[*PawnQuotas]                                               `xml:"pawnQuotas"`
+	KilledBosses                                 *scalar.Empty                                                          `xml:"killedBosses"`
+	TimesCalledBossgroups                        collection.Map[string, *scalar.Empty]                                       `xml:"timesCalledBossgroups"`
+	PriceModifiers                               collection.Map[string, float64]                                              `xml:"priceModifiers"`
+	PlayerTransactionsBySoldPurchasedMarketValue collection.Map[string, *scalar.Empty]                                       `xml:"playerTransactionsBySoldPurchasedMarketValue"`
+	ItemsToBeCrashedByTicks                      collection.Map[string, *scalar.Empty]                                       `xml:"itemsToBeCrashedByTicks"`
+	ItemsToBeSqueezeByTicks                      collection.Map[string, *scalar.Empty]                                       `xml:"itemsToBeSqueezeByTicks"`
+	BanksByFaction                               collection.Map[string, *SavegameGameComponentsLiBanksByFactionValues]        `xml:"banksByFaction"`
+	AllNews                                      *collection.Slice[*AllNews]                                                  `xml:"allNews"`
+	UnProcessedNews                              *scalar.Empty                                                          `xml:"unProcessedNews"`
+	PriceHistoryRecorders                        collection.Map[string, *SavegameGameComponentsLiPriceHistoryRecordersValues] `xml:"priceHistoryRecorders"`
+	Companies                                    *collection.Slice[*Companies]                                                `xml:"companies"`
+	PlayerSubmittedContracts                     *collection.Slice[*PlayerSubmittedContracts]                                 `xml:"playerSubmittedContracts"`
+	NpcSubmittedContracts                        *collection.Slice[*NpcSubmittedContracts]                                    `xml:"npcSubmittedContracts"`
+	NpcContractsToBeCompleted                    *scalar.Empty                                                          `xml:"npcContractsToBeCompleted"`
+	CurrentCaravanLordsWithContracts             collection.Map[string, *scalar.Empty]                                       `xml:"currentCaravanLordsWithContracts"`
+	PawnQuotas                                   *collection.Slice[*PawnQuotas]                                               `xml:"pawnQuotas"`
 	OpenFoods                                    bool                                                                    `xml:"open_Foods"`
 	OpenFoodMeals                                bool                                                                    `xml:"open_FoodMeals"`
 	OpenTextiles                                 bool                                                                    `xml:"open_Textiles"`
@@ -38,51 +38,51 @@ type Components struct {
 	OpenStoneBlocks                              bool                                                                    `xml:"open_StoneBlocks"`
 	OpenVceCondiments                            bool                                                                    `xml:"open_VCE_Condiments"`
 	CurrentStoryteller                           string                                                                  `xml:"currentStoryteller"`
-	RaidGroups                                   *types.Slice[*RaidGroups]                                               `xml:"raidGroups"`
-	ReinforcementGroups                          *primary.Empty                                                          `xml:"reinforcementGroups"`
-	QuestGiverManagers                           types.Map[string, *primary.Empty]                                       `xml:"questGiverManagers"`
-	RaidQueues                                   *primary.Empty                                                          `xml:"raidQueues"`
+	RaidGroups                                   *collection.Slice[*RaidGroups]                                               `xml:"raidGroups"`
+	ReinforcementGroups                          *scalar.Empty                                                          `xml:"reinforcementGroups"`
+	QuestGiverManagers                           collection.Map[string, *scalar.Empty]                                       `xml:"questGiverManagers"`
+	RaidQueues                                   *scalar.Empty                                                          `xml:"raidQueues"`
 	SentOncePerGame                              bool                                                                    `xml:"sentOncePerGame"`
 	SentOncePerGameGenes                         bool                                                                    `xml:"sentOncePerGameGenes"`
-	AchievementList                              *primary.Empty                                                          `xml:"achievementList"`
+	AchievementList                              *scalar.Empty                                                          `xml:"achievementList"`
 	CachedTool                                   string                                                                  `xml:"CachedTool"`
 	CurrentPriority                              int64                                                                   `xml:"currentPriority"`
-	ForcedSongs                                  *primary.Empty                                                          `xml:"forcedSongs"`
-	PrioritySongs                                types.Map[string, *primary.Empty]                                       `xml:"prioritySongs"`
+	ForcedSongs                                  *scalar.Empty                                                          `xml:"forcedSongs"`
+	PrioritySongs                                collection.Map[string, *scalar.Empty]                                       `xml:"prioritySongs"`
 	CycleIndex                                   int64                                                                   `xml:"cycleIndex"`
-	RoadNodes                                    *types.Slice[int64]                                                     `xml:"roadNodes"`
+	RoadNodes                                    *collection.Slice[int64]                                                     `xml:"roadNodes"`
 	PartyHunt                                    *PartyHunt                                                              `xml:"partyHunt"`
-	WorktypePriorities                           *types.Slice[*WorktypePriorities]                                       `xml:"worktypePriorities"`
-	LinkedBillsSets                              *types.Slice[*LinkedBillsSets]                                          `xml:"linkedBillsSets"`
-	Pawns                                        *primary.Empty                                                          `xml:"pawns"`
-	IgnoredFactions                              *types.Slice[string]                                                    `xml:"ignoredFactions"`
-	StripMine                                    *primary.Empty                                                          `xml:"stripMine"`
-	Store                                        types.Map[string, *primary.Empty]                                       `xml:"store"`
+	WorktypePriorities                           *collection.Slice[*WorktypePriorities]                                       `xml:"worktypePriorities"`
+	LinkedBillsSets                              *collection.Slice[*LinkedBillsSets]                                          `xml:"linkedBillsSets"`
+	Pawns                                        *scalar.Empty                                                          `xml:"pawns"`
+	IgnoredFactions                              *collection.Slice[string]                                                    `xml:"ignoredFactions"`
+	StripMine                                    *scalar.Empty                                                          `xml:"stripMine"`
+	Store                                        collection.Map[string, *scalar.Empty]                                       `xml:"store"`
 	Hireable                                     string                                                                  `xml:"hireable"`
-	Joblist                                      types.Map[string, *primary.Empty]                                       `xml:"joblist"`
-	Blueprints                                   *types.Slice[*Blueprints]                                               `xml:"Blueprints"`
+	Joblist                                      collection.Map[string, *scalar.Empty]                                       `xml:"joblist"`
+	Blueprints                                   *collection.Slice[*Blueprints]                                               `xml:"Blueprints"`
 	TicksToNextAssault                           int64                                                                   `xml:"ticksToNextAssault"`
-	MapsParent                                   types.Map[string, *primary.Empty]                                       `xml:"mapsParent"`
-	DeadCountKey                                 *primary.Empty                                                          `xml:"deadCountKey"`
+	MapsParent                                   collection.Map[string, *scalar.Empty]                                       `xml:"mapsParent"`
+	DeadCountKey                                 *scalar.Empty                                                          `xml:"deadCountKey"`
 	BestConstructorOverride                      string                                                                  `xml:"bestConstructorOverride"`
-	RoadEdgeTiles                                *primary.Empty                                                          `xml:"roadEdgeTiles"`
-	MarkedForRefillStockpile                     *primary.Empty                                                          `xml:"markedForRefillStockpile"`
-	Terrains                                     types.Map[string, *primary.Empty]                                       `xml:"terrains"`
-	GrowZoneRegistry                             types.Map[int64, *SavegameGameMapsLiComponentsLiGrowZoneRegistryValues] `xml:"growZoneRegistry"`
-	AwaitingPickup                               *primary.Empty                                                          `xml:"awaitingPickup"`
-	AwaitingIngredients                          *primary.Empty                                                          `xml:"awaitingIngredients"`
-	UniqueIdsManager                             *primary.Empty                                                          `xml:"uniqueIDsManager"`
-	MarkedForRefillBuilding                      *primary.Empty                                                          `xml:"markedForRefillBuilding"`
-	NotForAnimals                                *primary.Empty                                                          `xml:"notForAnimals"`
-	HarvestForbidden                             *primary.Empty                                                          `xml:"harvestForbidden"`
-	LauncherTargets                              types.Map[string, *primary.Empty]                                       `xml:"launcherTargets"`
-	AreaIndex                                    types.Map[int64, int64]                                                 `xml:"areaIndex"`
+	RoadEdgeTiles                                *scalar.Empty                                                          `xml:"roadEdgeTiles"`
+	MarkedForRefillStockpile                     *scalar.Empty                                                          `xml:"markedForRefillStockpile"`
+	Terrains                                     collection.Map[string, *scalar.Empty]                                       `xml:"terrains"`
+	GrowZoneRegistry                             collection.Map[int64, *SavegameGameMapsLiComponentsLiGrowZoneRegistryValues] `xml:"growZoneRegistry"`
+	AwaitingPickup                               *scalar.Empty                                                          `xml:"awaitingPickup"`
+	AwaitingIngredients                          *scalar.Empty                                                          `xml:"awaitingIngredients"`
+	UniqueIdsManager                             *scalar.Empty                                                          `xml:"uniqueIDsManager"`
+	MarkedForRefillBuilding                      *scalar.Empty                                                          `xml:"markedForRefillBuilding"`
+	NotForAnimals                                *scalar.Empty                                                          `xml:"notForAnimals"`
+	HarvestForbidden                             *scalar.Empty                                                          `xml:"harvestForbidden"`
+	LauncherTargets                              collection.Map[string, *scalar.Empty]                                       `xml:"launcherTargets"`
+	AreaIndex                                    collection.Map[int64, int64]                                                 `xml:"areaIndex"`
 	QbUseMapSettings                             bool                                                                    `xml:"qbUseMapSettings"`
-	NotForColonists                              *primary.Empty                                                          `xml:"notForColonists"`
-	DestroyedBuildings                           types.Map[string, *primary.Empty]                                       `xml:"destroyedBuildings"`
+	NotForColonists                              *scalar.Empty                                                          `xml:"notForColonists"`
+	DestroyedBuildings                           collection.Map[string, *scalar.Empty]                                       `xml:"destroyedBuildings"`
 }
 
-func (c *Components) Assign(*xml.Element) error {
+func (c *Components) Assign(*domain.Element) error {
 	return nil
 }
 

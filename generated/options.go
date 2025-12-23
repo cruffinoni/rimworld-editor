@@ -3,7 +3,7 @@
 package generated
 
 import (
-	"github.com/cruffinoni/rimworld-editor/internal/xml"
+	"github.com/cruffinoni/rimworld-editor/internal/xml/domain"
 	"github.com/cruffinoni/rimworld-editor/internal/xml/attributes"
 )
 
@@ -15,7 +15,7 @@ type Options struct {
 	OutSignal string `xml:"outSignal"`
 }
 
-func (o *Options) Assign(*xml.Element) error {
+func (o *Options) Assign(*domain.Element) error {
 	return nil
 }
 

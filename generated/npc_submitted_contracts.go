@@ -3,7 +3,7 @@
 package generated
 
 import (
-	"github.com/cruffinoni/rimworld-editor/internal/xml"
+	"github.com/cruffinoni/rimworld-editor/internal/xml/domain"
 	"github.com/cruffinoni/rimworld-editor/internal/xml/attributes"
 )
 
@@ -19,7 +19,7 @@ type NpcSubmittedContracts struct {
 	Stuff          string `xml:"stuff"`
 }
 
-func (n *NpcSubmittedContracts) Assign(*xml.Element) error {
+func (n *NpcSubmittedContracts) Assign(*domain.Element) error {
 	return nil
 }
 

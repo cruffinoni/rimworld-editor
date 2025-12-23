@@ -3,7 +3,7 @@
 package generated
 
 import (
-	"github.com/cruffinoni/rimworld-editor/internal/xml"
+	"github.com/cruffinoni/rimworld-editor/internal/xml/domain"
 	"github.com/cruffinoni/rimworld-editor/internal/xml/attributes"
 )
 
@@ -16,7 +16,7 @@ type Records struct {
 	BattleExitTick int64                                                            `xml:"battleExitTick"`
 }
 
-func (r *Records) Assign(*xml.Element) error {
+func (r *Records) Assign(*domain.Element) error {
 	return nil
 }
 

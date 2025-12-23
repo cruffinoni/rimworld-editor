@@ -3,19 +3,19 @@
 package generated
 
 import (
-	"github.com/cruffinoni/rimworld-editor/internal/xml"
+	"github.com/cruffinoni/rimworld-editor/internal/xml/domain"
 	"github.com/cruffinoni/rimworld-editor/internal/xml/attributes"
-	"github.com/cruffinoni/rimworld-editor/internal/xml/types"
+	"github.com/cruffinoni/rimworld-editor/internal/xml/collection"
 )
 
 type DesignationManager struct {
 	Attr           attributes.Attributes
 	FieldValidated map[string]bool
 
-	AllDesignations *types.Slice[*AllDesignations] `xml:"allDesignations"`
+	AllDesignations *collection.Slice[*AllDesignations] `xml:"allDesignations"`
 }
 
-func (d *DesignationManager) Assign(*xml.Element) error {
+func (d *DesignationManager) Assign(*domain.Element) error {
 	return nil
 }
 

@@ -1,0 +1,117 @@
+package query
+
+import (
+	"fmt"
+	"log"
+	"strings"
+
+	"github.com/cruffinoni/rimworld-editor/internal/xml/domain"
+	"github.com/cruffinoni/rimworld-editor/pkg/logging"
+)
+
+type pattern struct {
+	path    string
+	matcher ComputedMatcher
+}
+
+type Elements []*domain.Element
+
+// ResultType is the type of the result of a match.
+//type ResultType interface {
+//	*domain.Element | []*domain.Element
+//}
+
+// Path is a path to a node in the XML tree.
+type Path struct {
+	patterns []*pattern
+	tree     *domain.Tree
+	logger   logging.Logger
+}
+
+type Matcher interface {
+	Build(pattern string) ComputedMatcher
+	RawMatch(pattern string) bool
+}
+
+type ComputedMatcher interface {
+	StrictMatch(node *domain.Element, input string) Elements
+	TrailingMatch() Elements
+}
+
+type DefaultMatcher = StringMatch
+
+var matchers = []Matcher{
+	&WildcardMatch{},
+	&ArrayMatch{},
+	&ListMatch{},
+	&AttributeMatch{},
+}
+
+func NewPathing(rawPattern string, logger logging.Logger) *Path {
+	split := strings.Split(rawPattern, ">")
+	p := &Path{
+		patterns: make([]*pattern, 0, len(split)),
+		logger:   logger,
+	}
+	for _, s := range split {
+		pm := &pattern{
+			path:    s,
+			matcher: &DefaultMatcher{},
+		}
+		for _, m := range matchers {
+			if m.RawMatch(s) {
+				pm.matcher = m.Build(s)
+				if pm.matcher == nil {
+					log.Fatalf("failed to build matcher for %s", s)
+				}
+				break
+			}
+		}
+		p.patterns = append(p.patterns, pm)
+	}
+	return p
+}
+
+func FindWithPath(pattern string, root *domain.Element, logger logging.Logger) Elements {
+	p := NewPathing(pattern, logger)
+	return p.Find(root)
+}
+
+func (p *Path) Find(root *domain.Element) Elements {
+	var (
+		r          Elements
+		n          = root
+		patternIdx = 0
+	)
+	cpyPatterns := make([]*pattern, len(p.patterns))
+	copy(cpyPatterns, p.patterns)
+	for n != nil {
+		if r = p.patterns[patternIdx].matcher.StrictMatch(n, cpyPatterns[0].path); r == nil {
+			n = n.Next
+			continue
+		}
+		patternIdx++
+		cpyPatterns = cpyPatterns[1:]
+		if len(cpyPatterns) == 0 {
+			return r
+		} else {
+			n = n.Child
+		}
+	}
+	if r = p.patterns[patternIdx].matcher.TrailingMatch(); r != nil {
+		if len(r) == 0 {
+			p.logger.WithFields(logging.Fields{
+				"path":    cpyPatterns[0].path,
+				"matcher": fmt.Sprintf("%T", cpyPatterns[0].matcher),
+			}).Debug("Find: not found")
+		}
+		return r
+	}
+	if len(r) == 0 {
+		p.logger.WithFields(logging.Fields{
+			"path":    cpyPatterns[0].path,
+			"matcher": fmt.Sprintf("%T", cpyPatterns[0].matcher),
+		}).Debug("Find: not found")
+	}
+	return nil
+}

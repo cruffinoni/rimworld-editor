@@ -3,10 +3,10 @@
 package generated
 
 import (
-	"github.com/cruffinoni/rimworld-editor/internal/xml"
+	"github.com/cruffinoni/rimworld-editor/internal/xml/domain"
 	"github.com/cruffinoni/rimworld-editor/internal/xml/attributes"
-	"github.com/cruffinoni/rimworld-editor/internal/xml/types"
-	"github.com/cruffinoni/rimworld-editor/internal/xml/types/primary"
+	"github.com/cruffinoni/rimworld-editor/internal/xml/collection"
+	"github.com/cruffinoni/rimworld-editor/internal/xml/scalar"
 )
 
 type Maps struct {
@@ -43,16 +43,16 @@ type Maps struct {
 	StoryState                            *StoryState                            `xml:"storyState"`
 	WildPlantSpawner                      *WildPlantSpawner                      `xml:"wildPlantSpawner"`
 	TemporaryThingDrawer                  *TemporaryThingDrawer                  `xml:"temporaryThingDrawer"`
-	Flecks                                *primary.Empty                         `xml:"flecks"`
+	Flecks                                *scalar.Empty                         `xml:"flecks"`
 	AutoSlaughterManager                  *AutoSlaughterManager                  `xml:"autoSlaughterManager"`
 	TreeDestructionTracker                *TreeDestructionTracker                `xml:"treeDestructionTracker"`
 	StorageGroups                         *StorageGroups                         `xml:"storageGroups"`
 	Components                            [23]*Components                        `xml:"components"`
 	CompressedThingMapDeflate             string                                 `xml:"compressedThingMapDeflate"`
-	Things                                *types.Slice[*Thing]                   `xml:"things"`
+	Things                                *collection.Slice[*Thing]                   `xml:"things"`
 }
 
-func (m *Maps) Assign(*xml.Element) error {
+func (m *Maps) Assign(*domain.Element) error {
 	return nil
 }
 

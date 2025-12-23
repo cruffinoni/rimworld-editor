@@ -6,12 +6,12 @@ import (
 	"time"
 
 	"github.com/cruffinoni/rimworld-editor/generated"
+	"github.com/cruffinoni/rimworld-editor/internal/codegen"
+	"github.com/cruffinoni/rimworld-editor/internal/codegen/writer"
 	"github.com/cruffinoni/rimworld-editor/internal/config"
-	"github.com/cruffinoni/rimworld-editor/internal/file"
-	"github.com/cruffinoni/rimworld-editor/internal/generator"
-	"github.com/cruffinoni/rimworld-editor/internal/generator/files"
-	"github.com/cruffinoni/rimworld-editor/internal/xml/saver/xmlFile"
-	"github.com/cruffinoni/rimworld-editor/internal/xml/unmarshal"
+	"github.com/cruffinoni/rimworld-editor/internal/xml/binder"
+	"github.com/cruffinoni/rimworld-editor/internal/xml/encoder/reflection"
+	"github.com/cruffinoni/rimworld-editor/internal/xml/loader"
 	"github.com/cruffinoni/rimworld-editor/pkg/logging"
 )
 
@@ -30,7 +30,7 @@ func main() {
 	}
 	logger := logging.NewLogger("cycle", &cfg.Logging)
 	var (
-		fo       *file.Opening
+		fo       *loader.Opening
 		path     string
 		fileName string
 	)
@@ -46,25 +46,25 @@ func main() {
 		return
 	}
 	logger.WithField("path", path).Debug("Opening and decoding XML file")
-	fo, err = file.Open(path)
+	fo, err = loader.Open(path)
 	if err != nil {
 		logger.WithError(err).Fatal("Failed to open file")
 		return
 	}
 	logger.Debug("Generating Go files to ./generated")
-	root := generator.GenerateGoFiles(logger, fo.XML.Root, true)
-	gw := files.NewGoWriter(logger, nil, true, "")
+	root := codegen.GenerateGoFiles(logger, fo.XML.Root, true)
+	gw := writer.NewGoWriter(logger, nil, true, "")
 	if err = gw.WriteGoFile("./generated", root); err != nil {
 		logger.WithError(err).Fatal("Failed to write Go files")
 	}
 	save := &generated.GeneratedStructStarter0{}
 	logger.Debug("Unmarshalling XML")
-	if err := unmarshal.Element(logger, fo.XML.Root, save); err != nil {
+	if err := binder.Element(logger, fo.XML.Root, save); err != nil {
 		logger.WithError(err).Fatal("Failed to unmarshal XML")
 	}
 	save.ValidateField("Savegame")
 	logger.Debug("Generating XML file to folder")
-	buffer, err := xmlFile.SaveWithBuffer(logger, save.Savegame)
+	buffer, err := reflection.SaveWithBuffer(logger, save.Savegame)
 	if err != nil {
 		logger.WithError(err).Panic("Failed to save XML buffer")
 	}

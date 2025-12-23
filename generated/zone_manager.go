@@ -3,19 +3,19 @@
 package generated
 
 import (
-	"github.com/cruffinoni/rimworld-editor/internal/xml"
+	"github.com/cruffinoni/rimworld-editor/internal/xml/domain"
 	"github.com/cruffinoni/rimworld-editor/internal/xml/attributes"
-	"github.com/cruffinoni/rimworld-editor/internal/xml/types"
+	"github.com/cruffinoni/rimworld-editor/internal/xml/collection"
 )
 
 type ZoneManager struct {
 	Attr           attributes.Attributes
 	FieldValidated map[string]bool
 
-	AllZones *types.Slice[*AllZones] `xml:"allZones"`
+	AllZones *collection.Slice[*AllZones] `xml:"allZones"`
 }
 
-func (z *ZoneManager) Assign(*xml.Element) error {
+func (z *ZoneManager) Assign(*domain.Element) error {
 	return nil
 }
 

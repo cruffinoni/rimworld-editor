@@ -3,10 +3,10 @@
 package generated
 
 import (
-	"github.com/cruffinoni/rimworld-editor/internal/xml"
+	"github.com/cruffinoni/rimworld-editor/internal/xml/domain"
 	"github.com/cruffinoni/rimworld-editor/internal/xml/attributes"
-	"github.com/cruffinoni/rimworld-editor/internal/xml/types"
-	"github.com/cruffinoni/rimworld-editor/internal/xml/types/primary"
+	"github.com/cruffinoni/rimworld-editor/internal/xml/collection"
+	"github.com/cruffinoni/rimworld-editor/internal/xml/scalar"
 )
 
 type Archivables struct {
@@ -21,15 +21,15 @@ type Archivables struct {
 	ArrivalTick         int64                `xml:"arrivalTick"`
 	Text                string               `xml:"text"`
 	Quest               string               `xml:"quest"`
-	HyperlinkThingDefs  *types.Slice[string] `xml:"hyperlinkThingDefs"`
-	HyperlinkHediffDefs *primary.Empty       `xml:"hyperlinkHediffDefs"`
+	HyperlinkThingDefs  *collection.Slice[string] `xml:"hyperlinkThingDefs"`
+	HyperlinkHediffDefs *scalar.Empty       `xml:"hyperlinkHediffDefs"`
 	StartingTime        float64              `xml:"startingTime"`
 	StartingFrame       int64                `xml:"startingFrame"`
 	StartingTick        int64                `xml:"startingTick"`
 	Title               string               `xml:"title"`
 }
 
-func (a *Archivables) Assign(*xml.Element) error {
+func (a *Archivables) Assign(*domain.Element) error {
 	return nil
 }
 

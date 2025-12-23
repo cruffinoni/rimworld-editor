@@ -3,21 +3,21 @@
 package generated
 
 import (
-	"github.com/cruffinoni/rimworld-editor/internal/xml"
+	"github.com/cruffinoni/rimworld-editor/internal/xml/domain"
 	"github.com/cruffinoni/rimworld-editor/internal/xml/attributes"
-	"github.com/cruffinoni/rimworld-editor/internal/xml/types"
+	"github.com/cruffinoni/rimworld-editor/internal/xml/collection"
 )
 
 type Blueprints struct {
 	Attr           attributes.Attributes
 	FieldValidated map[string]bool
 
-	BuildableThings *types.Slice[*BuildableThings] `xml:"BuildableThings"`
+	BuildableThings *collection.Slice[*BuildableThings] `xml:"BuildableThings"`
 	Name            string                         `xml:"Name"`
 	Size            string                         `xml:"Size"`
 }
 
-func (b *Blueprints) Assign(*xml.Element) error {
+func (b *Blueprints) Assign(*domain.Element) error {
 	return nil
 }
 

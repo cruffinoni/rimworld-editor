@@ -3,7 +3,7 @@
 package generated
 
 import (
-	"github.com/cruffinoni/rimworld-editor/internal/xml"
+	"github.com/cruffinoni/rimworld-editor/internal/xml/domain"
 	"github.com/cruffinoni/rimworld-editor/internal/xml/attributes"
 )
 
@@ -22,7 +22,7 @@ type AgeTracker struct {
 	LastAgeReversalReason         string  `xml:"lastAgeReversalReason"`
 }
 
-func (a *AgeTracker) Assign(*xml.Element) error {
+func (a *AgeTracker) Assign(*domain.Element) error {
 	return nil
 }
 

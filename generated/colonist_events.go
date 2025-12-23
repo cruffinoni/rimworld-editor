@@ -3,19 +3,19 @@
 package generated
 
 import (
-	"github.com/cruffinoni/rimworld-editor/internal/xml"
+	"github.com/cruffinoni/rimworld-editor/internal/xml/domain"
 	"github.com/cruffinoni/rimworld-editor/internal/xml/attributes"
-	"github.com/cruffinoni/rimworld-editor/internal/xml/types"
+	"github.com/cruffinoni/rimworld-editor/internal/xml/collection"
 )
 
 type ColonistEvents struct {
 	Attr           attributes.Attributes
 	FieldValidated map[string]bool
 
-	Vals *types.Slice[*SavegameGameHistoryHistoryEventsManagerColonistEventsVals] `xml:"vals"`
+	Vals *collection.Slice[*SavegameGameHistoryHistoryEventsManagerColonistEventsVals] `xml:"vals"`
 }
 
-func (c *ColonistEvents) Assign(*xml.Element) error {
+func (c *ColonistEvents) Assign(*domain.Element) error {
 	return nil
 }
 

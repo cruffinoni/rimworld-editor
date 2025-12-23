@@ -3,19 +3,19 @@
 package generated
 
 import (
-	"github.com/cruffinoni/rimworld-editor/internal/xml"
+	"github.com/cruffinoni/rimworld-editor/internal/xml/domain"
 	"github.com/cruffinoni/rimworld-editor/internal/xml/attributes"
-	"github.com/cruffinoni/rimworld-editor/internal/xml/types/primary"
+	"github.com/cruffinoni/rimworld-editor/internal/xml/scalar"
 )
 
 type Contents struct {
 	Attr           attributes.Attributes
 	FieldValidated map[string]bool
 
-	InnerList *primary.Empty `xml:"innerList"`
+	InnerList *scalar.Empty `xml:"innerList"`
 }
 
-func (c *Contents) Assign(*xml.Element) error {
+func (c *Contents) Assign(*domain.Element) error {
 	return nil
 }
 

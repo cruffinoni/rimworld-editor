@@ -3,9 +3,9 @@
 package generated
 
 import (
-	"github.com/cruffinoni/rimworld-editor/internal/xml"
+	"github.com/cruffinoni/rimworld-editor/internal/xml/domain"
 	"github.com/cruffinoni/rimworld-editor/internal/xml/attributes"
-	"github.com/cruffinoni/rimworld-editor/internal/xml/types"
+	"github.com/cruffinoni/rimworld-editor/internal/xml/collection"
 )
 
 type Foundation struct {
@@ -14,10 +14,10 @@ type Foundation struct {
 
 	Def     string                 `xml:"def"`
 	Place   string                 `xml:"place"`
-	Deities *types.Slice[*Deities] `xml:"deities"`
+	Deities *collection.Slice[*Deities] `xml:"deities"`
 }
 
-func (f *Foundation) Assign(*xml.Element) error {
+func (f *Foundation) Assign(*domain.Element) error {
 	return nil
 }
 

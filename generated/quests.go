@@ -3,10 +3,10 @@
 package generated
 
 import (
-	"github.com/cruffinoni/rimworld-editor/internal/xml"
+	"github.com/cruffinoni/rimworld-editor/internal/xml/domain"
 	"github.com/cruffinoni/rimworld-editor/internal/xml/attributes"
-	"github.com/cruffinoni/rimworld-editor/internal/xml/types"
-	"github.com/cruffinoni/rimworld-editor/internal/xml/types/primary"
+	"github.com/cruffinoni/rimworld-editor/internal/xml/collection"
+	"github.com/cruffinoni/rimworld-editor/internal/xml/scalar"
 )
 
 type Quests struct {
@@ -25,9 +25,9 @@ type Quests struct {
 	ChallengeRating            int64                `xml:"challengeRating"`
 	Description                string               `xml:"description"`
 	Root                       string               `xml:"root"`
-	SignalsReceivedDebug       *primary.Empty       `xml:"signalsReceivedDebug"`
-	Parts                      *types.Slice[*Parts] `xml:"parts"`
-	Tags                       *types.Slice[string] `xml:"tags"`
+	SignalsReceivedDebug       *scalar.Empty       `xml:"signalsReceivedDebug"`
+	Parts                      *collection.Slice[*Parts] `xml:"parts"`
+	Tags                       *collection.Slice[string] `xml:"tags"`
 	Charity                    bool                 `xml:"charity"`
 	Parent                     string               `xml:"parent"`
 	Id                         int64                `xml:"id"`
@@ -36,7 +36,7 @@ type Quests struct {
 	Dismissed                  bool                 `xml:"dismissed"`
 }
 
-func (q *Quests) Assign(*xml.Element) error {
+func (q *Quests) Assign(*domain.Element) error {
 	return nil
 }
 

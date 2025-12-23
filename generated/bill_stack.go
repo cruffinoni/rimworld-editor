@@ -3,19 +3,19 @@
 package generated
 
 import (
-	"github.com/cruffinoni/rimworld-editor/internal/xml"
+	"github.com/cruffinoni/rimworld-editor/internal/xml/domain"
 	"github.com/cruffinoni/rimworld-editor/internal/xml/attributes"
-	"github.com/cruffinoni/rimworld-editor/internal/xml/types"
+	"github.com/cruffinoni/rimworld-editor/internal/xml/collection"
 )
 
 type BillStack struct {
 	Attr           attributes.Attributes
 	FieldValidated map[string]bool
 
-	Bills *types.Slice[*Bills] `xml:"bills"`
+	Bills *collection.Slice[*Bills] `xml:"bills"`
 }
 
-func (b *BillStack) Assign(*xml.Element) error {
+func (b *BillStack) Assign(*domain.Element) error {
 	return nil
 }
 

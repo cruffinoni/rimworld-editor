@@ -3,7 +3,7 @@
 package generated
 
 import (
-	"github.com/cruffinoni/rimworld-editor/internal/xml"
+	"github.com/cruffinoni/rimworld-editor/internal/xml/domain"
 	"github.com/cruffinoni/rimworld-editor/internal/xml/attributes"
 )
 
@@ -15,7 +15,7 @@ type DamagedParts struct {
 	Index int64  `xml:"index"`
 }
 
-func (d *DamagedParts) Assign(*xml.Element) error {
+func (d *DamagedParts) Assign(*domain.Element) error {
 	return nil
 }
 

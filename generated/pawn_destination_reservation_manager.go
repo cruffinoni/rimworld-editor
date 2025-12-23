@@ -3,19 +3,19 @@
 package generated
 
 import (
-	"github.com/cruffinoni/rimworld-editor/internal/xml"
+	"github.com/cruffinoni/rimworld-editor/internal/xml/domain"
 	"github.com/cruffinoni/rimworld-editor/internal/xml/attributes"
-	"github.com/cruffinoni/rimworld-editor/internal/xml/types"
+	"github.com/cruffinoni/rimworld-editor/internal/xml/collection"
 )
 
 type PawnDestinationReservationManager struct {
 	Attr           attributes.Attributes
 	FieldValidated map[string]bool
 
-	ReservedDestinations types.Map[string, [1]*xml.Element] `xml:"reservedDestinations"`
+	ReservedDestinations collection.Map[string, [1]*domain.Element] `xml:"reservedDestinations"`
 }
 
-func (p *PawnDestinationReservationManager) Assign(*xml.Element) error {
+func (p *PawnDestinationReservationManager) Assign(*domain.Element) error {
 	return nil
 }
 

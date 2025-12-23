@@ -3,19 +3,19 @@
 package generated
 
 import (
-	"github.com/cruffinoni/rimworld-editor/internal/xml"
+	"github.com/cruffinoni/rimworld-editor/internal/xml/domain"
 	"github.com/cruffinoni/rimworld-editor/internal/xml/attributes"
-	"github.com/cruffinoni/rimworld-editor/internal/xml/types"
+	"github.com/cruffinoni/rimworld-editor/internal/xml/collection"
 )
 
 type Features struct {
 	Attr           attributes.Attributes
 	FieldValidated map[string]bool
 
-	Features *types.Slice[*FeaturesFeaturesWorldGameSavegameInner] `xml:"features"`
+	Features *collection.Slice[*FeaturesFeaturesWorldGameSavegameInner] `xml:"features"`
 }
 
-func (f *Features) Assign(*xml.Element) error {
+func (f *Features) Assign(*domain.Element) error {
 	return nil
 }
 

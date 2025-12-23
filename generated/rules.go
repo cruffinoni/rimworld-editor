@@ -3,20 +3,20 @@
 package generated
 
 import (
-	"github.com/cruffinoni/rimworld-editor/internal/xml"
+	"github.com/cruffinoni/rimworld-editor/internal/xml/domain"
 	"github.com/cruffinoni/rimworld-editor/internal/xml/attributes"
-	"github.com/cruffinoni/rimworld-editor/internal/xml/types/primary"
+	"github.com/cruffinoni/rimworld-editor/internal/xml/scalar"
 )
 
 type Rules struct {
 	Attr           attributes.Attributes
 	FieldValidated map[string]bool
 
-	DisallowedBuildings       *primary.Empty `xml:"disallowedBuildings"`
-	DisallowedDesignatorTypes *primary.Empty `xml:"disallowedDesignatorTypes"`
+	DisallowedBuildings       *scalar.Empty `xml:"disallowedBuildings"`
+	DisallowedDesignatorTypes *scalar.Empty `xml:"disallowedDesignatorTypes"`
 }
 
-func (r *Rules) Assign(*xml.Element) error {
+func (r *Rules) Assign(*domain.Element) error {
 	return nil
 }
 

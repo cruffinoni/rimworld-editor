@@ -3,7 +3,7 @@
 package generated
 
 import (
-	"github.com/cruffinoni/rimworld-editor/internal/xml"
+	"github.com/cruffinoni/rimworld-editor/internal/xml/domain"
 	"github.com/cruffinoni/rimworld-editor/internal/xml/attributes"
 )
 
@@ -18,7 +18,7 @@ type Ownership struct {
 	AssignedDeathrestCasket string `xml:"assignedDeathrestCasket"`
 }
 
-func (o *Ownership) Assign(*xml.Element) error {
+func (o *Ownership) Assign(*domain.Element) error {
 	return nil
 }
 

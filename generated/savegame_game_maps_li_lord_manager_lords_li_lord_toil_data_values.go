@@ -3,7 +3,7 @@
 package generated
 
 import (
-	"github.com/cruffinoni/rimworld-editor/internal/xml"
+	"github.com/cruffinoni/rimworld-editor/internal/xml/domain"
 	"github.com/cruffinoni/rimworld-editor/internal/xml/attributes"
 )
 
@@ -22,7 +22,7 @@ type SavegameGameMapsLiLordManagerLordsLiLordToilDataValues struct {
 	InterruptCurrentJob bool           `xml:"interruptCurrentJob"`
 }
 
-func (s *SavegameGameMapsLiLordManagerLordsLiLordToilDataValues) Assign(*xml.Element) error {
+func (s *SavegameGameMapsLiLordManagerLordsLiLordToilDataValues) Assign(*domain.Element) error {
 	return nil
 }
 

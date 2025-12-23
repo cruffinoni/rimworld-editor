@@ -3,9 +3,9 @@
 package generated
 
 import (
-	"github.com/cruffinoni/rimworld-editor/internal/xml"
+	"github.com/cruffinoni/rimworld-editor/internal/xml/domain"
 	"github.com/cruffinoni/rimworld-editor/internal/xml/attributes"
-	"github.com/cruffinoni/rimworld-editor/internal/xml/types"
+	"github.com/cruffinoni/rimworld-editor/internal/xml/collection"
 )
 
 type Info struct {
@@ -21,10 +21,10 @@ type Info struct {
 	Name                    string               `xml:"name"`
 	PersistentRandomValue   int64                `xml:"persistentRandomValue"`
 	OverallRainfall         string               `xml:"overallRainfall"`
-	Factions                *types.Slice[string] `xml:"factions"`
+	Factions                *collection.Slice[string] `xml:"factions"`
 }
 
-func (i *Info) Assign(*xml.Element) error {
+func (i *Info) Assign(*domain.Element) error {
 	return nil
 }
 

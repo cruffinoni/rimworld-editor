@@ -3,9 +3,9 @@
 package generated
 
 import (
-	"github.com/cruffinoni/rimworld-editor/internal/xml"
+	"github.com/cruffinoni/rimworld-editor/internal/xml/domain"
 	"github.com/cruffinoni/rimworld-editor/internal/xml/attributes"
-	"github.com/cruffinoni/rimworld-editor/internal/xml/types"
+	"github.com/cruffinoni/rimworld-editor/internal/xml/collection"
 )
 
 type Meta struct {
@@ -13,12 +13,12 @@ type Meta struct {
 	FieldValidated map[string]bool
 
 	GameVersion string               `xml:"gameVersion"`
-	ModIds      *types.Slice[string] `xml:"modIds"`
-	ModSteamIds *types.Slice[int64]  `xml:"modSteamIds"`
-	ModNames    *types.Slice[string] `xml:"modNames"`
+	ModIds      *collection.Slice[string] `xml:"modIds"`
+	ModSteamIds *collection.Slice[int64]  `xml:"modSteamIds"`
+	ModNames    *collection.Slice[string] `xml:"modNames"`
 }
 
-func (m *Meta) Assign(*xml.Element) error {
+func (m *Meta) Assign(*domain.Element) error {
 	return nil
 }
 
