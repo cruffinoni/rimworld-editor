@@ -1,6 +1,6 @@
 module github.com/cruffinoni/rimworld-editor
 
-go 1.23.2
+go 1.25
 
 require (
 	github.com/briandowns/spinner v1.23.1
