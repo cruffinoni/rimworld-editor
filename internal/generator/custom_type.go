@@ -4,13 +4,12 @@ import (
 	"log"
 	"reflect"
 
-	"github.com/cruffinoni/printer"
-
 	"github.com/cruffinoni/rimworld-editor/internal/helper"
 
 	"github.com/cruffinoni/rimworld-editor/internal/generator/paths"
 
 	"github.com/cruffinoni/rimworld-editor/internal/xml"
+	"github.com/cruffinoni/rimworld-editor/pkg/logging"
 )
 
 type CustomType struct {
@@ -53,11 +52,11 @@ func IsEmbeddedType(c *CustomType) bool {
 	return c.Name == "Type" && c.Pkg == "*embedded"
 }
 
-func createCustomSlice(e *xml.Element, flag uint) any {
+func createCustomSlice(logger logging.Logger, e *xml.Element, flag uint) any {
 	return &CustomType{
 		Name:       "Slice",
 		Pkg:        "*types",
-		Type1:      createSubtype(e, flag, getTypeFromArrayOrSlice(e)),
+		Type1:      createSubtype(logger, e, flag, getTypeFromArrayOrSlice(logger, e)),
 		ImportPath: paths.CustomTypesPath,
 	}
 }
@@ -85,8 +84,8 @@ func createXMLElementType() any {
 // element as a reflect.Kind
 // If the type is invalid, we consider it as a *xml.Element.
 // Is it useful for empty tags.
-func determineTypeFromData(e *xml.Element, flag uint) any {
-	t := any(getTypeFromArrayOrSlice(e))
+func determineTypeFromData(logger logging.Logger, e *xml.Element, flag uint) any {
+	t := any(getTypeFromArrayOrSlice(logger, e))
 	//printer.Debugf("Type of %v is %v", e.XMLPath(), t)
 	// We need to define this struct with of this all members
 	if t == reflect.Struct || t == reflect.Slice {
@@ -95,11 +94,11 @@ func determineTypeFromData(e *xml.Element, flag uint) any {
 		if helper.IsListTag(c.Child.GetName()) {
 			// We set the forceChild flag to true to force the function createStructure
 			// to take the children of the list and not the list itself.
-			t = createArrayOrSlice(c, flag|forceChild)
+			t = createArrayOrSlice(logger, c, flag|forceChild)
 		} else {
 			// Otherwise, a basic struct is created
 			// We pass 'e' instead of 'c' because createStructure will take the children of 'e'
-			t = createStructure(e, flag)
+			t = createStructure(logger, e, flag)
 		}
 	} else if t == reflect.Invalid {
 		if e.Data == nil {
@@ -121,7 +120,7 @@ func determineTypeFromData(e *xml.Element, flag uint) any {
 	return t
 }
 
-func createCustomTypeForMap(e *xml.Element, flag uint) any {
+func createCustomTypeForMap(logger logging.Logger, e *xml.Element, flag uint) any {
 	if e.Child == nil {
 		log.Panic("generate.createCustomTypeForMap: missing child")
 	}
@@ -129,7 +128,7 @@ func createCustomTypeForMap(e *xml.Element, flag uint) any {
 	//printer.Debugf("Determining key type from %s", e.Child.XMLPath())
 	var (
 		c = e.Child
-		k = determineTypeFromData(c, flag|forceFullCheck)
+		k = determineTypeFromData(logger, c, flag|forceFullCheck)
 		v any
 	)
 	if ct, ok := k.(*CustomType); ok {
@@ -142,7 +141,7 @@ func createCustomTypeForMap(e *xml.Element, flag uint) any {
 	//printer.Debugf("Key type: %T", k)
 	c = c.Next
 	//printer.Debugf("Determining value type from '%v'", c.XMLPath())
-	v = determineTypeFromData(c, flag|forceFullCheck)
+	v = determineTypeFromData(logger, c, flag|forceFullCheck)
 	//printer.Debugf("Val type: %T", v)
 	// By default, maps are strings to strings
 	if k == reflect.Invalid || v == reflect.Invalid {
@@ -171,7 +170,7 @@ func findFirstValidElementWithChild(e *xml.Element) *xml.Element {
 	return n
 }
 
-func determineArrayOrSliceKind(e *xml.Element) reflect.Kind {
+func determineArrayOrSliceKind(_ logging.Logger, e *xml.Element) reflect.Kind {
 	k := e
 	for k != nil {
 		if k.Data == nil && k.Child == nil {
@@ -185,7 +184,7 @@ func determineArrayOrSliceKind(e *xml.Element) reflect.Kind {
 // getTypeFromArrayOrSlice returns the type of the element as a reflect.Kind.
 // If the element is not a valid type, it returns reflect.Invalid.
 // flag can be modified by the function to indicates to bypass the first element of the array/slice
-func getTypeFromArrayOrSlice(e *xml.Element) reflect.Kind {
+func getTypeFromArrayOrSlice(logger logging.Logger, e *xml.Element) reflect.Kind {
 	// Return Invalid if the element has no child
 	if e.Child == nil {
 		if e.Data == nil {
@@ -208,7 +207,7 @@ func getTypeFromArrayOrSlice(e *xml.Element) reflect.Kind {
 		for n != nil && n.GetName() == k.GetName() {
 			if n.Child != nil {
 				if helper.IsListTag(n.Child.GetName()) {
-					return determineArrayOrSliceKind(n)
+					return determineArrayOrSliceKind(logger, n)
 				}
 				return reflect.Struct
 			}
@@ -219,7 +218,7 @@ func getTypeFromArrayOrSlice(e *xml.Element) reflect.Kind {
 		// On the other hand, this part only check the first element
 		// but sometimes the first element has no data
 		if helper.IsListTag(k.Child.GetName()) {
-			return determineArrayOrSliceKind(k)
+			return determineArrayOrSliceKind(logger, k)
 		}
 		return reflect.Struct
 	}
@@ -231,7 +230,10 @@ func getTypeFromArrayOrSlice(e *xml.Element) reflect.Kind {
 				// Float64 and Int64 can be interchangeable
 				!(kdk == reflect.Float64 && kt == reflect.Int64) &&
 				!(kdk == reflect.Int64 && kt == reflect.Float64) {
-				printer.Debugf("last: '%v' & kind %s", k.Data, k.Data.Kind())
+				logger.WithFields(logging.Fields{
+					"value": k.Data,
+					"kind":  k.Data.Kind().String(),
+				}).Debug("Array/slice type mismatch")
 				log.Panicf("getTypeFromArrayOrSlice: found type %v, expected %v on path %v ('%v')", kdk, kt, k.XMLPath(), k.Data.GetData())
 			}
 			// Float64 and Int64 can be interchangeable, but we prefer to keep Float64
@@ -250,7 +252,7 @@ func getTypeFromArrayOrSlice(e *xml.Element) reflect.Kind {
 		if siblingWithChild == nil || siblingWithChild.Child == nil {
 			return reflect.Invalid
 		}
-		siblingType := createTypeFromElement(siblingWithChild, flagNone)
+		siblingType := createTypeFromElement(logger, siblingWithChild, flagNone)
 		if !IsSameType(siblingType, reflect.Invalid, 0) {
 			return Complex
 

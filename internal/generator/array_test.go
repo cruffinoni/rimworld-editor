@@ -7,6 +7,7 @@ import (
 	"github.com/stretchr/testify/require"
 
 	"github.com/cruffinoni/rimworld-editor/internal/xml/attributes"
+	"github.com/cruffinoni/rimworld-editor/pkg/logging"
 )
 
 func Test_createFixedArray(t *testing.T) {
@@ -138,7 +139,7 @@ func Test_createFixedArray(t *testing.T) {
 	for name, tt := range tests {
 		t.Run(name, func(t *testing.T) {
 			root := resetVarsAndReadBuffer(t, tt.args)
-			got := createFixedArray(root.Child, tt.args.flag, tt.args.o)
+			got := createFixedArray(logging.NewMockLogger(), root.Child, tt.args.flag, tt.args.o)
 			require.IsType(t, got, tt.want)
 			gotCasted := got.(*FixedArray)
 			wanted := got.(*FixedArray)

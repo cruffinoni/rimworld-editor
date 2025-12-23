@@ -2,19 +2,16 @@ package pawn
 
 import (
 	"fmt"
-	"log"
 
 	"github.com/cruffinoni/rimworld-editor/generated"
 )
 
-func getPawnFullNameColorFormatted(p *generated.Thing) string {
+func getPawnFullName(p *generated.Thing) string {
 	if p.Name == nil {
 		return "<nil pawn name>"
 	}
-	printer.Debugf("=> %+v", p.Name)
 	if p.Name.Nick != "" {
-		return fmt.Sprintf("{{{-F_GREEN}}}%s {{{-F_MAGENTA}}}%s {{{-F_CYAN}}}%s{{{-RESET}}}", p.Name.First, p.Name.Nick, p.Name.Last)
-	} else {
-		return fmt.Sprintf("{{{-F_GREEN}}}%s {{{-F_CYAN}}}%s{{{-RESET}}}", p.Name.First, p.Name.Last)
+		return fmt.Sprintf("%s \"%s\" %s", p.Name.First, p.Name.Nick, p.Name.Last)
 	}
+	return fmt.Sprintf("%s %s", p.Name.First, p.Name.Last)
 }

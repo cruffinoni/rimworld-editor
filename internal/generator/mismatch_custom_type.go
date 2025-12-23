@@ -4,7 +4,7 @@ import (
 	"errors"
 	"reflect"
 
-	"github.com/cruffinoni/printer"
+	"github.com/cruffinoni/rimworld-editor/pkg/logging"
 )
 
 var ErrUnsolvableMismatch = errors.New("unsolvable mismatch")
@@ -12,7 +12,7 @@ var ErrUnsolvableMismatch = errors.New("unsolvable mismatch")
 // fixCustomType main purpose is to reconcile the types of two CustomType values.
 // If either of them is nil, it updates the nil value to match the other.
 // If both are non-nil, it ensures that the Type1 and Type2 fields of both CustomType values are consistent by using helper functions.
-func fixCustomType(a, b *CustomType) error {
+func fixCustomType(logger logging.Logger, a, b *CustomType) error {
 	if a == nil {
 		a = b
 		return nil
@@ -22,13 +22,15 @@ func fixCustomType(a, b *CustomType) error {
 		return nil
 	}
 
-	if err := reconcileTypes(&a.Type1, &b.Type1, a, b); err != nil {
+	if err := reconcileTypes(logger, &a.Type1, &b.Type1, a, b); err != nil {
 		if !errors.Is(err, ErrUnsolvableMismatch) {
 			return err
 		}
-		printer.Debugf("(t1) data a: %v -> %T (%v)", a.Name, a.Type1, a.Type1)
-		printer.Debugf("(t1) data b: %v -> %T (%v)", b.Name, b.Type1, b.Type1)
-		printer.Debugf("Multiple type detected")
+		logger.WithFields(logging.Fields{
+			"type": "type1",
+			"a":    a.Type1,
+			"b":    b.Type1,
+		}).Debug("Multiple type detected")
 
 		// a: *CustomType[*multiple.Type] / *CustomType[*xml.Element]
 		// b: *CustomType[*multiple.Type] / *CustomType[*xml.Element]
@@ -36,10 +38,12 @@ func fixCustomType(a, b *CustomType) error {
 		b.Type1 = createXMLElementType()
 		return nil
 	}
-	if err := reconcileTypes(&a.Type2, &b.Type2, a, b); err != nil {
-		printer.Debugf("(t2) data a: %v -> %T (%+v)", a.Name, a.Type2, a.Type2)
-		printer.Debugf("(t2) data b: %v -> %T (%+v)", b.Name, b.Type2, b.Type2)
-		printer.Debugf("(t2) can't decide on which type work on between %T & %T", a.Type2, b.Type2)
+	if err := reconcileTypes(logger, &a.Type2, &b.Type2, a, b); err != nil {
+		logger.WithFields(logging.Fields{
+			"type": "type2",
+			"a":    a.Type2,
+			"b":    b.Type2,
+		}).Debug("Multiple type detected for type2")
 		panic("Multiple type detected for type2")
 		return err
 	}
@@ -58,7 +62,7 @@ func updateCustomType(dest, src *CustomType) {
 	dest.ImportPath = src.ImportPath
 }
 
-func reconcileTypes(aType, bType *any, a, b *CustomType) error {
+func reconcileTypes(logger logging.Logger, aType, bType *any, a, b *CustomType) error {
 	if *aType == nil && *bType == nil {
 		return nil
 	}
@@ -71,13 +75,13 @@ func reconcileTypes(aType, bType *any, a, b *CustomType) error {
 		} else if shouldUpdateType(bRefType, aRefType, *bType, *aType) {
 			updateCustomType(a, b)
 		} else {
-			return handleMismatch(aType, bType, a, b)
+			return handleMismatch(logger, aType, bType, a, b)
 		}
 	}
 	return nil
 }
 
-func handleMismatch(aType, bType *any, a, b *CustomType) error {
+func handleMismatch(logger logging.Logger, aType, bType *any, a, b *CustomType) error {
 	switch va := (*aType).(type) {
 	case reflect.Kind:
 		if vb, ok := (*bType).(reflect.Kind); ok {
@@ -94,7 +98,7 @@ func handleMismatch(aType, bType *any, a, b *CustomType) error {
 		}
 	case *StructInfo:
 		if vb, ok := (*bType).(*StructInfo); ok {
-			FixMembers(va, vb)
+			FixMembers(logger, va, vb)
 		} else {
 			return ErrUnsolvableMismatch
 		}

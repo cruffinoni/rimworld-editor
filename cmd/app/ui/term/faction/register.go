@@ -3,15 +3,14 @@ package faction
 import (
 	"strconv"
 
-	"github.com/cruffinoni/printer"
-
 	"github.com/cruffinoni/rimworld-editor/generated"
 	"github.com/cruffinoni/rimworld-editor/internal/xml/types/iterator"
+	"github.com/cruffinoni/rimworld-editor/pkg/logging"
 )
 
 type Registerer map[string]*generated.AllFactions
 
-func RegisterFactions(sg *generated.Savegame) Registerer {
+func RegisterFactions(logger logging.Logger, sg *generated.Savegame) Registerer {
 	allFac := Registerer{}
 	ite := iterator.NewSliceIterator[*generated.AllFactions](sg.Game.World.FactionManager.AllFactions)
 	for i := ite; i.HasNext(); i = i.Next() {
@@ -32,32 +31,43 @@ func IsPlayerFaction(f *generated.AllFactions) bool {
 	return f.Def == "PlayerColony"
 }
 
-func PrintFactionInformation(rf Registerer, f *generated.AllFactions, withRelations bool) {
+func PrintFactionInformation(logger logging.Logger, rf Registerer, f *generated.AllFactions, withRelations bool) {
 	id := GetFactionID(f.LoadId)
-	printer.Debugf("Faction %s (named '%s') - %s", f.Def, f.Name, id)
+	logger.WithFields(logging.Fields{
+		"faction": f.Def,
+		"name":    f.Name,
+		"id":      id,
+	}).Info("Faction")
 	if f.Def == "PlayerColony" {
-		printer.Debugf("{{{-BOLD,F_GREEN}}}This is the player's faction")
+		logger.WithField("id", id).Debug("Player faction")
 	} else {
-		printer.Debugf("{{{-F_MAGENTA}}}This is a faction controlled by the IA")
+		logger.WithField("id", id).Debug("AI-controlled faction")
 	}
 	if f.Leader == "null" {
-		printer.Debugf("The faction doesn't have any leader")
+		logger.WithField("id", id).Debug("Faction has no leader")
 	} else {
-		printer.Debugf("Faction's leader: {{{-BOLD}}}%s", f.Leader)
+		logger.WithFields(logging.Fields{
+			"id":     id,
+			"leader": f.Leader,
+		}).Debug("Faction leader")
 	}
 	if withRelations {
-		printer.Debugf("Relations:")
+		logger.WithField("id", id).Debug("Relations")
 		for i := iterator.NewSliceIterator[*generated.Relations](f.Relations); i.HasNext(); i = i.Next() {
 			r := i.Value()
+			relationLogger := logger.WithFields(logging.Fields{
+				"source":   f.Def,
+				"sourceID": id,
+				"target":   rf[r.Other].Def,
+				"targetID": GetFactionID(rf[r.Other].LoadId),
+				"goodwill": r.Goodwill,
+			})
 			if r.Goodwill > 75 {
-				printer.Debugf("\t- %s (%s) => %s (%s) : {{{-BOLD,F_GREEN}}}%d",
-					f.Def, id, rf[r.Other].Def, GetFactionID(rf[r.Other].LoadId), r.Goodwill)
+				relationLogger.Info("Relation: allied")
 			} else if r.Goodwill < -50 {
-				printer.Debugf("\t- %s (%s) => %s (%s) : {{{-BOLD,F_RED}}}%d",
-					f.Def, id, rf[r.Other].Def, GetFactionID(rf[r.Other].LoadId), r.Goodwill)
+				relationLogger.Warn("Relation: hostile")
 			} else {
-				printer.Debugf("\t- %s (%s) => %s (%s) : {{{-BOLD,F_YELLOW}}}%d",
-					f.Def, id, rf[r.Other].Def, GetFactionID(rf[r.Other].LoadId), r.Goodwill)
+				relationLogger.Info("Relation: neutral")
 			}
 		}
 	}

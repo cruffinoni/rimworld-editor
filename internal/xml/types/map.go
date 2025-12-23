@@ -8,8 +8,6 @@ import (
 	"sort"
 	"unicode"
 
-	"github.com/cruffinoni/printer"
-
 	"github.com/cruffinoni/rimworld-editor/internal/helper"
 
 	"github.com/cruffinoni/rimworld-editor/internal/xml"
@@ -21,6 +19,7 @@ import (
 	"github.com/cruffinoni/rimworld-editor/internal/xml/types/iterator"
 	"github.com/cruffinoni/rimworld-editor/internal/xml/types/primary"
 	"github.com/cruffinoni/rimworld-editor/internal/xml/unmarshal"
+	"github.com/cruffinoni/rimworld-editor/pkg/logging"
 )
 
 type Pair[K comparable, V any] struct {
@@ -51,6 +50,8 @@ type Map[K comparable, V any] struct {
 
 	tag  string
 	attr attributes.Attributes
+
+	logger logging.Logger
 }
 
 func castToInterface[T any](val any) (T, bool) {
@@ -155,12 +156,12 @@ func (m *Map[K, V]) Assign(e *xml.Element) error {
 		return nil
 	}
 	//printer.Debugf("Tag: %v", m.tag)
-	keys := path.FindWithPath("keys>[...]", e)
+	keys := path.FindWithPath("keys>[...]", e, m.logger)
 	if len(keys) == 0 {
 		return errors.New("Map/Assign: no key")
 	}
 	//printer.Debugf("e=%v", e.GetName())
-	values := path.FindWithPath("values>[...]", e)
+	values := path.FindWithPath("values>[...]", e, m.logger)
 	if len(values) == 0 {
 		return errors.New("Map/Assign: no value")
 	}
@@ -187,7 +188,10 @@ func (m *Map[K, V]) Assign(e *xml.Element) error {
 		// This might be a custom type that implements xml.Assigner interface
 		if okAssigner && !isEmpty {
 			if values[i].Child == nil {
-				printer.Debugf("Map/Assign: no child at %s | Index: %d", e.XMLPath(), i)
+				m.logger.WithFields(logging.Fields{
+					"path":  e.XMLPath(),
+					"index": i,
+				}).Debug("Map.Assign: no child")
 			}
 			var (
 				subValue    = new(V)
@@ -198,14 +202,14 @@ func (m *Map[K, V]) Assign(e *xml.Element) error {
 			if subValueVal.Kind() == reflect.Ptr {
 				// Initialize the pointer
 				subValueVal.Set(reflect.New(subValueVal.Type().Elem()))
-				if err := unmarshal.Element(values[i].Child, subValueVal.Interface()); err != nil {
+				if err := unmarshal.Element(m.logger, values[i].Child, subValueVal.Interface()); err != nil {
 					return err
 				}
 			} else if subValueVal.Kind() == reflect.Array { // A pointer to an array is not assignable to an array
 				for j := 0; j < subValueVal.Len(); j++ {
 					if subValueVal.Index(j).Kind() == reflect.Ptr {
 						subValueVal.Index(j).Set(reflect.New(subValueVal.Index(j).Type().Elem()))
-						if err := unmarshal.Element(values[i].Child, subValueVal.Index(j).Interface()); err != nil {
+						if err := unmarshal.Element(m.logger, values[i].Child, subValueVal.Index(j).Interface()); err != nil {
 							return err
 						}
 					} else {
@@ -333,6 +337,10 @@ func (m *Map[K, V]) SetAttributes(_ attributes.Attributes) {
 
 func (m *Map[K, V]) GetAttributes() attributes.Attributes {
 	return nil
+}
+
+func (m *Map[K, V]) SetLogger(logger logging.Logger) {
+	m.logger = logger
 }
 
 func (m *Map[K, V]) ValidateField(_ string) {

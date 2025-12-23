@@ -1,46 +1,45 @@
 package generator
 
 import (
-	"github.com/cruffinoni/rimworld-editor/internal/helper"
-
 	"github.com/cruffinoni/rimworld-editor/internal/generator/paths"
-
+	"github.com/cruffinoni/rimworld-editor/internal/helper"
 	"github.com/cruffinoni/rimworld-editor/internal/xml"
+	"github.com/cruffinoni/rimworld-editor/pkg/logging"
 )
 
-func createArrayOrSlice(e *xml.Element, flag uint) any {
+func createArrayOrSlice(logger logging.Logger, e *xml.Element, flag uint) any {
 	k := e.Child
 	count := 0
 	for k != nil {
 		count++
 		if k.Data == nil && k.Child == nil && (count > 0 || k.Next != nil && k.Next.Next == nil) {
 			// Count must be > 0 because empty slice/array must be considered as slice
-			return createFixedArray(e, flag, &offset{
+			return createFixedArray(logger, e, flag, &offset{
 				el:   k,
 				size: count - 1, // -1 maybe??
 			})
 		}
 		k = k.Next
 	}
-	return createCustomSlice(e, flag)
+	return createCustomSlice(logger, e, flag)
 }
 
 const BasicStructName = "GeneratedStructStarter"
 
-func createTypeFromElement(n *xml.Element, flag uint) any {
+func createTypeFromElement(logger logging.Logger, n *xml.Element, flag uint) any {
 	childName := n.Child.GetName()
 	if helper.IsListTag(childName) {
-		return createArrayOrSlice(n, flag)
+		return createArrayOrSlice(logger, n, flag)
 	} else if childName == "keys" {
-		return createCustomTypeForMap(n, flag)
+		return createCustomTypeForMap(logger, n, flag)
 	} else if n.Child.Next != nil && n.Child.Next.GetName() == childName {
-		return createArrayOrSlice(n, flag|forceChild)
+		return createArrayOrSlice(logger, n, flag|forceChild)
 	} else {
-		return createStructure(n, flag)
+		return createStructure(logger, n, flag)
 	}
 }
 
-func processLeafNode(n *xml.Element, st *StructInfo, flag uint) {
+func processLeafNode(logger logging.Logger, n *xml.Element, st *StructInfo, flag uint) {
 	var t any
 	if n.Data != nil {
 		t = n.Data.Kind()
@@ -53,17 +52,17 @@ func processLeafNode(n *xml.Element, st *StructInfo, flag uint) {
 			}
 		}
 	} else if n.Next != nil && n.Next.GetName() == n.GetName() {
-		t = createArrayOrSlice(n, flag)
+		t = createArrayOrSlice(logger, n, flag)
 		for n.Next != nil && n.Next.GetName() == n.GetName() {
 			n = n.Next
 		}
 	} else {
 		t = createEmptyType()
 	}
-	st.addMember(n.GetName(), n.Attr, t)
+	st.addMember(logger, n.GetName(), n.Attr, t)
 }
 
-func handleElement(e *xml.Element, st *StructInfo, flag uint) error {
+func handleElement(logger logging.Logger, e *xml.Element, st *StructInfo, flag uint) error {
 	n := e
 	//if n != nil && n.GetName() == "li" {
 	//	printer.Debugf("n: %v", n.GetName())
@@ -78,17 +77,17 @@ func handleElement(e *xml.Element, st *StructInfo, flag uint) error {
 	for n != nil {
 		if n.Child != nil {
 			if helper.IsListTag(n.GetName()) {
-				if err := handleElement(n.Child, st, flag); err != nil {
+				if err := handleElement(logger, n.Child, st, flag); err != nil {
 					return err
 				}
 			} else {
-				st.addMember(n.GetName(), n.Attr, createTypeFromElement(n, flag))
+				st.addMember(logger, n.GetName(), n.Attr, createTypeFromElement(logger, n, flag))
 			}
 		} else if !helper.IsListTag(n.GetName()) {
-			processLeafNode(n, st, flag)
+			processLeafNode(logger, n, st, flag)
 		} else {
-			t := createArrayOrSlice(n, flag)
-			st.addMember(n.GetName(), n.Attr, t)
+			t := createArrayOrSlice(logger, n, flag)
+			st.addMember(logger, n.GetName(), n.Attr, t)
 		}
 		n = n.Next
 	}

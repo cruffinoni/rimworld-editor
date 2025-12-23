@@ -10,6 +10,7 @@ import (
 	"github.com/stretchr/testify/require"
 
 	"github.com/cruffinoni/rimworld-editor/internal/generator/paths"
+	"github.com/cruffinoni/rimworld-editor/pkg/logging"
 )
 
 func createCustomSliceForTest(type1 any) *CustomType {
@@ -386,9 +387,9 @@ func Test_createCustomType(t *testing.T) {
 			root := resetVarsAndReadBuffer(t, tt.args)
 			var res any
 			if strings.Contains(name, "map") {
-				res = createCustomTypeForMap(root.Child, tt.args.flag)
+				res = createCustomTypeForMap(logging.NewMockLogger(), root.Child, tt.args.flag)
 			} else {
-				res = createCustomSlice(root.Child, tt.args.flag)
+				res = createCustomSlice(logging.NewMockLogger(), root.Child, tt.args.flag)
 			}
 			require.IsType(t, res, tt.want)
 			got := res.(*CustomType)

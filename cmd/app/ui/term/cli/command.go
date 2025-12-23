@@ -7,7 +7,7 @@ import (
 	"strconv"
 	"strings"
 
-	"github.com/cruffinoni/printer"
+	"github.com/cruffinoni/rimworld-editor/pkg/logging"
 )
 
 type Command struct {
@@ -18,6 +18,7 @@ type Command struct {
 	alias       []string
 	childCmds   []*Command
 	Handler     any
+	logger      logging.Logger
 }
 
 type CmdSpan func(*Command)
@@ -45,6 +46,7 @@ func (c *Command) NewCommand(cmd *Command, f CmdSpan, params ...Params) {
 	}
 	c.childCmds = make([]*Command, 0)
 	c.childCmds = append(c.childCmds, cmd)
+	cmd.logger = c.logger
 	cmd.init()
 	if f != nil {
 		f(cmd)
@@ -84,14 +86,19 @@ var (
 )
 
 func (c *Command) PrintUsage() {
-	printer.Debugf("%s's usage: %s", c.Name, c.Usage)
+	c.logger.WithFields(logging.Fields{
+		"command": c.Name,
+		"usage":   c.Usage,
+	}).Info("Command usage")
 	//printer.Debugf("%s [%q]", c.Name, strings.Join(c.getChildCommandNames(), "|"))
 }
 
 func (c *Command) PrintHelp() {
-	printer.Debugf("%+v & %d", c.childCmds, len(c.childCmds))
-	printer.Debugf("%s's help: %s", c.Name, c.Description)
-	printer.Debugf("%s [%q]", c.Name, strings.Join(c.getChildCommandNames(), "|"))
+	c.logger.WithFields(logging.Fields{
+		"command": c.Name,
+		"help":    c.Description,
+		"children": strings.Join(c.getChildCommandNames(), "|"),
+	}).Info("Command help")
 }
 
 func (c *Command) findParam(name string) *Params {
@@ -176,7 +183,7 @@ func (c *Command) RunWithArgs(args []string) error {
 		names := n.getCommandNames(true)
 		for _, name := range names {
 			if name == args[0] {
-				printer.Debugf("(cmd) Command '%s' found", name)
+				c.logger.WithField("command", name).Debug("Command found")
 				if len(n.childCmds) > 0 {
 					if len(args) == 1 {
 						n.PrintUsage()

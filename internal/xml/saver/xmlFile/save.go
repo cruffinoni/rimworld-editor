@@ -8,8 +8,6 @@ import (
 	"strconv"
 	"strings"
 
-	"github.com/cruffinoni/printer"
-
 	"github.com/cruffinoni/rimworld-editor/internal/helper"
 
 	"github.com/cruffinoni/rimworld-editor/internal/xml"
@@ -17,11 +15,12 @@ import (
 	"github.com/cruffinoni/rimworld-editor/internal/xml/interface"
 	"github.com/cruffinoni/rimworld-editor/internal/xml/saver"
 	"github.com/cruffinoni/rimworld-editor/internal/xml/types/primary"
+	"github.com/cruffinoni/rimworld-editor/pkg/logging"
 )
 
 // SaveWithBuffer takes in a value of multiple type, and returns a saver.Buffer and multiple error that occurs during the saving process.
-func SaveWithBuffer(val any) (*saver.Buffer, error) {
-	b := saver.NewBuffer()
+func SaveWithBuffer(logger logging.Logger, val any) (*saver.Buffer, error) {
+	b := saver.NewBuffer(logger)
 	valType := reflect.TypeOf(val)
 	if valType.Kind() == reflect.Ptr {
 		valType = valType.Elem()
@@ -52,6 +51,7 @@ func Save(val any, b *saver.Buffer, tag string) error {
 	if val == nil {
 		return nil
 	}
+	logger := b.Logger()
 	t := reflect.TypeOf(val)
 	if t.Kind() == reflect.Ptr {
 		t = t.Elem()
@@ -81,7 +81,10 @@ func Save(val any, b *saver.Buffer, tag string) error {
 	//}
 	//printer.Debugf("Content: '%v' (%T)", val, val)
 	if helper.IsReflectPrimaryType(valKind) && (v.IsZero() || v.Kind() == reflect.String && val == "") && !(valKind == reflect.Int64 || valKind == reflect.Float64) {
-		printer.Debugf("Skipping: %v & %T", val, val)
+		logger.WithFields(logging.Fields{
+			"value": val,
+			"type":  t.String(),
+		}).Debug("Skipping empty value")
 		return nil
 	}
 	_, isXMLElement := val.(*xml.Element)

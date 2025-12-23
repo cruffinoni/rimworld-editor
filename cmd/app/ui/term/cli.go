@@ -3,17 +3,15 @@ package term
 import (
 	"flag"
 	"fmt"
-	"log"
 	"strings"
 
 	cli "github.com/jawher/mow.cli"
-
-	"github.com/cruffinoni/printer"
 
 	"github.com/cruffinoni/rimworld-editor/cmd/app/ui"
 	"github.com/cruffinoni/rimworld-editor/cmd/app/ui/term/faction"
 	"github.com/cruffinoni/rimworld-editor/cmd/app/ui/term/pawn"
 	"github.com/cruffinoni/rimworld-editor/generated"
+	"github.com/cruffinoni/rimworld-editor/pkg/logging"
 
 	"github.com/c-bata/go-prompt"
 )
@@ -24,6 +22,7 @@ type Console struct {
 	shouldExit bool
 	save       *generated.Savegame
 	cli        *cli.Cli
+	logger     logging.Logger
 }
 
 func (c *Console) completer(d prompt.Document) []prompt.Suggest {
@@ -42,7 +41,7 @@ func (c *Console) Execute([]string) error {
 		f = append([]string{"rimworld"}, f...)
 		_ = c.cli.Run(f)
 		if c.shouldExit {
-			printer.Debugf("Execution ended.")
+			c.logger.Debug("Execution ended")
 			break
 		}
 	}
@@ -57,16 +56,16 @@ func (c *Console) exit() {
 func (c *Console) Init(options *ui.Options, save *generated.Savegame) {
 	c.opt = options
 	c.save = save
-	printer.Debugf("Called here")
-	rf := faction.RegisterFactions(c.save)
+	c.logger.Debug("Console init")
+	rf := faction.RegisterFactions(c.logger, c.save)
 	rp := pawn.RegisterPawns(c.save, rf)
-	fl := faction.NewList(c.save, rf)
+	fl := faction.NewList(c.logger, c.save, rf)
 
 	c.cli = cli.App("rimworld-editor", "Rimworld save game editor")
 	c.cli.ErrorHandling = flag.ContinueOnError
 	c.cli.Hidden = true
 	c.cli.Command("exit", "Exit the console", cli.ActionCommand(c.exit))
-	pawn.RegisterPawnCommands(c.cli, rp, rf, c.save)
+	pawn.RegisterPawnCommands(c.logger, c.cli, rp, rf, c.save)
 
 	c.cli.Command("faction", "Faction commands", func(cmd *cli.Cmd) {
 		cmd.Command("list", "List all factions", cli.ActionCommand(fl.ListAllFactions))
@@ -80,4 +79,8 @@ func (c *Console) Init(options *ui.Options, save *generated.Savegame) {
 			}
 		})
 	})
+}
+
+func (c *Console) SetLogger(logger logging.Logger) {
+	c.logger = logger
 }

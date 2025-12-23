@@ -1,12 +1,12 @@
 package path
 
 import (
+	"fmt"
 	"log"
 	"strings"
 
-	"github.com/cruffinoni/printer"
-
 	"github.com/cruffinoni/rimworld-editor/internal/xml"
+	"github.com/cruffinoni/rimworld-editor/pkg/logging"
 )
 
 type pattern struct {
@@ -25,6 +25,7 @@ type Elements []*xml.Element
 type Path struct {
 	patterns []*pattern
 	tree     *xml.Tree
+	logger   logging.Logger
 }
 
 type Matcher interface {
@@ -46,10 +47,11 @@ var matchers = []Matcher{
 	&AttributeMatch{},
 }
 
-func NewPathing(rawPattern string) *Path {
+func NewPathing(rawPattern string, logger logging.Logger) *Path {
 	split := strings.Split(rawPattern, ">")
 	p := &Path{
 		patterns: make([]*pattern, 0, len(split)),
+		logger:   logger,
 	}
 	for _, s := range split {
 		pm := &pattern{
@@ -70,8 +72,8 @@ func NewPathing(rawPattern string) *Path {
 	return p
 }
 
-func FindWithPath(pattern string, root *xml.Element) Elements {
-	p := NewPathing(pattern)
+func FindWithPath(pattern string, root *xml.Element, logger logging.Logger) Elements {
+	p := NewPathing(pattern, logger)
 	return p.Find(root)
 }
 
@@ -98,12 +100,18 @@ func (p *Path) Find(root *xml.Element) Elements {
 	}
 	if r = p.patterns[patternIdx].matcher.TrailingMatch(); r != nil {
 		if len(r) == 0 {
-			printer.Debugf("Find: not found at %s (%T)", cpyPatterns[0].path, cpyPatterns[0].matcher)
+			p.logger.WithFields(logging.Fields{
+				"path":    cpyPatterns[0].path,
+				"matcher": fmt.Sprintf("%T", cpyPatterns[0].matcher),
+			}).Debug("Find: not found")
 		}
 		return r
 	}
 	if len(r) == 0 {
-		printer.Debugf("Find: not found at %s (%T)", cpyPatterns[0].path, cpyPatterns[0].matcher)
+		p.logger.WithFields(logging.Fields{
+			"path":    cpyPatterns[0].path,
+			"matcher": fmt.Sprintf("%T", cpyPatterns[0].matcher),
+		}).Debug("Find: not found")
 	}
 	return nil
 }

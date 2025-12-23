@@ -44,8 +44,7 @@ func explainIsSameType(a, b any, e *explanations) *explanations {
 			}
 			if !hasSameMembers(bType, va, 0) {
 				e.content = append(e.content, fmt.Sprintf("[StructInfo] a has not the same members of b (len: %d <> %d)", len(va.Members), len(bType.Members)))
-				va.PrintOrderedMembers()
-				bType.PrintOrderedMembers()
+				// Intentionally skip logging here to avoid requiring a logger.
 			}
 		} else {
 			e.content = append(e.content, "[StructInfo] b is not type StructInfo but a is")

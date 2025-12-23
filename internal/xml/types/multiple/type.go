@@ -1,11 +1,10 @@
 package multiple
 
 import (
-	"log"
-
 	"github.com/cruffinoni/rimworld-editor/internal/xml"
 	"github.com/cruffinoni/rimworld-editor/internal/xml/attributes"
 	"github.com/cruffinoni/rimworld-editor/internal/xml/saver"
+	"github.com/cruffinoni/rimworld-editor/pkg/logging"
 )
 
 type Data struct {
@@ -18,10 +17,12 @@ type Data struct {
 type Type struct {
 	last  *Data
 	first *Data
+
+	logger logging.Logger
 }
 
 func (t *Type) Assign(e *xml.Element) error {
-	printer.Debugf("Assign called on multiple.Type: %v", e)
+	t.logger.WithField("tag", e.GetName()).Debug("multiple.Type.Assign called")
 	if t.last == nil {
 		t.last = &Data{
 			Element: e,
@@ -65,6 +66,10 @@ func (t *Type) TransformToXML(buffer *saver.Buffer) error {
 }
 
 func (t *Type) GetXMLTag() []byte {
-	printer.Debugf("GetXMLTag called on multiple.Type")
+	t.logger.Debug("multiple.Type.GetXMLTag called")
 	return []byte("")
+}
+
+func (t *Type) SetLogger(logger logging.Logger) {
+	t.logger = logger
 }

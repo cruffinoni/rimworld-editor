@@ -6,14 +6,13 @@ import (
 	"log"
 	"reflect"
 
-	"github.com/cruffinoni/printer"
-
 	"github.com/cruffinoni/rimworld-editor/internal/helper"
 	"github.com/cruffinoni/rimworld-editor/internal/xml"
 	"github.com/cruffinoni/rimworld-editor/internal/xml/interface"
 	"github.com/cruffinoni/rimworld-editor/internal/xml/path"
 	"github.com/cruffinoni/rimworld-editor/internal/xml/types/embedded"
 	"github.com/cruffinoni/rimworld-editor/internal/xml/types/primary"
+	"github.com/cruffinoni/rimworld-editor/pkg/logging"
 )
 
 func findFieldFromName(t reflect.Type, value reflect.Value, name string) int {
@@ -63,10 +62,10 @@ func attributeDataToField(v reflect.Value, e *xml.Element) {
 	}
 }
 
-func createValueFromPrimaryType(t reflect.Type, e *xml.Element) reflect.Value {
+func createValueFromPrimaryType(logger logging.Logger, t reflect.Type, e *xml.Element) reflect.Value {
 	k := t.Kind()
 	if e.Data == nil {
-		printer.Debugf("createValueFromPrimaryType: no data for %s", t.Name())
+		logger.WithField("type", t.Name()).Debug("createValueFromPrimaryType: no data")
 		return reflect.Zero(t)
 	}
 	d := e.Data
@@ -89,8 +88,8 @@ func createValueFromPrimaryType(t reflect.Type, e *xml.Element) reflect.Value {
 	return reflect.Value{}
 }
 
-func skipPath(element *xml.Element, pathStr string) *xml.Element {
-	p := path.FindWithPath(pathStr, element)
+func skipPath(logger logging.Logger, element *xml.Element, pathStr string) *xml.Element {
+	p := path.FindWithPath(pathStr, element, logger)
 
 	if len(p) > 1 {
 		panic("unmarshal: multiple elements found")
@@ -102,18 +101,22 @@ func skipPath(element *xml.Element, pathStr string) *xml.Element {
 	return n
 }
 
-func Element(element *xml.Element, dest any) error {
+func Element(logger logging.Logger, element *xml.Element, dest any) error {
 	// Do a copy of the element to avoid modifying the original
 	n := element
 	if n == nil || n.GetName() == "history" {
 		return nil
 	}
 
+	if setter, ok := dest.(_interface.LoggerSetter); ok {
+		setter.SetLogger(logger)
+	}
+
 	destAssigner, destIsAssigner := dest.(_interface.Assigner)
 	if destIsAssigner {
 		skippingPath := destAssigner.GetPath()
 		if skippingPath != "" {
-			n = skipPath(n, skippingPath)
+			n = skipPath(logger, n, skippingPath)
 		}
 	}
 	validator, canValidate := dest.(_interface.FieldValidator)
@@ -135,7 +138,7 @@ func Element(element *xml.Element, dest any) error {
 	}
 
 	if isXMLElement(v) {
-		printer.Debugf("special case: unmarshal: field %v is xml.Element", v.Type())
+		logger.WithField("type", v.Type().String()).Debug("special case: unmarshal: field is xml.Element")
 		//reflect.ValueOf(dest).Set(reflect.ValueOf(&element))
 		v.Set(reflect.ValueOf(reflect.ValueOf(element).Elem().Interface().(xml.Element)))
 		return nil
@@ -171,7 +174,7 @@ func Element(element *xml.Element, dest any) error {
 				fieldValue.Set(reflect.New(reflect.ArrayOf(l, fieldValue.Type().Elem())).Elem())
 				// If there is no child element, we are done and left the slice empty
 				if n.Child == nil {
-					printer.Debugf("unmarshal: array empty")
+					logger.Debug("unmarshal: array empty")
 					continue
 				}
 				// ft is the type of the slice
@@ -187,7 +190,7 @@ func Element(element *xml.Element, dest any) error {
 					if ft == elementStruct {
 						fieldValue.Index(idx).Set(reflect.ValueOf(nChild))
 					} else if embedded.IsEmbeddedPrimaryType(ft.Name()) || helper.IsReflectPrimaryType(ft.Kind()) {
-						fieldValue.Index(idx).Set(createValueFromPrimaryType(ft, nChild))
+						fieldValue.Index(idx).Set(createValueFromPrimaryType(logger, ft, nChild))
 					} else {
 						if ft.Kind() != reflect.Ptr {
 							panic("unmarshal: array element type must be a pointer")
@@ -196,7 +199,7 @@ func Element(element *xml.Element, dest any) error {
 						if nChild.Child == nil {
 							newEntry.Interface().(_interface.Assigner).SetAttributes(nChild.Attr)
 						} else {
-							if err := Element(nChild.Child, newEntry.Interface().(_interface.Assigner)); err != nil {
+							if err := Element(logger, nChild.Child, newEntry.Interface().(_interface.Assigner)); err != nil {
 								panic(err)
 							}
 						}
@@ -210,7 +213,7 @@ func Element(element *xml.Element, dest any) error {
 				// Special case for xml.Element, set directly to the field
 				//printer.Debugf("unmarshal: struct %v", typeName)
 				if isXMLElement(fieldValue) {
-					printer.Debugf("unmarshal: field %v is xml.Element", fieldValue.Type())
+					logger.WithField("type", fieldValue.Type().String()).Debug("unmarshal: field is xml.Element")
 					v.Field(f).Set(reflect.ValueOf(n))
 					break
 				} else if embedded.IsEmbeddedPrimaryType(typeName) || isEmptyType(typeName) {
@@ -221,7 +224,7 @@ func Element(element *xml.Element, dest any) error {
 				} else if assigner, ok := fieldValue.Addr().Interface().(_interface.Assigner); ok {
 					assigner.SetAttributes(n.Attr)
 					// Otherwise, we need to call the unmarshal function recursively
-					if err := Element(n.Child, fieldValue.Addr().Interface().(_interface.Assigner)); err != nil {
+					if err := Element(logger, n.Child, fieldValue.Addr().Interface().(_interface.Assigner)); err != nil {
 						panic(err)
 					}
 				}

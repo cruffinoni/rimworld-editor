@@ -5,8 +5,6 @@ import (
 	"reflect"
 	"strings"
 
-	"github.com/cruffinoni/printer"
-
 	"github.com/cruffinoni/rimworld-editor/internal/helper"
 
 	"github.com/cruffinoni/rimworld-editor/internal/xml/interface"
@@ -17,6 +15,7 @@ import (
 	"github.com/cruffinoni/rimworld-editor/internal/xml/attributes"
 	"github.com/cruffinoni/rimworld-editor/internal/xml/saver"
 	"github.com/cruffinoni/rimworld-editor/internal/xml/unmarshal"
+	"github.com/cruffinoni/rimworld-editor/pkg/logging"
 )
 
 type sliceData[T any] struct {
@@ -28,6 +27,7 @@ type sliceData[T any] struct {
 	tag    string
 	hidden bool
 	kind   reflect.Kind
+	logger logging.Logger
 }
 
 func (s *sliceData[T]) Assign(e *xml.Element) error {
@@ -35,7 +35,7 @@ func (s *sliceData[T]) Assign(e *xml.Element) error {
 	//printer.Debugf("Assign on slicedata called: %v (%v) > %T", e.XMLPath(), e.Attr, s.data)
 	s.kind = reflect.TypeOf(s.data).Kind()
 	if s.kind == reflect.Ptr {
-		err = unmarshal.Element(e, s.data)
+		err = unmarshal.Element(s.logger, e, s.data)
 		s.hidden = reflect.ValueOf(s.data).IsZero()
 		//printer.Debugf("Kind is ptr. Is it hidden ? %v", s.hidden)
 	} else if helper.IsReflectPrimaryType(s.kind) {
@@ -53,7 +53,7 @@ func (s *sliceData[T]) Assign(e *xml.Element) error {
 			return fmt.Errorf("sliceData.Assign: can't assign primary type %T to %T", e.Data.GetData(), s.data)
 		}
 	} else {
-		err = unmarshal.Element(e, &s.data)
+		err = unmarshal.Element(s.logger, e, &s.data)
 	}
 	if err != nil {
 		return err
@@ -133,6 +133,7 @@ type Slice[T any] struct {
 	repeatingTag string
 	name         string
 	cap          int
+	logger       logging.Logger
 }
 
 func (s *Slice[T]) TransformToXML(b *saver.Buffer) error {
@@ -173,10 +174,11 @@ func (s *Slice[T]) Set(value T, attr attributes.Attributes, idx int) {
 		panic("Slice index out of bounds")
 	}
 	d := sliceData[T]{
-		data: value,
-		attr: attr,
-		tag:  old.tag,
-		kind: old.kind,
+		data:   value,
+		attr:   attr,
+		tag:    old.tag,
+		kind:   old.kind,
+		logger: s.logger,
 	}
 	d.UpdateStringRepresentation()
 	if helper.IsReflectPrimaryType(d.kind) {
@@ -186,10 +188,11 @@ func (s *Slice[T]) Set(value T, attr attributes.Attributes, idx int) {
 
 func (s *Slice[T]) Add(value T, attr attributes.Attributes) {
 	d := sliceData[T]{
-		data: value,
-		attr: attr,
-		tag:  s.repeatingTag,
-		kind: reflect.TypeOf(value).Kind(),
+		data:   value,
+		attr:   attr,
+		tag:    s.repeatingTag,
+		kind:   reflect.TypeOf(value).Kind(),
+		logger: s.logger,
 	}
 	d.UpdateStringRepresentation()
 	if helper.IsReflectPrimaryType(d.kind) {
@@ -228,14 +231,14 @@ func (s *Slice[T]) Assign(e *xml.Element) error {
 	}
 	n := e
 	if n == nil {
-		printer.Debugf("n is nil")
+		s.logger.Debug("Slice.Assign: element is nil")
 		return nil
 	}
 	if n.Parent != nil {
 		s.name = n.Parent.GetName()
 		//printer.Debugf("Slice.Assign: Parent is %s", n.Parent.GetName())
 	} else {
-		printer.Debugf("Slice.Assign: Assigning to slice without parent")
+		s.logger.WithField("name", n.GetName()).Debug("Slice.Assign: assigning to slice without parent")
 		s.name = "unknown"
 	}
 	s.repeatingTag = n.GetName()
@@ -247,7 +250,8 @@ func (s *Slice[T]) Assign(e *xml.Element) error {
 	//printer.Debugf("Assigning: %v / %v", e.XMLPath(), e.Attr)
 	for n != nil {
 		sd := sliceData[T]{
-			tag: n.GetName(),
+			tag:    n.GetName(),
+			logger: s.logger,
 		}
 		// Set sd.data to zero depending on the type of T. Either a pointer or a
 		// value.
@@ -261,11 +265,11 @@ func (s *Slice[T]) Assign(e *xml.Element) error {
 
 		//printer.Debugf("Child ? %v", n.Child != nil)
 		if n.Child != nil {
-			if err := unmarshal.Element(n.Child, &sd); err != nil {
+			if err := unmarshal.Element(s.logger, n.Child, &sd); err != nil {
 				return err
 			}
 		} else {
-			if err := unmarshal.Element(n, &sd); err != nil {
+			if err := unmarshal.Element(s.logger, n, &sd); err != nil {
 				return err
 			}
 		}
@@ -308,6 +312,10 @@ func (s *Slice[T]) SetAttributes(attributes attributes.Attributes) {
 
 func (s *Slice[T]) GetAttributes() attributes.Attributes {
 	return s.attr
+}
+
+func (s *Slice[T]) SetLogger(logger logging.Logger) {
+	s.logger = logger
 }
 
 func (s *Slice[T]) ValidateField(_ string) {

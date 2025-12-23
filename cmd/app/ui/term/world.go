@@ -1,10 +1,9 @@
 package term
 
 import (
-	"github.com/cruffinoni/printer"
-
 	"github.com/cruffinoni/rimworld-editor/generated"
 	"github.com/cruffinoni/rimworld-editor/internal/xml/types/iterator"
+	"github.com/cruffinoni/rimworld-editor/pkg/logging"
 )
 
 func (c *Console) growAllPlants(percent float64) {
@@ -25,6 +24,9 @@ func (c *Console) growAllPlants(percent float64) {
 		t.Growth = growth
 		count++
 	}
-	printer.Debugf("{{{-BOLD,GREEN}}}%d plants{{{-RESET}}} edited to %.2f%% growth percentage", count, growth*100.0)
+	c.logger.WithFields(logging.Fields{
+		"plants":  count,
+		"growth": growth * 100.0,
+	}).Info("Updated plant growth percentage")
 	return
 }

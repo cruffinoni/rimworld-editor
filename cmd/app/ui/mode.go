@@ -1,6 +1,9 @@
 package ui
 
-import "github.com/cruffinoni/rimworld-editor/generated"
+import (
+	"github.com/cruffinoni/rimworld-editor/generated"
+	"github.com/cruffinoni/rimworld-editor/pkg/logging"
+)
 
 // Options is a struct that contains the Options for the application.
 type Options struct {
@@ -17,4 +20,5 @@ type Options struct {
 type Mode interface {
 	Execute(args []string) error
 	Init(options *Options, save *generated.Savegame)
+	SetLogger(logger logging.Logger)
 }

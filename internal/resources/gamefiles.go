@@ -10,7 +10,6 @@ import (
 	"reflect"
 	"strings"
 
-	"github.com/cruffinoni/printer"
 	"github.com/iancoleman/strcase"
 
 	"github.com/cruffinoni/rimworld-editor/internal/file"
@@ -18,11 +17,13 @@ import (
 	"github.com/cruffinoni/rimworld-editor/internal/generator/files"
 	"github.com/cruffinoni/rimworld-editor/internal/resources/discover"
 	"github.com/cruffinoni/rimworld-editor/internal/xml"
+	"github.com/cruffinoni/rimworld-editor/pkg/logging"
 )
 
 type GameData struct {
 	fileData       map[string]*GroupedThematic
 	accessibleData any
+	logger         logging.Logger
 }
 
 type GroupedThematic struct {
@@ -32,16 +33,20 @@ type GroupedThematic struct {
 	structInfos []*generator.StructInfo
 }
 
-func NewGameData() *GameData {
+func NewGameData(logger logging.Logger) *GameData {
 	return &GameData{
 		fileData: make(map[string]*GroupedThematic),
+		logger:   logger,
 	}
 }
 
 func (g *GameData) PrintThemes() {
-	printer.Debugf("Game fileData themes:")
+	g.logger.Debug("Game data themes")
 	for theme, elements := range g.fileData {
-		printer.Debugf("  %s: %d elements", theme, elements.cap)
+		g.logger.WithFields(logging.Fields{
+			"theme":   theme,
+			"entries": elements.cap,
+		}).Debug("Game data theme")
 	}
 }
 
@@ -50,7 +55,7 @@ func (g *GameData) DiscoverGameData(opeSystem string) error {
 	if err != nil {
 		return err
 	}
-	printer.Debugf(gp)
+	g.logger.WithField("path", gp).Debug("Game path detected")
 	err = filepath.Walk(gp, func(path string, info fs.FileInfo, err error) error {
 		if err != nil {
 			return fmt.Errorf("error walking %s: %w", path, err)
@@ -125,7 +130,10 @@ func (g *GameData) generateRegisteredTypeFile() error {
 	fullFileContent.WriteString(body.String())
 	buffer, err = format.Source([]byte(fullFileContent.String()))
 	if err != nil {
-		printer.Debugf("Err: Format buffer:\n%s", fullFileContent.String())
+		g.logger.WithFields(logging.Fields{
+			"error":   err.Error(),
+			"content": fullFileContent.String(),
+		}).Debug("Format buffer failed")
 		return err
 	}
 	if _, err = f.Write(buffer); err != nil {
@@ -136,11 +144,14 @@ func (g *GameData) generateRegisteredTypeFile() error {
 
 func (g *GameData) displayMV(mv generator.MemberVersioning) {
 	for k, v := range mv {
-		printer.Debugf("Struct has %v -> %d", k, len(v))
+		g.logger.WithFields(logging.Fields{
+			"struct": k,
+			"count":  len(v),
+		}).Debug("Struct versioning entries")
 	}
-	printer.Debugf("Same type? %v", generator.IsSameType(mv["GeneratedStructStarter0"][0].Order[0], mv["GeneratedStructStarter0"][1].Order[0], 0))
+	g.logger.WithField("same_type", generator.IsSameType(mv["GeneratedStructStarter0"][0].Order[0], mv["GeneratedStructStarter0"][1].Order[0], 0)).Debug("Type comparison result")
 	for _, i := range mv["GeneratedStructStarter0"] {
-		i.PrintOrderedMembers()
+		i.PrintOrderedMembers(g.logger)
 	}
 }
 
@@ -219,18 +230,21 @@ func (g *GameData) GenerateGoFiles() error {
 	//os.Exit(0)
 
 	for p := range g.fileData {
-		printer.Debugf("[%s] Processing {{{-BOLD,F_RED}}}%d{{{-RESET}}} thematics...", p, len(g.fileData[p].elements))
+		g.logger.WithFields(logging.Fields{
+			"theme":   p,
+			"entries": len(g.fileData[p].elements),
+		}).Debug("Processing thematics")
 		for _, element := range g.fileData[p].elements {
-			root := generator.GenerateGoFiles(element, false)
+			root := generator.GenerateGoFiles(g.logger, element, false)
 			//printer.Debugf("Path: %v", p)
 			g.fileData[p].mergeMemberVersioning(generator.RegisteredMembers)
 			g.fileData[p].structInfos = append(g.fileData[p].structInfos, root)
 		}
 		//g.displayMV(g.fileData[p].mv)
 		//printer.Debugf("Gonna fix this")
-		generator.FixRegisteredMembers(g.fileData[p].mv)
+		generator.FixRegisteredMembers(g.logger, g.fileData[p].mv)
 		for _, r := range g.fileData[p].structInfos {
-			gw := files.NewGoWriter(g.fileData[p].mv, false, strcase.ToSnake(p))
+			gw := files.NewGoWriter(g.logger, g.fileData[p].mv, false, strcase.ToSnake(p))
 			if err := gw.WriteGoFile(generatedFolderBasePath+p, r); err != nil {
 				log.Fatal(err)
 			}
@@ -248,7 +262,7 @@ func DirectSafeCast[T any](s any) T {
 }
 
 func (g *GameData) ReadGameFiles() error {
-	printer.Debugf("Reading game files from generated structure ({{{-BOLD,F_RED}}}%d{{{-RESET}}} thematics)...", len(g.fileData))
+	g.logger.WithField("themes", len(g.fileData)).Debug("Reading game files from generated structure")
 	//for p, gt := range g.fileData {
 	//	printer.Debugf("Thematic {{{F_RED}}}%s", p)
 	//	if s, ok := generated_resources.GlobalGameData[p]; !ok {

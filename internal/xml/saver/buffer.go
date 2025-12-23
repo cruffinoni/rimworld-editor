@@ -7,6 +7,7 @@ import (
 	"strings"
 
 	"github.com/cruffinoni/rimworld-editor/internal/xml/attributes"
+	"github.com/cruffinoni/rimworld-editor/pkg/logging"
 )
 
 type Flag uint
@@ -18,14 +19,17 @@ type Buffer struct {
 
 	lastPoint int
 	lastDepth int
+
+	logger logging.Logger
 }
 
-func NewBuffer() *Buffer {
+func NewBuffer(logger logging.Logger) *Buffer {
 	b := &Buffer{
 		buffer: make([]byte, 0),
 		// depth starts at -1 because the first tag is not indented.
 		depth:     -1,
 		lastPoint: -1,
+		logger:    logger,
 	}
 	b.Write([]byte("<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n"))
 	return b
@@ -152,6 +156,10 @@ func (b *Buffer) Bytes() []byte {
 
 func (b *Buffer) GetLastLine() []byte {
 	return bytes.SplitAfterN(b.buffer, []byte{'\n'}, 1)[0]
+}
+
+func (b *Buffer) Logger() logging.Logger {
+	return b.logger
 }
 
 var reMultipleLineBreak = regexp.MustCompile(`(?m)^\s*\r?\n`)

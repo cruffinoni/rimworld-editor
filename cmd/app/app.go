@@ -1,7 +1,6 @@
 package main
 
 import (
-	"log"
 	"os"
 	"path/filepath"
 	"strconv"
@@ -10,8 +9,6 @@ import (
 	"github.com/briandowns/spinner"
 	"github.com/jawher/mow.cli"
 	"github.com/tcnksm/go-input"
-
-	"github.com/cruffinoni/printer"
 
 	"github.com/cruffinoni/rimworld-editor/internal/file"
 	"github.com/cruffinoni/rimworld-editor/internal/resources"
@@ -24,6 +21,7 @@ import (
 	"github.com/cruffinoni/rimworld-editor/internal/generator/files"
 	"github.com/cruffinoni/rimworld-editor/internal/xml/saver/xmlFile"
 	"github.com/cruffinoni/rimworld-editor/internal/xml/unmarshal"
+	"github.com/cruffinoni/rimworld-editor/pkg/logging"
 )
 
 const (
@@ -46,10 +44,13 @@ type Application struct {
 
 	fileOpening *file.Opening
 	ui          ui.Mode
+	logger      logging.Logger
 }
 
-func CreateApplication() *Application {
-	app := &Application{}
+func CreateApplication(logger logging.Logger) *Application {
+	app := &Application{
+		logger: logger,
+	}
 	s := spinner.New(spinner.CharSets[21], 100*time.Millisecond)
 	app.Cli = cli.App("rimworld-editor", "Rimworld save game editor")
 	app.Version("version", cliVersion)
@@ -69,26 +70,27 @@ func CreateApplication() *Application {
 			panic("not implemented")
 			// app.ui = app.guiMode
 		}
+		app.ui.SetLogger(app.logger)
 		structInit := &generated.GeneratedStructStarter0{}
-		printer.Debugf("Unmarshalling XML...")
+		app.logger.Debug("Unmarshalling XML")
 		s.FinalMSG = "XML file unmarshalled successfully\n"
 		s.Start()
-		if err := unmarshal.Element(app.fileOpening.XML.Root, structInit); err != nil {
-			log.Fatal(err)
+		if err := unmarshal.Element(app.logger, app.fileOpening.XML.Root, structInit); err != nil {
+			app.logger.WithError(err).Fatal("Failed to unmarshal XML")
 		}
 		s.Stop()
 		structInit.ValidateField("Savegame")
-		printer.Debugf("Initializing UI...")
+		app.logger.Debug("Initializing UI")
 		app.ui.Init(&app.Options, structInit.Savegame)
-		printer.Debugf("Running UI...")
+		app.logger.Debug("Running UI")
 		if err := app.ui.Execute(os.Args); err != nil {
-			printer.PrintError(err)
+			app.logger.WithError(err).Error("UI execution failed")
 			return
 		}
 		if app.Save {
-			printer.Debugf("End of execution, generating new file...")
+			app.logger.Debug("End of execution, generating new file")
 			if err := app.SaveGameFile(structInit.Savegame); err != nil {
-				printer.PrintError(err)
+				app.logger.WithError(err).Error("Failed to save game file")
 			}
 		}
 	}
@@ -96,16 +98,16 @@ func CreateApplication() *Application {
 }
 
 func (app *Application) SaveGameFile(sg *generated.Savegame) error {
-	buffer, err := xmlFile.SaveWithBuffer(sg)
+	buffer, err := xmlFile.SaveWithBuffer(app.logger, sg)
 	if err != nil {
-		log.Panic(err)
+		app.logger.WithError(err).Panic("Failed to save XML buffer")
 	}
 	p, err := discover.GetSavegamePath(app.OperatingSystem)
 	if err != nil {
 		return err
 	}
 	path := p + "/" + "Generated_" + strconv.FormatInt(time.Now().Unix(), 10) + ".rws"
-	printer.Debugf("Saving file to '%s'", path)
+	app.logger.WithField("path", path).Debug("Saving file")
 	if err := buffer.ToFile(path); err != nil {
 		return err
 	}
@@ -114,41 +116,42 @@ func (app *Application) SaveGameFile(sg *generated.Savegame) error {
 
 func (app *Application) beforeExecution() {
 	if !isValidMode(app.Mode) {
-		printer.PrintErrorSf("invalid mode: %v", app.Mode)
+		app.logger.WithField("mode", app.Mode).Error("Invalid mode")
 		app.PrintHelp()
 		cli.Exit(1)
 	}
-	gameData := resources.NewGameData()
-	printer.Debugf("Discovering game data...")
+	gameData := resources.NewGameData(app.logger)
+	app.logger.Debug("Discovering game data")
 	err := gameData.DiscoverGameData(app.OperatingSystem)
 	if err != nil {
-		log.Fatal(err)
+		app.logger.WithError(err).Fatal("Failed to discover game data")
 	}
 	// gameData.PrintThemes()
 	// e, err := gameData.FindElement("", "Scavenger22")
 	// printer.Debugf("E: %v & Err %v", e.XMLPath(), err)
-	printer.Debugf("Generating Go files from game data...")
+	app.logger.Debug("Generating Go files from game data")
 	if err := gameData.GenerateGoFiles(); err != nil {
-		log.Fatal(err)
+		app.logger.WithError(err).Fatal("Failed to generate game files")
 	}
 	//if err := gameData.ReadGameFiles(); err != nil {
 	//	log.Fatal(err)
 	//}
 	//os.Exit(0)
 	if err = app.ReadSaveGame(); err != nil {
-		log.Fatal(err)
+		app.logger.WithError(err).Fatal("Failed to read save game")
 	}
 	if app.Generate {
 		s := spinner.New(spinner.CharSets[35], 100*time.Millisecond)
 		s.FinalMSG = "Generating Go files successfully\n"
 		s.Start()
-		root := generator.GenerateGoFiles(app.fileOpening.XML.Root, true)
+		root := generator.GenerateGoFiles(app.logger, app.fileOpening.XML.Root, true)
 		s.Stop()
-		if err = files.DefaultGoWriter.WriteGoFile(app.Output, root); err != nil {
-			log.Fatal(err)
+		gw := files.NewGoWriter(app.logger, nil, true, "")
+		if err = gw.WriteGoFile(app.Output, root); err != nil {
+			app.logger.WithError(err).Fatal("Failed to write generated files")
 		}
 		if err = app.fileOpening.ReOpen(); err != nil {
-			log.Fatal(err)
+			app.logger.WithError(err).Fatal("Failed to reopen savegame")
 		}
 	}
 }
@@ -199,9 +202,9 @@ func (app *Application) ReadSaveGame() error {
 	}
 	app.fileOpening, err = file.Open(savegame)
 	if err != nil {
-		printer.PrintError(err)
+		app.logger.WithError(err).Error("Failed to open savegame")
 	} else {
-		printer.Debugf("Savegame found at %v", savegame)
+		app.logger.WithField("path", savegame).Debug("Savegame found")
 	}
 	return err
 }

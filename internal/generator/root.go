@@ -1,9 +1,8 @@
 package generator
 
 import (
-	"github.com/cruffinoni/printer"
-
 	"github.com/cruffinoni/rimworld-editor/internal/xml"
+	"github.com/cruffinoni/rimworld-editor/pkg/logging"
 )
 
 type MemberVersioning map[string][]*StructInfo
@@ -33,37 +32,45 @@ func cleanUpMVPtrs(mv MemberVersioning) {
 // GenerateGoFiles generates the Go files (with the corresponding structs)
 // for the given XML file, but it doesn't write anything.
 // To do that, call WriteGoFile.
-func GenerateGoFiles(root *xml.Element, withMVFix bool) *StructInfo {
+func GenerateGoFiles(logger logging.Logger, root *xml.Element, withMVFix bool) *StructInfo {
 	s := &StructInfo{
 		Members: make(map[string]*Member),
 	}
 	//printer.Debugf("Generating Go files for %s", root.XMLPath())
 	RegisteredMembers = make(MemberVersioning)
 	UniqueNumber = 0
-	if err := handleElement(root, s, flagNone); err != nil {
+	if err := handleElement(logger, root, s, flagNone); err != nil {
 		panic(err)
 	}
 	if withMVFix {
-		printer.Debugf("Cleaning up the MemberVersioning pointers")
+		logger.Debug("Cleaning up MemberVersioning pointers")
 		cleanUpMVPtrs(RegisteredMembers)
-		printer.Debugf("{{{-BOLD}}}%d{{{-RESET}}} members registered. Fixing type mismatch.", len(RegisteredMembers))
-		FixRegisteredMembers(RegisteredMembers)
+		logger.WithField("members", len(RegisteredMembers)).Debug("Fixing type mismatch for registered members")
+		FixRegisteredMembers(logger, RegisteredMembers)
 	}
 	return s
 }
 
-func FixRegisteredMembers(mv MemberVersioning) {
+func FixRegisteredMembers(logger logging.Logger, mv MemberVersioning) {
 	for i := range mv {
 		l := len(mv[i])
 		if l >= 1 {
-			printer.Debugf("Fixing %s ({{{-BOLD,F_RED}}}%d{{{-RESET}}} fix to do)...", i, l)
+			logger.WithFields(logging.Fields{
+				"struct": i,
+				"count":  l,
+			}).Debug("Fixing registered members")
 			for j := 1; j < l; j++ {
 				//printer.Debugf("Name: %v (0) & %v (%d)", mv[i][0].Name, mv[i][j].Name, j)
 				if mv[i][0] == mv[i][j] {
-					printer.Debugf("Identical pointers: %p & %p / Probable infinite recursion - %v", mv[i][0], mv[i][j], i)
+					logger.WithFields(logging.Fields{
+						"struct":     i,
+						"pointer_a":  mv[i][0],
+						"pointer_b":  mv[i][j],
+						"suspicious": true,
+					}).Debug("Identical pointers detected")
 					continue
 				}
-				FixMembers(mv[i][0], mv[i][j])
+				FixMembers(logger, mv[i][0], mv[i][j])
 				//printer.Debugf("Done")
 			}
 		}

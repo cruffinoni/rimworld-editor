@@ -10,13 +10,13 @@ import (
 	"reflect"
 	"strings"
 
-	"github.com/cruffinoni/printer"
 	"github.com/iancoleman/strcase"
 
 	"github.com/cruffinoni/rimworld-editor/internal/generator"
 	"github.com/cruffinoni/rimworld-editor/internal/generator/paths"
 
 	"github.com/cruffinoni/rimworld-editor/internal/xml"
+	"github.com/cruffinoni/rimworld-editor/pkg/logging"
 )
 
 func getTypeName(t any) string {
@@ -178,8 +178,8 @@ func (gw *GoWriter) generateStructToPath(path string, s *generator.StructInfo) e
 		case *generator.StructInfo:
 			buf.writeToBody("*" + strcase.ToCamel(va.Name))
 			if s.Name == va.Name {
-				s.PrintOrderedMembers()
-				va.PrintOrderedMembers()
+				s.PrintOrderedMembers(gw.logger)
+				va.PrintOrderedMembers(gw.logger)
 				log.Panicf("duplicate name for %s & %s\n> s: %+v\nva: %+v", s.Name, va.Name, s, va)
 			}
 			if err = gw.generateStructToPath(path, va); err != nil {
@@ -200,11 +200,14 @@ func (gw *GoWriter) generateStructToPath(path string, s *generator.StructInfo) e
 	buf.writeToFooter("}\n")
 	writeRequiredInterfaces(buf, structName)
 	var b []byte
-	b, err = format.Source(buf.bytes())
-	if err != nil {
-		printer.Debugf("Err: Format buffer:\n%s", buf.bytes())
-		return err
-	}
+		b, err = format.Source(buf.bytes())
+		if err != nil {
+			gw.logger.WithFields(logging.Fields{
+				"error":   err.Error(),
+				"content": string(buf.bytes()),
+			}).Debug("Format buffer failed")
+			return err
+		}
 	if _, err = f.Write(b); err != nil {
 		return err
 	}

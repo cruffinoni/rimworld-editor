@@ -5,12 +5,13 @@ import (
 
 	"github.com/cruffinoni/rimworld-editor/cmd/app/ui/term/faction"
 	"github.com/cruffinoni/rimworld-editor/generated"
+	"github.com/cruffinoni/rimworld-editor/pkg/logging"
 )
 
-func RegisterPawnCommands(cl *cli.Cli, rp PawnsRegisterer, rf faction.Registerer, savegame *generated.Savegame) {
+func RegisterPawnCommands(logger logging.Logger, cl *cli.Cli, rp PawnsRegisterer, rf faction.Registerer, savegame *generated.Savegame) {
 	const pawnParamDescription = "The pawn ID (e.g. Thing_Human119753)"
-	pl := NewList(savegame, rp, rf)
-	pi := NewInjury(rp)
+	pl := NewList(logger, savegame, rp, rf)
+	pi := NewInjury(logger, rp)
 	cl.Command("pawn", "Pawn commands", func(cmd *cli.Cmd) {
 		cmd.Command("injury i", "Commands to manipulate pawn's injury", func(cmd *cli.Cmd) {
 			cmd.Command("remove-all", "Remove all injuries from a pawn", func(cmd *cli.Cmd) {
@@ -40,7 +41,7 @@ func RegisterPawnCommands(cl *cli.Cli, rp PawnsRegisterer, rf faction.Registerer
 			cmd.Command("world w", "List all pawns that alive in the game including your pawns and the faction leaders", cli.ActionCommand(pl.ListAllPawns))
 		})
 
-		ps := NewSkills(savegame, rp, rf)
+		ps := NewSkills(logger, savegame, rp, rf)
 		cmd.Command("skill s", "Commands to manage pawns skills", func(cmd *cli.Cmd) {
 			cmd.Command("list l", "List all pawns skills or a specific pawn if PAWN_ID is set", func(cmd *cli.Cmd) {
 				cmd.Spec = "[PAWN_ID]"

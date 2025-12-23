@@ -10,23 +10,26 @@ import (
 	"github.com/cruffinoni/rimworld-editor/internal/generator/paths"
 	"github.com/cruffinoni/rimworld-editor/internal/xml/algorithm"
 	"github.com/cruffinoni/rimworld-editor/internal/xml/interface"
+	"github.com/cruffinoni/rimworld-editor/pkg/logging"
 )
 
 type GoWriter struct {
 	forcedPackageName string
 	registeredMember  generator.MemberVersioning
 	deleteFolder      bool
+	logger            logging.Logger
 }
 
-func NewGoWriter(registeredMember generator.MemberVersioning, deleteFolder bool, forcedPackageName string) *GoWriter {
+func NewGoWriter(logger logging.Logger, registeredMember generator.MemberVersioning, deleteFolder bool, forcedPackageName string) *GoWriter {
 	return &GoWriter{
 		forcedPackageName: forcedPackageName,
 		registeredMember:  registeredMember,
 		deleteFolder:      deleteFolder,
+		logger:            logger,
 	}
 }
 
-var DefaultGoWriter = NewGoWriter(nil, true, "")
+var DefaultGoWriter = NewGoWriter(logging.NewLogger("generator", nil), nil, true, "")
 
 // WriteGoFile writes the struct Go code to the given path.
 // It writes recursively the members of the struct. If a member is a struct,

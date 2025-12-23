@@ -5,23 +5,24 @@ import (
 
 	"github.com/cruffinoni/rimworld-editor/internal/xml/algorithm"
 
-	"github.com/cruffinoni/printer"
-
 	"github.com/cruffinoni/rimworld-editor/cmd/app/ui/term/faction"
 	"github.com/cruffinoni/rimworld-editor/generated"
+	"github.com/cruffinoni/rimworld-editor/pkg/logging"
 )
 
 type Skills struct {
 	sg *generated.Savegame
 	rp PawnsRegisterer
 	rf faction.Registerer
+	logger logging.Logger
 }
 
-func NewSkills(sg *generated.Savegame, rp PawnsRegisterer, rf faction.Registerer) *Skills {
+func NewSkills(logger logging.Logger, sg *generated.Savegame, rp PawnsRegisterer, rf faction.Registerer) *Skills {
 	return &Skills{
-		sg: sg,
-		rp: rp,
-		rf: rf,
+		sg:     sg,
+		rp:     rp,
+		rf:     rf,
+		logger: logger,
 	}
 }
 
@@ -49,21 +50,21 @@ var skillCap = map[string]int64{
 func (s *Skills) Edit(pawnID, skill, passion string, level int) {
 	v, ok := s.rp[pawnID]
 	if !ok {
-		printer.PrintErrorSf("Pawn '%s' not found", pawnID)
+		s.logger.WithField("pawn_id", pawnID).Error("Pawn not found")
 		return
 	}
 	skill = strcase.ToCamel(skill)
 	if skillCap[skill] <= 0 {
-		printer.PrintErrorSf("Skill '%s' not found", skill)
+		s.logger.WithField("skill", skill).Error("Skill not found")
 		return
 	}
 	if level < 0 || level > 20 {
-		printer.PrintErrorSf("Level '%d' must be between 0 & 20", level)
+		s.logger.WithField("level", level).Error("Level must be between 0 and 20")
 		return
 	}
 	passion = strcase.ToCamel(passion)
 	if passion != PassionMinor && passion != PassionMajor && passion != PassionNone {
-		printer.PrintErrorS("Passion must be either 'Minor' or 'Major'")
+		s.logger.WithField("passion", passion).Error("Passion must be either 'Minor', 'Major', or 'None'")
 		return
 	}
 	for i, j := 0, v.Skills.Skills.Capacity(); i < j; i++ {
@@ -76,11 +77,12 @@ func (s *Skills) Edit(pawnID, skill, passion string, level int) {
 			}
 			val.XpSinceLastLevel = float64(s.calculateMaxXP(val.Level) * 1.0)
 			v.Skills.Skills.Set(val, val.Attr, i)
-			if passion != PassionNone {
-				printer.Debugf("Skill {{{-BOLD}}}%s{{{-RESET}}} of {{{-BOLD}}}%s{{{-RESET}}} set to {{{-BOLD}}}%d{{{-RESET}}} with passion '{{{-BOLD}}}%s{{{-RESET}}}'", skill, getPawnFullNameColorFormatted(v), level, passion)
-			} else {
-				printer.Debugf("Skill {{{-BOLD}}}%s{{{-RESET}}} of {{{-BOLD}}}%s{{{-RESET}}} set to {{{-BOLD}}}%d{{{-RESET}}}", skill, getPawnFullNameColorFormatted(v), level)
-			}
+			s.logger.WithFields(logging.Fields{
+				"pawn":    getPawnFullName(v),
+				"skill":   skill,
+				"level":   level,
+				"passion": passion,
+			}).Info("Skill updated")
 			return
 		}
 	}
@@ -104,7 +106,7 @@ func (s *Skills) calculateMaxXP(level int64) int64 {
 func (s *Skills) ForceGraduate(pawnID string) {
 	v, ok := s.rp[pawnID]
 	if !ok {
-		printer.PrintErrorSf("Pawn '%s' not found", pawnID)
+		s.logger.WithField("pawn_id", pawnID).Error("Pawn not found")
 		return
 	}
 	for i, j := 0, v.Skills.Skills.Capacity(); i < j; i++ {
@@ -116,27 +118,26 @@ func (s *Skills) ForceGraduate(pawnID string) {
 		}
 		val.XpSinceLastLevel = float64(s.calculateMaxXP(val.Level) * 1.0)
 		v.Skills.Skills.Set(val, val.Attr, i)
-		printer.Debugf("Skill {{{-BOLD}}}%s{{{-RESET}}} of {{{-BOLD}}}%s{{{-RESET}}} set to {{{-BOLD}}}%d{{{-RESET}}} with passion '{{{-BOLD}}}%s{{{-RESET}}}'", val.Def, getPawnFullNameColorFormatted(v), val.Level, val.Passion)
+		s.logger.WithFields(logging.Fields{
+			"pawn":    getPawnFullName(v),
+			"skill":   val.Def,
+			"level":   val.Level,
+			"passion": val.Passion,
+		}).Info("Skill updated")
 	}
 }
 
 func (s *Skills) printPawnSkill(fullName string, p *generated.Thing) {
-	printer.Debugf("Pawn {{{-BOLD}}}%s's{{{-RESET}}} (%s) skills", fullName, getPawnFullNameColorFormatted(p))
+	s.logger.WithFields(logging.Fields{
+		"pawn_id":  fullName,
+		"fullName": getPawnFullName(p),
+	}).Info("Pawn skills")
 	algorithm.SliceForeach[*generated.SkillsSkillsLiPawnsMothballedWorldPawnsWorldGameSavegameInner](p.Skills.Skills, func(skill *generated.SkillsSkillsLiPawnsMothballedWorldPawnsWorldGameSavegameInner) {
-		var color string
-		if skill.Level <= 5 {
-			color = "F_RED"
-		} else if skill.Level > 5 && skill.Level < 12 {
-			color = "F_YELLOW"
-		} else {
-			color = "F_GREEN"
-		}
-		printer.Debugf("Skill: {{{-BOLD}}}%s", skill.Def)
-		if skill.Passion != "" {
-			printer.Debugf("\tLevel: {-%s}%d{{{-RESET}}} | Passion: {{{-BOLD,F_CYAN}}}%s", color, skill.Level, skill.Passion)
-		} else {
-			printer.Debugf("\tLevel: {-%s}%d", color, skill.Level)
-		}
+		s.logger.WithFields(logging.Fields{
+			"skill":   skill.Def,
+			"level":   skill.Level,
+			"passion": skill.Passion,
+		}).Info("Skill entry")
 	})
 }
 
@@ -144,7 +145,7 @@ func (s *Skills) ListPawnsSkills(pawnID string) {
 	if pawnID != "ALL" {
 		v, ok := s.rp[pawnID]
 		if !ok {
-			printer.PrintErrorSf("Pawn '%s' not found", pawnID)
+			s.logger.WithField("pawn_id", pawnID).Error("Pawn not found")
 			return
 		}
 		s.printPawnSkill(pawnID, v)

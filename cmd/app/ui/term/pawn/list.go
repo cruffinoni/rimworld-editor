@@ -1,37 +1,41 @@
 package pawn
 
 import (
-	"github.com/cruffinoni/printer"
-
 	"github.com/cruffinoni/rimworld-editor/cmd/app/ui/term/faction"
 	"github.com/cruffinoni/rimworld-editor/generated"
+	"github.com/cruffinoni/rimworld-editor/pkg/logging"
 )
 
 type List struct {
 	sg *generated.Savegame
 	rp PawnsRegisterer
 	rf faction.Registerer
+	logger logging.Logger
 }
 
-func NewList(sg *generated.Savegame, rp PawnsRegisterer, rf faction.Registerer) *List {
+func NewList(logger logging.Logger, sg *generated.Savegame, rp PawnsRegisterer, rf faction.Registerer) *List {
 	return &List{
-		sg: sg,
-		rp: rp,
-		rf: rf,
+		sg:     sg,
+		rp:     rp,
+		rf:     rf,
+		logger: logger,
 	}
 }
 
 func (l *List) ListAllPawns() {
 	for k, v := range l.rp {
-		printer.Debugf("Pawn {{{-BOLD}}}%s{{{-RESET}}} registered", k)
+		l.logger.WithField("pawn_id", k).Debug("Pawn registered")
 		if v.Name == nil {
-			printer.Debugf("name is nil: %v", v.Name)
+			l.logger.WithField("pawn_id", k).Debug("Pawn name is nil")
 			continue
 		}
-		printer.Debugf("Full name: %s", getPawnFullNameColorFormatted(v))
+		l.logger.WithFields(logging.Fields{
+			"pawn_id":  k,
+			"fullName": getPawnFullName(v),
+		}).Info("Pawn name")
 		if fac, ok := l.rf[v.Faction]; ok {
-			faction.PrintFactionInformation(l.rf, fac, false)
+			faction.PrintFactionInformation(l.logger, l.rf, fac, false)
 		}
-		printer.Debugf("")
+		l.logger.Debug("Pawn summary end")
 	}
 }

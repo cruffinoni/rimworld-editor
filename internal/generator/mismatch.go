@@ -6,10 +6,9 @@ import (
 	"reflect"
 	"sort"
 
-	"github.com/cruffinoni/printer"
-
 	"github.com/cruffinoni/rimworld-editor/internal/xml"
 	"github.com/cruffinoni/rimworld-editor/internal/xml/types/embedded"
+	"github.com/cruffinoni/rimworld-editor/pkg/logging"
 )
 
 func isRelevantType(t1 any) bool {
@@ -25,7 +24,7 @@ func isRelevantType(t1 any) bool {
 }
 
 // PrintOrderedMembers print Members of s in an alphabetic order
-func (s *StructInfo) PrintOrderedMembers() {
+func (s *StructInfo) PrintOrderedMembers(logger logging.Logger) {
 	if len(s.Members) == 0 {
 		return
 	}
@@ -34,11 +33,22 @@ func (s *StructInfo) PrintOrderedMembers() {
 		m = append(m, k)
 	}
 	sort.Strings(m)
-	printer.Debugf("Struct %v", s.Name)
+	logger.WithField("struct", s.Name).Debug("Struct members")
 	for _, k := range m {
-		printer.Debugf("'%s' > %T (%v)", k, s.Members[k].T, s.Members[k].T)
+		typeName := "<nil>"
+		if reflect.TypeOf(s.Members[k].T) != nil {
+			typeName = reflect.TypeOf(s.Members[k].T).String()
+		}
+		logger.WithFields(logging.Fields{
+			"member": k,
+			"type":   typeName,
+			"value":  s.Members[k].T,
+		}).Debug("Member type")
 		if ct, ok := s.Members[k].T.(*CustomType); ok {
-			printer.Debugf("  > Custom types: %T & %T", ct.Type1, ct.Type2)
+			logger.WithFields(logging.Fields{
+				"type1": reflect.TypeOf(ct.Type1).String(),
+				"type2": reflect.TypeOf(ct.Type2).String(),
+			}).Debug("Custom types")
 		}
 	}
 }
@@ -52,7 +62,7 @@ func containsParentMember(s *StructInfo, a *Member) bool {
 	return false
 }
 
-func consolidateSubStructures(newMember, existingStruct *StructInfo) error {
+func consolidateSubStructures(logger logging.Logger, newMember, existingStruct *StructInfo) error {
 	if _, ok := existingStruct.Members[newMember.Name]; !ok {
 		m := &Member{
 			T:    newMember,
@@ -62,7 +72,7 @@ func consolidateSubStructures(newMember, existingStruct *StructInfo) error {
 		existingStruct.Members[newMember.Name] = m
 		existingStruct.Order = append(existingStruct.Order, m)
 	}
-	return fixTypeMismatch(&Member{
+	return fixTypeMismatch(logger, &Member{
 		T:    existingStruct.Members[newMember.Name],
 		Attr: nil,
 		Name: newMember.Name,
@@ -73,7 +83,7 @@ func consolidateSubStructures(newMember, existingStruct *StructInfo) error {
 	})
 }
 
-func fixTypeMismatch(a, b *Member) error {
+func fixTypeMismatch(logger logging.Logger, a, b *Member) error {
 	//printer.Debugf("Types mismatch: %v (%T) & %v (%T)", getTypeName(a.T), a.T, getTypeName(b.T), b.T)
 	switch va := a.T.(type) {
 	// a: *CustomType
@@ -95,7 +105,7 @@ func fixTypeMismatch(a, b *Member) error {
 				b.T = a.T
 				return nil
 			}
-			return fixCustomType(va, vb)
+			return fixCustomType(logger, va, vb)
 
 		// a: *CustomType[?]
 		// b: *StructInfo
@@ -105,9 +115,12 @@ func fixTypeMismatch(a, b *Member) error {
 			// a: CustomType[*StructInfo]
 			// b: *StructInfo
 			if sliceStructType, ok := va.Type1.(*StructInfo); ok {
-				return consolidateSubStructures(sliceStructType, vb)
+				return consolidateSubStructures(logger, sliceStructType, vb)
 			} else {
-				printer.Debugf("sub type A not handled: %T (%+v)", va.Type1, va)
+				logger.WithFields(logging.Fields{
+					"type":  reflect.TypeOf(va.Type1).String(),
+					"value": va.Type1,
+				}).Debug("Sub type A not handled")
 				a.T = b.T
 			}
 
@@ -131,7 +144,7 @@ func fixTypeMismatch(a, b *Member) error {
 					log.Fatalf("SliceStruct in FixedArray detected but the primary type is not supported: %T (%v)", va.Type1, va.Type1)
 				}
 				//printer.Debugf("Arr: %v & %v", vbPrimaryType.Name, sliceStructType.Name)
-				return fixTypeMismatch(&Member{
+				return fixTypeMismatch(logger, &Member{
 					T:    vbPrimaryType,
 					Attr: nil,
 					Name: vbPrimaryType.Name,
@@ -150,7 +163,7 @@ func fixTypeMismatch(a, b *Member) error {
 					a.T = b.T
 					return nil
 				}
-				return fixTypeMismatch(&Member{
+				return fixTypeMismatch(logger, &Member{
 					T:    vbPrimaryType,
 					Attr: nil,
 					Name: vbPrimaryType.Name,
@@ -177,13 +190,16 @@ func fixTypeMismatch(a, b *Member) error {
 		default:
 			// a: *CustomType[*embedded.Primary]
 			// b: ?
-			printer.Debugf("Is IsEmbeddedPrimaryType? %v (%s)", embedded.IsEmbeddedPrimaryType(getTypeName(a.T)), getTypeName(a.T))
+			logger.WithFields(logging.Fields{
+				"type": getTypeName(a.T),
+				"ok":   embedded.IsEmbeddedPrimaryType(getTypeName(a.T)),
+			}).Debug("Embedded primary type check")
 			log.Panicf("type B not handled: %+v (%T) | %+v (%T)", a.T, a.T, b.T, b.T)
 		}
 	case *StructInfo:
 		if bStruct, okStruct := b.T.(*StructInfo); okStruct {
 			if !containsParentMember(va, a) {
-				FixMembers(va, bStruct)
+				FixMembers(logger, va, bStruct)
 			}
 			return nil
 		} else {
@@ -191,7 +207,7 @@ func fixTypeMismatch(a, b *Member) error {
 			// To avoid code duplication, we just swap those 2 and run through the actual code
 			switch b.T.(type) {
 			case *FixedArray, *CustomType, reflect.Kind:
-				if err := fixTypeMismatch(b, a); err != nil {
+				if err := fixTypeMismatch(logger, b, a); err != nil {
 					return err
 				}
 				a.T = b.T
@@ -207,7 +223,7 @@ func fixTypeMismatch(a, b *Member) error {
 			//printer.Debugf("Final FixedArray (%v | size: %d) & FixedArray (%v | size: %d)", getTypeName(a), va.Size, getTypeName(b), bFArr.Size)
 			if !IsSameType(bFArr.PrimaryType, va.PrimaryType, 0) {
 				//printer.Debugf("Mismatch between %T & %T", bFArr.PrimaryType, va.PrimaryType)
-				return fixTypeMismatch(&Member{
+				return fixTypeMismatch(logger, &Member{
 					T:    bFArr.PrimaryType,
 					Attr: nil,
 					Name: "",
@@ -218,10 +234,13 @@ func fixTypeMismatch(a, b *Member) error {
 				})
 			}
 		} else {
-			printer.Debugf("Mismatch between FixedArray (%v) & %T (%v)", getTypeName(a), b.T, getTypeName(b.T))
+			logger.WithFields(logging.Fields{
+				"type_a": getTypeName(a),
+				"type_b": getTypeName(b.T),
+			}).Debug("FixedArray type mismatch")
 			switch b.T.(type) {
 			case *FixedArray, *CustomType, reflect.Kind:
-				if err := fixTypeMismatch(b, a); err != nil {
+				if err := fixTypeMismatch(logger, b, a); err != nil {
 					return err
 				}
 				a.T = b.T
@@ -241,7 +260,7 @@ func fixTypeMismatch(a, b *Member) error {
 
 		// Previous type is an int64 and the next type might an int overflow considered as a string
 		if va == reflect.Int64 && bt == reflect.String {
-			printer.Debugf("Previous type is an int64 and the next type might an int overflow considered as a string")
+			logger.Debug("Previous type is int64 and next type might be an int overflow treated as string")
 			a.T = reflect.String
 		} else if va == reflect.Int64 && bt == reflect.Float64 {
 			a.T = reflect.Float64
@@ -304,7 +323,6 @@ func getTypeName(a any) string {
 func IsSameType(a, b any, depth uint32) bool {
 	// If depth has exceeded MaxDepth, log a message and return false to stop further recursion.
 	if depth > MaxDepth {
-		printer.Debugf("Max depth reached: %v", depth)
 		return false
 	}
 	// If either a or b is nil, compare their equality and return the result.
@@ -385,8 +403,6 @@ func updateOrderedMembers(a *StructInfo) {
 func detectForRecursiveStructure(a *StructInfo, detected bool) bool {
 	for _, i := range a.Order {
 		if i.Name == a.Name {
-			printer.Debugf("Struct has a member with the same name of the struct")
-
 			//os.Exit(0)
 			return true
 		}
@@ -396,11 +412,14 @@ func detectForRecursiveStructure(a *StructInfo, detected bool) bool {
 
 var TmpFixMemberCall = 0
 
-func FixMembers(a, b *StructInfo) {
+func FixMembers(logger logging.Logger, a, b *StructInfo) {
 	TmpFixMemberCall++
 	//printer.Debugf("Tmp: %d", TmpFixMemberCall)
 	if TmpFixMemberCall > 100000 {
-		printer.Debugf("Probable infinite recursion w/ %v/%v (a/b) calling himself.", a.Name, b.Name)
+		logger.WithFields(logging.Fields{
+			"struct_a": a.Name,
+			"struct_b": b.Name,
+		}).Debug("Probable infinite recursion")
 		TmpFixMemberCall = 0
 		return
 	}
@@ -441,8 +460,8 @@ func FixMembers(a, b *StructInfo) {
 	}
 	for i := range a.Members {
 		if _, ok := b.Members[i]; !ok {
-			a.PrintOrderedMembers()
-			b.PrintOrderedMembers()
+			a.PrintOrderedMembers(logger)
+			b.PrintOrderedMembers(logger)
 			log.Panicf("FixMembers: '%v' doesn't exist in b", i)
 		}
 		if !IsSameType(a.Members[i].T, b.Members[i].T, 0) {
@@ -456,7 +475,7 @@ func FixMembers(a, b *StructInfo) {
 			//}
 
 			//printer.Debugf("%T (%v) | %T (%v) is not same type", a.Members[i].T, a.Members[i].Name, b.Members[i].T, b.Members[i].Name)
-			err := fixTypeMismatch(a.Members[i], b.Members[i])
+			err := fixTypeMismatch(logger, a.Members[i], b.Members[i])
 			if err != nil {
 				panic(err.Error())
 			}

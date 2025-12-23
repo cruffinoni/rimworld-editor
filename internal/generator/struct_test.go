@@ -8,6 +8,8 @@ import (
 	"github.com/go-test/deep"
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/require"
+
+	"github.com/cruffinoni/rimworld-editor/pkg/logging"
 )
 
 func Test_createStructure(t *testing.T) {
@@ -126,7 +128,7 @@ func Test_createStructure(t *testing.T) {
 	for name, tt := range tests {
 		t.Run(name, func(t *testing.T) {
 			root := resetVarsAndReadBuffer(t, tt.args)
-			res := createStructure(root.Child, tt.args.flag)
+			res := createStructure(logging.NewMockLogger(), root.Child, tt.args.flag)
 			require.IsType(t, res, tt.want)
 			got := res.(*StructInfo)
 			wanted := tt.want.(*StructInfo)
@@ -670,7 +672,7 @@ func TestGenerateGoFiles(t *testing.T) {
 	for name, tt := range tests {
 		t.Run(name, func(t *testing.T) {
 			root := resetVarsAndReadBuffer(t, tt.args)
-			if diff := deep.Equal(tt.want, GenerateGoFiles(root, true)); diff != nil {
+			if diff := deep.Equal(tt.want, GenerateGoFiles(logging.NewMockLogger(), root, true)); diff != nil {
 				assert.FailNow(t, strings.Join(diff, "\n"))
 			}
 		})

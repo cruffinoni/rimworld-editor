@@ -9,6 +9,7 @@ import (
 
 	"github.com/cruffinoni/rimworld-editor/internal/xml"
 	"github.com/cruffinoni/rimworld-editor/internal/xml/attributes"
+	"github.com/cruffinoni/rimworld-editor/pkg/logging"
 )
 
 type Member struct {
@@ -73,14 +74,14 @@ const maxTransversalDepth = 10
 // createStructure creates a new structure from the given element.
 // Then the function will recursively call handleElement on the children of the element.
 // It removes the duplicates from the members of the struct.
-func createStructure(e *xml.Element, flag uint) any {
+func createStructure(logger logging.Logger, e *xml.Element, flag uint) any {
 	// forceChild is a flag that forces the child of the current child to be used
 	// It is useful for the case of lists
 	if flag&forceChild > 0 {
 		flag &^= forceChild
 		// Quick way to determine if the child is a structure
 		if e.Child != nil && e.Child.Child != nil {
-			return createStructure(e.Child, flag|forceChildApplied)
+			return createStructure(logger, e.Child, flag|forceChildApplied)
 		} else {
 			// The array authorize cells to be empty
 			//panic("generate.createStructure|forceChild: missing child")
@@ -99,7 +100,7 @@ func createStructure(e *xml.Element, flag uint) any {
 		// in the file, so we need to set it a random name
 
 		//printer.Debugf("generate.createStructure: '%s' & child name: %v & e %v & %v", name, e.Child.GetName(), lowerName, e.Parent.GetName())
-		return createStructure(e.Parent, flag|forceRandomName)
+		return createStructure(logger, e.Parent, flag|forceRandomName)
 	}
 
 	// In this case, the child has the same name as his parent which
@@ -145,13 +146,13 @@ func createStructure(e *xml.Element, flag uint) any {
 		}
 		flag &^= forceFullCheck | forceChildApplied
 		for n != nil {
-			if err := handleElement(n.Child, s, flag); err != nil {
+			if err := handleElement(logger, n.Child, s, flag); err != nil {
 				panic(err)
 			}
 			n = n.Next
 		}
 	} else {
-		if err := handleElement(e.Child, s, flag&^forceFullCheck); err != nil {
+		if err := handleElement(logger, e.Child, s, flag&^forceFullCheck); err != nil {
 			panic(err)
 		}
 	}
@@ -162,7 +163,7 @@ func createStructure(e *xml.Element, flag uint) any {
 // addMember adds a new Member to the StructInfo map.
 // If the Member already exists, the function checks if the type of the existing Member and the new Member are the same.
 // If they are not, the function fixes the type mismatch.
-func (s *StructInfo) addMember(name string, attr attributes.Attributes, t any) {
+func (s *StructInfo) addMember(logger logging.Logger, name string, attr attributes.Attributes, t any) {
 	// If there is no existing Member with the same name, add the new Member to the map
 	if _, ok := s.Members[name]; !ok {
 		s.Members[name] = &Member{
@@ -176,7 +177,7 @@ func (s *StructInfo) addMember(name string, attr attributes.Attributes, t any) {
 		if !IsSameType(t, s.Members[name].T, 0) {
 			// printer.Debugf("Type mismatch: %v > %v | %v", name, s.Members[name].T, t)
 			// If the types are different, fix the type mismatch
-			err := fixTypeMismatch(s.Members[name], &Member{
+			err := fixTypeMismatch(logger, s.Members[name], &Member{
 				Name: name,
 				T:    t,
 				Attr: attr,
