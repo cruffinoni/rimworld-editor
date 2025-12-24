@@ -7,16 +7,16 @@ import (
 	"time"
 
 	"github.com/briandowns/spinner"
-	"github.com/jawher/mow.cli"
 	"github.com/tcnksm/go-input"
 
+	"github.com/cruffinoni/rimworld-editor/internal/application/commandline"
 	"github.com/cruffinoni/rimworld-editor/internal/rimworld/discovery"
 	"github.com/cruffinoni/rimworld-editor/internal/rimworld/gamedata"
 	"github.com/cruffinoni/rimworld-editor/internal/xml/loader"
 
 	"github.com/cruffinoni/rimworld-editor/generated"
-	"github.com/cruffinoni/rimworld-editor/internal/application/terminal"
-	"github.com/cruffinoni/rimworld-editor/internal/application/userinterface"
+	"github.com/cruffinoni/rimworld-editor/internal/application/term"
+	"github.com/cruffinoni/rimworld-editor/internal/application/ui"
 	"github.com/cruffinoni/rimworld-editor/internal/codegen"
 	"github.com/cruffinoni/rimworld-editor/internal/codegen/writer"
 	"github.com/cruffinoni/rimworld-editor/internal/xml/binder"
@@ -40,7 +40,7 @@ func isValidMode(mode string) bool {
 // Application is the main application.
 type Application struct {
 	ui.Options
-	*cli.Cli
+	cliApp commandline.App
 
 	fileOpening *loader.Opening
 	ui          ui.Mode
@@ -52,18 +52,18 @@ func CreateApplication(logger logging.Logger) *Application {
 		logger: logger,
 	}
 	s := spinner.New(spinner.CharSets[21], 100*time.Millisecond)
-	app.Cli = cli.App("rimworld-editor", "Rimworld save game editor")
-	app.Version("version", cliVersion)
-	app.BoolOptPtr(&app.Verbose, "v verbose", false, "Verbose mode")
-	app.BoolOptPtr(&app.Generate, "g generate", false, "Generate go files from xml")
-	app.BoolOptPtr(&app.Save, "s save", true, "Save your modifications when exiting the application")
-	app.StringOptPtr(&app.Output, "o output", "generated", "Output folder for generated files")
-	app.StringOptPtr(&app.Mode, "m mode", modeConsole, "The mode to run the application in")
-	app.IntOptPtr(&app.MaxSaveGameFileDiscover, "mx maxnb", 10, "Maximum number of save games to discover")
-	app.StringOptPtr(&app.Input, "ds defaultsave", "", "Default save game to load from your Rimworld saves game folder")
-	app.StringOptPtr(&app.OperatingSystem, "operating-system os", "", "Force a operating system file path finding")
-	app.Before = app.beforeExecution
-	app.Action = func() {
+	app.cliApp = commandline.NewMowApp("rimworld-editor", "Rimworld save game editor")
+	app.cliApp.Version("version", cliVersion)
+	app.cliApp.BoolOptPtr(&app.Verbose, "v verbose", false, "Verbose mode")
+	app.cliApp.BoolOptPtr(&app.Generate, "g generate", false, "Generate go files from xml")
+	app.cliApp.BoolOptPtr(&app.Save, "s save", true, "Save your modifications when exiting the application")
+	app.cliApp.StringOptPtr(&app.Output, "o output", "generated", "Output folder for generated files")
+	app.cliApp.StringOptPtr(&app.Mode, "m mode", modeConsole, "The mode to run the application in")
+	app.cliApp.IntOptPtr(&app.MaxSaveGameFileDiscover, "mx maxnb", 10, "Maximum number of save games to discover")
+	app.cliApp.StringOptPtr(&app.Input, "ds defaultsave", "", "Default save game to load from your Rimworld saves game folder")
+	app.cliApp.StringOptPtr(&app.OperatingSystem, "operating-system os", "", "Force a operating system file path finding")
+	app.cliApp.SetBefore(app.beforeExecution)
+	app.cliApp.SetAction(func() {
 		if app.Mode == modeConsole {
 			app.ui = &term.Console{}
 		} else if app.Mode == modeGUI {
@@ -93,7 +93,7 @@ func CreateApplication(logger logging.Logger) *Application {
 				app.logger.WithError(err).Error("Failed to save game file")
 			}
 		}
-	}
+	})
 	return app
 }
 
@@ -117,8 +117,8 @@ func (app *Application) SaveGameFile(sg *generated.Savegame) error {
 func (app *Application) beforeExecution() {
 	if !isValidMode(app.Mode) {
 		app.logger.WithField("mode", app.Mode).Error("Invalid mode")
-		app.PrintHelp()
-		cli.Exit(1)
+		app.cliApp.PrintHelp()
+		app.cliApp.Exit(1)
 	}
 	gameData := gamedata.NewGameData(app.logger)
 	app.logger.Debug("Discovering game data")
@@ -157,11 +157,11 @@ func (app *Application) beforeExecution() {
 }
 
 func (app *Application) Run() error {
-	return app.Cli.Run(os.Args)
+	return app.cliApp.Run(os.Args)
 }
 
 func (app *Application) RunWithArgs(args []string) error {
-	return app.Cli.Run(args)
+	return app.cliApp.Run(args)
 }
 
 func (app *Application) ReadSaveGame() error {

@@ -6,7 +6,7 @@ import (
 	"github.com/cruffinoni/rimworld-editor/internal/xml/algorithm"
 
 	"github.com/cruffinoni/rimworld-editor/generated"
-	"github.com/cruffinoni/rimworld-editor/internal/application/terminal/faction"
+	"github.com/cruffinoni/rimworld-editor/internal/application/term/faction"
 	"github.com/cruffinoni/rimworld-editor/pkg/logging"
 )
 

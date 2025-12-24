@@ -7,11 +7,11 @@ CYCLE_BIN := $(BINS_DIR)/cycle
 GEN_GO_BIN := $(BINS_DIR)/gen_go
 GEN_XML_BIN := $(BINS_DIR)/gen_xml
 
-vendor:
-	go mod vendor
-
 check:
 	go build ./...
+
+vendor:
+	go mod vendor
 
 build: build-all
 
