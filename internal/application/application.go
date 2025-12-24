@@ -39,11 +39,11 @@ func isValidMode(mode string) bool {
 
 // Application is the main application.
 type Application struct {
-	userinterface.Options
+	ui.Options
 	*cli.Cli
 
 	fileOpening *loader.Opening
-	ui          userinterface.Mode
+	ui          ui.Mode
 	logger      logging.Logger
 }
 
@@ -65,7 +65,7 @@ func CreateApplication(logger logging.Logger) *Application {
 	app.Before = app.beforeExecution
 	app.Action = func() {
 		if app.Mode == modeConsole {
-			app.ui = &terminal.Console{}
+			app.ui = &term.Console{}
 		} else if app.Mode == modeGUI {
 			panic("not implemented")
 			// app.ui = app.guiMode

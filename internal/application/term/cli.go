@@ -1,4 +1,4 @@
-package terminal
+package term
 
 import (
 	"flag"
@@ -17,8 +17,8 @@ import (
 )
 
 type Console struct {
-	userinterface.Mode
-	opt        *userinterface.Options
+	ui.Mode
+	opt        *ui.Options
 	shouldExit bool
 	save       *generated.Savegame
 	cli        *cli.Cli
@@ -53,7 +53,7 @@ func (c *Console) exit() {
 	return
 }
 
-func (c *Console) Init(options *userinterface.Options, save *generated.Savegame) {
+func (c *Console) Init(options *ui.Options, save *generated.Savegame) {
 	c.opt = options
 	c.save = save
 	c.logger.Debug("Console init")

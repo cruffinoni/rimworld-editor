@@ -1,4 +1,4 @@
-package userinterface
+package ui
 
 import (
 	"github.com/cruffinoni/rimworld-editor/generated"
