@@ -1,25 +1,24 @@
 package application
 
 import (
+	"fmt"
 	"os"
 	"path/filepath"
 	"strconv"
 	"time"
 
 	"github.com/briandowns/spinner"
+	"github.com/spf13/cobra"
 	"github.com/tcnksm/go-input"
 
-	"github.com/cruffinoni/rimworld-editor/internal/application/commandline"
 	"github.com/cruffinoni/rimworld-editor/internal/rimworld/discovery"
 	"github.com/cruffinoni/rimworld-editor/internal/rimworld/gamedata"
 	"github.com/cruffinoni/rimworld-editor/internal/xml/loader"
 
 	"github.com/cruffinoni/rimworld-editor/generated"
-	"github.com/cruffinoni/rimworld-editor/internal/application/term"
 	"github.com/cruffinoni/rimworld-editor/internal/application/ui"
 	"github.com/cruffinoni/rimworld-editor/internal/codegen"
 	"github.com/cruffinoni/rimworld-editor/internal/codegen/writer"
-	"github.com/cruffinoni/rimworld-editor/internal/xml/binder"
 	"github.com/cruffinoni/rimworld-editor/internal/xml/encoder/reflection"
 	"github.com/cruffinoni/rimworld-editor/pkg/logging"
 )
@@ -40,7 +39,7 @@ func isValidMode(mode string) bool {
 // Application is the main application.
 type Application struct {
 	ui.Options
-	cliApp commandline.App
+	rootCmd *cobra.Command
 
 	fileOpening *loader.Opening
 	ui          ui.Mode
@@ -51,49 +50,7 @@ func CreateApplication(logger logging.Logger) *Application {
 	app := &Application{
 		logger: logger,
 	}
-	s := spinner.New(spinner.CharSets[21], 100*time.Millisecond)
-	app.cliApp = commandline.NewMowApp("rimworld-editor", "Rimworld save game editor")
-	app.cliApp.Version("version", cliVersion)
-	app.cliApp.BoolOptPtr(&app.Verbose, "v verbose", false, "Verbose mode")
-	app.cliApp.BoolOptPtr(&app.Generate, "g generate", false, "Generate go files from xml")
-	app.cliApp.BoolOptPtr(&app.Save, "s save", true, "Save your modifications when exiting the application")
-	app.cliApp.StringOptPtr(&app.Output, "o output", "generated", "Output folder for generated files")
-	app.cliApp.StringOptPtr(&app.Mode, "m mode", modeConsole, "The mode to run the application in")
-	app.cliApp.IntOptPtr(&app.MaxSaveGameFileDiscover, "mx maxnb", 10, "Maximum number of save games to discover")
-	app.cliApp.StringOptPtr(&app.Input, "ds defaultsave", "", "Default save game to load from your Rimworld saves game folder")
-	app.cliApp.StringOptPtr(&app.OperatingSystem, "operating-system os", "", "Force a operating system file path finding")
-	app.cliApp.SetBefore(app.beforeExecution)
-	app.cliApp.SetAction(func() {
-		if app.Mode == modeConsole {
-			app.ui = &term.Console{}
-		} else if app.Mode == modeGUI {
-			panic("not implemented")
-			// app.ui = app.guiMode
-		}
-		app.ui.SetLogger(app.logger)
-		structInit := &generated.GeneratedStructStarter0{}
-		app.logger.Debug("Unmarshalling XML")
-		s.FinalMSG = "XML file unmarshalled successfully\n"
-		s.Start()
-		if err := binder.Element(app.logger, app.fileOpening.XML.Root, structInit); err != nil {
-			app.logger.WithError(err).Fatal("Failed to unmarshal XML")
-		}
-		s.Stop()
-		structInit.ValidateField("Savegame")
-		app.logger.Debug("Initializing UI")
-		app.ui.Init(&app.Options, structInit.Savegame)
-		app.logger.Debug("Running UI")
-		if err := app.ui.Execute(os.Args); err != nil {
-			app.logger.WithError(err).Error("UI execution failed")
-			return
-		}
-		if app.Save {
-			app.logger.Debug("End of execution, generating new file")
-			if err := app.SaveGameFile(structInit.Savegame); err != nil {
-				app.logger.WithError(err).Error("Failed to save game file")
-			}
-		}
-	})
+	app.rootCmd = app.newRootCommand()
 	return app
 }
 
@@ -114,31 +71,33 @@ func (app *Application) SaveGameFile(sg *generated.Savegame) error {
 	return nil
 }
 
-func (app *Application) beforeExecution() {
+func (app *Application) beforeExecution(cmd *cobra.Command) error {
 	if !isValidMode(app.Mode) {
 		app.logger.WithField("mode", app.Mode).Error("Invalid mode")
-		app.cliApp.PrintHelp()
-		app.cliApp.Exit(1)
+		if cmd != nil {
+			_ = cmd.Help()
+		}
+		return fmt.Errorf("invalid mode: %s", app.Mode)
 	}
 	gameData := gamedata.NewGameData(app.logger)
 	app.logger.Debug("Discovering game data")
 	err := gameData.DiscoverGameData(app.OperatingSystem)
 	if err != nil {
-		app.logger.WithError(err).Fatal("Failed to discover game data")
+		return err
 	}
 	// gameData.PrintThemes()
 	// e, err := gameData.FindElement("", "Scavenger22")
 	// printer.Debugf("E: %v & Err %v", e.XMLPath(), err)
 	app.logger.Debug("Generating Go files from game data")
 	if err := gameData.GenerateGoFiles(); err != nil {
-		app.logger.WithError(err).Fatal("Failed to generate game files")
+		return err
 	}
 	//if err := gameData.ReadGameFiles(); err != nil {
 	//	log.Fatal(err)
 	//}
 	//os.Exit(0)
 	if err = app.ReadSaveGame(); err != nil {
-		app.logger.WithError(err).Fatal("Failed to read save game")
+		return err
 	}
 	if app.Generate {
 		s := spinner.New(spinner.CharSets[35], 100*time.Millisecond)
@@ -148,20 +107,23 @@ func (app *Application) beforeExecution() {
 		s.Stop()
 		gw := writer.NewGoWriter(app.logger, nil, true, "")
 		if err = gw.WriteGoFile(app.Output, root); err != nil {
-			app.logger.WithError(err).Fatal("Failed to write generated files")
+			return err
 		}
 		if err = app.fileOpening.ReOpen(); err != nil {
-			app.logger.WithError(err).Fatal("Failed to reopen savegame")
+			return err
 		}
 	}
+	return nil
 }
 
 func (app *Application) Run() error {
-	return app.cliApp.Run(os.Args)
+	app.rootCmd.SetArgs(os.Args[1:])
+	return app.rootCmd.Execute()
 }
 
 func (app *Application) RunWithArgs(args []string) error {
-	return app.cliApp.Run(args)
+	app.rootCmd.SetArgs(args)
+	return app.rootCmd.Execute()
 }
 
 func (app *Application) ReadSaveGame() error {
@@ -182,7 +144,7 @@ func (app *Application) ReadSaveGame() error {
 			}
 		}
 	} else {
-		ui := &input.UI{
+		u := &input.UI{
 			Writer: os.Stdout,
 			Reader: os.Stdin,
 		}
@@ -191,7 +153,7 @@ func (app *Application) ReadSaveGame() error {
 			joinedFileName = append(joinedFileName, s.Name())
 		}
 
-		selected, err := ui.Select("What savegame do you want to select", joinedFileName, &input.Options{
+		selected, err := u.Select("Which savegame do you want to select", joinedFileName, &input.Options{
 			Required: true,
 			Loop:     true,
 		})

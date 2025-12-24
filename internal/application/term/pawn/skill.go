@@ -98,9 +98,9 @@ func (s *Skills) calculateMaxXP(level int64) int64 {
 		return 1000 + level*1000
 	} else if level < 20 {
 		return 12000 + (level-10)*2000
-	} else {
-		return 30000
 	}
+
+	return 30000
 }
 
 func (s *Skills) ForceGraduate(pawnID string) {

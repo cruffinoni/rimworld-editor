@@ -9,8 +9,8 @@ require (
 	github.com/go-test/deep v1.1.1
 	github.com/go-viper/mapstructure/v2 v2.4.0
 	github.com/iancoleman/strcase v0.3.0
-	github.com/jawher/mow.cli v1.2.0
 	github.com/sirupsen/logrus v1.9.3
+	github.com/spf13/cobra v1.9.1
 	github.com/spf13/viper v1.21.0
 	github.com/stretchr/testify v1.11.1
 	github.com/tcnksm/go-input v0.0.0-20180404061846-548a7d7a8ee8
@@ -26,6 +26,7 @@ require (
 	github.com/gabriel-vasile/mimetype v1.4.12 // indirect
 	github.com/go-playground/locales v0.14.1 // indirect
 	github.com/go-playground/universal-translator v0.18.1 // indirect
+	github.com/inconshreveable/mousetrap v1.1.0 // indirect
 	github.com/leodido/go-urn v1.4.0 // indirect
 	github.com/mattn/go-colorable v0.1.14 // indirect
 	github.com/mattn/go-isatty v0.0.20 // indirect
@@ -49,5 +50,3 @@ require (
 	gopkg.in/check.v1 v1.0.0-20201130134442-10cb98267c6c // indirect
 	gopkg.in/yaml.v3 v3.0.1 // indirect
 )
-
-replace github.com/jawher/mow.cli => github.com/cruffinoni/mow.cli v1.0.1
