@@ -22,3 +22,5 @@ test.xml
 test/
 
 config/config.yaml
+
+bin/
