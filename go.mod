@@ -14,7 +14,7 @@ require (
 	github.com/spf13/viper v1.21.0
 	github.com/stretchr/testify v1.12.1
 	github.com/tcnksm/go-input v0.0.0-20180404061846-548a7d7a8ee8
-	golang.org/x/net v0.62.0
+	golang.org/x/net v0.63.0
 )
 
 require (
